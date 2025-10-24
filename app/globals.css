@@ -25,22 +25,4 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.navOption {
-  color: #CCCCCC;
-  text-decoration: none;
-}
-.navOption:hover {
-  color: #ff6900;
-}
-
-.transformation-dropdown{
-  position: relative;
-  display: inline-block;
-}
-
-.transformation-dropdown-content {
-  display: none;
-  position: absolute;
-  z-index: 1;
-}
 

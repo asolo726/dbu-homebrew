@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "./home.css";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -25,32 +26,19 @@ export default function RootLayout({ children }) {
             >
                 <header className="">
                     <nav className="flex">
-                        <h1 className="">DBU Galaxy</h1>
-                        <a className="navOption" href="/">
-                            Home
-                        </a>
+                        <a className="flex-1 w-40"><h1>DBU North Galaxy</h1></a>
                         <div className="transformation-dropdown">
-                            <p>Transformations</p>
+                            <p className="navOption">Transformations</p>
                             <div className="transformation-dropdown-content">
-                                <ul>
-                                    <li className="navOption">
-                                        <a href="">Manifested Powers</a>
-                                    </li>
-                                    <li className="navOption">
-                                        <a href="">Enhancement Forms</a>
-                                    </li>
-                                    <li className="navOption">
-                                        <a href="">Alternate Forms</a>
-                                    </li>
-                                    <li className="navOption">
-                                        <a href="">Legendary Forms</a>
-                                    </li>
-                                </ul>
+                                <a className="navOption" href="">Manifested Powers</a>
+                                <a className="navOption" href="">Enhancement Forms</a>
+                                <a className="navOption" href="">Alternate Forms</a>
+                                <a className="navOption" href="">Legendary Forms</a>
                             </div>
                         </div>
-                        <a>Races</a>
-                        <a>Sign Up</a>
-                        <a>Log In</a>
+                        <a className="navOption">Races</a>
+                        <a className="navOption">Sign Up</a>
+                        <a className="navOption">Log In</a>
                     </nav>
                 </header>
                 {children}

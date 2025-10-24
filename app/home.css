@@ -1,0 +1,30 @@
+.navOption {
+    color: #CCCCCC;
+    text-decoration: none;
+
+    width: 100px;
+    padding: 20px;
+    margin: 5px;
+    text-align: center;
+}
+
+nav > 
+
+.navOption:hover {
+  color: #ff6900;
+}
+
+.transformation-dropdown{
+  position: relative;
+  display: inline-block;
+}
+
+.transformation-dropdown:hover .transformation-dropdown-content {
+  display: block;
+}
+
+.transformation-dropdown-content {
+  display: none;
+  position: absolute;
+  z-index: 1;
+}
