@@ -1,17 +1,17 @@
 .navOption {
     color: #CCCCCC;
     text-decoration: none;
-
-    width: 100px;
-    padding: 20px;
-    margin: 5px;
-    text-align: center;
 }
-
-nav > 
-
 .navOption:hover {
   color: #ff6900;
+}
+
+.top{
+  margin-top: 10px;
+}
+
+.navMenu{
+  display: none;
 }
 
 .transformation-dropdown{
@@ -20,11 +20,27 @@ nav >
 }
 
 .transformation-dropdown:hover .transformation-dropdown-content {
-  display: block;
+  display: inline-block;
 }
+
 
 .transformation-dropdown-content {
   display: none;
   position: absolute;
   z-index: 1;
+}
+
+.transformation-dropdown-content > a{
+    width: 100%;
+    margin: 5px;
+}
+
+/* Tablet */
+@media screen and (min-width: 600px) {
+
+}
+
+/* Desktop */
+@media screen and (min-width: 1024px) {
+  
 }

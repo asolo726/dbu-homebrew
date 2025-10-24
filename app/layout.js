@@ -25,20 +25,24 @@ export default function RootLayout({ children }) {
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
                 <header className="">
-                    <nav className="flex">
-                        <a className="flex-1 w-40"><h1>DBU North Galaxy</h1></a>
-                        <div className="transformation-dropdown">
-                            <p className="navOption">Transformations</p>
-                            <div className="transformation-dropdown-content">
-                                <a className="navOption" href="">Manifested Powers</a>
-                                <a className="navOption" href="">Enhancement Forms</a>
-                                <a className="navOption" href="">Alternate Forms</a>
-                                <a className="navOption" href="">Legendary Forms</a>
+                    <nav className="flex m-5">
+                        <a className="navOption flex-1 w-40 text-left "><h1>DBU North Galaxy</h1></a>
+                        <div className="navMenu">
+                            <div className="transformation-dropdown">
+                                <p className="navOption top">Transformations</p>
+                                <div className="transformation-dropdown-content">
+                                <ul>
+                                    <li><a className="navOption" href="">Manifested Powers</a></li>
+                                    <li><a className="navOption" href="">Enhancement Forms</a></li>
+                                    <li><a className="navOption" href="">Alternate Forms</a></li>
+                                    <li><a className="navOption" href="">Legendary Forms</a></li>
+                                </ul>
+                                </div>
                             </div>
+                            <a className="navOption top">Races</a>
+                            <a className="navOption top">Sign Up</a>
+                            <a className="navOption top">Log In</a>
                         </div>
-                        <a className="navOption">Races</a>
-                        <a className="navOption">Sign Up</a>
-                        <a className="navOption">Log In</a>
                     </nav>
                 </header>
                 {children}
