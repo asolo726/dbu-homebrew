@@ -11,7 +11,7 @@ export default function NavDropdown({ list, menuState }) {
                         key === list.length - 1 ? " border-b-0" : " "
                     )}
                 >
-                    <a classname="block w-max p-10" href={item.link}>{item.text}</a>
+                    <a className="block w-max p-10" href={item.link}>{item.text}</a>
                 </li>
             ))}
         </ul>

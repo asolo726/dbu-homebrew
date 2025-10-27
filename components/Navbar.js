@@ -4,22 +4,35 @@ import "./Navbar.css";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { RxCross1 } from "react-icons/rx";
 import NavOption from "./navComponents/navOption";
+import NavColumn from "./navComponents/navColumn";
 
 export default function Navbar() {
     const [menuIsOpen, setMenuIsOpen] = useState(false);
     const dropdownCss = menuIsOpen ? " block" : " hidden";
+    const transformationOptions = [
+        { text: "Manifested Powers", link: "" },
+        { text: "Enhancement Powers", link: "" },
+        { text: "Alternate Forms", link: "" },
+        { text: "Legendary Forms", link: "" },
+    ];
+
     const navOptions = [
-        { text: "Transformations", link: "" },
+        { text: "Transformations", link: "", list: transformationOptions },
         { text: "Races", link: "" },
         { text: "Sign Up", link: "" },
         { text: "Log In", link: "" },
     ];
-    const transformationOptions = [
-        {text: "Manifested Powers", link: ""},
-        {text: "Enhancement Powers", link: ""},
-        {text: "Alternate Forms", link: ""},
-        {text: "Legendary Forms", link: ""},
-    ];
+    
+
+    const desktopNavMenu = ()=>{
+        return (
+            <div id="innerNavMenu" className="flex justify-between">
+                {navOptions.map((item, key) => (
+                    <NavColumn key={key} text={item.text} link={item.link} list={item.list}/>
+                ))}
+            </div>
+        )
+    }
 
     return (
         <>
@@ -55,10 +68,7 @@ export default function Navbar() {
                         id="innerDesktopNavMenu"
                         className="flex flex-row self-end w-full"
                     >
-                        <p className="text-sm border-b-1 border-dbu-line py-3">
-                            MENU
-                        </p>
-                        <div className="transformation-dropdown">
+                        {/* <div className="transformation-dropdown">
                             <p className="navOption top">Transformations</p>
                             <div className="transformation-dropdown-content bg-dbu-bg">
                                 <ul className="">
@@ -79,7 +89,8 @@ export default function Navbar() {
                         </div>
                         <a className="navOption top ">Races</a>
                         <a className="navOption top">Sign Up</a>
-                        <a className="navOption top">Log In</a>
+                        <a className="navOption top">Log In</a> */}
+                        {(desktopNavMenu())}
                     </div>
                 </nav>
             </header>
@@ -96,11 +107,23 @@ export default function Navbar() {
                     <p className="text-sm border-b-1 border-dbu-line py-3">
                         MENU
                     </p>
-                    <NavOption text={navOptions[0].text} link={navOptions[0].link} list={transformationOptions} />
-                    <NavOption text={navOptions[1].text} link={navOptions[1].link} />
-                    <NavOption text={navOptions[2].text} link={navOptions[2].link} />
-                    <NavOption text={navOptions[3].text} link={navOptions[3].link}  />
-                    
+                    <NavOption
+                        text={navOptions[0].text}
+                        link={navOptions[0].link}
+                        list={transformationOptions}
+                    />
+                    <NavOption
+                        text={navOptions[1].text}
+                        link={navOptions[1].link}
+                    />
+                    <NavOption
+                        text={navOptions[2].text}
+                        link={navOptions[2].link}
+                    />
+                    <NavOption
+                        text={navOptions[3].text}
+                        link={navOptions[3].link}
+                    />
                 </div>
             </nav>
         </>
