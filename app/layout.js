@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import "./home.css";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -19,32 +18,12 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+
     return (
         <html lang="en">
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
-                <header className="">
-                    <nav className="flex m-5">
-                        <a className="navOption flex-1 w-40 text-left "><h1>DBU North Galaxy</h1></a>
-                        <div className="navMenu">
-                            <div className="transformation-dropdown">
-                                <p className="navOption top">Transformations</p>
-                                <div className="transformation-dropdown-content">
-                                <ul>
-                                    <li><a className="navOption" href="">Manifested Powers</a></li>
-                                    <li><a className="navOption" href="">Enhancement Forms</a></li>
-                                    <li><a className="navOption" href="">Alternate Forms</a></li>
-                                    <li><a className="navOption" href="">Legendary Forms</a></li>
-                                </ul>
-                                </div>
-                            </div>
-                            <a className="navOption top">Races</a>
-                            <a className="navOption top">Sign Up</a>
-                            <a className="navOption top">Log In</a>
-                        </div>
-                    </nav>
-                </header>
                 {children}
             </body>
         </html>

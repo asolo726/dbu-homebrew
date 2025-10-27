@@ -1,8 +1,17 @@
 @import "tailwindcss";
 
+@theme{
+  --color-dbu-line: #353535;
+  --color-dbu-bg: #232323;
+  --color-dbu-header: #dfe288;
+  --color-dbu-text: #CCCCCC;
+  --color-dbu-link: #ff6900;
+  --color-dbu-bg2: #1b1b1b;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #232323;
+  --foreground: #232323;
 }
 
 @theme inline {
@@ -14,15 +23,15 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #232323;
+    --foreground: #CCCCCC;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
 }
 
 
