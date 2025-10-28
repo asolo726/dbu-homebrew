@@ -1,6 +1,7 @@
 import NavDropdown from "./navDropdown";
 import { useState } from "react";
 import { RxChevronUp } from "react-icons/rx";
+// Navigation option for Mobile
 export default function NavOption({ text, link, list = [] }) {
     const content = () => {
         if (list.length > 0) {

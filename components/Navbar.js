@@ -26,7 +26,10 @@ export default function Navbar() {
 
     const desktopNavMenu = ()=>{
         return (
-            <div id="innerNavMenu" className="flex justify-between">
+            <div
+                id="innerDesktopNavMenu"
+                className="flex flex-row place-content-end"
+            >
                 {navOptions.map((item, key) => (
                     <NavColumn key={key} text={item.text} link={item.link} list={item.list}/>
                 ))}
@@ -38,11 +41,11 @@ export default function Navbar() {
         <>
             <header
                 id="navHeader"
-                className="p-7 grid grid-cols-4 border-b-1 border-dbu-line"
+                className="p-7 border-b-1 grid grid-cols-4 grid-rows-1  border-dbu-line"
             >
                 <div
                     id="title"
-                    className="col-span-3 md:col-span-2 md:grow-1 text-dbu-header place-content-center"
+                    className="col-span-3 md:col-span-2 md:grow-2 text-dbu-header place-content-center"
                 >
                     <a className="navOption text-left text-xl hover:text-dbu-link" href="/">
                         Dragon Ball Universe: North Galaxy
@@ -63,35 +66,8 @@ export default function Navbar() {
                     </button>
                 </div>
 
-                <nav id="desktopNavMenu" className="hidden md:justify-self-end md:col-span-2 md:block"> 
-                    <div
-                        id="innerDesktopNavMenu"
-                        className="flex flex-row self-end w-full"
-                    >
-                        {/* <div className="transformation-dropdown">
-                            <p className="navOption top">Transformations</p>
-                            <div className="transformation-dropdown-content bg-dbu-bg">
-                                <ul className="">
-                                    <li className="navOption navDropItem">
-                                        <a href="">Manifested Powers</a>
-                                    </li>
-                                    <li className="navOption navDropItem">
-                                        <a href="">Enhancement Forms</a>
-                                    </li>
-                                    <li className="navOption navDropItem">
-                                        <a href="">Alternate Forms</a>
-                                    </li>
-                                    <li className="navOption navDropItem">
-                                        <a href="">Legendary Forms</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <a className="navOption top ">Races</a>
-                        <a className="navOption top">Sign Up</a>
-                        <a className="navOption top">Log In</a> */}
-                        {(desktopNavMenu())}
-                    </div>
+                <nav id="desktopNavMenu" className="hidden md:justify-self-end md:place-self-center md:col-span-2 md:block w-full"> 
+                    {(desktopNavMenu())}
                 </nav>
             </header>
             <nav
@@ -102,9 +78,9 @@ export default function Navbar() {
             >
                 <div
                     id="innerNavMenu"
-                    className="self-center flex flex-col md:flex-row md:self-end w-full"
+                    className="self-center flex flex-col m-10 md:flex-row md:self-end w-full"
                 >
-                    <p className="text-sm border-b-1 border-dbu-line py-3">
+                    <p className="text-sm border-b-1 pb-5 border-dbu-line py-3">
                         MENU
                     </p>
                     <NavOption
