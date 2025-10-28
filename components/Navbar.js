@@ -42,14 +42,14 @@ export default function Navbar() {
             >
                 <div
                     id="title"
-                    className="col-span-3 md:grow-1 text-dbu-header place-content-center"
+                    className="col-span-3 md:col-span-2 md:grow-1 text-dbu-header place-content-center"
                 >
-                    <a className="navOption text-left text-xl" href="/">
+                    <a className="navOption text-left text-xl hover:text-dbu-link" href="/">
                         Dragon Ball Universe: North Galaxy
                     </a>
                 </div>
 
-                <div className="col-span-1 justify-self-end place-content-center  md:hidden">
+                <div className="col-span-1 justify-self-end place-content-center md:hidden">
                     <button
                         id="navButton"
                         className="flex align-middle justify-center p-3"
@@ -63,7 +63,7 @@ export default function Navbar() {
                     </button>
                 </div>
 
-                <nav id="desktopNavMenu" className="hidden md:block">
+                <nav id="desktopNavMenu" className="hidden md:justify-self-end md:col-span-2 md:block"> 
                     <div
                         id="innerDesktopNavMenu"
                         className="flex flex-row self-end w-full"

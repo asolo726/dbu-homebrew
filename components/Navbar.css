@@ -2,10 +2,6 @@ nav{
   font-family: "Helvetica light", sans-serif ;
 }
 
-#innerNavMenu{
-  margin: 7.6923% 15.3846%;
-}
-
 .top{
   padding: 8px 0px;
   font-size: 15px;
@@ -15,7 +11,6 @@ nav{
 .transformation-dropdown{
   position: relative;
   display: inline-block;
-  
 }
 
 .transformation-dropdown:active .transformation-dropdown-content {
