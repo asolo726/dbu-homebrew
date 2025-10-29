@@ -11,7 +11,7 @@ export default function Navbar() {
     const dropdownCss = menuIsOpen ? " block" : " hidden";
     const transformationOptions = [
         { text: "Manifested Powers", link: "" },
-        { text: "Enhancement Powers", link: "" },
+        { text: "Enhancement Powers", link: "/home/test" },
         { text: "Alternate Forms", link: "" },
         { text: "Legendary Forms", link: "" },
     ];
