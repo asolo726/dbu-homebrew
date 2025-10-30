@@ -3,7 +3,9 @@ export default function HomeLayout({ children }) {
     return (
         <>
             <Navbar />
-            {children}
+            <div className="grid justify-center">
+                {children}
+            </div>
         </>
     );
 }

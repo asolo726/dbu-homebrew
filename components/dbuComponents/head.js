@@ -1,3 +1,4 @@
+import Image from "next/image";
 /**
  *
  * @returns Head of the page. Including Title, Banner, Requirements, and Stat Buff Table
@@ -5,42 +6,103 @@
 export default function Head(props) {
     const requirementNameStyle = "font-bold text-dbu-header";
     return (
-        <div className="">
-            <h1 className="text-dbu-header text-5xl font-bold text-center">{props.title}</h1>
-            <img src={props.banner} width="100%" height="100%" />
-            <p>{props.mainDesc}</p>
-            {/* 
-            Racial Requirement: Any
-            Transformation Type: Enhancement Power
-            Prerequisite(s): Access to the God Ki Special State
-            Stress Test Requirement: 18
-            Tier of Power Requirement. 6+
-            Aspects: God Ki, Mindful (LV2), Strainless, Weakening*/}
-            <ul className="">
-                <li className="">
-                    <p><span className={requirementNameStyle}>Racial Requirement: </span> {props.race} </p>
+        <div className="flex-grow-1">
+            <h1 className="text-dbu-header text-[2em] sm:text-[3em] font-bold text-center mb-10">
+                {props.title}
+            </h1>
+            <Image
+                src={props.banner}
+                className="justify-self-center max-w-[100%] mb-5"
+                width={1500}
+                height={1500}
+                alt="Super Saiyan Son Goku gripping Cooler's wrists."
+            />
+            <p className="text-balance text-md md:text-lg">{props.mainDesc}</p>
+            <ul className="list-disc ml-10 mt-3 text-md md:text-lg">
+                <li>
+                    <p>
+                        <span className={requirementNameStyle}>
+                            Racial Requirement:
+                        </span>{" "}
+                        {props.race}
+                    </p>
                 </li>
                 <li>
-                    <p className={requirementNameStyle}>Transformation Type</p>
-                    <p>{props.type}</p>
+                    <p>
+                        <span className={requirementNameStyle}>
+                            Transformation Type:
+                        </span>{" "}
+                        {props.type}
+                    </p>
                 </li>
                 <li>
-                    <p>Prerequisite(s)</p>
-                    <p>{props.prereq}</p>
+                    <p>
+                        <span className={requirementNameStyle}>
+                            Prerequisite(s):{" "}
+                        </span>{" "}
+                        {props.prereq}
+                    </p>
                 </li>
                 <li>
-                    <p>Stress Test Requirement</p>
-                    <p>{props.stress}</p>
+                    <p>
+                        <span className={requirementNameStyle}>
+                            Stress Test Requirement:{" "}
+                        </span>
+                        {props.stress}
+                    </p>
                 </li>
                 <li>
-                    <p>Tier of Power Requirement</p>
-                    <p>{props.tier}</p>
+                    <p>
+                        <span className={requirementNameStyle}>
+                            Tier of Power Requirement{" "}
+                        </span>{" "}
+                        {props.tier}
+                    </p>
                 </li>
                 <li>
-                    <p>Aspects</p>
-                    <p>{props.aspects}</p>
+                    <p>
+                        <span className={requirementNameStyle}>Aspects </span>{" "}
+                        {props.aspects.map(
+                            (aspect) =>
+                                aspect.name + " (LV" + aspect.level + "), "
+                        )}
+                    </p>
                 </li>
             </ul>
+            <div className="flex justify-center py-5">
+                <table className="table-fixed w-full border-collapse text-center text-xl font-light ">
+                    <thead>
+                        <tr>
+                            {props.attributeModifiers.map((modifier,id) => (
+                                <th key={id} className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all">
+                                    {modifier.attribute}
+                                </th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {props.attributeModifiers.map((modifier, id) =>
+                                modifier.Bonus > 0 ? (
+                                    <td
+                                        className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
+                                        key={id}
+                                    >
+                                        {`+${modifier.Bonus}(${modifier.Multiplier})`}
+                                    </td>
+                                ) : (
+                                    <td
+                                        className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
+                                        key={id}
+                                    >
+                                        -
+                                    </td>
+                                )
+                            )}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }

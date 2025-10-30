@@ -15,9 +15,18 @@ export default function Test() {
         { name: "Temporary ", level: 3 },
         { name: "Limited ", level: 1 },
     ];
-    // Strainless, Dedicated, Temporary (LV3), Limited (LV1), Special (Enraged)
+    const banner = "/I_told_you_mom_said_its_MY_turn_on_the_xbox.webp";
+    const attributeModifiers = [
+        {attribute: "AG", "Bonus": 1, "Multiplier": "T"},
+        {attribute: "FO", "Bonus": 2, "Multiplier": "T"},
+        {attribute: "TE", "Bonus": 2, "Multiplier": "T"},
+        {attribute: "SC", "Bonus": 0, "Multiplier": "T"},
+        {attribute: "IN", "Bonus": 0, "Multiplier": "T"},
+        {attribute: "MA", "Bonus": 2, "Multiplier": "T"},
+        {attribute: "PE", "Bonus": 0, "Multiplier": "T"},
+    ]
     return (
-        <div className="flex flex-row justify-center content-center w-250 text-wrap bg-dbu-bg2 m-10">
+        <div className="flex flex-row max-w-4xl px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 rounded-xl">
             <Head
                 title="Righteous Indignation"
                 prerequisite="Good or Pure Good Z-Soul Alignment"
@@ -25,7 +34,11 @@ export default function Test() {
                 tier="3+"
                 stress="15"
                 race="Any"
+                prereq="Good or Pure Good Z-Soul Alignment"
                 mainDesc={mainDesc}
+                aspects={aspects}
+                banner={banner}
+                attributeModifiers={attributeModifiers}
             />
         </div>
     );
