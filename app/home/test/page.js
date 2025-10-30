@@ -1,4 +1,6 @@
 import Head from "../../../components/dbuComponents/head";
+import Feature from "../../../components/dbuComponents/feature";
+import { title } from "process";
 
 /**
  *
@@ -25,6 +27,22 @@ export default function Test() {
         {attribute: "MA", "Bonus": 2, "Multiplier": "T"},
         {attribute: "PE", "Bonus": 0, "Multiplier": "T"},
     ]
+
+    const featureTitle1 = {title: "Limitless Rage", desc: "The flames of your soil continue to toil even as your vigor begins to fall, renewing you and pushing you far beyond your natural limits."};
+    const featureTitle2 = {title: "Limitless Resolve", desc:"Though you are beaten, bruised, and nearly at death’s door, the cries of those you care about and the future of the innocent that hangs in the balance bestows you with the strength to press on."};
+
+    const featureAbilities1 = [
+        { condition: "Constant, Triggered/Defeated, 1/Encounter", desc: ""},
+        { condition: "Automatic/Transform, 1/Encounter", desc: ""},
+        { condition: "Automatic/Transform", desc: ""},
+        { condition: "Passive", desc: ""},
+        { condition: "1/Round", desc: ""},
+        { condition: "Triggered, 3/Round", desc: ""},
+    ]
+    const featureAbilities2 = [
+        
+    ]
+    const burstQuote = "You Scum!!!!";
     return (
         <div className="flex flex-row max-w-4xl px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 rounded-xl">
             <Head
@@ -40,6 +58,11 @@ export default function Test() {
                 banner={banner}
                 attributeModifiers={attributeModifiers}
             />
+            <Feature title={featureTitle1} abilities={featureAbilities1}/>
+            <Feature title={featureTitle2} abilities={featureAbilities2}/>
+            <BurstLimit
+                title={burstQuote}
+             />
         </div>
     );
 }
