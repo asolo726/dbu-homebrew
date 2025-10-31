@@ -1,6 +1,6 @@
-import Head from "../../../components/dbuComponents/head";
-import Feature from "../../../components/dbuComponents/feature";
-import BurstLimit from "../../../components/dbuComponents/burstLimit";
+import Head from "../../../components/dbuComponents/Enhancement/head";
+import Trait from "../../../components/dbuComponents/General/trait";
+import BurstLimit from "../../../components/dbuComponents/General/burstLimit";
 import { title } from "process";
 
 /**
@@ -46,8 +46,13 @@ export default function Test() {
         
     ]
     const burstQuote = "You Scum!!!!";
+    const burstDesc = "You refuse to allow the innocent around you continue experiencing injustice as your spirit is riled with anger and determination.";
+    const burstAbility = {
+        condition: "Triggered/Transform",
+        desc: "Gain a stack of Power, double the Life and Ki Points gained through Limitless Rage’s 2nd effect, and use the Empower Maneuver as an Out-of-Sequence Maneuver."
+    }
     return (
-        <div className="flex flex-row max-w-5xl px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
+        <div className="flex flex-col flex-col-1 max-w-5xl px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
             <Head
                 title={title}
                 author={author}
@@ -62,10 +67,12 @@ export default function Test() {
                 banner={banner}
                 attributeModifiers={attributeModifiers}
             />
-            <Feature title={featureTitle1} abilities={featureAbilities1}/>
-            <Feature title={featureTitle2} abilities={featureAbilities2}/>
+            <Trait title={featureTitle1} abilities={featureAbilities1}/>
+            <Trait title={featureTitle2} abilities={featureAbilities2}/>
             <BurstLimit
                 title={burstQuote}
+                desc={burstDesc}
+                ability={burstAbility}
              />
         </div>
     );

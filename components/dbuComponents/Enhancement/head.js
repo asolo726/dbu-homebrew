@@ -7,7 +7,7 @@ export default function Head(props) {
     const requirementNameStyle = "font-bold text-dbu-header";
     return (
         <div className="flex-grow-1">
-            <h1 className="text-dbu-header text-[2em] sm:text-[3em] font-bold text-center mb-4">
+            <h1 className="text-dbu-header text-[2em] sm:text-[3em] font-bold text-center mb-4 tracking-wide">
                 {props.title}
             </h1>
             <h3 className="text-dbu-header text-[1.5em] sm:text-[1.8em] italic text-center mb-10">
@@ -20,7 +20,7 @@ export default function Head(props) {
                 height={1500}
                 alt="Super Saiyan Son Goku gripping Cooler's left wrist."
             />
-            <p className="text-pretty text-md md:text-lg">{props.mainDesc}</p>
+            <p className="text-pretty text-md tracking-wide md:text-lg">{props.mainDesc}</p>
             <ul className="list-disc ml-10 mt-3 text-md md:text-lg">
                 <li>
                     <p>
