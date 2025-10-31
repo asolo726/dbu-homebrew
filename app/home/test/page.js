@@ -1,5 +1,6 @@
 import Head from "../../../components/dbuComponents/head";
 import Feature from "../../../components/dbuComponents/feature";
+import BurstLimit from "../../../components/dbuComponents/burstLimit";
 import { title } from "process";
 
 /**
@@ -7,6 +8,8 @@ import { title } from "process";
  * @returns Test Page for Righteous Indignation  Enhancement power
  */
 export default function Test() {
+    const title = "Righteous Indignation";
+    const author = "Blasteroid";
     const mainDesc =
         "While it is well known that intense emotions can give rise to immense bursts of strength, raw, unfocused feelings can often lead to excess waste, leaving the individual weaker when their momentary outburst ends. What is better is harnessing that emotion towards something greater, something beyond yourself, and the good nature of your soul pushes you to virtuous action. You are not simply angry for the sake of being angry or for some prideful reason; you burn with righteous fury and fight to defend and protect what is dear.";
     const aspects = [
@@ -44,9 +47,10 @@ export default function Test() {
     ]
     const burstQuote = "You Scum!!!!";
     return (
-        <div className="flex flex-row max-w-4xl px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 rounded-xl">
+        <div className="flex flex-row max-w-5xl px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
             <Head
-                title="Righteous Indignation"
+                title={title}
+                author={author}
                 prerequisite="Good or Pure Good Z-Soul Alignment"
                 type="Enhancement Power"
                 tier="3+"
