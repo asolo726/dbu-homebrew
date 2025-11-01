@@ -1,11 +1,11 @@
 export default function Ability({ abilityList = [{}] }) {
     return (
-        <div className="mt-4">
+        <div className="mt-2">
             {abilityList.map((item, key) => {
                 if ("condition" in item) {
                     return (
                         <p
-                            className="text-dbu-text text-md md:text-lg text-left my-3"
+                            className="text-dbu-text text-md md:text-lg text-left my-1"
                             key={key}
                         >
                             {"-["}
@@ -22,7 +22,7 @@ export default function Ability({ abilityList = [{}] }) {
                             {item.list.map((listItem, key) => {
                                 return (
                                     <li
-                                        className="my-3 text-dbu-text text-md md:text-lg text-left"
+                                        className="my-2 text-dbu-text text-md md:text-lg text-left"
                                         key={key}
                                     >
                                         {listItem}
