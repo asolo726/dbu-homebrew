@@ -73,7 +73,29 @@ export default function Test() {
             desc: "Apply the effects of the Karmic Edge (See —Weapons) to your Attacking Maneuver. If you would already apply this Quality’s effects to the Attacking Maneuver, increase the Dice Category of its Wound roll bonus by 1.",
         },
     ];
-    const featureAbilities2 = [{}, {}];
+    const featureAbilities2 = [
+        {
+            condition: "Ruling",
+            desc: "If you apply Power Control: Improvement to this Transformation, the 2nd effect of Limitless Rage gains the Triggered/Transform keyword instead of Automatic/Transform."
+        }, 
+        {
+            condition: "Triggered/Transform, Triggered/Start of Turn, 3/Encounter",
+            desc: " Gain 2 Temporary Karma Points. Temporary Karma Points function as normal Karma Points but disappear at the end of the Encounter and do not count against your maximum."
+        }, 
+        {
+            condition: "Passive",
+            desc: "When you use the Empower Maneuver, the ally regains Life Points equal to the Ki they receive, and treat the Empower Maneuver as having an additional amount of KP spent equal to your Power Level."
+        }, 
+        {
+            condition: "1/Encounter",
+            desc: "When you use the 5th effect of Limitless Rage, enter the Furious State until the end of the turn and use the Movement or Energy Charge Maneuvers as an Out-of-Sequence Maneuver. You do not suffer from the Furious State’s 2nd effect."
+        }, 
+        {
+            condition: "Triggered, 1/Encounter",
+            desc: "If you would lose a Duel Maneuver, trigger a Power Surge and make an additional Strike Roll as part of the Duel Maneuver."
+        }, 
+        
+    ];
     const burstQuote = "You Scum!!!!";
     const burstDesc =
         "You refuse to allow the innocent around you continue experiencing injustice as your spirit is riled with anger and determination.";

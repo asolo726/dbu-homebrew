@@ -7,7 +7,7 @@ export default function BurstLimit({title = "", desc = "", ability = {}}){
                 <span className="font-bold text-dbu-header">{title}:</span> 
                 {" "}{desc}
             </p>
-            <Ability ability={ability}/>
+            <Ability abilityList={ability}/>
         </div>
     )
 }
