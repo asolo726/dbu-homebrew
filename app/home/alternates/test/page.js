@@ -171,7 +171,7 @@ export default function Test_DarkRessurrection() {
                 author={alternateFormObj.head.author}
                 raceReq={alternateFormObj.head.raceReq}
                 preReq={alternateFormObj.head.preReq}
-                top={alternateFormObj.head.top}
+                tier={alternateFormObj.head.top}
                 aspects={alternateFormObj.head.aspects}
                 attributeModifiers={alternateFormObj.head.attributeModifiers}
                 stress={alternateFormObj.head.stress}

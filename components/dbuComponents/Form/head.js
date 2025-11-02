@@ -83,7 +83,7 @@ export default function Head(props) {
                         <span className={requirementNameStyle}>
                             Tier of Power Requirement{" "}
                         </span>{" "}
-                        {props.tier}
+                        {props.tier}+
                     </p>
                 </li>
                 <li>
