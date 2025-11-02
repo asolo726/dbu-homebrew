@@ -1,29 +1,29 @@
-import FormHead from "../../Forms/FormHead";
+import FormHead from "../FormHead.Class";
 class AlternateHead extends FormHead {
     constructor({
         title,
-        banner = "",
-        desc = "",
-        author = "",
-        raceReq = "None",
-        preReq = "None",
-        top = "1",
-        aspects = [],
-        attributeModifiers = [],
+        banner,
+        desc,
+        author,
+        raceReq,
+        preReq,
+        top,
+        aspects,
+        attributeModifiers,
         stress = "1",
         transLine = "",
         transStage = "",
     } = {}) {
-        super(
-            title,
-            banner,
-            desc,
-            author,
-            raceReq,
-            preReq,
-            top,
-            aspects,
-            attributeModifiers
+        super({
+            title: title,
+            banner: banner,
+            desc: desc,
+            author: author,
+            raceReq: raceReq,
+            preReq: preReq,
+            top: top,
+            aspects: aspects,
+            attributeModifiers: attributeModifiers}
         );
         this._stress = stress;
         this._transLine = transLine;

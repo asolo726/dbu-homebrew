@@ -1,5 +1,5 @@
-import Ability from "./ability";
-export default function BurstLimit({title = "", desc = "", ability = {}}){
+import Ability from "../General/ability";
+export default function BurstLimit({title = "", desc = "", ability = [{}]}){
     return(
         <div className="">
             <p className="text-dbu-header text-center text-md md:text-2xl my-3 font-bold tracking-widest">BURST LIMIT</p>

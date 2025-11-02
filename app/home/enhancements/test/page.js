@@ -1,6 +1,6 @@
-import Head from "../../../../components/dbuComponents/Enhancement/head";
+import Head from "../../../../components/dbuComponents/Form/head";
 import Trait from "../../../../components/dbuComponents/General/trait";
-import BurstLimit from "../../../../components/dbuComponents/General/burstLimit";
+import BurstLimit from "../../../../components/dbuComponents/Form/burstLimit";
 
 /**
  *
@@ -14,8 +14,8 @@ export default function Test() {
     const aspects = [
         { name: "Raging", level: 3 },
         { name: "High Speed", level: 1 },
-        { name: "Strainless", level: 1 },
-        { name: "Dedicated", level: 1 },
+        { name: "Strainless", level: 0 },
+        { name: "Dedicated", level: 0 },
         { name: "Temporary ", level: 3 },
         { name: "Limited ", level: 1 },
     ];
@@ -113,8 +113,8 @@ export default function Test() {
                 prerequisite="Good or Pure Good Z-Soul Alignment"
                 tier="3+"
                 stress="15"
-                race="Any"
-                prereq="Good or Pure Good Z-Soul Alignment"
+                raceReq="Any"
+                preReq="Good or Pure Good Z-Soul Alignment"
                 mainDesc={mainDesc}
                 aspects={aspects}
                 banner={banner}

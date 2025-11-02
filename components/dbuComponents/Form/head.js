@@ -11,23 +11,25 @@ export default function Head(props) {
                 {props.title}
             </h1>
             <h3 className="text-dbu-header text-[1.5em] sm:text-[1.8em] italic text-center mb-10">
-               by {props.author}
+                by {props.author}
             </h3>
             <Image
                 src={props.banner}
                 className="justify-self-center max-w-[100%] mb-5"
                 width={1500}
                 height={1500}
-                alt="Super Saiyan Son Goku gripping Cooler's left wrist."
+                alt=""
             />
-            <p className="text-pretty text-md tracking-wide md:text-lg">{props.mainDesc}</p>
+            <p className="text-pretty text-md tracking-wide md:text-lg">
+                {props.mainDesc}
+            </p>
             <ul className="list-disc ml-10 mt-3 text-md md:text-lg">
                 <li>
                     <p>
                         <span className={requirementNameStyle}>
                             Racial Requirement:
                         </span>{" "}
-                        {props.race}
+                        {props.raceReq}
                     </p>
                 </li>
                 <li>
@@ -43,17 +45,39 @@ export default function Head(props) {
                         <span className={requirementNameStyle}>
                             Prerequisite(s):{" "}
                         </span>{" "}
-                        {props.prereq}
+                        {props.preReq}
                     </p>
                 </li>
-                <li>
-                    <p>
-                        <span className={requirementNameStyle}>
-                            Stress Test Requirement:{" "}
-                        </span>
-                        {props.stress}
-                    </p>
-                </li>
+                {/* {props.transLine.length > 0 ? (
+                    <li>
+                        <p>
+                            <span className={requirementNameStyle}>
+                                Transformation Line:{" "}
+                            </span>{" "}
+                            {props.transLine}
+                        </p>
+                    </li>
+                ) : <></>}
+                {props.transStage.length > 0 ? (
+                    <li>
+                        <p>
+                            <span className={requirementNameStyle}>
+                                Transformation Stage:{" "}
+                            </span>{" "}
+                            {props.transStage}
+                        </p>
+                    </li>
+                ): <></>} */}
+                {props.stress !== "" && (
+                    <li>
+                        <p>
+                            <span className={requirementNameStyle}>
+                                Stress Test Requirement:{" "}
+                            </span>
+                            {props.stress}
+                        </p>
+                    </li>
+                )}
                 <li>
                     <p>
                         <span className={requirementNameStyle}>
@@ -65,9 +89,16 @@ export default function Head(props) {
                 <li>
                     <p>
                         <span className={requirementNameStyle}>Aspects </span>{" "}
-                        {props.aspects.map(
-                            (aspect, id) =>
-                                id === props.aspects.length - 1 ? aspect.name + " (LV" + aspect.level + ")" :  aspect.name + " (LV" + aspect.level + "), "
+                        {props.aspects.map((aspect, id) =>
+                            id === props.aspects.length - 1
+                                ? aspect.name +
+                                  (aspect.level === 0
+                                      ? " "
+                                      : " (LV" + aspect.level + ") ")
+                                : aspect.name +
+                                  (aspect.level === 0
+                                      ? ", "
+                                      : " (LV" + aspect.level + "), ")
                         )}
                     </p>
                 </li>
@@ -76,8 +107,11 @@ export default function Head(props) {
                 <table className="table-fixed w-full border-collapse text-center text-xl font-light ">
                     <thead>
                         <tr>
-                            {props.attributeModifiers.map((modifier,id) => (
-                                <th key={id} className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all">
+                            {props.attributeModifiers.map((modifier, id) => (
+                                <th
+                                    key={id}
+                                    className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
+                                >
                                     {modifier.attribute}
                                 </th>
                             ))}
