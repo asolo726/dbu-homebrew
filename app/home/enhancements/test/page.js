@@ -1,6 +1,6 @@
-import Head from "../../../components/dbuComponents/Enhancement/head";
-import Trait from "../../../components/dbuComponents/General/trait";
-import BurstLimit from "../../../components/dbuComponents/General/burstLimit";
+import Head from "../../../../components/dbuComponents/Enhancement/head";
+import Trait from "../../../../components/dbuComponents/General/trait";
+import BurstLimit from "../../../../components/dbuComponents/General/burstLimit";
 
 /**
  *
@@ -111,7 +111,6 @@ export default function Test() {
                 title={title}
                 author={author}
                 prerequisite="Good or Pure Good Z-Soul Alignment"
-                type="Enhancement Power"
                 tier="3+"
                 stress="15"
                 race="Any"
@@ -121,8 +120,8 @@ export default function Test() {
                 banner={banner}
                 attributeModifiers={attributeModifiers}
             />
-            <Trait traitIntro={featureTitle1} abilities={featureAbilities1} />
-            <Trait traitIntro={featureTitle2} abilities={featureAbilities2} />
+            <Trait title={featureTitle1.title} desc={featureTitle1.desc} abilities={featureAbilities1} />
+            <Trait title={featureTitle2.title} desc={featureTitle2.desc} abilities={featureAbilities2} />
             <BurstLimit
                 title={burstQuote}
                 desc={burstDesc}

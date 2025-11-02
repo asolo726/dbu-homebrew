@@ -35,7 +35,7 @@ export default function Head(props) {
                         <span className={requirementNameStyle}>
                             Transformation Type:
                         </span>{" "}
-                        {props.type}
+                        Enhancement Power
                     </p>
                 </li>
                 <li>
