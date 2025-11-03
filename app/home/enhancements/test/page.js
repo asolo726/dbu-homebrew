@@ -111,7 +111,7 @@ export default function Test() {
                 title={title}
                 author={author}
                 prerequisite="Good or Pure Good Z-Soul Alignment"
-                tier="3+"
+                tier="3"
                 stress="15"
                 raceReq="Any"
                 preReq="Good or Pure Good Z-Soul Alignment"

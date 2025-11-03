@@ -176,15 +176,6 @@ export default function Test_DarkRessurrection() {
         masteryTraitObj
     );
 
-    console.log("trait1 abilities:", trait1.abilities);
-    console.log("traitObj1:", traitObj1);
-    console.log("traitObj1 abilities getter:", traitObj1.abilities);
-
-    console.log("trait2 abilities:", trait2.abilities);
-    console.log("traitObj2:", traitObj2);
-    console.log("traitObj2 abilities getter:", traitObj2.abilities);
-
-
     return (
         <div className="flex flex-col flex-col-1 max-w-5xl px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
             <Head
