@@ -113,9 +113,19 @@ export default function Test_DarkRessurrection() {
             },
         ],
     };
-    const traitObj1 = new TraitClass(trait1.title, trait1.desc, trait1.abilities);
-    const traitObj2 = new TraitClass(trait2.title, trait2.desc, trait2.abilities);
-    
+
+    const traitObj1 = new TraitClass(
+        trait1.title,
+        trait1.desc,
+        trait1.abilities
+    );
+
+    const traitObj2 = new TraitClass(
+        trait2.title,
+        trait2.desc,
+        trait2.abilities
+    );
+
     const masteryTrait = {
         title: "Night Warrior",
         desc: "Having perfected the art of your corpse transmogrification, you are no longer hindered by the state of undeath - and may enter it while your body still lives.",
@@ -154,13 +164,26 @@ export default function Test_DarkRessurrection() {
             },
         ],
     };
-    const masteryTraitObj = new MasteryTraitClass(masteryTrait.title, masteryTrait.desc, masteryTrait.abilities);
+    const masteryTraitObj = new MasteryTraitClass(
+        masteryTrait.title,
+        masteryTrait.desc,
+        masteryTrait.abilities
+    );
 
     const alternateFormObj = new Alternate(
         altHead,
         [traitObj1, traitObj2],
         masteryTraitObj
     );
+
+    console.log("trait1 abilities:", trait1.abilities);
+    console.log("traitObj1:", traitObj1);
+    console.log("traitObj1 abilities getter:", traitObj1.abilities);
+
+    console.log("trait2 abilities:", trait2.abilities);
+    console.log("traitObj2:", traitObj2);
+    console.log("traitObj2 abilities getter:", traitObj2.abilities);
+
 
     return (
         <div className="flex flex-col flex-col-1 max-w-5xl px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
@@ -178,12 +201,21 @@ export default function Test_DarkRessurrection() {
                 transLine={alternateFormObj.head.transLine}
                 transStage={alternateFormObj.head.transStage}
             />
-            {
-                alternateFormObj.traits.map((trait, key) => {
-                    return <Trait title={trait.title} desc={trait.desc} ability={trait.abilities} key={key}/>;
-                })
-            }
-            <MasteryTrait title={masteryTraitObj.title} desc={masteryTraitObj.desc} ability={masteryTraitObj.abilities} />
+            {alternateFormObj.traits.map((trait, key) => {
+                return (
+                    <Trait
+                        title={trait.title}
+                        desc={trait.desc}
+                        abilities={trait.abilities}
+                        key={key}
+                    />
+                );
+            })}
+            <MasteryTrait
+                title={masteryTraitObj.title}
+                desc={masteryTraitObj.desc}
+                ability={masteryTraitObj.abilities}
+            />
         </div>
     );
 }

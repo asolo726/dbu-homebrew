@@ -48,7 +48,7 @@ export default function Head(props) {
                         {props.preReq}
                     </p>
                 </li>
-                {/* {props.transLine.length > 0 ? (
+                {props.transLine ? (
                     <li>
                         <p>
                             <span className={requirementNameStyle}>
@@ -58,7 +58,7 @@ export default function Head(props) {
                         </p>
                     </li>
                 ) : <></>}
-                {props.transStage.length > 0 ? (
+                {props.transStage ? (
                     <li>
                         <p>
                             <span className={requirementNameStyle}>
@@ -67,7 +67,7 @@ export default function Head(props) {
                             {props.transStage}
                         </p>
                     </li>
-                ): <></>} */}
+                ): <></>}
                 {props.stress !== "" && (
                     <li>
                         <p>
