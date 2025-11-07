@@ -1,9 +1,10 @@
+import Head from "../../../../components/dbuComponents/Form/head";
+import Trait from "../../../../components/dbuComponents/General/trait";
+import MasteryTrait from "../../../../components/dbuComponents/Form/masteryTrait";
+
 import AlternateHead from "../../../../classes/Forms/Alternate/altHead.Class";
 import Alternate from "../../../../classes/Forms/Alternate/alternate.Class";
-import Head from "../../../../components/dbuComponents/Form/head";
-import MasteryTrait from "../../../../components/dbuComponents/Form/masteryTrait";
 import MasteryTraitClass from "../../../../classes/Forms/Alternate/masteryTrait.Class";
-import Trait from "../../../../components/dbuComponents/General/trait";
 import TraitClass from "../../../../classes/General Classes/trait.Class";
 
 export default function Test_DarkRessurrection() {
@@ -29,7 +30,7 @@ export default function Test_DarkRessurrection() {
         banner: "/Comaeu's Son.webp",
         raceReq: "Any Race (except Robot)",
         stress: "10",
-        top: "1",
+        tier: "1",
         aspects: aspects,
         attributeModifiers: attributeModifiers,
     });
@@ -179,18 +180,7 @@ export default function Test_DarkRessurrection() {
     return (
         <div className="flex flex-col flex-col-1 max-w-5xl px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
             <Head
-                title={alternateFormObj.head.title}
-                banner={alternateFormObj.head.banner}
-                desc={alternateFormObj.head.desc}
-                author={alternateFormObj.head.author}
-                raceReq={alternateFormObj.head.raceReq}
-                preReq={alternateFormObj.head.preReq}
-                tier={alternateFormObj.head.top}
-                aspects={alternateFormObj.head.aspects}
-                attributeModifiers={alternateFormObj.head.attributeModifiers}
-                stress={alternateFormObj.head.stress}
-                transLine={alternateFormObj.head.transLine}
-                transStage={alternateFormObj.head.transStage}
+                Form={alternateFormObj}
             />
             {alternateFormObj.traits.map((trait, key) => {
                 return (

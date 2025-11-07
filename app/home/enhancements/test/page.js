@@ -2,11 +2,16 @@ import Head from "../../../../components/dbuComponents/Form/head";
 import Trait from "../../../../components/dbuComponents/General/trait";
 import BurstLimit from "../../../../components/dbuComponents/Form/burstLimit";
 
+import EnhancementHeadClass from "../../../../classes/Forms/Enhancement/enhancementHead.Class";
+import EnhancementClass from "../../../../classes/Forms/Enhancement/enhancement.Class";
+import BurstLimitClass from "../../../../classes/Forms/Enhancement/burstLimit.Class";
+import TraitClass from "../../../../classes/General Classes/trait.Class";
+
 /**
  *
  * @returns Test Page for Righteous Indignation Enhancement power
  */
-export default function Test() {
+export default function Test_Righteous_Indignation() {
     const title = "Righteous Indignation";
     const author = "Blasteroid";
     const mainDesc =
@@ -30,6 +35,19 @@ export default function Test() {
         { attribute: "MA", Bonus: 2, Multiplier: "T" },
         { attribute: "PE", Bonus: 0, Multiplier: "T" },
     ];
+
+    const head = new EnhancementHeadClass({
+        title: title,
+        banner: banner,
+        desc: mainDesc,
+        author: author,
+        raceReq: "Any",
+        preReq: "Good or Pure Good Z-Soul Alignment",
+        tier: "3",
+        aspects: aspects,
+        attributeModifiers: attributeModifiers,
+        stress: "15",
+    });
 
     const featureTitle1 = {
         title: "Limitless Rage",
@@ -76,26 +94,40 @@ export default function Test() {
     const featureAbilities2 = [
         {
             condition: "Ruling",
-            desc: "If you apply Power Control: Improvement to this Transformation, the 2nd effect of Limitless Rage gains the Triggered/Transform keyword instead of Automatic/Transform."
-        }, 
+            desc: "If you apply Power Control: Improvement to this Transformation, the 2nd effect of Limitless Rage gains the Triggered/Transform keyword instead of Automatic/Transform.",
+        },
         {
-            condition: "Triggered/Transform, Triggered/Start of Turn, 3/Encounter",
-            desc: " Gain 2 Temporary Karma Points. Temporary Karma Points function as normal Karma Points but disappear at the end of the Encounter and do not count against your maximum."
-        }, 
+            condition:
+                "Triggered/Transform, Triggered/Start of Turn, 3/Encounter",
+            desc: " Gain 2 Temporary Karma Points. Temporary Karma Points function as normal Karma Points but disappear at the end of the Encounter and do not count against your maximum.",
+        },
         {
             condition: "Passive",
-            desc: "When you use the Empower Maneuver, the ally regains Life Points equal to the Ki they receive, and treat the Empower Maneuver as having an additional amount of KP spent equal to your Power Level."
-        }, 
+            desc: "When you use the Empower Maneuver, the ally regains Life Points equal to the Ki they receive, and treat the Empower Maneuver as having an additional amount of KP spent equal to your Power Level.",
+        },
         {
             condition: "1/Encounter",
-            desc: "When you use the 5th effect of Limitless Rage, enter the Furious State until the end of the turn and use the Movement or Energy Charge Maneuvers as an Out-of-Sequence Maneuver. You do not suffer from the Furious State’s 2nd effect."
-        }, 
+            desc: "When you use the 5th effect of Limitless Rage, enter the Furious State until the end of the turn and use the Movement or Energy Charge Maneuvers as an Out-of-Sequence Maneuver. You do not suffer from the Furious State’s 2nd effect.",
+        },
         {
             condition: "Triggered, 1/Encounter",
-            desc: "If you would lose a Duel Maneuver, trigger a Power Surge and make an additional Strike Roll as part of the Duel Maneuver."
-        }, 
-        
+            desc: "If you would lose a Duel Maneuver, trigger a Power Surge and make an additional Strike Roll as part of the Duel Maneuver.",
+        },
     ];
+
+    const traits = [
+        new TraitClass(
+            featureTitle1.title,
+            featureTitle1.desc,
+            featureAbilities1
+        ),
+        new TraitClass(
+            featureTitle2.title,
+            featureTitle2.desc,
+            featureAbilities2
+        ),
+    ];
+
     const burstQuote = "You Scum!!!!";
     const burstDesc =
         "You refuse to allow the innocent around you continue experiencing injustice as your spirit is riled with anger and determination.";
@@ -105,27 +137,29 @@ export default function Test() {
             desc: "Gain a stack of Power, double the Life and Ki Points gained through Limitless Rage’s 2nd effect, and use the Empower Maneuver as an Out-of-Sequence Maneuver.",
         },
     ];
+
+    const burstLimit = new BurstLimitClass(burstQuote, burstDesc, burstAbility);
+
+    const enhancement = new EnhancementClass(head, traits, burstLimit);
     return (
         <div className="flex flex-col flex-col-1 max-w-5xl px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
-            <Head
-                title={title}
-                author={author}
-                prerequisite="Good or Pure Good Z-Soul Alignment"
-                tier="3"
-                stress="15"
-                raceReq="Any"
-                preReq="Good or Pure Good Z-Soul Alignment"
-                mainDesc={mainDesc}
-                aspects={aspects}
-                banner={banner}
-                attributeModifiers={attributeModifiers}
+            <Head 
+                Form={enhancement} 
             />
-            <Trait title={featureTitle1.title} desc={featureTitle1.desc} abilities={featureAbilities1} />
-            <Trait title={featureTitle2.title} desc={featureTitle2.desc} abilities={featureAbilities2} />
+            {enhancement.traits.map((trait, key) => {
+                return (
+                    <Trait
+                        title={trait.title}
+                        desc={trait.desc}
+                        abilities={trait.abilities}
+                        key={key}
+                    />
+                );
+            })}
             <BurstLimit
-                title={burstQuote}
-                desc={burstDesc}
-                ability={burstAbility}
+                title={enhancement.burstLimit.title}
+                desc={enhancement.burstLimit.desc}
+                ability={enhancement.burstLimit.abilities}
             />
         </div>
     );

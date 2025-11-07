@@ -2,13 +2,15 @@ class BurstLimit {
     constructor(title, desc, abilities = [{}]) {
         this._title = title;
         this._desc = desc;
-        this._ability = ability;
+        this._abilities = abilities;
     }
 
     get title() { return this._title;}
     get desc() { return this._desc;}
-    get ability() { return this._ability;}
+    get abilities() { return this._abilities;}
     set title(value) { this._title = value; }
     set desc(value) { this._desc = value; }
-    set ability(value) { this._ability = value; }
+    set abilities(value) { this._abilities = value; }
 }
+
+export default BurstLimit;

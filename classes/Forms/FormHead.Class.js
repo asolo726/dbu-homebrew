@@ -7,7 +7,7 @@ class FormHead extends Head {
         author = "",
         raceReq = "None",
         preReq = "None",
-        top = "1",
+        tier = "1",
         aspects = [],
         attributeModifiers = [],
     } = {}) {
@@ -15,7 +15,7 @@ class FormHead extends Head {
         this._author = author;
         this._raceReq = raceReq;
         this._preReq = preReq;
-        this._top = top;
+        this._tier = tier;
         this._aspects = aspects;
         this._attributeModifiers = attributeModifiers;
     }
@@ -38,11 +38,11 @@ class FormHead extends Head {
     set preReq(value) {
         this._preReq = value;
     }
-    get top() {
-        return this._top;
+    get tier() {
+        return this._tier;
     }
-    set top(value) {
-        this._top = value;
+    set tier(value) {
+        this._tier = value;
     }
     get aspects() {
         return this._aspects;

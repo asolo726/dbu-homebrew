@@ -7,7 +7,7 @@ class AlternateHead extends FormHead {
         author,
         raceReq,
         preReq,
-        top,
+        tier,
         aspects,
         attributeModifiers,
         stress = "1",
@@ -21,10 +21,10 @@ class AlternateHead extends FormHead {
             author: author,
             raceReq: raceReq,
             preReq: preReq,
-            top: top,
+            tier: tier,
             aspects: aspects,
-            attributeModifiers: attributeModifiers}
-        );
+            attributeModifiers: attributeModifiers
+        });
         this._stress = stress;
         this._transLine = transLine;
         this._transStage = transStage;

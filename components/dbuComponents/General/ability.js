@@ -1,14 +1,16 @@
 export default function Ability({ abilityList = [{}], key }) {
+    let conditionAbilityCount = 0;
     return (
         <div className="mt-2" key={key}>
             {abilityList.map((item, key) => {
                 if ("condition" in item) {
+                    conditionAbilityCount++;
                     return (
                         <p
                             className="text-dbu-text text-md md:text-lg text-left my-1"
                             key={key}
                         >
-                            {"-["}
+                            {"("}<span className="font-bold text-dbu-header">{conditionAbilityCount}</span>{")-["}
                             <span className="font-bold text-dbu-header">
                                 {`${item.condition}`}
                             </span>
