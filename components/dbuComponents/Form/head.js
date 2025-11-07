@@ -73,7 +73,7 @@ export default function Head({Form}) {
                 ) : (
                     <></>
                 )}
-                {Form.head.stress !== "" ? (
+                {Form.head.stress ? (
                     <li>
                         <p>
                             <span className={requirementNameStyle}>
@@ -85,6 +85,16 @@ export default function Head({Form}) {
                 ) : (
                     <></>
                 )}
+                {Form.head.maxStacks ? (
+                    <li>
+                        <p>
+                            <span className={requirementNameStyle}>
+                                Maximum No of Stacks:{" "}
+                            </span>
+                            {Form.head.maxStacks}
+                        </p>
+                    </li>
+                ) : <></>}
                 <li>
                     <p>
                         <span className={requirementNameStyle}>
@@ -138,7 +148,7 @@ export default function Head({Form}) {
                                         className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
                                         key={id}
                                     >
-                                        {`+${modifier.Bonus}(${modifier.Multiplier})`}
+                                        {modifier.Multiplier.length === 0 ? `+${modifier.Bonus}` : `${modifier.Bonus}(${modifier.Multiplier})` }
                                     </td>
                                 ) : (
                                     <td
