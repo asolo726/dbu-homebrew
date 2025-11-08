@@ -38,7 +38,7 @@ export default function Head({Form}) {
                         <span className={requirementNameStyle}>
                             Transformation Type:
                         </span>{" "}
-                        Enhancement Power
+                        {Form.head.type}
                     </p>
                 </li>
                 <li>

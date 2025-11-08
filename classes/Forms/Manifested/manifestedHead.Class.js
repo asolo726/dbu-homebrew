@@ -11,6 +11,7 @@ class ManifestHead extends FormHead {
         aspects,
         attributeModifiers,
         maxStacks = 1,
+        type = "Manifested Power"
     } = {}) {
         super({
             title: title,
@@ -21,7 +22,8 @@ class ManifestHead extends FormHead {
             preReq: preReq,
             tier: tier,
             aspects: aspects,
-            attributeModifiers: attributeModifiers
+            attributeModifiers: attributeModifiers,
+            type: type
         });
         this._maxStacks = maxStacks;
     }

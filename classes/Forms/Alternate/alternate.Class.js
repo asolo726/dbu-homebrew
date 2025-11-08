@@ -6,9 +6,7 @@ class Alternate{
         this._masteryTrait = masteryTrait;
         this._transformations = transformations;
     }
-
     
-
     get head(){ return this._head; }
     set head(value){ this._head = value; }
 

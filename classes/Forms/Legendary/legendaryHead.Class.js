@@ -1,5 +1,4 @@
-import FormHead from "../FormHead.Class";
-class AlternateHead extends FormHead {
+class LegendaryHead extends FormHead {
     constructor({
         title,
         banner,
@@ -13,7 +12,7 @@ class AlternateHead extends FormHead {
         stress = "1",
         transLine = "",
         transStage = "",
-        type = "Alternate Form"
+        type = "Legendary Form"
     } = {}) {
         super({
             title: title,
@@ -32,25 +31,29 @@ class AlternateHead extends FormHead {
         this._transStage = transStage;
     }
 
-    set stress(value) {
-        this._stress = value;
-    }
     get stress() {
         return this._stress;
     }
-    set transLine(value) {
-        this._transLine = value;
-    }
+
     get transLine() {
         return this._transLine;
     }
-    set transStage(value) {
-        this._transStage = value;
-    }
+
     get transStage() {
         return this._transStage;
     }
-    
+
+    set stress(value) {
+        this._stress = value;
+    }
+
+    set transLine(value) {
+        this._transLine = value;
+    }
+
+    set transStage(value) {
+        this._transStage = value;
+    }
 }
 
-export default AlternateHead;
+export default LegendaryHead;

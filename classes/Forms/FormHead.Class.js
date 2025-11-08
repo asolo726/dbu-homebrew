@@ -10,6 +10,7 @@ class FormHead extends Head {
         tier = "1",
         aspects = [],
         attributeModifiers = [],
+        type
     } = {}) {
         super(title, banner, desc);
         this._author = author;
@@ -18,6 +19,7 @@ class FormHead extends Head {
         this._tier = tier;
         this._aspects = aspects;
         this._attributeModifiers = attributeModifiers;
+        this._type = type;
     }
 
     get author() {
@@ -55,6 +57,12 @@ class FormHead extends Head {
     }
     set attributeModifiers(value) {
         this._attributeModifiers = value;
+    }
+    set type(value) {
+        this._type = value;
+    }
+    get type() {
+        return this._type;
     }
 }
 

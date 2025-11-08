@@ -10,6 +10,7 @@ class EnhancementHead extends FormHead {
         tier,
         aspects = [],
         attributeModifiers = [],
+        type = "Enhancement Power",
         stress = 0,
     } = {}) {
         super({
@@ -21,7 +22,8 @@ class EnhancementHead extends FormHead {
             preReq: preReq,
             tier: tier,
             aspects: aspects,
-            attributeModifiers: attributeModifiers
+            attributeModifiers: attributeModifiers,
+            type: type
         });
         this._stress = stress;
     }
