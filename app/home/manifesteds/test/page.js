@@ -82,8 +82,15 @@ export default function Test_Deific_Saiyan() {
     return (
         <div className="flex flex-col flex-col-1 max-w-5xl px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
             <Head Form={manifested} />
-            {manifested.traits.map((trait, key) => {
-                return <Trait key={key} title={trait.title} desc={trait.desc} abilities={trait.abilities} />;
+            {manifested.traits.map((trait, index) => {
+                return (
+                    <Trait
+                        key={index}
+                        title={trait.title}
+                        desc={trait.desc}
+                        abilities={trait.abilities}
+                    />
+                );
             })}
         </div>
     );

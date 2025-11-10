@@ -1,7 +1,7 @@
 import Ability from "../General/ability";
 export default function MasteryTrait({title = "", desc = "", ability}) {
     return (
-        <div className="">
+        <div className="mt-10">
             <p className="text-dbu-header text-center text-md md:text-2xl my-3 font-bold tracking-widest">
                 MASTERY TRAIT
             </p>

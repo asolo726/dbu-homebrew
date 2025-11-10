@@ -148,7 +148,7 @@ export default function Head({Form}) {
                                         className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
                                         key={id}
                                     >
-                                        {modifier.Multiplier.length === 0 ? `+${modifier.Bonus}` : `${modifier.Bonus}(${modifier.Multiplier})` }
+                                        {modifier.Multiplier.length === 0 ? `+${modifier.Bonus}` : `+${modifier.Bonus}(${modifier.Multiplier})` }
                                     </td>
                                 ) : (
                                     <td

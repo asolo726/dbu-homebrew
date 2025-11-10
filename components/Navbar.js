@@ -13,7 +13,7 @@ export default function Navbar() {
         { text: "Manifested Powers", link: "/home/manifesteds/test" },
         { text: "Enhancement Powers", link: "/home/enhancements/test" },
         { text: "Alternate Forms", link: "/home/alternates/test" },
-        { text: "Legendary Forms", link: "" },
+        { text: "Legendary Forms", link: "/home/legendary/test" },
     ];
 
     const navOptions = [

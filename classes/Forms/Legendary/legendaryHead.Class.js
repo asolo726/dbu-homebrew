@@ -1,3 +1,4 @@
+import FormHead from "../FormHead.Class";
 class LegendaryHead extends FormHead {
     constructor({
         title,

@@ -14,6 +14,7 @@ export default function Test_DarkRessurrection() {
         { name: "Dedicated", level: 0 },
         { name: "Difficult", level: 2 },
     ];
+
     const attributeModifiers = [
         { attribute: "AG", Bonus: 0, Multiplier: "T" },
         { attribute: "FO", Bonus: 1, Multiplier: "T" },
@@ -23,6 +24,7 @@ export default function Test_DarkRessurrection() {
         { attribute: "MA", Bonus: 1, Multiplier: "T" },
         { attribute: "PE", Bonus: 0, Multiplier: "T" },
     ];
+
     const altHead = new AlternateHead({
         title: "Dark Ressurrection",
         desc: "Be it by a curse, a quirk of your biology, or something more sinister, you have acquired the ability to spontaneously and temporarily raise yourself from the dead after you’ve been defeated - staggering up as a walking corpse or rising as a foul spirit, and assaulting your enemies unrelentingly.",
@@ -72,6 +74,7 @@ export default function Test_DarkRessurrection() {
             },
         ],
     };
+    
     const trait2 = {
         title: "Macabre Fighter",
         desc: "Rising from the grave, you draw strength from your transmogrified being, and make the most of your unliving state.",
