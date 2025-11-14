@@ -118,6 +118,18 @@ export default function Test_BlackBlade() {
                         },
                     ],
                 },
+                {
+                    addendumBox: [
+                        {
+                            boxTitle: "Black Armor",
+                            title: "Black Armor",
+                            desc: "Within the Black Blade lies the Rune of Death, a fragment of shadow capable of bringing an end to any and all life, including even the most powerful deities.",
+                            abilities: [
+                                
+                            ]
+                        }
+                    ]
+                }
             ],
         },
     ];

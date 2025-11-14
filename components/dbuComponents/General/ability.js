@@ -1,3 +1,5 @@
+import AddendumBox from "./addendumBox";
+
 export default function Ability({ abilityList = [{}], key }) {
     let conditionAbilityCount = 0;
     return (
@@ -49,6 +51,12 @@ export default function Ability({ abilityList = [{}], key }) {
                             })}
                         </ul>
                     );
+                } else if ("addendumBox" in item ){
+                    return(
+                        <ul key={key} className="list-disc ml-10">
+                            <AddendumBox boxTitle={item.boxTitle} title={item.title} desc={item.desc} abilities={item.abilities} />
+                        </ul>
+                    )
                 }
             })}
         </div>
