@@ -127,7 +127,7 @@ export default function Head({Form}) {
                 )}
             </ul>
             <div className="flex justify-center py-5">
-                <table className="table-fixed w-full border-collapse text-center text-xl font-light ">
+                <table className="table-fixed w-full border-collapse text-center text-md md:text-xl font-light ">
                     <thead>
                         <tr>
                             {Form.head.attributeModifiers.map((modifier, id) => (

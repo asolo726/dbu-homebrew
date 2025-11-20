@@ -1,3 +1,4 @@
+'use client';
 import Trait from "./trait";
 import { useState } from 'react';
 import { RxChevronUp } from "react-icons/rx";
