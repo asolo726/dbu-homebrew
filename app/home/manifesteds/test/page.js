@@ -21,6 +21,7 @@ export default function Test_Deific_Saiyan() {
             "Though the scarlet flames may fade from your body, your Saiyan cells hold steadfast to the godly power they were exposed to. While not as powerful as the Super Saiyan God, your base power is now far beyond what it once was, capable of combating even the most experienced of deities without even transforming. \n" +
             "This Manifested Power can be obtained in one of two ways. The first and most common method is to enter the Super Saiyan God Transformation once, after which upon exiting the Transformation you immediately gain this Manifested power. The other method is to enter the God Ki State through a Core Transformation. Upon exiting this Transformation, you may gain this Manifested Power by spending DT unlocking a form.",
         author: "Blasteroid",
+        bannerAuthor: "Kashew",
         raceReq: "Saiyan",
         preReq: "Have entered the God Ki State or Super Saiyan God Transformations at some point. You do not have the Divine Candidate Manifested Power.",
         tier: "4",

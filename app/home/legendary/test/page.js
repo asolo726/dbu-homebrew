@@ -31,7 +31,7 @@ export default function Test_BlackBlade() {
     const legendaryHead = new LegendaryHead({
         title: "Black Blade",
         desc: "Since time immemorial, light has always been followed by shadow. Be it body, mind, or soul, even the most sanctified of light–the luminescence of the gods– can fall to the corruption of the dark. However, shadow does not only birth disorder and despair, for that same darkness can be wielded as a holy blade. A blade born from black, forged to grant even the gods their Destined Death. Brandished by warriors, of unbreakable will and loyalty, seeking only to maintain the order of the world. Yes, indeed, these are the Black Blades. ",
-        banner: "/black_blade.webp",
+        banner: "/Griffith_Can_we_have_battle_beast._no_guts_we_have_battle_beast_at_home._battle_beast_at_home.webp",
         author: "Blasteroid",
         raceReq: "Any",
         preReq: "None",
