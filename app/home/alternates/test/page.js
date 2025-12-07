@@ -29,7 +29,7 @@ export default function Test_DarkRessurrection() {
         title: "Dark Ressurrection",
         desc: "Be it by a curse, a quirk of your biology, or something more sinister, you have acquired the ability to spontaneously and temporarily raise yourself from the dead after you’ve been defeated - staggering up as a walking corpse or rising as a foul spirit, and assaulting your enemies unrelentingly.",
         author: "Comaeu",
-        banner: "/Comaeu's Son.webp",
+        banner: "/I_diagnose_you_with_ligma.webp",
         raceReq: "Any Race (except Robot)",
         stress: "10",
         tier: "1",

@@ -1,8 +1,9 @@
 class Head {
-    constructor(title, banner = "", desc = "" ){
+    constructor(title, banner = "", desc = "", bannerAuthor = ""){
         this._title = title;
         this._banner = banner;
         this._desc = desc;
+        this._bannerAuthor = bannerAuthor;
     }
 
 
@@ -13,6 +14,8 @@ class Head {
     set banner(value){ this._banner = value; }
     get desc(){ return this._desc; }
     set desc(value){ this._desc = value; }
+    get bannerAuthor(){ return this._bannerAuthor; }
+    set bannerAuthor(value){ this._bannerAuthor = value; }
 }
 
 export default Head;

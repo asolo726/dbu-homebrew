@@ -21,8 +21,15 @@ export default function Head({Form}) {
                 alt=""
                 priority={true}
             />
+            {
+                Form.head.bannerAuthor != "" ? (
+                    <p className="text-md md:text-lg text-center mb-3">
+                        (Art Credit: {Form.head.bannerAuthor})
+                    </p>
+                ) : <></>
+            }
             <p className="text-pretty text-md tracking-wide md:text-lg">
-                {Form.head.mainDesc}
+                {Form.head.desc}
             </p>
             <ul className="list-disc ml-10 mt-3 text-md md:text-lg">
                 <li>

@@ -4,6 +4,7 @@ class FormHead extends Head {
         title,
         banner = "/whosthatzfighter.webp",
         desc = "",
+        bannerAuthor = "",
         author = "",
         raceReq = "None",
         preReq = "None",
@@ -12,7 +13,7 @@ class FormHead extends Head {
         attributeModifiers = [],
         type
     } = {}) {
-        super(title, banner, desc);
+        super(title, banner, desc, bannerAuthor);
         this._author = author;
         this._raceReq = raceReq;
         this._preReq = preReq;
