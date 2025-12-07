@@ -20,7 +20,7 @@ export default function Navbar() {
         { text: "Transformations", link: "", list: transformationOptions },
         { text: "Races", link: "" },
         { text: "Sign Up", link: "" },
-        { text: "Log In", link: "" },
+        { text: "Log In", link: "/Login" },
     ];
     
 
