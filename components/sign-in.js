@@ -1,4 +1,4 @@
-import { signIn } from "../lib/auth";
+import { signIn } from "../auth";
 
 //Sign In Form Component
 export default function SignIn() {
@@ -6,7 +6,7 @@ export default function SignIn() {
         <form
             action={async (formData) => {
                 "use server";
-                await signIn("resend", formData);
+                await signIn("mailgun", formData);
             }}
         >
             <input type="text" name="email" placeholder="Email" />
