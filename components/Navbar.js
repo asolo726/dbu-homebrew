@@ -5,8 +5,9 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { RxCross1 } from "react-icons/rx";
 import NavOption from "./navComponents/navOption";
 import NavColumn from "./navComponents/navColumn";
+import SignIn from "./signInorOut";
 
-export default function Navbar() {
+export default function Navbar({session}) {
     const [menuIsOpen, setMenuIsOpen] = useState(false);
     const dropdownCss = menuIsOpen ? " block" : " hidden";
     const transformationOptions = [
@@ -19,11 +20,10 @@ export default function Navbar() {
     const navOptions = [
         { text: "Transformations", link: "", list: transformationOptions },
         { text: "Races", link: "" },
-        { text: "Sign Up", link: "" },
-        { text: "Log In", link: "/Login" },
+        // { text: "Sign Up", link: "" },
+        // { text: "Log In", link: "/Login" },
     ];
     
-
     const desktopNavMenu = ()=>{
         return (
             <div
@@ -33,6 +33,8 @@ export default function Navbar() {
                 {navOptions.map((item, key) => (
                     <NavColumn key={key} text={item.text} link={item.link} list={item.list}/>
                 ))}
+
+                <SignIn session={session}/>
             </div>
         )
     }
@@ -91,14 +93,6 @@ export default function Navbar() {
                     <NavOption
                         text={navOptions[1].text}
                         link={navOptions[1].link}
-                    />
-                    <NavOption
-                        text={navOptions[2].text}
-                        link={navOptions[2].link}
-                    />
-                    <NavOption
-                        text={navOptions[3].text}
-                        link={navOptions[3].link}
                     />
                 </div>
             </nav>

@@ -1,3 +1,4 @@
+'use client';
 import NavDropdown from "./navDropdown";
 import { useState } from "react";
 import { RxChevronUp } from "react-icons/rx";

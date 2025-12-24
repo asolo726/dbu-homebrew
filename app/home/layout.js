@@ -1,8 +1,8 @@
-import Navbar from "../../components/Navbar";
+import NavbarServer from "../../components/NavbarServer";
 export default function HomeLayout({ children }) {
     return (
         <>
-            <Navbar />
+            <NavbarServer />
             <div className="grid justify-center">
                 {children}
             </div>

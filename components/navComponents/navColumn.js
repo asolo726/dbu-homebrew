@@ -1,9 +1,6 @@
-"use client";
-import { useState } from "react";
-
 // Navigation option for Desktop
 export default function NavColumn({ text, link, list = [] }) {
-    const div_styles = "border-r-1 border-dbu-line w-auto";
+    const div_styles = "border-r-1 border-dbu-line w-auto self-center";
     const a_styles = "block text-dbu-text decoration-0 text-md w-full md:px-3 lg:px-7 hover:text-dbu-link ";
 
     const content = () => {

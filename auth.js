@@ -1,13 +1,13 @@
 import NextAuth from "next-auth"
 import { MongoDBAdapter } from "@auth/mongodb-adapter"
 import client from "./lib/mongoDBClient"
-import {Mailgun} from "next-auth/providers/mailgun"
+import Okta from "next-auth/providers/okta"
 
-
-// Setting up Email Verification for Authentication using SendGrid
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: MongoDBAdapter(client),
-  providers: [Mailgun({
-    apiKey: process.env.AUTH_MAILGUN_KEY,
-  })]
+  providers: [Okta({
+    clientId: process.env.OKTA_CLIENT_ID,
+    clientSecret: process.env.OKTA_CLIENT_SECRET,
+    issuer: process.env.OKTA_DOMAIN
+  })],
 })
