@@ -1,33 +1,33 @@
 class Awakening {
-    constructor(head, traits = [], grandAwakening) {
-        this._head = head;
-        this._traits = traits;
-        this._grandAwakening = grandAwakening; // Only for Super Awakenings
-    }
+  constructor(head, traits = [], grandAwakening) {
+    this._head = head;
+    this._traits = traits;
+    this._grandAwakening = grandAwakening; // Only for Super Awakenings
+  }
 
-    get traits() {
-        return this._traits;
-    }
+  get traits() {
+    return this._traits;
+  }
 
-    set traits(value) {
-        this._traits = value;
-    }
+  set traits(value) {
+    this._traits = value;
+  }
 
-    get head() {
-        return this._head;
-    }
+  get head() {
+    return this._head;
+  }
 
-    set head(value) {
-        this._head = value;
-    }
+  set head(value) {
+    this._head = value;
+  }
 
-    get grandAwakening() {
-        return this._grandAwakening;
-    }
+  get grandAwakening() {
+    return this._grandAwakening;
+  }
 
-    set grandAwakening(value) {
-        this._grandAwakening = value;
-    }
+  set grandAwakening(value) {
+    this._grandAwakening = value;
+  }
 }
 
 export default Awakening;

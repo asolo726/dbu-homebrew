@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
-@theme{
+@theme {
   --color-dbu-line: #353535;
   --color-dbu-bg: #232323;
   --color-dbu-header: #dfe288;
-  --color-dbu-text: #CCCCCC;
+  --color-dbu-text: #cccccc;
   --color-dbu-link: #ff6900;
   --color-dbu-bg2: #1b1b1b;
   --color-dbu-bg3: #1f1f1f;
@@ -25,7 +25,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #232323;
-    --foreground: #CCCCCC;
+    --foreground: #cccccc;
   }
 }
 
@@ -34,5 +34,3 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
 }
-
-

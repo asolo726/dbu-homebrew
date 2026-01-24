@@ -1,3 +1,5 @@
-class Table{
-    constructor(title){ this._title = title; }
+class Table {
+  constructor(title) {
+    this._title = title;
+  }
 }
