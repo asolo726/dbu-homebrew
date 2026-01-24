@@ -33,8 +33,8 @@ export default function Test_SCellManifestation() {
     banner: "/whosthatzfighter.webp",
     author: "Blasteroid",
     preReq:
-      "Saiyan Race and access to Super Saiyan 1, Saiyan Ancestry Factor and Descended Super Saiyan, or Saiyan-Like Bio-Focus",
-    tier: "Same as Original Form",
+      "Saiyan Race and access to Super Saiyan 1, Saiyan Ancestry Factor and Descended Super Saiyan, or Saiyan-Like Bio-Focus Trait and Gleaming Might (Saiyan) Genetic Trait",
+    tier: "2+ or Same as Original Form (whichever is higher)",
     aspects: aspects,
     attributeModifiers: attributeModifiers,
     stress: "+3",
