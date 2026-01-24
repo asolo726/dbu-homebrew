@@ -51,6 +51,14 @@ export default function Head({Form}) {
                 <li>
                     <p>
                         <span className={requirementNameStyle}>
+                            Enhancement Type:
+                        </span>{" "}
+                        {Form.head.enhancementType}
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <span className={requirementNameStyle}>
                             Awakening Type:
                         </span>{" "}
                         {Form.head.awakeningType}

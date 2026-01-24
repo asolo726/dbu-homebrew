@@ -12,6 +12,7 @@ class EnhancementHead extends FormHead {
         aspects = [],
         attributeModifiers = [],
         type = "Enhancement Power",
+        enhancementType, // Standard or Special
         stress = 0,
     } = {}) {
         super({
@@ -27,6 +28,7 @@ class EnhancementHead extends FormHead {
             attributeModifiers: attributeModifiers,
             type: type
         });
+        this._enhancementType = enhancementType;
         this._stress = stress;
     }
 
@@ -35,6 +37,14 @@ class EnhancementHead extends FormHead {
     }
     set stress(value) {
         this._stress = value;
+    }
+
+    get enhancementType() {
+        return this._enhancementType;
+    }
+
+    set enhancementType(value) {
+        this._enhancementType = value;
     }
 }
 

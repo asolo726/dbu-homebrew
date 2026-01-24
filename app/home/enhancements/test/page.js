@@ -47,6 +47,7 @@ export default function Test_Righteous_Indignation() {
         aspects: aspects,
         attributeModifiers: attributeModifiers,
         stress: "15",
+        enhancementType: "Standard",
     });
 
     const featureTitle1 = {
