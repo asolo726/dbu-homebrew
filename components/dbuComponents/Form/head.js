@@ -32,12 +32,26 @@ export default function Head({ Form }) {
         {Form.head.desc}
       </p>
       <ul className="list-disc ml-10 mt-3 text-md md:text-lg">
-        <li>
-          <p>
-            <span className={requirementNameStyle}>Racial Requirement:</span>{" "}
-            {Form.head.raceReq}
-          </p>
-        </li>
+        {Form.head.raceReq ? (
+          <li>
+            <p>
+              <span className={requirementNameStyle}>Racial Requirement:</span>{" "}
+              {Form.head.raceReq}
+            </p>
+          </li>
+        ) : (
+          <></>
+        )}
+        {Form.head.evolvedStageType ? (
+          <li>
+            <p>
+              <span className={requirementNameStyle}>Evolved Stage Type</span>{" "}
+              {Form.head.evolvedStageType}
+            </p>
+          </li>
+        ) : (
+          <></>
+        )}
         <li>
           <p>
             <span className={requirementNameStyle}>Transformation Type:</span>{" "}
@@ -143,7 +157,8 @@ export default function Head({ Form }) {
             <span className={requirementNameStyle}>
               Tier of Power Requirement:{" "}
             </span>{" "}
-            {Form.head.tier}+
+            {Form.head.tier +
+              (!Number.isNaN(Number(Form.head.tier)) ? "+" : "")}
           </p>
         </li>
         {Form.head.aspects.length > 0 ? (

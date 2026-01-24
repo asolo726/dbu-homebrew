@@ -15,6 +15,7 @@ export default function Navbar({ session }) {
     { text: "Enhancement Powers", link: "/home/enhancements/test" },
     { text: "Alternate Forms", link: "/home/alternates/test" },
     { text: "Legendary Forms", link: "/home/legendary/test" },
+    { text: "Evolved Stages", link: "/home/evolvedStages/test" },
   ];
 
   const navOptions = [
