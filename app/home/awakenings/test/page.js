@@ -1,7 +1,7 @@
 import Head from "../../../../components/dbuComponents/Form/head";
 import Trait from "../../../../components/dbuComponents/General/trait";
-import ManifestHeadClass from "../../../../classes/Forms/Manifested/manifestedHead.Class.js";
-import ManifestedClass from "../../../../classes/Forms/Manifested/manifested.Class.js";
+import AwakeningHeadClass from "../../../../classes/Forms/Awakening/awakeningHead.Class.js";
+import AwakeningClass from "../../../../classes/Forms/Awakening/awakening.Class.js";
 import TraitClass from "../../../../classes/General Classes/trait.Class";
 
 export default function Test_Deific_Saiyan() {
@@ -14,18 +14,20 @@ export default function Test_Deific_Saiyan() {
         { attribute: "MA", Bonus: 3, Multiplier: "" },
         { attribute: "PE", Bonus: 0, Multiplier: "" },
     ];
-    const manifestHead = new ManifestHeadClass({
+    const awakeningHead = new AwakeningHeadClass({
         title: "Deific Saiyan",
         banner: "/There_Is_a_Massive_Dragon_Behind_Me_Isnt_There.webp",
         desc:
             "Though the scarlet flames may fade from your body, your Saiyan cells hold steadfast to the godly power they were exposed to. While not as powerful as the Super Saiyan God, your base power is now far beyond what it once was, capable of combating even the most experienced of deities without even transforming. \n" +
-            "This Manifested Power can be obtained in one of two ways. The first and most common method is to enter the Super Saiyan God Transformation once, after which upon exiting the Transformation you immediately gain this Manifested power. The other method is to enter the God Ki State through a Core Transformation. Upon exiting this Transformation, you may gain this Manifested Power by spending DT unlocking a form.",
+            "This Awakening can be obtained in one of two ways. The first and most common method is to enter the Super Saiyan God Transformation once, after which upon exiting the Transformation you immediately gain this Manifested power. The other method is to enter the God Ki State through a Core Transformation. Upon exiting this Transformation, you may gain this Manifested Power by spending DT unlocking a form.",
         author: "Blasteroid",
         bannerAuthor: "Kashew",
         raceReq: "Saiyan",
         preReq: "Have entered the God Ki State or Super Saiyan God Transformations at some point. You do not have the Divine Candidate Manifested Power.",
         tier: "4",
         attributeModifiers: attributeModifiers,
+        awakeningType: "Greater",
+        awakeningOrigin: "Body",
         maxStacks: 1,
     });
 
@@ -78,12 +80,12 @@ export default function Test_Deific_Saiyan() {
         new TraitClass(traits[1].title, traits[1].desc, traits[1].abilities),
     ];
 
-    const manifested = new ManifestedClass(manifestHead, traitObjs);
+    const awakening = new AwakeningClass(awakeningHead, traitObjs, null);
 
     return (
         <div className="flex flex-col flex-col-1 max-w-5xl px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
-            <Head Form={manifested} />
-            {manifested.traits.map((trait, index) => {
+            <Head Form={awakening} />
+            {awakening.traits.map((trait, index) => {
                 return (
                     <Trait
                         key={index}

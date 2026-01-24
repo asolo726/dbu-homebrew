@@ -1,5 +1,5 @@
 import FormHead from "../FormHead.Class";
-class ManifestHead extends FormHead {
+class AwakeningHead extends FormHead {
     constructor({
         title,
         banner,
@@ -12,7 +12,9 @@ class ManifestHead extends FormHead {
         aspects,
         attributeModifiers,
         maxStacks = 1,
-        type = "Manifested Power"
+        awakeningType, // Lesser, Greater, or Super
+        awakeningOrigin, // Body or Mind
+        type = "Awakening"
     } = {}) {
         super({
             title: title,
@@ -27,7 +29,9 @@ class ManifestHead extends FormHead {
             attributeModifiers: attributeModifiers,
             type: type
         });
-        this._maxStacks = maxStacks;
+        this._maxStacks = maxStacks,
+        this._awakeningType = awakeningType,
+        this._awakeningOrigin = awakeningOrigin;
     }
 
     get maxStacks() {
@@ -37,6 +41,22 @@ class ManifestHead extends FormHead {
     set maxStacks(value) {
         this._maxStacks = value;
     }
+
+    get awakeningType() {
+        return this._awakeningType;
+    }
+
+    set awakeningType(value) {
+        this._awakeningType = value;
+    }
+
+    get awakeningOrigin() {
+        return this._awakeningOrigin;
+    }
+
+    set awakeningOrigin(value) {
+        this._awakeningOrigin = value;
+    }
 }
 
-export default ManifestHead;
+export default AwakeningHead;

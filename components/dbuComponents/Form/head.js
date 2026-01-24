@@ -51,6 +51,22 @@ export default function Head({Form}) {
                 <li>
                     <p>
                         <span className={requirementNameStyle}>
+                            Awakening Type:
+                        </span>{" "}
+                        {Form.head.awakeningType}
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <span className={requirementNameStyle}>
+                            Awakening Origin:
+                        </span>{" "}
+                        {Form.head.awakeningOrigin}
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <span className={requirementNameStyle}>
                             Prerequisite(s):{" "}
                         </span>{" "}
                         {Form.head.preReq}
