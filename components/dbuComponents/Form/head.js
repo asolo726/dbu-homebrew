@@ -48,30 +48,42 @@ export default function Head({Form}) {
                         {Form.head.type}
                     </p>
                 </li>
-                <li>
-                    <p>
-                        <span className={requirementNameStyle}>
-                            Enhancement Type:
-                        </span>{" "}
-                        {Form.head.enhancementType}
-                    </p>
-                </li>
-                <li>
-                    <p>
-                        <span className={requirementNameStyle}>
-                            Awakening Type:
-                        </span>{" "}
-                        {Form.head.awakeningType}
-                    </p>
-                </li>
-                <li>
-                    <p>
-                        <span className={requirementNameStyle}>
-                            Awakening Origin:
-                        </span>{" "}
-                        {Form.head.awakeningOrigin}
-                    </p>
-                </li>
+                {Form.head.enhancementType ? (
+                    <li>
+                        <p>
+                            <span className={requirementNameStyle}>
+                                Enhancement Type:
+                            </span>{" "}
+                            {Form.head.enhancementType}
+                        </p>
+                    </li>
+                ) : (
+                    <></>
+                )}
+                {Form.head.awakeningType ? (
+                    <li>
+                        <p>
+                            <span className={requirementNameStyle}>
+                                Awakening Type:
+                            </span>{" "}
+                            {Form.head.awakeningType}
+                        </p>
+                    </li>
+                ) : (
+                    <></>
+                )}
+                {Form.head.awakeningOrigin ? (
+                    <li>
+                        <p>
+                            <span className={requirementNameStyle}>
+                                Awakening Origin:
+                            </span>{" "}
+                            {Form.head.awakeningOrigin}
+                        </p>
+                    </li>
+                ) : (
+                    <></>
+                )}
                 <li>
                     <p>
                         <span className={requirementNameStyle}>
