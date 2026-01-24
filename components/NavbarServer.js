@@ -1,11 +1,11 @@
-import { auth } from "../auth"
-import Navbar from "./Navbar"
-import newUserCheck from "./newUserCheck"
+import { auth } from "../auth";
+import Navbar from "./Navbar";
+import newUserCheck from "./newUserCheck";
 
 export default async function NavbarServer() {
-    const session = await auth();
-    
-    if(session) await newUserCheck(session);
+  const session = await auth();
 
-    return <Navbar session={session} />;
+  if (session) await newUserCheck(session);
+
+  return <Navbar session={session} />;
 }

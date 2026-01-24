@@ -1,4 +1,4 @@
-class Trait {
+class GrandAwakening {
   constructor(title, desc, abilities) {
     this._title = title;
     this._desc = desc;
@@ -20,9 +20,9 @@ class Trait {
   set desc(value) {
     this._desc = value;
   }
-  set abilities(value) {
+  set ability(value) {
     this._abilities = value;
   }
 }
 
-export default Trait;
+export default GrandAwakening;
