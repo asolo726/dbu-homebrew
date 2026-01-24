@@ -3,7 +3,7 @@ import Head from "../../../../components/dbuComponents/Form/head";
 import Trait from "../../../../components/dbuComponents/General/trait";
 import LegendaryTrait from "../../../../components/dbuComponents/Form/legendaryTrait";
 
-//Classses
+//Classes
 import LegendaryHead from "../../../../classes/Forms/Legendary/legendaryHead.Class.js";
 import LegendaryClass from "../../../../classes/Forms/Legendary/legendary.Class.js";
 import TraitClass from "../../../../classes/General Classes/trait.Class.js";

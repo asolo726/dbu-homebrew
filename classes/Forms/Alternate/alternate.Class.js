@@ -1,5 +1,5 @@
 class Alternate{
-    constructor(head, traits = [], masteryTrait, transformations = [])
+    constructor({head, traits = [], masteryTrait, transformations = []} = {})
     {
         this._head = head;
         this._traits = traits;
