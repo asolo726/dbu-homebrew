@@ -7,9 +7,9 @@ let nextAuthBody = async () => {
     return {
         providers: [
             Okta({
-                clientId: process.env.OKTA_CLIENT_ID,
-                clientSecret: process.env.OKTA_CLIENT_SECRET,
-                issuer: process.env.OKTA_DOMAIN,
+                clientId: process.env.AUTH0_CLIENT_ID,
+                clientSecret: process.env.AUTH0_CLIENT_SECRET,
+                issuer: process.env.AUTH0_DOMAIN,
             }),
         ],
     };

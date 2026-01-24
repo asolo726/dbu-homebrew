@@ -1,7 +1,7 @@
 export default async function getToken() {
-    const domain = process.env.OKTA_DOMAIN;
-    const id = process.env.OKTA_CLIENT_ID;
-    const secret = process.env.OKTA_CLIENT_SECRET;
+    const id = process.env.AUTH0_CLIENT_ID;
+    const secret = process.env.AUTH0_CLIENT_SECRET;
+    const domain = process.env.AUTH0_DOMAIN;
     try {
         const response = await fetch(
             domain + "/oauth/token",

@@ -6,7 +6,7 @@
  */
 export default async function newUserCheck(session) {
    const email = session.user.email;
-   const baseUrl = process.env.baseURL;
+   const baseUrl = process.env.APP_BASE_URL;
    const result = await fetch(`${baseUrl}/netlify/functions/searchUser?email=${email}`);
    if (result.statusText === "No User Found") {
       const postResult = await fetch(`${baseUrl}/netlify/functions/postUser?email=${email}`);
