@@ -45,7 +45,7 @@ export default function Head({ Form }) {
         {Form.head.evolvedStageType ? (
           <li>
             <p>
-              <span className={requirementNameStyle}>Evolved Stage Type</span>{" "}
+              <span className={requirementNameStyle}>Evolved Stage Type:</span>{" "}
               {Form.head.evolvedStageType}
             </p>
           </li>
