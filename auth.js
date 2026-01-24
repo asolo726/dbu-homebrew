@@ -4,6 +4,12 @@ import NextAuth from "next-auth";
 import Okta from "next-auth/providers/okta";
 
 let nextAuthBody = async () => {
+    if (process.env.NEXTAUTH_ENABLED === 'false') {
+        return {
+            providers: [],
+        }
+    }
+
     return {
         providers: [
             Okta({
@@ -15,3 +21,12 @@ let nextAuthBody = async () => {
     };
 };
 export const { handlers, auth, signIn, signOut } = NextAuth(nextAuthBody);
+export const authOptions = {
+    pages: {
+        signIn: '/login',
+    },
+};
+
+if (process.env.NODE_ENV === 'development') {
+    authOptions.skipCSRFCheck = true;
+}
