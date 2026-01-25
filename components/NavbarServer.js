@@ -5,7 +5,7 @@ import newUserCheck from "./newUserCheck";
 export default async function NavbarServer() {
   const session = await auth();
 
-  if (session) await newUserCheck(session);
+  // if (session) await newUserCheck(session);
 
   return <Navbar session={session} />;
 }

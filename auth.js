@@ -1,6 +1,6 @@
+import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import NextAuth from "next-auth";
-// import { MongoDBAdapter } from "@auth/mongodb-adapter"
-// import client from "./lib/mongoDBClient"
+import client from "./lib/mongoDBClient"
 import Okta from "next-auth/providers/okta";
 
 let nextAuthBody = async () => {
@@ -11,6 +11,7 @@ let nextAuthBody = async () => {
   }
 
   return {
+    adapter: MongoDBAdapter(client),
     providers: [
       Okta({
         clientId: process.env.AUTH0_CLIENT_ID,
