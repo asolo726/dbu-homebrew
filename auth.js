@@ -27,6 +27,3 @@ export const authOptions = {
   },
 };
 
-if (process.env.NODE_ENV === "development") {
-  authOptions.skipCSRFCheck = true;
-}

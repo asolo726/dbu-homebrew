@@ -6,7 +6,7 @@ import getToken from "../getToken/route";
  */
 async function GET_OKTA_ID(emailToSearchWith) {
   const token = await getToken();
-  const domain = process.env.OKTA_DOMAIN;
+  const domain = process.env.AUTH0_DOMAIN;
   let oktaJson;
   try {
     var myHeaders = new Headers();
