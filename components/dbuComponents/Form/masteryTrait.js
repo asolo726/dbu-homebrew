@@ -9,7 +9,9 @@ export default function MasteryTrait({ masteryTraitList = [] }) {
         <div key={key} className="flex-grow-1 mt-2">
           <p className="text-dbu-text text-md md:text-lg text-left">
             <span className="font-bold text-dbu-header">
-              {trait.title + (key > 1 ? ` (${key})` : "")}:
+              {trait.title +
+                (masteryTraitList.length > 1 ? ` (${key + 1})` : "")}
+              :
             </span>{" "}
             {trait.desc}
           </p>
