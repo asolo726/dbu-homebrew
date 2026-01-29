@@ -4,7 +4,8 @@ import { signOut } from "next-auth/react";
 //Sign In Form Component
 export default function SignIn({ session }) {
   const textStyle =
-    "p-1 mx-4 hover:text-dbu-link hover:text-bold align-center cursor-pointer ";
+    "p-1 mx-4 hover:text-dbu-link hover:text-bold cursor-pointer ";
+    
   if (session) {
     return (
       <div className="flex flex-col justify-center gap-2">
