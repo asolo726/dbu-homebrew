@@ -3,6 +3,7 @@ import { useState } from "react";
 import "./Navbar.css";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { RxCross1 } from "react-icons/rx";
+import Image from "next/image";
 import NavOption from "./navComponents/navOption";
 import NavColumn from "./navComponents/navColumn";
 import Profile from "./Profile";
@@ -56,6 +57,18 @@ export default function Navbar({ session }) {
 
     return (
         <>
+            <Image
+                src={"/Ultimate Shenron thingy.png"}
+                className="flex flex-row self-center object-fit-cover col-span-1 max-h-[100%] w-full"
+                width={3200}
+                height={800}
+                quality={100}
+                alt=""
+                style={{
+                    objectFit: "cover",
+                }}
+                priority={true}
+            />
             <header
                 id="navHeader"
                 className="p-7 border-b-1 grid grid-cols-4 grid-rows-1  border-dbu-line"
