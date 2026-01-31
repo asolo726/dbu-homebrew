@@ -58,7 +58,7 @@ export default function Navbar({ session }) {
     return (
         <>
             <Image
-                src={"/Ultimate Shenron thingy.png"}
+                src={"/Ultimate Shenron thingy.webp"}
                 className="flex flex-row self-center object-fit-cover col-span-1 max-h-[100%] w-full"
                 width={3200}
                 height={800}
