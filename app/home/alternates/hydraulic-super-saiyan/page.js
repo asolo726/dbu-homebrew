@@ -38,7 +38,9 @@ export async function generateMetadata() {
       description: altHead.desc,
       images: [altHead.banner],
       type: "website",
+      siteName: "DBU: The Homebrew Galaxy",
     },
+    authors: [{ name: altHead.author }],
   };
 }
 
