@@ -2,9 +2,15 @@
 import { useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import SignIn from "./signInorOut";
-
+import { Sign } from "crypto";
+/**
+ * Handles the Profile Icon and Dropmenu, and holds the Sign In/Out button
+ * @param {*} Session object from Auth 
+ * @returns 
+ */
 export default function Profile({ session }) {
     const [menuIsOpen, setMenuIsOpen] = useState(false);
+    const listOptions = ["...", <SignIn session={session} /> ];
     const listCss =
         "px-3 text-left border-dbu-line border-t-1 text-dbu-text decoration-0 hover:text-dbu-link text-sm";
     
@@ -27,10 +33,11 @@ export default function Profile({ session }) {
                 }
             >
                 <ul className="border-dbu-line border-x-1 border-b-1 text-left">
-                    <li className={listCss}>...</li>
-                    <li className={listCss}>
-                        <SignIn session={session} />
-                    </li>
+                    {listOptions.map((item, key) => (
+                        <li key={key} className={listCss}>
+                            {item}
+                        </li>
+                    ))}
                 </ul>
             </div>
         </div>
