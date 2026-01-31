@@ -1,7 +1,7 @@
 //Components
-import Head from "../../../../components/dbuComponents/Form/head";
-import Trait from "../../../../components/dbuComponents/General/trait";
-import LegendaryTrait from "../../../../components/dbuComponents/Form/legendaryTrait";
+import Head from "../../../../components/dbuComponents/Form/head.js";
+import Trait from "../../../../components/dbuComponents/General/trait.js";
+import LegendaryTrait from "../../../../components/dbuComponents/Form/legendaryTrait.js";
 
 //Classes
 import LegendaryHead from "../../../../classes/Forms/Legendary/legendaryHead.Class.js";

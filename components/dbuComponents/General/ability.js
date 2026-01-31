@@ -1,4 +1,5 @@
 import AddendumBox from "./addendumBox";
+import Table from "./table";
 
 export default function Ability({ abilityList = [{}], key }) {
   let conditionAbilityCount = 0;
@@ -64,6 +65,14 @@ export default function Ability({ abilityList = [{}], key }) {
                 desc={item.desc}
                 abilities={item.abilities}
               />
+            </ul>
+          );
+        } else if ("table" in item) {
+          const tableData = {headers: item.table.headers, rows: item.table.rows}
+          console.log(tableData);
+          return (
+            <ul key={key} className="list-disc ml-10">
+              <Table tableData={tableData} />
             </ul>
           );
         }

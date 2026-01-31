@@ -1,8 +1,9 @@
 class MasteryTrait {
-  constructor(title, desc, abilities) {
+  constructor(title, desc, abilities, tables) {
     this._title = title;
     this._desc = desc;
     this._abilities = abilities;
+    this._tables = tables;
   }
 
   get title() {
@@ -22,6 +23,13 @@ class MasteryTrait {
   }
   set ability(value) {
     this._abilities = value;
+  }
+
+  get tables() {
+    return this._tables;
+  }
+  set tables(value) {
+    this._tables = value;
   }
 }
 

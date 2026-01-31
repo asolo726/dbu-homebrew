@@ -1,14 +1,16 @@
-export default function Table({ rows }) {
+export default function Table({tableData}) {
+  const { headers, rows } = tableData;
+  console.log("headers: ", headers, "rows: ", rows);
   return (
-    <table className="table-fixed w-full border-collapse text-center text-xl font-light">
+    <table className="table-fixed w-full border-collapse text-center text-md font-light">
       <thead>
-        {rows[0].map((item, key) => (
-          <th
-            className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
+        {headers.map((item, key) => (
+          <td
+            className="border border-dbu-header min-w-[3em] max-w-[10em] py-2"
             key={key}
           >
-            {item}
-          </th>
+            <th className="text-center">{item}</th>
+          </td>
         ))}
       </thead>
       <tbody>
@@ -16,7 +18,7 @@ export default function Table({ rows }) {
           <tr key={key}>
             {row.map((item, key) => (
               <td
-                className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
+                className="border border-dbu-header min-w-[3em] max-w-[10em] py-2"
                 key={key}
               >
                 {item}
