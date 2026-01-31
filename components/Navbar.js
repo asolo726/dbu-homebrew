@@ -3,6 +3,7 @@ import { useState } from "react";
 import "./Navbar.css";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { RxCross1 } from "react-icons/rx";
+import Image from "next/image";
 import NavOption from "./navComponents/navOption";
 import NavColumn from "./navComponents/navColumn";
 import Profile from "./Profile";
@@ -10,8 +11,13 @@ import Profile from "./Profile";
 export default function Navbar({ session }) {
     const [menuIsOpen, setMenuIsOpen] = useState(false);
     const dropdownCss = menuIsOpen ? " block" : " hidden";
+        const testList = [
+        { text: "Option 1", link: "/option1" },
+    ]
     const transformationOptions = [
-        { text: "Awakenings", link: "/home/awakenings/test" },
+        { text: "Lesser Awakenings", link: "/home/awakenings/test", list: testList },
+        { text: "Greater Awakenings", link: "/home/awakenings/test" },
+        { text: "Super Awakenings", link: "/home/awakenings/test" },
         { text: "Enhancement Powers", link: "/home/enhancements/test" },
         { text: "Alternate Forms", link: "/home/alternates/test" },
         { text: "Legendary Forms", link: "/home/legendary/test" },
@@ -20,7 +26,8 @@ export default function Navbar({ session }) {
 
     const navOptions = [
         { text: "Transformations", link: "", list: transformationOptions },
-        { text: "Races", link: "" },
+        { text: "Races", link: "", list: [] },
+        { text: "Compendiums", link: "", list: []}
         // { text: "Sign Up", link: "" },
         // { text: "Log In", link: "/Login" },
     ];
@@ -33,7 +40,7 @@ export default function Navbar({ session }) {
             <div
                 id="innerDesktopNavMenu"
                 className="flex flex-row place-content-end"
-            >
+            > {/* This needs to be changed to a recursive method so you can have submenus */}
                 {navOptions.map((item, key) => (
                     <NavColumn
                         key={key}
@@ -50,6 +57,18 @@ export default function Navbar({ session }) {
 
     return (
         <>
+            <Image
+                src={"/Ultimate Shenron thingy.webp"}
+                className="flex flex-row self-center object-fit-cover col-span-1 max-h-[100%] w-full"
+                width={3200}
+                height={800}
+                quality={100}
+                alt=""
+                style={{
+                    objectFit: "cover",
+                }}
+                priority={true}
+            />
             <header
                 id="navHeader"
                 className="p-7 border-b-1 grid grid-cols-4 grid-rows-1  border-dbu-line"
@@ -103,15 +122,14 @@ export default function Navbar({ session }) {
                     <div className="flex flex-row border-b-1 pb-5 border-dbu-line py-3">
                         <p className="text-sm self-center">MENU</p>
                     </div>
-                    <NavOption
-                        text={navOptions[0].text}
-                        link={navOptions[0].link}
-                        list={transformationOptions}
-                    />
-                    <NavOption
-                        text={navOptions[1].text}
-                        link={navOptions[1].link}
-                    />
+                    {navOptions.forEach((option, index) => {
+                        <NavOption
+                            key={index}
+                            text={option.text}
+                            link={option.link}
+                            list={option.list}
+                        />
+                    })};
                 </div>
             </nav>
             
