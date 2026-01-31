@@ -165,13 +165,30 @@ export default function Head({ Form }) {
           <li>
             <p>
               <span className={requirementNameStyle}>Aspects: </span>{" "}
-              {Form.head.aspects.map((aspect, id) =>
-                id === Form.head.aspects.length - 1
-                  ? aspect.name +
-                    (aspect.level === 0 ? " " : " (LV" + aspect.level + ") ")
-                  : aspect.name +
-                    (aspect.level === 0 ? ", " : " (LV" + aspect.level + "), "),
-              )}
+              {Form.head.aspects.map((aspect, id) => {
+                const lastAspect = id === Form.head.aspects.length - 1;
+                return (
+                  <span key={id}>
+                    {aspect.name}
+                    {aspect.link && (
+                      <>
+                        {" "}
+                        (
+                        <a
+                          href={aspect.link.url}
+                          target="_blank"
+                          className="text-dbu-link hover:underline"
+                        >
+                          {aspect.link.name}
+                        </a>
+                        )
+                      </>
+                    )}
+                    {aspect.level !== 0 && <> (LV{aspect.level})</>}
+                    {!lastAspect && ", "}
+                  </span>
+                );
+              })}
             </p>
           </li>
         ) : (

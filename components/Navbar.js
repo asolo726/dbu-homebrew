@@ -30,12 +30,12 @@ export default function Navbar({ session }) {
     { text: "Minion Races", link: "" },
     { text: "Talents", link: "" },
     { text: "Gear", link: "" },
-  ]
+  ];
   const techniqueOptions = [
     { text: "Signature Techniques", link: "" },
     { text: "Auras", link: "" },
     { text: "Unique Abilities", link: "" },
-  ]
+  ];
 
   const navOptions = [
     { text: "Transformations", link: "", list: transformationOptions },

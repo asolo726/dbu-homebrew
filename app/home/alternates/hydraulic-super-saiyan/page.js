@@ -9,7 +9,14 @@ import TraitClass from "../../../../classes/General Classes/trait.Class";
 
 export default function Test_HydraulicSuperSaiyan() {
   const aspects = [
-    { name: "Variant (Super Saiyan 1)", level: 0 },
+    {
+      name: "Variant",
+      level: 0,
+      link: {
+        name: "Super Saiyan 1",
+        url: "https://dbu-rpg.com/super-saiyan/",
+      },
+    },
     { name: "Enhanced Save (Impulsive/Corporeal)", level: 0 },
     { name: "Super Saiyan Form", level: 0 },
     { name: "Raging", level: 0 },
