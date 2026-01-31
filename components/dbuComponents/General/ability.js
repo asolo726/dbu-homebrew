@@ -30,7 +30,7 @@ export default function Ability({ abilityList = [{}], key }) {
           if ("sublist" in item) {
             indentor += item.sublist * 10;
           }
-          console.log("indentor: ", indentor);
+          //console.log("indentor: ", indentor);
           return (
             <ul key={key} className={`list-disc ml-${indentor}`}>
               {item.list.map((listItem, key) => {

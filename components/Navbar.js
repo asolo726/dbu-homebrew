@@ -25,10 +25,22 @@ export default function Navbar({ session }) {
     { text: "Legendary Forms", link: "/home/legendary/test" },
     { text: "Evolved Stages", link: "/home/evolvedStages/test" },
   ];
+  const playerOptions = [
+    { text: "Races", link: "" },
+    { text: "Minion Races", link: "" },
+    { text: "Talents", link: "" },
+    { text: "Gear", link: "" },
+  ]
+  const techniqueOptions = [
+    { text: "Signature Techniques", link: "" },
+    { text: "Auras", link: "" },
+    { text: "Unique Abilities", link: "" },
+  ]
 
   const navOptions = [
     { text: "Transformations", link: "", list: transformationOptions },
-    { text: "Races", link: "", list: [] },
+    { text: "Player", link: "", list: playerOptions },
+    { text: "Techniques", link: "", list: techniqueOptions },
     { text: "Compendiums", link: "", list: [] },
     // { text: "Sign Up", link: "" },
     // { text: "Log In", link: "/Login" },
@@ -62,7 +74,7 @@ export default function Navbar({ session }) {
         className="flex flex-row self-center object-fit-cover col-span-1 max-h-[100%] w-full"
         width={3200}
         height={800}
-        quality={100}
+        quality={70}
         alt=""
         style={{
           objectFit: "cover",
