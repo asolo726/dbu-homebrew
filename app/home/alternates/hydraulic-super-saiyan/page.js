@@ -36,7 +36,8 @@ export default function Test_HydraulicSuperSaiyan() {
     title: "Hydraulic Super Saiyan",
     desc: "Through some miraculous feat of engineering, or perhaps the remnants of your former self seeping into your constructed vessel, you are capable of ascending into a higher form, reminiscent of that of a Super Saiyan. ",
     author: "Blasteroid",
-    banner: "/you_see_afton_you_arent_dealing_with_the_average_animatronic_warrior_anymore.webp",
+    banner:
+      "/you_see_afton_you_arent_dealing_with_the_average_animatronic_warrior_anymore.webp",
     raceReq: "Androids",
     stress: "12",
     tier: "2",
@@ -68,7 +69,8 @@ export default function Test_HydraulicSuperSaiyan() {
         {
           miniTraitList: [
             {
-              title: "Enhanced Organism [Triggered/Start of Turn, 3/Encounter, Resource",
+              title:
+                "Enhanced Organism [Triggered/Start of Turn, 3/Encounter, Resource",
               desc: "At the start of each of your turns, gain a “Reconstructed S-Cell”. Upon gaining a Reconstructed S-Cell, select a Combat Roll and increase the Natural Result of the Combat Roll by 1 while in this Form for the remainder of the Encounter. You cannot select a particular Combat Roll more than once.",
             },
             {
@@ -98,7 +100,8 @@ export default function Test_HydraulicSuperSaiyan() {
         {
           miniTraitList: [
             {
-              title: "Enhanced Organism [Triggered/Transform, Triggered/Threshold, 3/Encounter]",
+              title:
+                "Enhanced Organism [Triggered/Transform, Triggered/Threshold, 3/Encounter]",
               desc: "Use a Ki Surge. Increase your Surgency by half when you use a Ki Surge this way.",
             },
             {
@@ -131,43 +134,43 @@ export default function Test_HydraulicSuperSaiyan() {
     },
   ];
 
-    const sparkingTraits = [
-    new TraitClass(
-      "Spark for Battle",
-      "Sparks begin to form around you, representing the newfound energy surging through your synthetic veins.",
-      [ 
+  const sparkingTraits = [
+    {
+      title: "Spark for Battle",
+      desc: "Sparks begin to form around you, representing the newfound energy surging through your synthetic veins.",
+      abilities: [
         {
           condition: "Passive",
-          desc: "Increase your Wound Rolls and Initiative Rolls G(T)."
+          desc: "Increase your Wound Rolls and Initiative Rolls G(T).",
         },
         {
           condition: "Triggered",
-          desc: "When you target an Opponent with the Surging State, increase your Tier of Power Extra Dice Category by 1."
+          desc: "When you target an Opponent with the Surging State, increase your Tier of Power Extra Dice Category by 1.",
         },
         {
           condition: "Triggered, 1/Round",
-          desc: "When you make an Attacking Maneuver with a Ki Wager equal to or exceeding 1/4th of your Max Capacity, apply a stack of Energy Charge."
-        }
-      ]
-    ),
-    new TraitClass(
-      "Limitless Sparks",
-      "Your hair grows to obscene levels as you enter a nearly limitless level of strength.",
-      [ 
+          desc: "When you make an Attacking Maneuver with a Ki Wager equal to or exceeding 1/4th of your Max Capacity, apply a stack of Energy Charge.",
+        },
+      ],
+    },
+    {
+      title: "Limitless Sparks",
+      desc: "Your hair grows to obscene levels as you enter a nearly limitless level of strength.",
+      abilities: [
         {
           condition: "Passive",
-          desc: "Increase the Insight Modifier bonus of this Transformation by 1(T)."
+          desc: "Increase the Insight Modifier bonus of this Transformation by 1(T).",
         },
         {
           condition: "Triggered, 1/Round",
-          desc: "When you use a Signature Technique, for every 1/4th of your maximum capacity that you Wager on the Attacking Maneuver, increase the Damage Category by 1. This cannot increase the Damage Category more than G times."
+          desc: "When you use a Signature Technique, for every 1/4th of your maximum capacity that you Wager on the Attacking Maneuver, increase the Damage Category by 1. This cannot increase the Damage Category more than G times.",
         },
         {
           condition: "Triggered, 1/Encounter",
-          desc: "When you use a Signature Technique, increase the Dice Category of any Energy Charges applied to the Attacking Maneuver by 1 for each stack of Power you possess."
-        }
-      ]
-    ),
+          desc: "When you use a Signature Technique, increase the Dice Category of any Energy Charges applied to the Attacking Maneuver by 1 for each stack of Power you possess.",
+        },
+      ],
+    },
   ];
 
   const masteryTraits = [
@@ -199,36 +202,51 @@ export default function Test_HydraulicSuperSaiyan() {
       abilities: [
         {
           condition: "Permanent",
-          desc: "This Transformation loses a level of the Draining Aspect."
+          desc: "This Transformation loses a level of the Draining Aspect.",
         },
         {
           condition: "Passive",
-          desc: "While you are in the Surging or Superior State, increase the Dice Category of your Energy Charges applied to Signature Techniques by 1."
+          desc: "While you are in the Surging or Superior State, increase the Dice Category of your Energy Charges applied to Signature Techniques by 1.",
         },
         {
           condition: "Passive",
-          desc: "This Transformation gains the Graded Aspect."
+          desc: "This Transformation gains the Graded Aspect.",
         },
         {
           condition: "Graded",
-          desc: "Hydraulic Super Saiyan has 2 Grades. Each Hydraulic Super Saiyan Grade has its own Tier of Power Requirement, and each Grade after the first…"
+          desc: "Hydraulic Super Saiyan has 2 Grades. Each Hydraulic Super Saiyan Grade has its own Tier of Power Requirement, and each Grade after the first…",
         },
         {
           list: [
-            "Grants the effects of each previous Grade.", 
+            "Grants the effects of each previous Grade.",
             "Increase the Stress Test Requirement by 5, and the levels of the High Speed/Draining Aspects by 1.",
             "Increases the bonus granted by the first effect of Gleaming Might by 1.",
             "Increases the Attribute Modifier Bonuses by this Transformation by a specified amount.",
-            "Grants you access to a Sparking Trait."
-          ]
+            "Grants you access to a Sparking Trait.",
+          ],
         },
-        { table: {
-            headers: ["Grade", "Tier of Power Requirement", "AMB (AG/FO/TE/MA)", "Sparking Trait Gained"],
+        {
+          table: {
+            headers: [
+              "Grade",
+              "Tier of Power Requirement",
+              "AMB (AG/FO/TE/MA)",
+              "Sparking Trait Gained",
+            ],
             rows: [
               ["1 (Super Saiyan)", "2+", "–", "–"],
-              ["2 (Super Saiyan 2)", "3+", "+1(T)", ""]
+              [
+                "2 (Super Saiyan 2)",
+                "3+",
+                "+1(T)",
+                [
+                  sparkingTraits[0].title,
+                  sparkingTraits[0].desc,
+                  sparkingTraits[0].abilities,
+                ],
+              ],
             ],
-          }
+          },
         },
       ],
     },
@@ -238,51 +256,68 @@ export default function Test_HydraulicSuperSaiyan() {
       abilities: [
         {
           condition: "Permanent",
-          desc: "This Transformation loses a level of the Draining Aspect, and gains ‘M’-1 levels of the Scaling Aspect."
+          desc: "This Transformation loses a level of the Draining Aspect, and gains ‘M’-1 levels of the Scaling Aspect.",
         },
         {
           condition: "2/Encounter",
-          desc: "If you would “Overheat”, you can choose to not Overheat."
+          desc: "If you would “Overheat”, you can choose to not Overheat.",
         },
         {
           condition: "Permanent, Choice",
-          desc: "Gain the following based on your selection with the 4th effect of Energy Core:"
+          desc: "Gain the following based on your selection with the 4th effect of Energy Core:",
         },
         {
           miniTraitList: [
             {
               title: "Infinite Energy [Triggered]",
-              desc: "When you regain Ki Points through the 4th effect of Energy Core, you may choose to do one of the following:"
-            }
-          ]
+              desc: "When you regain Ki Points through the 4th effect of Energy Core, you may choose to do one of the following:",
+            },
+          ],
         },
         {
           list: [
             "Increase the Ki Points gained by 2(bT).",
             "Use the Energy Charge Maneuver as an Instant Maneuver and halve the Ki Points regained.",
-            "Use the Power Up Maneuver as an Instant Maneuver, but do not regain any Ki Points."
-          ]
+            "Use the Power Up Maneuver as an Instant Maneuver, but do not regain any Ki Points.",
+          ],
+          sublist: 1,
         },
         {
           miniTraitList: [
             {
               title: "Power Battery [Passive]",
-              desc: "The 5th effect of Power Battery is always active. If your Ki Points exceed your Max Capacity, double the bonus of this effect."
-            }
-          ]
+              desc: "The 5th effect of Power Battery is always active. If your Ki Points exceed your Max Capacity, double the bonus of this effect.",
+            },
+          ],
         },
         {
           condition: "Graded",
-          desc: "Hydraulic Super Saiyan gains a 3rd Grade."
+          desc: "Hydraulic Super Saiyan gains a 3rd Grade.",
         },
-        { 
+        {
           table: {
-            headers: ["Grade", "Tier of Power Requirement", "AMB (AG/FO/TE/MA)", "Sparking Trait Gained"],
-            rows: [["3 (Super Saiyan 3)", "4+", "+1(T)", ""]]
-          }
+            headers: [
+              "Grade",
+              "Tier of Power Requirement",
+              "AMB (AG/FO/TE/MA)",
+              "Sparking Trait Gained",
+            ],
+            rows: [
+              [
+                "3 (Super Saiyan 3)",
+                "4+",
+                "+1(T)",
+                [
+                  sparkingTraits[1].title,
+                  sparkingTraits[1].desc,
+                  sparkingTraits[1].abilities,
+                ],
+              ],
+            ],
+          },
         },
-      ]
-    }
+      ],
+    },
   ];
 
   const traitObjs = [
@@ -313,8 +348,6 @@ export default function Test_HydraulicSuperSaiyan() {
     traits: traitObjs,
     masteryTrait: masteryTraitsObj,
   });
-
-
 
   return (
     <div className="flex flex-col flex-col-1 max-w-5xl px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">

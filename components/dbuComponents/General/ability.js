@@ -26,12 +26,25 @@ export default function Ability({ abilityList = [{}], key }) {
             </p>
           );
         } else if ("list" in item) {
+          let indentor = 10;
+          if ("sublist" in item) {
+            indentor += item.sublist * 10;
+          }
+          console.log("indentor: ", indentor);
           return (
-            <ul key={key} className="list-disc ml-10">
+            <ul key={key} className={`list-disc ml-${indentor}`}>
               {item.list.map((listItem, key) => {
                 return (
                   <li
                     className="my-2 text-dbu-text text-md md:text-lg text-left"
+                    style={{
+                      listStyleType:
+                        indentor > 20
+                          ? "square"
+                          : indentor > 10
+                            ? "circle"
+                            : "disc",
+                    }}
                     key={key}
                   >
                     {listItem}
@@ -41,6 +54,10 @@ export default function Ability({ abilityList = [{}], key }) {
             </ul>
           );
         } else if ("miniTraitList" in item) {
+          let indentor = 10;
+          if ("sublist" in item) {
+            indentor += item.sublist * 10;
+          }
           return (
             <ul key={key} className="list-disc ml-10">
               {item.miniTraitList.map((listItem, key) => {
@@ -68,8 +85,11 @@ export default function Ability({ abilityList = [{}], key }) {
             </ul>
           );
         } else if ("table" in item) {
-          const tableData = {headers: item.table.headers, rows: item.table.rows}
-          console.log(tableData);
+          const tableData = {
+            headers: item.table.headers,
+            rows: item.table.rows,
+          };
+          //console.log(tableData);
           return (
             <ul key={key} className="list-disc ml-10">
               <Table tableData={tableData} />

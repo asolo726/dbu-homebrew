@@ -7,7 +7,7 @@ class Table {
   get headers() {
     return this._headers;
   }
-  
+
   set headers(value) {
     this._headers = value;
   }

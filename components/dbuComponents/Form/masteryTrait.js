@@ -11,16 +11,17 @@ export default function MasteryTrait({ masteryTraitList = [] }) {
         <div key={key} className="flex-grow-1 mt-2">
           <p className="text-dbu-text text-md md:text-lg text-left">
             <span className="font-bold text-dbu-header">
-              {trait.title + (hasMultipleMasteryTraits ? ` (${key+1})` : "")}:
+              {trait.title + (hasMultipleMasteryTraits ? ` (${key + 1})` : "")}:
             </span>{" "}
             {trait.desc}
           </p>
           <Ability abilityList={trait.abilities} />
-          {trait.tables && trait.tables.map((table, tKey) => (
-            <div key={tKey} className="mt-5 mb-5">
-              <Table table={table} />
-            </div>
-          ))}
+          {trait.tables &&
+            trait.tables.map((table, tKey) => (
+              <div key={tKey} className="mt-5 mb-5">
+                <Table table={table} />
+              </div>
+            ))}
         </div>
       ))}
     </div>

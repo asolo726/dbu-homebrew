@@ -1,6 +1,6 @@
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import NextAuth from "next-auth";
-import client from "./lib/mongoDBClient"
+import client from "./lib/mongoDBClient";
 import Okta from "next-auth/providers/okta";
 
 let nextAuthBody = async () => {
@@ -27,4 +27,3 @@ export const authOptions = {
     signIn: "/login",
   },
 };
-
