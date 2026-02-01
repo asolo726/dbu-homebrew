@@ -134,15 +134,17 @@ export default function Navbar({ session }) {
           <div className="flex flex-row border-b-1 pb-5 border-dbu-line py-3">
             <p className="text-sm self-center">MENU</p>
           </div>
-          {navOptions.forEach((option, index) => {
-            <NavOption
-              key={index}
-              text={option.text}
-              link={option.link}
-              list={option.list}
-            />;
+          {navOptions.map((option, index) => {
+            return (
+              console.log("Running: ", index),
+              <NavOption
+                key={index}
+                text={option.text}
+                link={option.link}
+                list={option.list}
+              />
+            )
           })}
-          ;
         </div>
       </nav>
     </>
