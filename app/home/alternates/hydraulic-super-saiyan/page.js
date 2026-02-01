@@ -8,39 +8,17 @@ import MasteryTraitClass from "../../../../classes/Forms/Alternate/masteryTrait.
 import TraitClass from "../../../../classes/General Classes/trait.Class";
 
 export async function generateMetadata() {
-  const altHead = new AlternateHead({
-    title: "Hydraulic Super Saiyan",
-    desc: "Through some miraculous feat of engineering, or perhaps the remnants of your former self seeping into your constructed vessel, you are capable of ascending into a higher form, reminiscent of that of a Super Saiyan. ",
-    author: "Blasteroid",
-    banner:
-      "/you_see_afton_you_arent_dealing_with_the_average_animatronic_warrior_anymore.webp",
-    raceReq: "Androids",
-    stress: "12",
-    tier: "2",
-    type: "Alternate",
-    aspects: [
-      {
-        name: "Variant",
-        level: 0,
-        link: {
-          name: "Super Saiyan 1",
-          url: "https://dbu-rpg.com/super-saiyan/",
-        },
-      },
-    ],
-  });
-
   return {
-    title: altHead.title,
-    description: altHead.desc,
+    title: "Hydraulic Super Saiyan",
+    description: "Through some miraculous feat of engineering, or perhaps the remnants of your former self seeping into your constructed vessel, you are capable of ascending into a higher form, reminiscent of that of a Super Saiyan.",
     openGraph: {
-      title: altHead.title,
-      description: altHead.desc,
-      images: [altHead.banner],
+      title: "Hydraulic Super Saiyan",
+      description: "Through some miraculous feat of engineering, or perhaps the remnants of your former self seeping into your constructed vessel, you are capable of ascending into a higher form, reminiscent of that of a Super Saiyan.",
+      images: "https://dbu-rpg-northgalaxy.vercel.app/you_see_afton_you_arent_dealing_with_the_average_animatronic_warrior_anymore.webp",
       type: "website",
       siteName: "DBU: The Homebrew Galaxy",
     },
-    authors: [{ name: altHead.author }],
+    authors: "Blasteroid",
   };
 }
 
