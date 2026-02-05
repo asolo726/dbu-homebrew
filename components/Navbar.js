@@ -70,7 +70,7 @@ export default function Navbar({ session }) {
   return (
     <>
       <Image
-        src={"/Ultimate Shenron thingy.webp"}
+        src="/Ultimate Shenron thingy.webp"
         className="flex flex-row self-center object-fit-cover col-span-1 max-h-[100%] w-full"
         width={3200}
         height={800}
@@ -87,7 +87,7 @@ export default function Navbar({ session }) {
       >
         <div
           id="title"
-          className="col-span-3 md:col-span-2 md:grow-2 text-dbu-header place-content-center"
+          className="col-span-3 lg:col-span-2 lg:grow-2 text-dbu-header place-content-center"
         >
           <a
             className="navOption text-left text-xl hover:text-dbu-link"
@@ -97,7 +97,7 @@ export default function Navbar({ session }) {
           </a>
         </div>
 
-        <div className="flex flex-row self-center col-span-1 justify-self-end place-content-center md:hidden">
+        <div className="flex flex-row self-center col-span-1 justify-self-end place-content-center lg:hidden">
           <button
             id="navButton"
             className="flex align-middle justify-center p-3 "
@@ -114,7 +114,7 @@ export default function Navbar({ session }) {
 
         <nav
           id="desktopNavMenu"
-          className="hidden md:justify-self-end md:place-self-center md:col-span-2 md:block w-full"
+          className="hidden lg:justify-self-end lg:place-self-center lg:col-span-2 lg:block w-full"
         >
           {desktopNavMenu()}
         </nav>
@@ -123,20 +123,19 @@ export default function Navbar({ session }) {
       {/* Mobile Nav Menu */}
       <nav
         id="mobileNavMenu"
-        className={"bg-dbu-bg2 flex justify-center align-middle md:hidden".concat(
+        className={"bg-dbu-bg2 flex justify-center align-middle lg:hidden".concat(
           dropdownCss,
         )}
       >
         <div
           id="innerNavMenu"
-          className="self-center flex flex-col m-10 md:flex-row md:self-end w-full"
+          className="self-center flex flex-col m-10 lg:flex-row lg:self-end w-full"
         >
           <div className="flex flex-row border-b-1 pb-5 border-dbu-line py-3">
             <p className="text-sm self-center">MENU</p>
           </div>
           {navOptions.map((option, index) => {
             return (
-              console.log("Running: ", index),
               <NavOption
                 key={index}
                 text={option.text}
