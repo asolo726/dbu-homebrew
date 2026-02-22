@@ -10,11 +10,14 @@ import TraitClass from "../../../../classes/General Classes/trait.Class";
 export async function generateMetadata() {
   return {
     title: "Hydraulic Super Saiyan",
-    description: "Through some miraculous feat of engineering, or perhaps the remnants of your former self seeping into your constructed vessel, you are capable of ascending into a higher form, reminiscent of that of a Super Saiyan.",
+    description:
+      "Through some miraculous feat of engineering, or perhaps the remnants of your former self seeping into your constructed vessel, you are capable of ascending into a higher form, reminiscent of that of a Super Saiyan.",
     openGraph: {
       title: "Hydraulic Super Saiyan",
-      description: "Through some miraculous feat of engineering, or perhaps the remnants of your former self seeping into your constructed vessel, you are capable of ascending into a higher form, reminiscent of that of a Super Saiyan.",
-      images: "https://dbu-rpg-northgalaxy.vercel.app/you_see_afton_you_arent_dealing_with_the_average_animatronic_warrior_anymore.webp",
+      description:
+        "Through some miraculous feat of engineering, or perhaps the remnants of your former self seeping into your constructed vessel, you are capable of ascending into a higher form, reminiscent of that of a Super Saiyan.",
+      images:
+        "https://dbu-rpg-northgalaxy.vercel.app/you_see_afton_you_arent_dealing_with_the_average_animatronic_warrior_anymore.webp",
       type: "website",
       siteName: "DBU: The Homebrew Galaxy",
     },

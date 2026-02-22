@@ -142,7 +142,7 @@ export default function Navbar({ session }) {
                 link={option.link}
                 list={option.list}
               />
-            )
+            );
           })}
         </div>
       </nav>

@@ -13,6 +13,7 @@ class EnhancementHead extends FormHead {
     attributeModifiers = [],
     type = "Enhancement Power",
     enhancementType, // Standard or Special
+    initialEnhancement, // Only for Special Enhancements. If present, always contains an array of 2 elements
     stress = 0,
   } = {}) {
     super({
@@ -29,6 +30,7 @@ class EnhancementHead extends FormHead {
       type: type,
     });
     this._enhancementType = enhancementType;
+    this._initialEnhancement = initialEnhancement;
     this._stress = stress;
   }
 
@@ -45,6 +47,14 @@ class EnhancementHead extends FormHead {
 
   set enhancementType(value) {
     this._enhancementType = value;
+  }
+
+  get initialEnhancement() {
+    return this._initialEnhancement;
+  }
+
+  set initialEnhancement(value) {
+    this._initialEnhancement = value;
   }
 }
 

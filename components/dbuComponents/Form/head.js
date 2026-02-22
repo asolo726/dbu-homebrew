@@ -1,4 +1,31 @@
 import Image from "next/image";
+import { aspectData } from "../../Aspects/aspectData";
+import { Tooltip } from "../../../lib/reactTooltip";
+
+/**
+ * Generates formatted HTML tooltip for an aspect
+ */
+const getAspectTooltip = (aspectName) => {
+  const cleanName = aspectName.replace(/\s*\(.*?\)$/, "");
+  const aspectInfo = aspectData[cleanName];
+  const isPositive = aspectInfo.type === "Positive";
+  const textColorClass = isPositive
+    ? "text-dbu-pos-aspect"
+    : "text-dbu-neg-aspect";
+
+  return `<div class="p-3">
+    <div class="text-lg font-bold ${textColorClass} mb-1">
+      ${cleanName}
+    </div>
+    <div class="italic text-sm mb-2 text-gray-300">
+      ${aspectInfo.type} Aspect
+    </div>
+    <div class="text-sm leading-relaxed text-gray-100">
+      ${aspectInfo.effects}
+    </div>
+  </div>`;
+};
+
 /**
  *
  * @returns Head of the page. Including Title, Banner, Requirements, and Stat Buff Table
@@ -73,6 +100,22 @@ export default function Head({ Form }) {
             <p>
               <span className={requirementNameStyle}>Enhancement Type:</span>{" "}
               {Form.head.enhancementType}
+            </p>
+          </li>
+        ) : (
+          <></>
+        )}
+        {Form.head.initialEnhancement ? (
+          <li>
+            <p>
+              <span className={requirementNameStyle}>Initial Enhancement:</span>{" "}
+              <a
+                href={Form.head.initialEnhancement[1]}
+                target="_blank"
+                className="text-dbu-link hover:underline"
+              >
+                {Form.head.initialEnhancement[0]}
+              </a>
             </p>
           </li>
         ) : (
@@ -169,7 +212,13 @@ export default function Head({ Form }) {
                 const lastAspect = id === Form.head.aspects.length - 1;
                 return (
                   <span key={id}>
-                    {aspect.name}
+                    <a
+                      data-tooltip-id="my-tooltip"
+                      data-tooltip-html={getAspectTooltip(aspect.name)}
+                      className="cursor-help"
+                    >
+                      {aspect.name}
+                    </a>
                     {aspect.link && (
                       <>
                         {" "}
@@ -233,6 +282,11 @@ export default function Head({ Form }) {
             </tr>
           </tbody>
         </table>
+        <Tooltip
+          id="my-tooltip"
+          className="tooltip"
+          style={{ maxWidth: "400px" }}
+        />
       </div>
     </div>
   );

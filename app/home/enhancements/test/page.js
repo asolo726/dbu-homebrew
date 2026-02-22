@@ -17,12 +17,11 @@ export default function Test_Righteous_Indignation() {
   const mainDesc =
     "While it is well known that intense emotions can give rise to immense bursts of strength, raw, unfocused feelings can often lead to excess waste, leaving the individual weaker when their momentary outburst ends. What is better is harnessing that emotion towards something greater, something beyond yourself, and the good nature of your soul pushes you to virtuous action. You are not simply angry for the sake of being angry or for some prideful reason; you burn with righteous fury and fight to defend and protect what is dear.";
   const aspects = [
-    { name: "Raging", level: 3 },
-    { name: "High Speed", level: 1 },
-    { name: "Strainless", level: 0 },
+    { name: "Raging", level: 0 },
+    { name: "High Speed", level: 0 },
     { name: "Dedicated", level: 0 },
-    { name: "Temporary ", level: 3 },
-    { name: "Limited ", level: 1 },
+    { name: "Limited", level: 3 },
+    { name: "Fading", level: 1 },
   ];
   const banner = "/I_told_you_mom_said_its_MY_turn_on_the_xbox.webp";
 
@@ -41,18 +40,17 @@ export default function Test_Righteous_Indignation() {
     banner: banner,
     desc: mainDesc,
     author: author,
-    raceReq: "Any",
-    preReq: "Good or Pure Good Z-Soul Alignment",
     tier: "3",
     aspects: aspects,
     attributeModifiers: attributeModifiers,
     stress: "15",
-    enhancementType: "Standard",
+    enhancementType: "Special",
+    initialEnhancement: ["Enraged", "https://dbu-rpg.com/enraged/"],
   });
 
   const featureTitle1 = {
     title: "Limitless Rage",
-    desc: "The flames of your soil continue to toil even as your vigor begins to fall, renewing you and pushing you far beyond your natural limits.",
+    desc: "The flames of your soul continue to toil even as your vigor begins to fall, renewing you and pushing you far beyond your natural limits.",
   };
   const featureTitle2 = {
     title: "Limitless Resolve",

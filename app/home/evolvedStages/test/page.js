@@ -32,12 +32,11 @@ export default function Test_SCellManifestation() {
     desc: "By channeling the S-Cells within your body, you transcend the limits for your existing Transformation with the fearsome, gilded power of the Super Saiyan.",
     banner: "/do_doo_do_dodo_do_doo_do_dodo.png",
     author: "Blasteroid",
-    preReq:
-      "Saiyan Race and access to Super Saiyan 1, Saiyan Ancestry Factor and Descended Super Saiyan, or Saiyan-Like Bio-Focus Trait and Gleaming Might (Saiyan) Genetic Trait",
+    preReq: "Mastered Form with the Super Saiyan Form Aspect",
     tier: "2+ or Same as Original Form (whichever is higher)",
     aspects: aspects,
     attributeModifiers: attributeModifiers,
-    stress: "+3",
+    stress: "+6",
     evolvedStageType: "Generic",
     formType: "Same as Original Form",
   });

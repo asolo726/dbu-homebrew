@@ -8,6 +8,8 @@
   --color-dbu-link: #ff6900;
   --color-dbu-bg2: #1b1b1b;
   --color-dbu-bg3: #1f1f1f;
+  --color-dbu-pos-aspect: #4caf50;
+  --color-dbu-neg-aspect: #f44336;
 }
 
 :root {
