@@ -5,9 +5,9 @@
 - Added new field "initialEnhancement" for Special Enhancements
 - Added new Tooltip Popup to Aspects.
 - Created new "AspectData" class/object to store the following information about each Aspect:
- - Type
- - Level
- - Effects (description)
+- Type
+- Level
+- Effects (description)
 
 ## Misc
 
