@@ -216,7 +216,7 @@ export default function Dashboard() {
       <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
 
       {/* Overall Progress Bar */}
-      <div className="mb-12">
+      <div className="mb-20">
         <SegmentedProgressBar
           label="0.9.3 Update Progress"
           currentProgress={overallProgress}
