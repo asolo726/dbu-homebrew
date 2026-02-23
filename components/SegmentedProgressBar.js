@@ -23,9 +23,21 @@ export default function SegmentedProgressBar({
   const percentage = Math.round(currentProgress);
   const segmentsArray = Array.from({ length: totalSegments });
 
+  // Rainbow color sequence for gradient effect
+  const rainbowColors = [
+    "bg-red-500",
+    "bg-orange-500",
+    "bg-yellow-400",
+    "bg-green-500",
+    "bg-cyan-500",
+    "bg-blue-500",
+    "bg-purple-500",
+  ];
+
   // Map color names to Tailwind classes for filled segments
   const colorMap = {
     green: "bg-green-500",
+    darkgreen: "bg-green-800",
     amber: "bg-amber-600",
     orange: "bg-orange-500",
     pink: "bg-pink-500",
@@ -34,11 +46,13 @@ export default function SegmentedProgressBar({
     yellow: "bg-yellow-400",
     red: "bg-red-600",
     slate: "bg-slate-600",
+    rainbow: null, // Special case handled separately
   };
 
   // Map color names to text colors
   const textColorMap = {
     green: "text-green-500",
+    darkgreen: "text-green-800",
     amber: "text-amber-600",
     orange: "text-orange-500",
     pink: "text-pink-500",
@@ -47,9 +61,17 @@ export default function SegmentedProgressBar({
     yellow: "text-yellow-400",
     red: "text-red-600",
     slate: "text-slate-600",
+    rainbow: "text-purple-500",
   };
 
-  const filledColor = colorMap[color] || colorMap.green;
+  const getSegmentColor = (index) => {
+    if (color === "rainbow") {
+      return rainbowColors[index % rainbowColors.length];
+    }
+    return colorMap[color] || colorMap.green;
+  };
+
+  const filledColor = getSegmentColor(0);
   const textColor = textColorMap[color] || textColorMap.green;
 
   return (
@@ -76,7 +98,7 @@ export default function SegmentedProgressBar({
               key={index}
               style={{ flex: `1 1 0%` }}
               className={`h-8 transition-all rounded-sm ${
-                index < filledSegments ? filledColor : "bg-gray-800"
+                index < filledSegments ? getSegmentColor(index) : "bg-gray-800"
               }`}
             />
           ))}

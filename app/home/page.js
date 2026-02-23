@@ -13,6 +13,9 @@ import {
   alternateFormsPageProgress,
   legendaryFormsPageProgress,
   evolvedStagesPageProgress,
+  playerPageProgress,
+  arcContentPageProgress,
+  homebrewPageProgress,
 } from "../../lib/pageProgressData";
 
 export default function Dashboard() {
@@ -72,6 +75,9 @@ export default function Dashboard() {
   const alternateFormsProgress = calculateProgress(alternateFormsPageProgress);
   const legendaryFormsProgress = calculateProgress(legendaryFormsPageProgress);
   const evolvedStagesProgress = calculateProgress(evolvedStagesPageProgress);
+  const playerProgress = calculateProgress(playerPageProgress);
+  const arcContentProgress = calculateProgress(arcContentPageProgress);
+  const homebrewProgress = calculateProgress(homebrewPageProgress);
 
   // State for dropdown toggles - track which bars have open dropdowns
   const [openDropdowns, setOpenDropdowns] = useState({});
@@ -236,6 +242,24 @@ export default function Dashboard() {
       color: "slate",
       pageProgress: evolvedStagesPageProgress,
     },
+    {
+      label: "Player",
+      currentProgress: playerProgress,
+      color: "yellow",
+      pageProgress: playerPageProgress,
+    },
+    {
+      label: "ARC Content",
+      currentProgress: arcContentProgress,
+      color: "slate",
+      pageProgress: arcContentPageProgress,
+    },
+    {
+      label: "Homebrew",
+      currentProgress: homebrewProgress,
+      color: "darkgreen",
+      pageProgress: homebrewPageProgress,
+    },
   ];
 
   // Calculate statistics for all pages
@@ -243,11 +267,28 @@ export default function Dashboard() {
   let completedPages = 0;
   let newContentCount = 0;
 
+  // Manual overrides for specific bars
+  const manualOverrides = {
+    "Signature Techniques": { total: 2, completed: 2 },
+    "Unique Abilities": { total: 1, completed: 1 },
+  };
+
   progressBars.forEach((bar) => {
-    const { completed, total, newItems } = countAllItems(bar.pageProgress);
-    totalPages += total;
-    completedPages += completed;
-    newContentCount += newItems;
+    if (manualOverrides[bar.label]) {
+      // Use manual override values
+      const override = manualOverrides[bar.label];
+      totalPages += override.total;
+      completedPages += override.completed;
+      // Still count new items from the data
+      const { newItems } = countAllItems(bar.pageProgress);
+      newContentCount += newItems;
+    } else {
+      // Use automatic calculation
+      const { completed, total, newItems } = countAllItems(bar.pageProgress);
+      totalPages += total;
+      completedPages += completed;
+      newContentCount += newItems;
+    }
   });
 
   const pagesLeftToUpdate = totalPages - completedPages;
@@ -258,6 +299,29 @@ export default function Dashboard() {
   const daysSinceUpdate = Math.floor(
     (today - updateStartDate) / (1000 * 60 * 60 * 24),
   );
+
+  // Calculate estimated time to completion
+  const pagesPerDay = completedPages / Math.max(daysSinceUpdate, 1); // Avoid division by zero
+  const estimatedDaysRemaining = Math.ceil(pagesLeftToUpdate / pagesPerDay);
+  const estimatedCompletionDate = new Date(today);
+  estimatedCompletionDate.setDate(
+    estimatedCompletionDate.getDate() + estimatedDaysRemaining,
+  );
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const formattedCompletionDate = `${monthNames[estimatedCompletionDate.getMonth()]} ${estimatedCompletionDate.getDate()}, ${estimatedCompletionDate.getFullYear()}`;
 
   // Sort bars by progress (lowest first, so highest appears at bottom)
   const sortedBars = [...progressBars].sort(
@@ -322,6 +386,16 @@ export default function Dashboard() {
                 {newContentCount}
               </p>
             </div>
+          </div>
+
+          <div className="mt-6 pt-6 border-t border-gray-700">
+            <p className="text-gray-400 text-base mb-2">
+              Estimated Time until Update is Complete
+            </p>
+            <p className="text-blue-400 font-bold text-2xl">
+              {estimatedDaysRemaining} days
+            </p>
+            <p className="text-gray-500 text-sm">({formattedCompletionDate})</p>
           </div>
         </div>
       </div>
