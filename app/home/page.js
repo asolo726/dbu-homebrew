@@ -107,6 +107,46 @@ export default function Dashboard() {
     return false;
   };
 
+  // Helper function to count all items and their completion status
+  const countAllItems = (pageProgress) => {
+    const countItems = (obj) => {
+      let completed = 0;
+      let total = 0;
+      let newItems = 0;
+
+      Object.values(obj).forEach((value) => {
+        if (typeof value === "boolean") {
+          total++;
+          if (value) completed++;
+        } else if (
+          typeof value === "object" &&
+          value !== null &&
+          !Array.isArray(value)
+        ) {
+          // Check if it's a completion object with completed property
+          if ("completed" in value) {
+            total++;
+            if (value.completed) completed++;
+            if (value.isNew) newItems++;
+          } else {
+            const {
+              completed: nestedCompleted,
+              total: nestedTotal,
+              newItems: nestedNewItems,
+            } = countItems(value);
+            completed += nestedCompleted;
+            total += nestedTotal;
+            newItems += nestedNewItems;
+          }
+        }
+      });
+
+      return { completed, total, newItems };
+    };
+
+    return countItems(pageProgress);
+  };
+
   // Helper function to render page progress items recursively
   const renderPageProgressItems = (items, depth = 0) => {
     return Object.entries(items).map(([key, value]) => (
@@ -198,6 +238,27 @@ export default function Dashboard() {
     },
   ];
 
+  // Calculate statistics for all pages
+  let totalPages = 0;
+  let completedPages = 0;
+  let newContentCount = 0;
+
+  progressBars.forEach((bar) => {
+    const { completed, total, newItems } = countAllItems(bar.pageProgress);
+    totalPages += total;
+    completedPages += completed;
+    newContentCount += newItems;
+  });
+
+  const pagesLeftToUpdate = totalPages - completedPages;
+
+  // Calculate days since update began (October 13, 2025)
+  const updateStartDate = new Date(2025, 9, 13); // October 13, 2025
+  const today = new Date();
+  const daysSinceUpdate = Math.floor(
+    (today - updateStartDate) / (1000 * 60 * 60 * 24),
+  );
+
   // Sort bars by progress (lowest first, so highest appears at bottom)
   const sortedBars = [...progressBars].sort(
     (a, b) => a.currentProgress - b.currentProgress,
@@ -216,13 +277,53 @@ export default function Dashboard() {
       <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
 
       {/* Overall Progress Bar */}
-      <div className="mb-20">
+      <div className="mb-12">
         <SegmentedProgressBar
           label="0.9.3 Update Progress"
           currentProgress={overallProgress}
           totalSegments={20}
           color="green"
         />
+
+        {/* Statistics */}
+        <div className="mt-6 bg-gray-900 rounded-lg p-6 text-center">
+          <div className="flex justify-center mb-6">
+            <div>
+              <p className="text-gray-400 text-base">
+                Days Since Update Began (Oct 13, 2025)
+              </p>
+              <p className="text-purple-400 font-bold text-4xl">
+                {daysSinceUpdate}
+              </p>
+              <p className="text-gray-400 text-base">days</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6">
+            <div>
+              <p className="text-gray-400">Total Pages</p>
+              <p className="text-green-400 font-bold text-2xl">{totalPages}</p>
+            </div>
+            <div>
+              <p className="text-gray-400">Pages Updated</p>
+              <p className="text-green-400 font-bold text-2xl">
+                {completedPages}
+              </p>
+            </div>
+            <div>
+              <p className="text-gray-400">Pages Left to Update</p>
+              <p className="text-yellow-400 font-bold text-2xl">
+                {pagesLeftToUpdate}
+              </p>
+            </div>
+            <div>
+              <p className="text-gray-400">New Content</p>
+              <p className="text-cyan-400 font-bold text-2xl">
+                {newContentCount}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Individual Progress Bars - sorted */}
