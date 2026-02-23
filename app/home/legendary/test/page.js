@@ -12,10 +12,9 @@ export default function Test_BlackBlade() {
   const aspects = [
     { name: "Battle Uniform", level: 0 },
     { name: "Growth", level: 2 },
-    { name: "High Speed", level: 2 },
-    { name: "Natural", level: 0 },
+    { name: "High Speed", level: 0 },
+    { name: "Natural", level: 1 },
     { name: "Peaked", level: 0 },
-    { name: "Strainless", level: 0 },
     { name: "Long Transformation", level: 1 },
   ];
   const attributeModifiers = [

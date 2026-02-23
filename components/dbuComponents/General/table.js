@@ -8,7 +8,7 @@ export default function Table({ tableData }) {
         <tr>
           {headers.map((item, key) => (
             <th
-              className="border border-dbu-header min-w-[6em] max-w-[10em] py-2"
+              className="border border-dbu-header min-w-[6em] max-w-[10em] py-2 text-sm"
               key={key}
             >
               {item}
