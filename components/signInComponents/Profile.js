@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import SignIn from "./signInorOut";
-import { Sign } from "crypto";
 /**
  * Handles the Profile Icon and Dropmenu, and holds the Sign In/Out button
  * @param {*} Session object from Auth

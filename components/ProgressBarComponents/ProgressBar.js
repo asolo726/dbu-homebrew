@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import SegmentedProgressBar from "../SegmentedProgressBar";
+import SegmentedProgressBar from "./SegmentedProgressBar";
 import ProgressBarClass from "../../classes/progress-tracker/progressBar.Class";
 import {
   calculateProgress,
@@ -8,7 +8,7 @@ import {
   renderPageProgressItems,
 } from "../../app/home/progress-tracker/progressTrackerUtil";
 
-export default function ProgressBar({ progressSession }) {
+export default function ProgressBoard({ progressData }) {
   // Progress data for all bars with colors and pageProgress data
   const [data, setData] = useState([]);
   const [progressBars, setProgressBars] = useState([]);
@@ -25,10 +25,13 @@ export default function ProgressBar({ progressSession }) {
 
   // Import data from MongoDB and calculate progress for each bar
   useEffect(() => {
-    fetch("/api/progress")
-      .then((res) => res.json())
-      .then(setData);
     setProgressBars([]);
+    if (progressData.Response === "No Data Found"){
+      throw Error("No Data Found for Progress Board");
+      return;
+    }
+    else setData(progressData.Response);
+    
     data.forEach((bar) => {
       const label = bar.progressBar;
       const segmentColor = bar.segmentColor;
@@ -53,24 +56,16 @@ export default function ProgressBar({ progressSession }) {
   let totalPages = 0;
   let completedPages = 0;
   let newContentCount = 0;
-
   progressBars.forEach((bar) => {
-    if (bar.pageCountOverride) {
-      // Use manual override values
-      const override = bar.pageCountOverride;
-      totalPages += override.total;
-      completedPages += override.completed;
-      // Still count new items from the data
-      const { newItems } = countAllItems(bar.pageProgress);
-      newContentCount += newItems;
-    } else {
-      // Use automatic calculation
       const { completed, total, newItems } = countAllItems(bar.pageProgress);
-      totalPages += total;
-      completedPages += completed;
+      let override = null;
+      try { bar.pageCountOverride >= 0 ? override = bar.pageCountOverride : null}
+      catch {console.log("Error in Progress Bar: ", bar.progressBar)}
+      totalPages += override ? override : total;
+      completedPages += override ? override : completed;
       newContentCount += newItems;
     }
-  });
+  );
 
   const pagesLeftToUpdate = totalPages - completedPages;
 
@@ -188,7 +183,8 @@ export default function ProgressBar({ progressSession }) {
             label={bar.label}
             currentProgress={bar.currentProgress}
             totalSegments={20}
-            color={bar.color}
+            segmentColor={bar.segmentColor}
+            textColor={bar.textColor}
             onToggleDropdown={() => toggleDropdown(bar.label)}
             isOpen={openDropdowns[bar.label]}
           />

@@ -1,5 +1,5 @@
-import ProgressData from "../../../components/ProgressData";
+import ProgressDataServer from "../../../components/ProgressBarComponents/ProgressDataServer";
 
 export default function ProgressTracker() {
-  return <ProgressData />;
+  return <ProgressDataServer />;
 }

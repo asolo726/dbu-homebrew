@@ -4,9 +4,9 @@ import "./Navbar.css";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { RxCross1 } from "react-icons/rx";
 import Image from "next/image";
-import NavOption from "./navComponents/navOption";
-import NavColumn from "./navComponents/navColumn";
-import Profile from "./Profile";
+import NavOption from "./navOption";
+import NavColumn from "./navColumn";
+import Profile from "../signInComponents/Profile";
 
 export default function Navbar({ session }) {
   const [menuIsOpen, setMenuIsOpen] = useState(false);

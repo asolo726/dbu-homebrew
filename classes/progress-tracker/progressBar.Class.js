@@ -52,3 +52,5 @@ class ProgressBar {
     this._pageCountOverride = value;
   }
 }
+
+export default ProgressBar;

@@ -1,4 +1,4 @@
-import NavbarServer from "../../components/NavbarServer";
+import NavbarServer from "../../components/navComponents/NavbarServer";
 export default function HomeLayout({ children }) {
   return (
     <>

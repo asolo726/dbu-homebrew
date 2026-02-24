@@ -15,7 +15,8 @@ export default function SegmentedProgressBar({
   label,
   currentProgress = 0,
   totalSegments = 20,
-  color = "green",
+  segmentColor = "bg-green-800",
+  textColor = "text-green-800",
   onToggleDropdown,
   isOpen = false,
 }) {
@@ -23,41 +24,41 @@ export default function SegmentedProgressBar({
   const percentage = Math.round(currentProgress);
   const segmentsArray = Array.from({ length: totalSegments });
 
-  // Map color names to Tailwind classes for filled segments
-  const colorMap = {
-    green: "bg-green-500",
-    darkgreen: "bg-green-800",
-    amber: "bg-amber-600",
-    orange: "bg-orange-500",
-    pink: "bg-pink-500",
-    purple: "bg-purple-500",
-    cyan: "bg-cyan-500",
-    yellow: "bg-yellow-400",
-    red: "bg-red-600",
-    slate: "bg-slate-600",
-    rainbow: null, // Special case handled separately
-  };
+  // // Map color names to Tailwind classes for filled segments
+  // const colorMap = {
+  //   green: "bg-green-500",
+  //   darkgreen: "bg-green-800",
+  //   amber: "bg-amber-600",
+  //   orange: "bg-orange-500",
+  //   pink: "bg-pink-500",
+  //   purple: "bg-purple-500",
+  //   cyan: "bg-cyan-500",
+  //   yellow: "bg-yellow-400",
+  //   red: "bg-red-600",
+  //   slate: "bg-slate-600",
+  //   rainbow: null, // Special case handled separately
+  // };
 
-  // Map color names to text colors
-  const textColorMap = {
-    green: "text-green-500",
-    darkgreen: "text-green-800",
-    amber: "text-amber-600",
-    orange: "text-orange-500",
-    pink: "text-pink-500",
-    purple: "text-purple-500",
-    cyan: "text-cyan-500",
-    yellow: "text-yellow-400",
-    red: "text-red-600",
-    slate: "text-slate-600",
-    rainbow: "text-purple-500",
-  };
+  // // Map color names to text colors
+  // const textColorMap = {
+  //   green: "text-green-500",
+  //   darkgreen: "text-green-800",
+  //   amber: "text-amber-600",
+  //   orange: "text-orange-500",
+  //   pink: "text-pink-500",
+  //   purple: "text-purple-500",
+  //   cyan: "text-cyan-500",
+  //   yellow: "text-yellow-400",
+  //   red: "text-red-600",
+  //   slate: "text-slate-600",
+  //   rainbow: "text-purple-500",
+  // };
 
-  const getSegmentColor = () => {
-    return colorMap[color] || colorMap.green;
-  };
+  // const getSegmentColor = () => {
+  //   return colorMap[color] || colorMap.green;
+  // };
 
-  const textColor = textColorMap[color] || textColorMap.green;
+  // const textColor = textColorMap[color] || textColorMap.green;
 
   return (
     <div className="flex items-center gap-6 mb-8 w-full">
@@ -83,7 +84,7 @@ export default function SegmentedProgressBar({
               key={index}
               style={{ flex: `1 1 0%` }}
               className={`h-8 transition-all rounded-sm ${
-                index < filledSegments ? getSegmentColor(index) : "bg-gray-800"
+                index < filledSegments ? segmentColor : "bg-gray-800"
               }`}
             />
           ))}

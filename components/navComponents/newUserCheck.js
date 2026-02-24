@@ -1,5 +1,5 @@
-import searchUser from "../app/api/auth/searchUser/route";
-import postUser from "../app/api/auth/postUser/route";
+import searchUser from "../../app/api/auth/searchUser/route";
+import postUser from "../../app/api/auth/postUser/route";
 /**
  * Checks MONGODB for existing user. If a user exists, returns false.
  * If a user does not exist, creates a new user in MongoDB and returns true.

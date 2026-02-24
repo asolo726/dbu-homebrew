@@ -1,4 +1,4 @@
-import { auth } from "../auth";
+import { auth } from "../../auth";
 import Navbar from "./Navbar";
 import newUserCheck from "./newUserCheck";
 
