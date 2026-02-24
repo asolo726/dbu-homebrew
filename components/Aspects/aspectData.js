@@ -79,7 +79,9 @@ export const aspectData = {
   Natural: {
     type: "Positive",
     effects:
-      "Level 1+: You are not required to roll Stress Tests while only in this Transformation. You do not leave this form if suffering from Stress Exhaustion. Level 2: If you would leave a Transformation, you may enter this Transformation instead of your Normal State. You still suffer the effects of Stress Exhaustion.",
+      "Level 1+: You are not required to roll Stress Tests while only in this Transformation. You do not leave this form if suffering from Stress Exhaustion." +
+      "<br><br>" +
+      "Level 2: If you would leave a Transformation, you may enter this Transformation instead of your Normal State. You still suffer the effects of Stress Exhaustion.",
     maxLevel: 2,
   },
   "Perfect Ki Control": {
