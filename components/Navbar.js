@@ -38,6 +38,7 @@ export default function Navbar({ session }) {
   ];
 
   const navOptions = [
+    { text: "0.9.3 Update Tracker", link: "/home/progress-tracker"},
     { text: "Transformations", link: "", list: transformationOptions },
     { text: "Player", link: "", list: playerOptions },
     { text: "Techniques", link: "", list: techniqueOptions },

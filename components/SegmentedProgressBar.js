@@ -23,17 +23,6 @@ export default function SegmentedProgressBar({
   const percentage = Math.round(currentProgress);
   const segmentsArray = Array.from({ length: totalSegments });
 
-  // Rainbow color sequence for gradient effect
-  const rainbowColors = [
-    "bg-red-500",
-    "bg-orange-500",
-    "bg-yellow-400",
-    "bg-green-500",
-    "bg-cyan-500",
-    "bg-blue-500",
-    "bg-purple-500",
-  ];
-
   // Map color names to Tailwind classes for filled segments
   const colorMap = {
     green: "bg-green-500",
@@ -64,14 +53,10 @@ export default function SegmentedProgressBar({
     rainbow: "text-purple-500",
   };
 
-  const getSegmentColor = (index) => {
-    if (color === "rainbow") {
-      return rainbowColors[index % rainbowColors.length];
-    }
+  const getSegmentColor = () => {
     return colorMap[color] || colorMap.green;
   };
 
-  const filledColor = getSegmentColor(0);
   const textColor = textColorMap[color] || textColorMap.green;
 
   return (
