@@ -7,14 +7,15 @@ import SignIn from "./signInorOut";
  * @param {*} Session object from Auth
  * @returns
  */
-export default function Profile({ session }) {
+export default function ProfileMenu({ session }) {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
-  const listOptions = ["...", <SignIn session={session} />];
+  const listOptions = [ <a href="/home/create">Create</a> , <SignIn session={session} />];
   const listCss =
-    "px-3 text-left border-dbu-line border-t-1 text-dbu-text decoration-0 hover:text-dbu-link text-sm";
+    "p-3 text-center border-dbu-line border-t-1 text-dbu-text decoration-0 hover:text-dbu-link text-sm";
 
   return (
     <div className="relative self-center pl-5">
+      {/* Profile Icon */}
       <div
         className=" max-w-10 rounded-full cursor-pointer overflow-clip"
         onClick={() => setMenuIsOpen(!menuIsOpen)}
@@ -28,13 +29,14 @@ export default function Profile({ session }) {
           <CgProfile className="size-8" />
         )}
       </div>
+      {/* Drop Down Menu */}
       <div
         className={
-          "flex flex-row -left-15 mt-2 z-10 min-w-20 absolute bg-dbu-bg border-dbu-line" +
+          "flex flex-row -left-25 mt-2 z-10 min-w-20 absolute bg-dbu-bg border-dbu-line" +
           (menuIsOpen ? " " : " hidden")
         }
       >
-        <ul className="border-dbu-line border-x-1 border-b-1 text-left">
+        <ul className="border-dbu-line border-x-1 border-b-1 text-center">
           {listOptions.map((item, key) => (
             <li key={key} className={listCss}>
               {item}

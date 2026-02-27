@@ -6,7 +6,7 @@ import { RxCross1 } from "react-icons/rx";
 import Image from "next/image";
 import NavOption from "./navOption";
 import NavColumn from "./navColumn";
-import Profile from "../signInComponents/Profile";
+import ProfileMenu from "../signInComponents/ProfileMenu";
 
 export default function Navbar({ session }) {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
@@ -63,7 +63,7 @@ export default function Navbar({ session }) {
             list={item.list}
           />
         ))}
-        <Profile session={session} />
+        <ProfileMenu session={session} />
       </div>
     );
   };
@@ -110,7 +110,7 @@ export default function Navbar({ session }) {
               <RxHamburgerMenu className="cursor-pointer size-5 stroke-1 stroke-dbu-text hover:stroke-dbu-link" />
             )}
           </button>
-          <Profile session={session} />
+          <ProfileMenu session={session} />
         </div>
 
         <nav
