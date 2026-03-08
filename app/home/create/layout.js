@@ -35,5 +35,7 @@ export default async function CreateLayout({ children }) {
  *    1. AuthSessionContext
  *    2. AuthSessionWrapper
  *    3. Create/Layout.js (That's this file :D )
- *
+ *    
+ * With this setup, everything inside of the Create Layout has access to the session info. 
+ * On top of that, for access to the subsequent pages
  * */

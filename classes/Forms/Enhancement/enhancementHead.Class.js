@@ -11,7 +11,7 @@ class EnhancementHead extends FormHead {
     tier,
     aspects = [],
     attributeModifiers = [],
-    type = "Enhancement Power",
+    transformationType = "Enhancement Power",
     enhancementType, // Standard or Special
     initialEnhancement, // Only for Special Enhancements. If present, always contains an array of 2 elements
     stress = 0,
@@ -27,7 +27,7 @@ class EnhancementHead extends FormHead {
       tier: tier,
       aspects: aspects,
       attributeModifiers: attributeModifiers,
-      type: type,
+      transformationType: transformationType,
     });
     this._enhancementType = enhancementType;
     this._initialEnhancement = initialEnhancement;

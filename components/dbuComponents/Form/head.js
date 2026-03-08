@@ -82,7 +82,7 @@ export default function Head({ Form }) {
         <li>
           <p>
             <span className={requirementNameStyle}>Transformation Type:</span>{" "}
-            {Form.head.type}
+            {Form.head.transformationType}
           </p>
         </li>
         {Form.head.formType ? (
@@ -204,7 +204,7 @@ export default function Head({ Form }) {
               (!Number.isNaN(Number(Form.head.tier)) ? "+" : "")}
           </p>
         </li>
-        {Form.head.aspects.length > 0 ? (
+        {Form.head.identity !== "Awakening" ? (
           <li>
             <p>
               <span className={requirementNameStyle}>Aspects: </span>{" "}

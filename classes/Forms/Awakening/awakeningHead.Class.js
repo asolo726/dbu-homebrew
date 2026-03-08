@@ -14,7 +14,7 @@ class AwakeningHead extends FormHead {
     maxStacks = 1,
     awakeningType, // Lesser, Greater, or Super
     awakeningOrigin, // Body or Mind
-    type = "Awakening",
+    transformationType = "Awakening",
   } = {}) {
     super({
       title: title,
@@ -27,7 +27,7 @@ class AwakeningHead extends FormHead {
       tier: tier,
       aspects: aspects,
       attributeModifiers: attributeModifiers,
-      type: type,
+      transformationType: transformationType,
     });
     ((this._maxStacks = maxStacks),
       (this._awakeningType = awakeningType),
