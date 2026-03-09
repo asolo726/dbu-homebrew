@@ -24,7 +24,7 @@ export async function generateMetadata({ params }) {
     const title = result.head.title;
     const description = result.head.desc;
     const image = result.head.banner;
-    const url = `${SITE_URL}/${slug}`;
+    const url = `${SITE_URL}/${result.head.keyName}`;
 
     return {
         title,
