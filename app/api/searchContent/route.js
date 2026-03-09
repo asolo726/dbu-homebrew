@@ -13,7 +13,7 @@ async function findContent(searchParam) {
 
     for await (const collection of collections) {
         const searchResult = await db.collection(collection.name).findOne({
-            "head.title": searchParam,
+            "head.keyName": searchParam,
         });
         if (searchResult) {
             resultArr.push(searchResult);
@@ -49,7 +49,7 @@ function getSearchParam(slug) {
  * @returns If 0 Finds: An object containing a failed status: {status: "failed"}
  */
 export default async function GET(slug) {
-    const searchParam = getSearchParam(slug);
+    const searchParam = slug
     let resultArr = await findContent(searchParam);
 
     if (resultArr.length >= 1) {
