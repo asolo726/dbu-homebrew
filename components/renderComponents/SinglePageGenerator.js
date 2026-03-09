@@ -3,9 +3,10 @@ import AwakeningRenderPage from "./Awakening";
 import LegendaryRenderPage from "./Legendary";
 import searchContent from "../../app/api/searchContent/route";
 
-export async function generateMetadata({ params }) {
-    const { slug } = await params;
-    const resultArr = await searchContent(slug);
+export async function generateMetadata(resultArr) {
+    // const { slug } = await params;
+    // const resultArr = await searchContent(slug);
+    // console.log(resultArr[0])
 
     if (resultArr.length < 1) {
         return {
@@ -15,12 +16,12 @@ export async function generateMetadata({ params }) {
         };
     }
 
-    const result = resultArr[0];
+    const result = resultArr;
 
     const title = result.head.title;
     const description = result.head.desc;
     const image = result.head.banner;
-    const url = `https://dbu-homebrew.vercel.app/${slug}`;
+    const url = `https://dbu-homebrew.vercel.app/${result.head.keyName}`;
 
     return {
         title,
@@ -60,6 +61,7 @@ export async function generateMetadata({ params }) {
  */
 
 export default function SinglePageGenerator({ content }) {
+    generateMetadata(content);
     switch (content.head.identity) {
         case "Awakening":
             return (
