@@ -4,8 +4,8 @@ import LegendaryRenderPage from "./Legendary";
 import searchContent from "../../app/api/searchContent/route";
 
 export async function generateMetadata({ params }) {
-    const searchParam = await params;
-    const resultArr = await searchContent(searchParam);
+    const { slug } = await params;
+    const resultArr = await searchContent(slug);
 
     if (resultArr.length < 1) {
         return {
@@ -20,7 +20,6 @@ export async function generateMetadata({ params }) {
     const title = result.head.title;
     const description = result.head.desc;
     const image = result.head.banner;
-    const slug = params.slug;
     const url = `https://dbu-homebrew.vercel.app/${slug}`;
 
     return {
