@@ -22,7 +22,6 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <HelmetProvider>
       <html lang="en">
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col justify-center-safe`}
@@ -31,6 +30,5 @@ export default function RootLayout({ children }) {
           <div className="grid justify-center">{children}</div>
         </body>
       </html>
-    </HelmetProvider>
   );
 }

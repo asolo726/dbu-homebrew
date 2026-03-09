@@ -179,24 +179,6 @@ export default function Test_DarkRessurrection() {
     masteryTrait: masteryTraitsObj,
   });
 
-    async function generateMetadata() {
-  return {
-    title: altHead.title,
-    description:
-      altHead.desc,
-    openGraph: {
-      title: altHead.title,
-      description:
-        altHead.desc,
-      images:
-        altHead.banner,
-      type: "website",
-      siteName: "DBU: The Homebrew Galaxy",
-    },
-    authors: "Blasteroid",
-  };
-}
-
   return (
     <div className="flex flex-col flex-col-1 max-w-5xl px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
       <Head Form={alternateFormObj} />
