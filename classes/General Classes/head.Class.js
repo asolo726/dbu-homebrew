@@ -1,9 +1,10 @@
 class Head {
-  constructor(title, banner = "", desc = "", bannerAuthor = "") {
+  constructor(title, banner = "", desc = "", bannerAuthor = "", identity="") {
     this._title = title;
     this._banner = banner;
     this._desc = desc;
     this._bannerAuthor = bannerAuthor;
+    this._identity= identity;
   }
 
   get title() {
@@ -29,6 +30,13 @@ class Head {
   }
   set bannerAuthor(value) {
     this._bannerAuthor = value;
+  }
+
+  get identity(){
+    return this._identity;
+  }
+  set identity(value){
+    this._identity = value;
   }
 }
 

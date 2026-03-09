@@ -45,3 +45,7 @@ next-env.d.ts
 
 #Old Netlify Function folder
 .netlify-old
+
+#Syncthing Files
+.stignore
+.stfolder

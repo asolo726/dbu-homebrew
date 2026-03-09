@@ -11,7 +11,8 @@ class FormHead extends Head {
     tier = "1",
     aspects = [],
     attributeModifiers = [],
-    type,
+    transformationType,
+    identity,
   } = {}) {
     super(title, banner, desc, bannerAuthor);
     this._author = author;
@@ -20,7 +21,8 @@ class FormHead extends Head {
     this._tier = tier;
     this._aspects = aspects;
     this._attributeModifiers = attributeModifiers;
-    this._type = type;
+    this._type = transformationType;
+    this._identity = identity;
   }
 
   get author() {
@@ -59,10 +61,10 @@ class FormHead extends Head {
   set attributeModifiers(value) {
     this._attributeModifiers = value;
   }
-  set type(value) {
+  set transformationType(value) {
     this._type = value;
   }
-  get type() {
+  get transformationType() {
     return this._type;
   }
 }
