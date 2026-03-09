@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import NavbarServer from "../components/navComponents/NavbarServer";
-import { HelmetProvider } from 'react-helmet-async';
 import "./globals.css";
 
 const geistSans = Geist({
