@@ -14,7 +14,7 @@
 
 :root {
   --background: #232323;
-  --foreground: #232323;
+  --foreground: #cccccc;
 }
 
 @theme inline {
