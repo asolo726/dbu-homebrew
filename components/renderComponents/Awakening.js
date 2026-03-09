@@ -1,7 +1,7 @@
 import Head from "../../components/dbuComponents/Form/head";
 import Trait from "../../components/dbuComponents/General/trait";
-export default function AwakeningRenderPage({content}) {
-    
+import GrandAwakening from "../dbuComponents/Form/grandAwakening";
+export default function AwakeningRenderPage({ content }) {
     return (
         <div className="flex flex-col flex-col-1 max-w-5xl px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
             <Head Form={content} />
@@ -15,6 +15,15 @@ export default function AwakeningRenderPage({content}) {
                     />
                 );
             })}
+            {content.head.awakeningType === "Super" ? (
+                <GrandAwakening
+                    title={content.grandAwakening.title}
+                    desc={content.grandAwakening.desc}
+                    ability={content.grandAwakening.abilities}
+                />
+            ) : (
+                ""
+            )}
         </div>
     );
 }
