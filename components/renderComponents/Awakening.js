@@ -22,7 +22,7 @@ export default function AwakeningRenderPage({ content }) {
                     ability={content.grandAwakening.abilities}
                 />
             ) : (
-                ""
+                " "
             )}
         </div>
     );
