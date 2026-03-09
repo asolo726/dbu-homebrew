@@ -14,7 +14,7 @@ class AlternateHead extends FormHead {
     stress = "1",
     transLine = "",
     transStage = "",
-    transformationType = "Alternate Form",
+    transformationType = "Form",
     formType = "Alternate",
   } = {}) {
     super({

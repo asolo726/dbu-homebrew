@@ -7,17 +7,17 @@ import clientPromise from "../../../lib/mongoDBClient";
  */
 export default async function GET(slug) {
     //Clean up searchParam to replace - with whitespace and capitalize letters
-    const slugWithoutDash = slug.replaceAll("-", " ");
-    const words = slugWithoutDash.split(" ");
-    for (let i = 0; i < words.length; i++) {
-        if (words[i].length > 0) {
-            words[i] =
-                words[i].charAt(0).toUpperCase() +
-                words[i].slice(1).toLowerCase();
-        }
-    }
+    // const slugWithoutDash = slug.replaceAll("-", " ");
+    // const words = slugWithoutDash.split(" ");
+    // for (let i = 0; i < words.length; i++) {
+    //     if (words[i].length > 0) {
+    //         words[i] =
+    //             words[i].charAt(0).toUpperCase() +
+    //             words[i].slice(1).toLowerCase();
+    //     }
+    // }
+    // const searchParam = words.join(" ");
 
-    const searchParam = words.join(" ");
 
     //Actual DB Work--------------------------------------------------------------------------------------------------------
     const client = await clientPromise;
@@ -29,7 +29,7 @@ export default async function GET(slug) {
     // If the search isn't null, is added to the resultArr
     for await (const collection of collections) { 
         const searchResult = await db.collection(collection.name).findOne({
-            "head.title": searchParam,
+            "head.keyName": slug,
         });
         
         if (searchResult) {
