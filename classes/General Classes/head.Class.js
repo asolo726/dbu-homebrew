@@ -1,10 +1,11 @@
 class Head {
-  constructor(title, banner = "", desc = "", bannerAuthor = "", identity="") {
+  constructor(title="", banner = "", desc = "", bannerAuthor = "", identity="") {
     this._title = title;
     this._banner = banner;
     this._desc = desc;
     this._bannerAuthor = bannerAuthor;
     this._identity= identity;
+    this._keyName=title.replaceAll(' ','-');
   }
 
   get title() {

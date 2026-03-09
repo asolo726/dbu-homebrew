@@ -1,4 +1,6 @@
+import AlternateRenderPage from "./Alternate";
 import AwakeningRenderPage from "./Awakening";
+import LegendaryRenderPage from "./Legendary";
 
 /**
  * Handles generating one page from the [slug] page request. Decides which render method to use depending on the transformationType received.
@@ -12,6 +14,18 @@ export default function SinglePageGenerator({ content }) {
                     <AwakeningRenderPage content={content} />
                 </div>
             );
+        case "Alternate":
+            return (
+                <div>
+                    <AlternateRenderPage content={content}/>
+                </div>
+            )
+        case "Legendary":
+            return(
+                <div>
+                    <LegendaryRenderPage content={content} />
+                </div>
+            )
         case "Temp":
             return <></>;
         default:
