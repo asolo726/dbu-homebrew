@@ -1,5 +1,5 @@
 import clientPromise from "../../../lib/mongoDBClient";
-/**
+/** 
  *
  *
  * @returns If 1+ Finds: An object containing status and an array of the requested info { status: "status", content: [{}]}
