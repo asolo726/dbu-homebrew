@@ -1,4 +1,51 @@
 import SinglePageGenerator from "../../components/renderComponents/SinglePageGenerator.js";
+import searchContent from "../api/searchContent/route.js";
+
+const SITE_URL = "https://dbu-homebrew.vercel.app";
+const SLUG_PATTERN = /^(\w+[-]?)+$/g;
+
+export async function generateMetadata({ params }) {
+    const { slug } = await params;
+
+    if (!SLUG_PATTERN.test(slug)) {
+        return { title: "Invalid URL" };
+    }
+
+    const searchResult = await searchContent(slug);
+
+    if (searchResult.status === "failed") {
+        return {
+            title: "Content Not Found",
+            description: "The content you are looking for does not exist or has not been published yet.",
+        };
+    }
+
+    const result = searchResult.content[0];
+    const title = result.head.title;
+    const description = result.head.desc;
+    const image = result.head.banner;
+    const url = `${SITE_URL}/${slug}`;
+
+    return {
+        title,
+        description,
+        alternates: { canonical: url },
+        openGraph: {
+            title,
+            description,
+            url,
+            type: "website",
+            images: [{ url: image, width: 1200, height: 630, alt: title }],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+            images: [image],
+        },
+    };
+}
+
 import searchContent from "../../app/api/searchContent/route";
 /**
  * 1. Search DB for entry that matches the slug. I.e: {slug: Super-Saiyan} searches for Super-Saiyan
