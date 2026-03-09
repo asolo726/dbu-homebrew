@@ -46,7 +46,6 @@ export async function generateMetadata({ params }) {
     };
 }
 
-import searchContent from "../../app/api/searchContent/route";
 /**
  * 1. Search DB for entry that matches the slug. I.e: {slug: Super-Saiyan} searches for Super-Saiyan
  *  - Prior to picking a Type, possibly create an array that holds the entries found if there are multiple.
@@ -54,58 +53,6 @@ import searchContent from "../../app/api/searchContent/route";
  * 2. Check FormType to pick which component is used to render the page.
  *
  *  */
-
-export async function generateMetadata({params}) {
-    const { slug } = await params;
-    const resultArr = await searchContent(slug);
-    console.log("Hey I'm running the metadata:")
-
-    if (resultArr.length < 1) {
-        return {
-            title: "Content Not Found",
-            description:
-                "The content you are looking for does not exist or has not been published yet.",
-        };
-    }
-
-    const result = resultArr.content[0];
-
-    const title = result.head.title;
-    const description = result.head.desc;
-    const image = result.head.banner;
-    const url = `https://dbu-homebrew.vercel.app/${result.head.keyName}`;
-
-    return {
-        title,
-        description,
-
-        alternates: {
-            canonical: url,
-        },
-
-        openGraph: {
-            title,
-            description,
-            url,
-            type: "website",
-            images: [
-                {
-                    url: image,
-                    width: 1200,
-                    height: 630,
-                    alt: title,
-                },
-            ],
-        },
-
-        twitter: {
-            card: "summary_large_image",
-            title,
-            description,
-            images: [image],
-        },
-    };
-}
 
 export default async function Page({ params }) {
     const { slug } = await params;
