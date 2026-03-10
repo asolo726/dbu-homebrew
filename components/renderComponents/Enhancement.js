@@ -1,6 +1,7 @@
 import Head from "../../components/dbuComponents/Form/head";
 import Trait from "../../components/dbuComponents/General/trait";
 import BurstLimit from "../../components/dbuComponents/Form/burstLimit"
+import MasteryTrait from "../dbuComponents/Form/masteryTrait";
 
 export default function EnhancementRenderPage({ content }) {
     return (
@@ -17,6 +18,9 @@ export default function EnhancementRenderPage({ content }) {
                 );
             })}
             <BurstLimit burstLimit={content.burstLimit} />
+            {
+                content.masteryTrait ? <MasteryTrait masteryTraitList={content.masteryTrait}/> : <></>
+            }
         </div>
     );
 }
