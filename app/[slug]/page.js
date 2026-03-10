@@ -20,7 +20,8 @@ export async function generateMetadata({ params }) {
         "The content you are looking for does not exist or has not been published yet.",
     };
   }
-
+  
+  const siteName = "DBU: The Homebrew Galaxy";
   const result = searchResult.content[0];
   const title = result.head.title;
   const description = result.head.desc;
@@ -36,6 +37,7 @@ export async function generateMetadata({ params }) {
       description,
       url,
       type: "website",
+      siteName,
       images: [{ url: image, width: 1200, height: 630, alt: title }],
     },
     twitter: {
