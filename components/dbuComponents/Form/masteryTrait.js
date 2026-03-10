@@ -16,6 +16,7 @@ export default function MasteryTrait({ masteryTraitList = [] }) {
             {trait.desc}
           </p>
           <Ability abilityList={trait.abilities} />
+          {/* Is this table section even doing anything? Check later... */}
           {trait.tables &&
             trait.tables.map((table, tKey) => (
               <div key={tKey} className="mt-5 mb-5">
