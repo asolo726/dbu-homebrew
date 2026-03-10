@@ -7,7 +7,5 @@ import AuthSessionWrapper from "../../../contextProviders/AuthSessionWrapper";
  */
 
 export default async function Create_Page() {
-    return (<Create />);
+  return <Create />;
 }
-
-

@@ -1,11 +1,17 @@
 class Head {
-  constructor(title="", banner = "", desc = "", bannerAuthor = "", identity="") {
+  constructor(
+    title = "",
+    banner = "",
+    desc = "",
+    bannerAuthor = "",
+    identity = "",
+  ) {
     this._title = title;
     this._banner = banner;
     this._desc = desc;
     this._bannerAuthor = bannerAuthor;
-    this._identity= identity;
-    this._keyName=title.replaceAll(' ','-');
+    this._identity = identity;
+    this._keyName = title.replaceAll(" ", "-");
   }
 
   get title() {
@@ -33,10 +39,10 @@ class Head {
     this._bannerAuthor = value;
   }
 
-  get identity(){
+  get identity() {
     return this._identity;
   }
-  set identity(value){
+  set identity(value) {
     this._identity = value;
   }
 }

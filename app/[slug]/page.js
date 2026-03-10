@@ -5,45 +5,46 @@ const SITE_URL = "https://dbu-homebrew.vercel.app";
 const SLUG_PATTERN = /^(\w+[-]?)+$/g;
 
 export async function generateMetadata({ params }) {
-    const { slug } = await params;
+  const { slug } = await params;
 
-    if (!SLUG_PATTERN.test(slug)) {
-        return { title: "Invalid URL" };
-    }
+  if (!SLUG_PATTERN.test(slug)) {
+    return { title: "Invalid URL" };
+  }
 
-    const searchResult = await searchContent(slug);
+  const searchResult = await searchContent(slug);
 
-    if (searchResult.status === "failed") {
-        return {
-            title: "Content Not Found",
-            description: "The content you are looking for does not exist or has not been published yet.",
-        };
-    }
-
-    const result = searchResult.content[0];
-    const title = result.head.title;
-    const description = result.head.desc;
-    const image = result.head.banner;
-    const url = `${SITE_URL}/${result.head.keyName}`;
-
+  if (searchResult.status === "failed") {
     return {
-        title,
-        description,
-        alternates: { canonical: url },
-        openGraph: {
-            title,
-            description,
-            url,
-            type: "website",
-            images: [{ url: image, width: 1200, height: 630, alt: title }],
-        },
-        twitter: {
-            card: "summary_large_image",
-            title,
-            description,
-            images: [image],
-        },
+      title: "Content Not Found",
+      description:
+        "The content you are looking for does not exist or has not been published yet.",
     };
+  }
+
+  const result = searchResult.content[0];
+  const title = result.head.title;
+  const description = result.head.desc;
+  const image = result.head.banner;
+  const url = `${SITE_URL}/${result.head.keyName}`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: "website",
+      images: [{ url: image, width: 1200, height: 630, alt: title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+    },
+  };
 }
 
 /**
@@ -55,59 +56,56 @@ export async function generateMetadata({ params }) {
  *  */
 
 export default async function Page({ params }) {
-    const { slug } = await params;
+  const { slug } = await params;
 
-    //This Regex pattern checks that a url search only contains alphanumerical characters and a -
-    //Example: "Super-Saiyan-3" is a match. "{GetUsers} is not a match."
-    //This site is very helpful: https://regex101.com
-    const pattern = /^(\w+[-]?)+$/g;
-    if (pattern.test(slug) === false) {
-        return (
-            <div className="flex flex-col justify-center">
-                <h1>
-                    Whatever the hell you just typed in was invalid. Only
-                    letters, numbers, and - is acceptable.
-                </h1>
-                <h1>
-                    Anything else makes you look fishy. And I DON'T. LIKE.
-                    FISHES.
-                </h1>
-                <button className="mt-10">
-                    <a
-                        className="p-5 rounded-xl bg-dbu-link text-white font-bold "
-                        href="/"
-                    >
-                        Home
-                    </a>
-                </button>
-            </div>
-        );
-    }
+  //This Regex pattern checks that a url search only contains alphanumerical characters and a -
+  //Example: "Super-Saiyan-3" is a match. "{GetUsers} is not a match."
+  //This site is very helpful: https://regex101.com
+  const pattern = /^(\w+[-]?)+$/g;
+  if (pattern.test(slug) === false) {
+    return (
+      <div className="flex flex-col justify-center">
+        <h1>
+          Whatever the hell you just typed in was invalid. Only letters,
+          numbers, and - is acceptable.
+        </h1>
+        <h1>Anything else makes you look fishy. And I DON'T. LIKE. FISHES.</h1>
+        <button className="mt-10">
+          <a
+            className="p-5 rounded-xl bg-dbu-link text-white font-bold "
+            href="/"
+          >
+            Home
+          </a>
+        </button>
+      </div>
+    );
+  }
 
-    const searchResult = await searchContent(slug);
-    if (searchResult.status === "failed") {
-        return (
-            <div className="flex flex-col justify-center">
-                <h1>
-                    Hmmm, looks like that doesn't exist. That page probably
-                    doesn't exist or hasn't been published yet.
-                </h1>
-                <button className="mt-10">
-                    <a
-                        className="p-5 rounded-xl bg-dbu-link text-white font-bold "
-                        href="/"
-                    >
-                        Home
-                    </a>
-                </button>
-            </div>
-        );
-    }
-    if (searchResult.content.length === 1) {
-        return (
-            <>
-                <SinglePageGenerator content={searchResult.content[0]} />
-            </>
-        );
-    }
+  const searchResult = await searchContent(slug);
+  if (searchResult.status === "failed") {
+    return (
+      <div className="flex flex-col justify-center">
+        <h1>
+          Hmmm, looks like that doesn't exist. That page probably doesn't exist
+          or hasn't been published yet.
+        </h1>
+        <button className="mt-10">
+          <a
+            className="p-5 rounded-xl bg-dbu-link text-white font-bold "
+            href="/"
+          >
+            Home
+          </a>
+        </button>
+      </div>
+    );
+  }
+  if (searchResult.content.length === 1) {
+    return (
+      <>
+        <SinglePageGenerator content={searchResult.content[0]} />
+      </>
+    );
+  }
 }

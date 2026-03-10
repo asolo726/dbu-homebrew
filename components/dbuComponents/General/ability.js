@@ -77,10 +77,11 @@ export default function Ability({ abilityList = [{}], key }) {
           return (
             <ul key={key} className="list-disc ml-10">
               <AddendumBox
-                boxTitle={item.boxTitle}
-                title={item.title}
-                desc={item.desc}
-                abilities={item.abilities}
+                boxTitle={item.addendumBox.boxTitle}
+                title={item.addendumBox.title}
+                desc={item.addendumBox.desc}
+                abilities={item.addendumBox.abilities}
+                traits={item.addendumBox.traits}
               />
             </ul>
           );

@@ -2,6 +2,7 @@
 import Head from "../../../../components/dbuComponents/Form/head.js";
 import Trait from "../../../../components/dbuComponents/General/trait.js";
 import LegendaryTrait from "../../../../components/dbuComponents/Form/legendaryTrait.js";
+import AddendumBox from "../../../../components/dbuComponents/General/addendumBox.js";
 
 //Classes
 import LegendaryHead from "../../../../classes/Forms/Legendary/legendaryHead.Class.js";
@@ -123,7 +124,16 @@ export default function Test_BlackBlade() {
             boxTitle: "Destined Death Quality",
             title: "Destined Death",
             desc: "Within the Black Blade lies the Rune of Death, a fragment of shadow capable of bringing an end to any and all life, including even the most powerful deities.",
-            abilities: [],
+            abilities: [
+              {
+                condition: "Effects",
+                desc: "If you roll for Wound with the Black Blade, you can spend 2(bT) to cause all opponents to automatically lose 5 percent (%) of their current Life Points. If an opponent did not lose Life Points from your initial Wound Roll, or used an effect to reduce the Damage Category of your Wound Roll by at least 1, they instead lose 2 percent (%) of their current Life Points.",
+              },
+              {
+                condition: "Triggered",
+                desc: "If you hit an Opponent with an attack of the Physical Foundation with your Black Blade while using Destined Death main effect, they reduce their maximum Life Points by 1/4th for the remainder of the combat encounter or until you exit this Legendary Form, lowering their current Life Points to equal their maximum Life Points if they would now exceed their maximum. This effect cannot stack on an opponent.",
+              },
+            ],
           },
         },
       ],
@@ -188,6 +198,41 @@ export default function Test_BlackBlade() {
         );
       })}
       <LegendaryTrait legendaryTraitList={legendary.legendaryTrait} />
+      <AddendumBox
+        boxTitle="Battle Uniform"
+        traits={[
+          {
+            title: "Category",
+            desc: "Armor",
+            abilities: [],
+          },
+          {
+            title: "Grade",
+            desc: "High",
+            abilities: [],
+          },
+          {
+            title: "Black Iron",
+            desc: "Forged with black iron, your armor signifies the fear of Destined Death.",
+            abilities: [
+              {
+                condition: "Effects",
+                desc: "Increase your Damage Reduction by +2(bT). You also reduce the Damage Category of all Attacking Maneuvers with an Elemental or Magic Profile used against you by 1.",
+              },
+            ],
+          },
+          {
+            title: "Gilded Champion",
+            desc: "Your armor is gilded with gold, emblematic of this form's god-slaying might.",
+            abilities: [
+              {
+                condition: "Effects",
+                desc: "At the start of each Combat Round, gain an Energy Charge for each opponent in Initiative against you until the end of your next turn. Energy Charges gained this way do not count against the limit of Energy Charges you can possess. When you use Energy Charges gained this way, increase the Dice Category of the bonus to Wound granted by 1.",
+              },
+            ],
+          },
+        ]}
+      />
     </div>
   );
 }

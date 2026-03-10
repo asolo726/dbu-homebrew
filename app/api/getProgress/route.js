@@ -13,13 +13,13 @@ export default async function GET() {
 
   const data = await db.collection("Progress").find({}).toArray();
   if (data) {
-      // This loop Cleans up the Object IDs to be serializable and usable by Client Components.
-      data.forEach(element => {
-        element._id = element._id.toString();
-      });
-      
-    return {Response: data};
+    // This loop Cleans up the Object IDs to be serializable and usable by Client Components.
+    data.forEach((element) => {
+      element._id = element._id.toString();
+    });
+
+    return { Response: data };
   } else {
-    return {Response: "No Data Found"};
+    return { Response: "No Data Found" };
   }
 }
