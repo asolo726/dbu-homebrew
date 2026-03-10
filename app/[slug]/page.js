@@ -21,6 +21,7 @@ export async function generateMetadata({ params }) {
     };
   }
 
+  const siteName = "DBU: The Homebrew Galaxy";
   const result = searchResult.content[0];
   const title = result.head.title;
   const description = result.head.desc;
@@ -37,6 +38,7 @@ export async function generateMetadata({ params }) {
       url,
       type: "website",
       images: [{ url: image, width: 1200, height: 630, alt: title }],
+      siteName,
     },
     twitter: {
       card: "summary_large_image",
