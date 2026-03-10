@@ -41,14 +41,14 @@ export default function Head({ Form }) {
         by {Form.head.author}
       </h3>
       <Image
-        src={Form.head.banner}
+        src={Form.head.banner ? Form.head.banner : "/https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp"}
         className="justify-self-center max-w-[100%] mb-5"
         width={1500}
         height={1500}
         alt=""
         priority={true}
       />
-      {Form.head.bannerAuthor != "" ? (
+      {Form.head.bannerAuthor != "" || Form.head.bannerAuthor ? (
         <p className="text-md md:text-lg text-center mb-3">
           (Art Credit: {Form.head.bannerAuthor})
         </p>
