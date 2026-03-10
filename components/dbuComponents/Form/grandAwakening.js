@@ -1,5 +1,9 @@
 import Ability from "../General/ability";
-export default function GrandAwakening({ title = "", desc = "", ability = [{}] }) {
+export default function GrandAwakening({
+  title = "",
+  desc = "",
+  ability = [{}],
+}) {
   return (
     <div className="mt-10">
       <p className="text-dbu-header text-center text-xl md:text-2xl my-3 font-bold tracking-widest">

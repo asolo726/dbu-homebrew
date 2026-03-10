@@ -1,8 +1,3 @@
-export default function Alternate_Create_Page(){
-
-    return(
-        <>
-            
-        </>
-    );
+export default function Alternate_Create_Page() {
+  return <></>;
 }

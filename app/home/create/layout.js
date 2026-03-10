@@ -1,25 +1,25 @@
 import { auth } from "../../../auth";
 import AuthSessionWrapper from "../../../contextProviders/AuthSessionWrapper";
 export default async function CreateLayout({ children }) {
-    const session = await auth();
-    return session ? (
-        <AuthSessionWrapper session={session}>{children}</AuthSessionWrapper>
-    ) : (
-        <div className="flex flex-col justify-center">
-            <h1>
-                Hmmm, looks like you don't have access to this site. Let's get
-                you back home
-            </h1>
-            <button className="mt-10">
-                <a
-                    className="p-5 rounded-xl bg-dbu-link text-white font-bold "
-                    href="/"
-                >
-                    Home
-                </a>
-            </button>
-        </div>
-    );
+  const session = await auth();
+  return session ? (
+    <AuthSessionWrapper session={session}>{children}</AuthSessionWrapper>
+  ) : (
+    <div className="flex flex-col justify-center">
+      <h1>
+        Hmmm, looks like you don't have access to this site. Let's get you back
+        home
+      </h1>
+      <button className="mt-10">
+        <a
+          className="p-5 rounded-xl bg-dbu-link text-white font-bold "
+          href="/"
+        >
+          Home
+        </a>
+      </button>
+    </div>
+  );
 }
 /**
  * Takeaway notes cause I spent 2.5 hours on this.
@@ -35,7 +35,7 @@ export default async function CreateLayout({ children }) {
  *    1. AuthSessionContext
  *    2. AuthSessionWrapper
  *    3. Create/Layout.js (That's this file :D )
- *    
- * With this setup, everything inside of the Create Layout has access to the session info. 
+ *
+ * With this setup, everything inside of the Create Layout has access to the session info.
  * On top of that, for access to the subsequent pages
  * */

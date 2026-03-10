@@ -20,20 +20,24 @@ export default function AddendumBox({
       >
         <RxChevronRight
           className={"stroke-1 shrink-0 transition-transform".concat(
-            menuState ? " rotate-90" : ""
+            menuState ? " rotate-90" : "",
           )}
         />
-        <p className="text-md md:text-lg">
-          {boxTitle}
-        </p>
+        <p className="text-md md:text-lg">{boxTitle}</p>
       </button>
       <div className={menuState ? "block px-3 pb-3" : "hidden"}>
-        {traits
-          ? traits.map((trait, i) => (
-              <Trait key={i} title={trait.title} desc={trait.desc} abilities={trait.abilities} />
-            ))
-          : <Trait title={title} desc={desc} abilities={abilities} />
-        }
+        {traits ? (
+          traits.map((trait, i) => (
+            <Trait
+              key={i}
+              title={trait.title}
+              desc={trait.desc}
+              abilities={trait.abilities}
+            />
+          ))
+        ) : (
+          <Trait title={title} desc={desc} abilities={abilities} />
+        )}
       </div>
     </div>
   );

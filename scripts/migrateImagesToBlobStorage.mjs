@@ -15,25 +15,34 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.join(__dirname, "../public");
 
-const IMAGE_EXTENSIONS = new Set([".webp", ".png", ".jpg", ".jpeg", ".gif", ".svg"]);
+const IMAGE_EXTENSIONS = new Set([
+  ".webp",
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".gif",
+  ".svg",
+]);
 
 const files = await readdir(PUBLIC_DIR);
-const imageFiles = files.filter((f) => IMAGE_EXTENSIONS.has(path.extname(f).toLowerCase()));
+const imageFiles = files.filter((f) =>
+  IMAGE_EXTENSIONS.has(path.extname(f).toLowerCase()),
+);
 
 console.log(`Found ${imageFiles.length} images to migrate:\n`);
 
 const mapping = {};
 
 for (const filename of imageFiles) {
-    const filePath = path.join(PUBLIC_DIR, filename);
-    const buffer = await readFile(filePath);
-    const blob = await put(filename, buffer, { access: "public" });
+  const filePath = path.join(PUBLIC_DIR, filename);
+  const buffer = await readFile(filePath);
+  const blob = await put(filename, buffer, { access: "public" });
 
-    const oldPath = `/${filename}`;
-    mapping[oldPath] = blob.url;
+  const oldPath = `/${filename}`;
+  mapping[oldPath] = blob.url;
 
-    console.log(`✓ ${oldPath}`);
-    console.log(`  → ${blob.url}\n`);
+  console.log(`✓ ${oldPath}`);
+  console.log(`  → ${blob.url}\n`);
 }
 
 console.log("\n--- Full mapping (old path → Blob URL) ---");

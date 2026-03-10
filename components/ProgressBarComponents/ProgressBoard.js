@@ -26,12 +26,11 @@ export default function ProgressBoard({ progressData }) {
   // Import data from MongoDB and calculate progress for each bar
   useEffect(() => {
     setProgressBars([]);
-    if (progressData.Response === "No Data Found"){
+    if (progressData.Response === "No Data Found") {
       throw Error("No Data Found for Progress Board");
       return;
-    }
-    else setData(progressData.Response);
-    
+    } else setData(progressData.Response);
+
     data.forEach((bar) => {
       const label = bar.progressBar;
       const segmentColor = bar.segmentColor;
@@ -57,15 +56,17 @@ export default function ProgressBoard({ progressData }) {
   let completedPages = 0;
   let newContentCount = 0;
   progressBars.forEach((bar) => {
-      const { completed, total, newItems } = countAllItems(bar.pageProgress);
-      let override = null;
-      try { bar.pageCountOverride >= 0 ? override = bar.pageCountOverride : null}
-      catch {console.log("Error in Progress Bar: ", bar.progressBar)}
-      totalPages += override ? override : total;
-      completedPages += override ? override : completed;
-      newContentCount += newItems;
+    const { completed, total, newItems } = countAllItems(bar.pageProgress);
+    let override = null;
+    try {
+      bar.pageCountOverride >= 0 ? (override = bar.pageCountOverride) : null;
+    } catch {
+      console.log("Error in Progress Bar: ", bar.progressBar);
     }
-  );
+    totalPages += override ? override : total;
+    completedPages += override ? override : completed;
+    newContentCount += newItems;
+  });
 
   const pagesLeftToUpdate = totalPages - completedPages;
 

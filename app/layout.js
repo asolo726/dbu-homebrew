@@ -16,18 +16,19 @@ const geistMono = Geist_Mono({
 export const metadata = {
   metadataBase: new URL("https://dbu-homebrew.vercel.app"), // Change to your production URL
   title: "DBU: The Homebrew Galaxy",
-  description: "The Dragon Ball Universe's Homebrew Galaxy, find all the homebrew content here!",
+  description:
+    "The Dragon Ball Universe's Homebrew Galaxy, find all the homebrew content here!",
 };
 
 export default function RootLayout({ children }) {
   return (
-      <html lang="en">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col justify-center-safe`}
-        >
-          <NavbarServer />
-          <div className="grid justify-center">{children}</div>
-        </body>
-      </html>
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col justify-center-safe`}
+      >
+        <NavbarServer />
+        <div className="grid justify-center">{children}</div>
+      </body>
+    </html>
   );
 }

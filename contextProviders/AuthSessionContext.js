@@ -1,3 +1,3 @@
-'use client'
+"use client";
 import { createContext } from "react";
-export const AuthSessionContext = createContext(); 
+export const AuthSessionContext = createContext();
