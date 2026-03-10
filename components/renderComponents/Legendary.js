@@ -18,16 +18,6 @@ export default function LegendaryRenderPage({ content }) {
         );
       })}
       <LegendaryTrait legendaryTraitList={content.legendaryTrait} />
-      {content.addendumBoxes?.map((box, i) => (
-        <AddendumBox
-          key={i}
-          boxTitle={box.boxTitle}
-          title={box.title}
-          desc={box.desc}
-          abilities={box.abilities}
-          traits={box.traits}
-        />
-      ))}
     </div>
   );
 }

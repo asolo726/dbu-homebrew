@@ -18,16 +18,6 @@ export default function AlternateRenderPage({ content }) {
         );
       })}
       <MasteryTrait masteryTraitList={content.masteryTrait} />
-      {content.addendumBoxes?.map((box, i) => (
-        <AddendumBox
-          key={i}
-          boxTitle={box.boxTitle}
-          title={box.title}
-          desc={box.desc}
-          abilities={box.abilities}
-          traits={box.traits}
-        />
-      ))}
     </div>
   );
 }

@@ -18,16 +18,6 @@ export default function EnhancementRenderPage({ content }) {
         );
       })}
       <BurstLimit burstLimit={content.burstLimit} />
-      {content.addendumBoxes?.map((box, i) => (
-        <AddendumBox
-          key={i}
-          boxTitle={box.boxTitle}
-          title={box.title}
-          desc={box.desc}
-          abilities={box.abilities}
-          traits={box.traits}
-        />
-      ))}
     </div>
   );
 }
