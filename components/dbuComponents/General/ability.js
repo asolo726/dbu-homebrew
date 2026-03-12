@@ -66,7 +66,7 @@ export default function Ability({ abilityList = [{}], key }) {
                     className="my-2 text-dbu-text text-md md:text-lg text-left"
                     key={key}
                   >
-                    <span className="font-bold text-dbu-header">{`${listItem.title}: `}</span>
+                    <span className="font-bold text-dbu-header">{`[${listItem.title}]: `}</span>
                     {listItem.desc}
                   </li>
                 );
