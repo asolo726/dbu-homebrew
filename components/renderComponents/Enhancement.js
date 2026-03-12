@@ -19,7 +19,7 @@ export default function EnhancementRenderPage({ content }) {
         );
       })}
       <BurstLimit burstLimit={content.burstLimit} />
-      <MasteryTrait masteryTraitList={content.masteryTrait} />
+      <MasteryTrait masteryTraitList={content.masteryTraits} />
     </div>
   );
 }
