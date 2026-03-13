@@ -42,7 +42,11 @@ export default function Head({ Form }) {
       </h3>
       {console.log(Form.head.banner == "")}
       <Image
-        src={Form.head.banner != "" ? Form.head.banner : "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp"}
+        src={
+          Form.head.banner != ""
+            ? Form.head.banner
+            : "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp"
+        }
         className="justify-self-center max-w-[100%] mb-5"
         width={1500}
         height={1500}

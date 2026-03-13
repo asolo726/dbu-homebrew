@@ -18,7 +18,11 @@ export default function EnhancementRenderPage({ content }) {
         );
       })}
       <BurstLimit burstLimit={content.burstLimit} />
-      {content.masteryTrait ? <MasteryTrait masteryTraitList={content.masteryTrait} /> : <></>}
+      {content.masteryTrait ? (
+        <MasteryTrait masteryTraitList={content.masteryTrait} />
+      ) : (
+        <></>
+      )}
       {/* Transcendant Traits may need to be added... follow the optional display for it like masteryTrait here*/}
     </div>
   );

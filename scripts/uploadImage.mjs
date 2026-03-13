@@ -15,13 +15,16 @@ import path from "path";
 const filePath = process.argv[2];
 
 if (!filePath) {
-    console.error("Usage: node scripts/uploadImage.mjs <path-to-image>");
-    process.exit(1);
+  console.error("Usage: node scripts/uploadImage.mjs <path-to-image>");
+  process.exit(1);
 }
 
 const filename = path.basename(filePath);
 const buffer = await readFile(filePath);
-const blob = await put(filename, buffer, { access: "public", contentDisposition: "inline" });
+const blob = await put(filename, buffer, {
+  access: "public",
+  contentDisposition: "inline",
+});
 
 console.log(`\nUploaded: ${filename}`);
 console.log(`URL: ${blob.url}\n`);
