@@ -1,7 +1,6 @@
 import Head from "../../components/dbuComponents/Form/head";
 import Trait from "../../components/dbuComponents/General/trait";
 import BurstLimit from "../../components/dbuComponents/Form/burstLimit";
-import AddendumBox from "../dbuComponents/General/addendumBox";
 import MasteryTrait from "../dbuComponents/Form/masteryTrait";
 
 export default function EnhancementRenderPage({ content }) {
@@ -19,7 +18,8 @@ export default function EnhancementRenderPage({ content }) {
         );
       })}
       <BurstLimit burstLimit={content.burstLimit} />
-      <MasteryTrait masteryTraitList={content.masteryTraits} />
+      {content.masteryTrait ? <MasteryTrait masteryTraitList={content.masteryTrait} /> : <></>}
+      {/* Transcendant Traits may need to be added... follow the optional display for it like masteryTrait here*/}
     </div>
   );
 }

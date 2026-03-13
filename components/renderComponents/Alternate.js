@@ -1,7 +1,6 @@
 import Head from "../../components/dbuComponents/Form/head";
 import Trait from "../../components/dbuComponents/General/trait";
 import MasteryTrait from "../dbuComponents/Form/masteryTrait";
-import AddendumBox from "../dbuComponents/General/addendumBox";
 
 export default function AlternateRenderPage({ content }) {
   return (
