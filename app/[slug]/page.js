@@ -25,7 +25,7 @@ export async function generateMetadata({ params }) {
   const result = searchResult.content[0];
   const title = result.head.title;
   const description = result.head.desc;
-  const image = result.head.banner != "" ? result.head.banner : `https://dbu-rpg-northgalaxy.vercel.app/9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp`;
+  const image = result.head.banner || `${SITE_URL}/whosthatzfighter.webp`;
   const url = `${SITE_URL}/${result.head.keyName}`;
 
   return {
