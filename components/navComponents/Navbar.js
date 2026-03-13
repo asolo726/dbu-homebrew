@@ -15,15 +15,15 @@ export default function Navbar({ session }) {
   const transformationOptions = [
     {
       text: "Lesser Awakenings",
-      link: "/home/awakenings/test",
+      link: "",
       list: testList,
     },
-    { text: "Greater Awakenings", link: "/home/awakenings/test" },
-    { text: "Super Awakenings", link: "/home/awakenings/test" },
-    { text: "Enhancement Powers", link: "/home/enhancements/test" },
-    { text: "Alternate Forms", link: "/home/alternates/test" },
-    { text: "Legendary Forms", link: "/home/legendary/test" },
-    { text: "Evolved Stages", link: "/home/evolvedStages/test" },
+    { text: "Greater Awakenings", link: "" },
+    { text: "Super Awakenings", link: "" },
+    { text: "Enhancement Powers", link: "" },
+    { text: "Alternate Forms", link: "" },
+    { text: "Legendary Forms", link: "" },
+    { text: "Evolved Stages", link: "" },
   ];
   const playerOptions = [
     { text: "Races", link: "" },
