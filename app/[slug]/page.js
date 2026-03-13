@@ -2,7 +2,7 @@ import SinglePageGenerator from "../../components/renderComponents/SinglePageGen
 import searchContent from "../api/searchContent/route.js";
 
 const SITE_URL = "https://dbu-homebrew.vercel.app";
-const SLUG_PATTERN = /^(\w+[-]?)+$/g;
+const SLUG_PATTERN = /^(\w+[-]?)+$/;
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
