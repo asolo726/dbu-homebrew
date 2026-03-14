@@ -10,7 +10,10 @@
 
 import { put } from "@vercel/blob";
 import { readFile } from "fs/promises";
+import { config } from "dotenv";
 import path from "path";
+
+config({ path: ".env.local" });
 
 const filePath = process.argv[2];
 

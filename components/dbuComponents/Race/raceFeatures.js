@@ -2,7 +2,7 @@ export default function RaceFeatures({
   racialLifeModifier,
   savingThrows = [""],
   skillRanks,
-  attributeMod = "",
+  attributeModifiers = "",
   minionSize = "",
   availableFactors,
 }) {
@@ -16,4 +16,43 @@ export default function RaceFeatures({
               : ", "
             : "";
         });
+  const hasMinionSize = minionSize != null && minionSize != undefined && minionSize != "";
+  const hasAvailableFactors = availableFactors != null && availableFactors != undefined && availableFactors != "";
+  const requirementNameStyle = "font-bold text-dbu-header";
+  return (
+    <div className="border-1 border-dbu-header"> 
+      <p>
+        <span className={requirementNameStyle}>Attribute Score Increase.</span>{" "}
+        {attributeModifiers}
+      </p>
+      <p>
+        <span className={requirementNameStyle}>Racial Life Modifier.</span>{" "}
+        +{racialLifeModifier}
+      </p>
+      <p>
+        <span className={requirementNameStyle}>Saving Throws.</span>{" "}
+        <span className="italic">{savingThrowsDisplay}</span>
+      </p>
+      <p>
+        <span className={requirementNameStyle}>Skill Ranks</span>{" "}
+        {skillRanks}
+      </p>
+      {hasMinionSize ? (
+        <p>
+          <span className={requirementNameStyle}>Minion Size.</span>{" "}
+          {minionSize}
+      </p>
+      ) : (
+        <></>
+      )}
+      {hasAvailableFactors ? (
+        <p>
+          <span className={requirementNameStyle}>Available Factors.</span>{" "}
+          {availableFactors}
+      </p>
+      ) : (
+        <></>
+      )}
+    </div>
+  );
 }

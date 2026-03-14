@@ -1,4 +1,4 @@
-import Head from "../../components/dbuComponents/Form/head";
+import Head from "../dbuComponents/General/head";
 import Trait from "../../components/dbuComponents/General/trait";
 import MasteryTrait from "../dbuComponents/Form/masteryTrait";
 
