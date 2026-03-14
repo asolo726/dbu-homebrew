@@ -250,6 +250,7 @@ export default function Head({ Form }) {
         )}
       </ul>
       <div className="flex justify-center py-5">
+        {Form.head.attributeModifiers && Form.head.attributeModifiers.length > 0 ? (
         <table className="table-fixed w-full border-collapse text-center text-md md:text-xl font-light ">
           <thead>
             <tr>
@@ -286,7 +287,9 @@ export default function Head({ Form }) {
               )}
             </tr>
           </tbody>
-        </table>
+        </table>) : (
+          <></>
+        )}
         <Tooltip
           id="my-tooltip"
           className="tooltip"
