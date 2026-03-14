@@ -1,3 +1,9 @@
 export default function Alternate_Create_Page() {
-  return <></>;
+    const identity = "Alternate";
+
+    return (
+        <div>
+            
+        </div>
+    );
 }

@@ -14,7 +14,7 @@ export default function Create() {
     },
     {
       name: "Alternate",
-      link: "",
+      link: "/home/create/alternate",
       imageLink: "",
     },
     {

@@ -40,7 +40,6 @@ export default function Head({ Form }) {
       <h3 className="text-dbu-header text-[1.5em] sm:text-[1.8em] italic text-center mb-10">
         by {Form.head.author}
       </h3>
-      {console.log(Form.head.banner == "")}
       <Image
         src={Form.head.banner != "" ? Form.head.banner : "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp"}
         className="justify-self-center max-w-[100%] mb-5"
