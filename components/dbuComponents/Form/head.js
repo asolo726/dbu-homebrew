@@ -84,12 +84,15 @@ export default function Head({ Form }) {
         ) : (
           <></>
         )}
+        {Form.head.transformationType ? (
         <li>
           <p>
             <span className={requirementNameStyle}>Transformation Type:</span>{" "}
             {Form.head.transformationType}
           </p>
-        </li>
+        </li>) : (
+          <></>
+        )}
         {Form.head.formType ? (
           <li>
             <p>
@@ -141,6 +144,16 @@ export default function Head({ Form }) {
             <p>
               <span className={requirementNameStyle}>Awakening Origin:</span>{" "}
               {Form.head.awakeningOrigin}
+            </p>
+          </li>
+        ) : (
+          <></>
+        )}
+        {Form.head.maxFactor ? (
+          <li>
+            <p>
+              <span className={requirementNameStyle}>Maximum Factor:</span>{" "}
+              {Form.head.maxFactor}
             </p>
           </li>
         ) : (
@@ -200,6 +213,7 @@ export default function Head({ Form }) {
         ) : (
           <></>
         )}
+        {Form.head.tier ? (
         <li>
           <p>
             <span className={requirementNameStyle}>
@@ -209,7 +223,10 @@ export default function Head({ Form }) {
               (!Number.isNaN(Number(Form.head.tier)) ? "+" : "")}
           </p>
         </li>
-        {Form.head.identity !== "Awakening" ? (
+        ) : (
+          <></>
+        )}
+        {Form.head.aspects && Form.head.aspects.length > 0 ? (
           <li>
             <p>
               <span className={requirementNameStyle}>Aspects: </span>{" "}

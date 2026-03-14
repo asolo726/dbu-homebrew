@@ -32,6 +32,11 @@ export default function Create() {
       link: "",
       imageLink: "",
     },
+    {
+      name: "Factor",
+      link: "",
+      imageLink: "",
+    }
   ];
 
   return (
