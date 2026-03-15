@@ -3,6 +3,8 @@ import AwakeningRenderPage from "./Awakening";
 import LegendaryRenderPage from "./Legendary";
 import EvolvedStageRenderPage from "./EvolvedStage";
 import EnhancementRenderPage from "./Enhancement";
+import FactorRenderPage from "./Factor";
+import RaceRenderPage from "./Race";
 
 /**
  * Handles generating one page from the [slug] page request. Decides which render method to use depending on the transformationType received.
@@ -39,6 +41,18 @@ export default function SinglePageGenerator({ content }) {
       return (
         <div>
           <EnhancementRenderPage content={content} />
+        </div>
+      );
+    case "Factor":
+      return (
+        <div>
+          <FactorRenderPage content={content} />
+        </div>
+      );
+    case "Race":
+      return (
+        <div>
+          <RaceRenderPage content={content} />
         </div>
       );
     case "Temp":

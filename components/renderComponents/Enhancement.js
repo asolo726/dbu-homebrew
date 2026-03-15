@@ -1,4 +1,4 @@
-import Head from "../../components/dbuComponents/Form/head";
+import Head from "../dbuComponents/General/head";
 import Trait from "../../components/dbuComponents/General/trait";
 import BurstLimit from "../../components/dbuComponents/Form/burstLimit";
 import MasteryTrait from "../dbuComponents/Form/masteryTrait";
@@ -23,7 +23,21 @@ export default function EnhancementRenderPage({ content }) {
       ) : (
         <></>
       )}
-      {/* Transcendant Traits may need to be added... follow the optional display for it like masteryTrait here*/}
+      {content.transcendentTrait ? (
+        <div className="mt-10">
+          <p className="text-dbu-header text-center text-md md:text-2xl my-3 font-bold tracking-widest">
+            Transcendent Trait
+          </p>
+          <Trait
+            title={transcendentTrait.title}
+            desc={transcendentTrait.desc}
+            abilities={transcendentTrait.abilities}
+            key={key}
+          />
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
