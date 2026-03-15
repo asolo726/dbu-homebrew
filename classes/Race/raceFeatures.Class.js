@@ -3,14 +3,14 @@ class RaceFeatures {
     racialLifeModifier,
     savingThrows,
     skillRanks,
-    attributeMod,
+    attributeScores,
     minionSize,
     availableFactors,
   ) {
     this._racialLifeModifier = racialLifeModifier;
     this._savingThrows = savingThrows;
     this._skillRanks = skillRanks;
-    this._attributeMod = attributeMod;
+    this._attributeScores = attributeScores;
     this._minionSize = minionSize;
     this._availableFactors = availableFactors;
   }
@@ -24,8 +24,8 @@ class RaceFeatures {
   get skillRanks() {
     return this._skillRanks;
   }
-  get attributeMod() {
-    return this._attributeMod;
+  get attributeScores() {
+    return this._attributeScores;
   }
   get minionSize() {
     return this._minionSize;
@@ -43,8 +43,8 @@ class RaceFeatures {
   set skillRanks(value) {
     this._skillRanks = value;
   }
-  set attributeMod(value) {
-    this._attributeMod = value;
+  set attributeScores(value) {
+    this._attributeScores = value;
   }
   set minionSize(value) {
     this._minionSize = value;

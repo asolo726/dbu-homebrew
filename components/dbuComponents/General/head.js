@@ -53,14 +53,14 @@ export default function Head({ Form }) {
         alt=""
         priority={true}
       />
-      {Form.head.bannerAuthor != "" || Form.head.bannerAuthor ? (
+      {Form.head.bannerAuthor != "" && Form.head.bannerAuthor ? (
         <p className="text-md md:text-lg text-center mb-3">
           (Art Credit: {Form.head.bannerAuthor})
         </p>
       ) : (
         <></>
       )}
-      <p className="text-pretty text-md tracking-wide md:text-lg">
+      <p className="text-pretty text-md tracking-wide md:text-lg whitespace-pre-wrap">
         {Form.head.desc}
       </p>
       <ul className="list-disc ml-10 mt-3 text-md md:text-lg">
@@ -159,12 +159,16 @@ export default function Head({ Form }) {
         ) : (
           <></>
         )}
-        <li>
-          <p>
-            <span className={requirementNameStyle}>Prerequisite(s): </span>{" "}
-            {Form.head.preReq}
-          </p>
-        </li>
+        { Form.head.preReq ? (
+          <li>
+            <p>
+              <span className={requirementNameStyle}>Prerequisite(s): </span>{" "}
+              {Form.head.preReq}
+            </p>
+          </li>
+        ) : (
+          <></>
+        )}
         {Form.head.transLine ? (
           <li>
             <p>
@@ -266,53 +270,54 @@ export default function Head({ Form }) {
           <></>
         )}
       </ul>
-      <div className="flex justify-center py-5">
-        {Form.head.attributeModifiers && Form.head.attributeModifiers.length > 0 ? (
-        <table className="table-fixed w-full border-collapse text-center text-md md:text-xl font-light ">
-          <thead>
-            <tr>
-              {Form.head.attributeModifiers.map((modifier, id) => (
-                <th
-                  key={id}
-                  className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
-                >
-                  {modifier.attribute}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              {Form.head.attributeModifiers.map((modifier, id) =>
-                modifier.Bonus > 0 ? (
-                  <td
-                    className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
+      {Form.head.attributeModifiers && Form.head.attributeModifiers.length > 0 ? (
+        <div className="flex justify-center py-5">
+          <table className="table-fixed w-full border-collapse text-center text-md md:text-xl font-light ">
+            <thead>
+              <tr>
+                {Form.head.attributeModifiers.map((modifier, id) => (
+                  <th
                     key={id}
-                  >
-                    {modifier.Multiplier.length === 0
-                      ? `+${modifier.Bonus}`
-                      : `+${modifier.Bonus}(${modifier.Multiplier})`}
-                  </td>
-                ) : (
-                  <td
                     className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
-                    key={id}
                   >
-                    -
-                  </td>
-                ),
-              )}
-            </tr>
-          </tbody>
-        </table>) : (
-          <></>
-        )}
-        <Tooltip
-          id="my-tooltip"
-          className="tooltip"
-          style={{ maxWidth: "400px" }}
-        />
-      </div>
+                    {modifier.attribute}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                {Form.head.attributeModifiers.map((modifier, id) =>
+                  modifier.Bonus > 0 ? (
+                    <td
+                      className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
+                      key={id}
+                    >
+                      {modifier.Multiplier.length === 0
+                        ? `+${modifier.Bonus}`
+                        : `+${modifier.Bonus}(${modifier.Multiplier})`}
+                    </td>
+                  ) : (
+                    <td
+                      className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
+                      key={id}
+                    >
+                      -
+                    </td>
+                  ),
+                )}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <></>
+      )}
+      <Tooltip
+        id="my-tooltip"
+        className="tooltip"
+        style={{ maxWidth: "400px" }}
+      />
     </div>
   );
 }

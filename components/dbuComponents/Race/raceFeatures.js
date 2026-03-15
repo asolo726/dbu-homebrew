@@ -2,7 +2,7 @@ export default function RaceFeatures({
   racialLifeModifier,
   savingThrows = [""],
   skillRanks,
-  attributeModifiers = "",
+  attributeScores = "",
   minionSize = "",
   availableFactors,
 }) {
@@ -20,26 +20,26 @@ export default function RaceFeatures({
   const hasAvailableFactors = availableFactors != null && availableFactors != undefined && availableFactors != "";
   const requirementNameStyle = "font-bold text-dbu-header";
   return (
-    <div className="border-1 border-dbu-header"> 
+    <div className="border-1 border-dbu-header space-y-6 p-2"> 
       <p>
-        <span className={requirementNameStyle}>Attribute Score Increase.</span>{" "}
-        {attributeModifiers}
+        <span className={requirementNameStyle}>Attribute Score Increase:</span>{" "}
+        {attributeScores}
       </p>
       <p>
-        <span className={requirementNameStyle}>Racial Life Modifier.</span>{" "}
+        <span className={requirementNameStyle}>Racial Life Modifier:</span>{" "}
         +{racialLifeModifier}
       </p>
       <p>
-        <span className={requirementNameStyle}>Saving Throws.</span>{" "}
+        <span className={requirementNameStyle}>Saving Throws:</span>{" "}
         <span className="italic">{savingThrowsDisplay}</span>
       </p>
       <p>
-        <span className={requirementNameStyle}>Skill Ranks</span>{" "}
+        <span className={requirementNameStyle}>Skill Ranks:</span>{" "}
         {skillRanks}
       </p>
       {hasMinionSize ? (
         <p>
-          <span className={requirementNameStyle}>Minion Size.</span>{" "}
+          <span className={requirementNameStyle}>Minion Size:</span>{" "}
           {minionSize}
       </p>
       ) : (
@@ -47,7 +47,7 @@ export default function RaceFeatures({
       )}
       {hasAvailableFactors ? (
         <p>
-          <span className={requirementNameStyle}>Available Factors.</span>{" "}
+          <span className={requirementNameStyle}>Available Factors:</span>{" "}
           {availableFactors}
       </p>
       ) : (

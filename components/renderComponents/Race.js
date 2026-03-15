@@ -7,23 +7,21 @@ import RaceFeatures from "../dbuComponents/Race/raceFeatures";
  */
 
 export default function RaceRenderPage({ content }) {
-    const subraces = Object.keys(content)
-        .filter(key => key.startsWith("subrace_"))
-        .sort()
-        .map(key => content[key]);
-
+    const hasSubraces = content.subraces && content.subraces != "" && content.subraces != null;
+    const headerStyle = "text-dbu-header text-center text-xl md:text-2xl my-3 font-bold tracking-widest";
+    const header2Style = "text-dbu-header text-[1.5em] sm:text-[1.8em] font-bold text-center mt-5 mb-5";
     return (
         <div className="flex flex-col flex-col-1 max-w-5xl px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
             <Head Form={content} />
             <RaceFeatures 
-                racialLifeModifier={content.racialLifeModifier}
-                savingThrows={content.savingThrows}
-                skillRanks={content.skillRanks}
-                attributeModifiers={content.attributeModifiers}
-                minionSize={content.minionSize}
-                availableFactors={content.availableFactors}
+                racialLifeModifier={content.raceFeatures.racialLifeModifier}
+                savingThrows={content.raceFeatures.savingThrows}
+                skillRanks={content.raceFeatures.skillRanks}
+                attributeScores={content.raceFeatures.attributeScores}
+                minionSize={content.raceFeatures.minionSize}
+                availableFactors={content.raceFeatures.availableFactors}
             />
-            <p className="text-dbu-header text-center text-md md:text-2xl my-3 font-bold tracking-widest">
+            <p className={header2Style}>
                 Primary Racial Traits
             </p>
             {content.primaryTraits.map((trait, index) => {
@@ -36,7 +34,7 @@ export default function RaceRenderPage({ content }) {
                     />
                 );
             })}
-            <p className="text-dbu-header text-center text-md md:text-2xl my-3 font-bold tracking-widest">
+            <p className={header2Style}>
                 Secondary Racial Traits
             </p>
             {content.secondaryTraits.map((trait, index) => {
@@ -49,11 +47,11 @@ export default function RaceRenderPage({ content }) {
                     />
                 );
             })}
-            {subraces.length > 0 ? (
-                subraces.map((subrace, index) => {
+            { hasSubraces ? (
+                content.subraces.map((subrace, index) => {
                     return (
-                        <div>
-                            <p className="text-dbu-header text-center text-md md:text-2xl my-3 font-bold tracking-widest">
+                        <div key={index}>
+                            <p className={header2Style}>
                                 {`${subrace.subraceName} Subrace Traits`}
                             </p>
                             {subrace.traits.map((trait, index) => {
@@ -71,7 +69,7 @@ export default function RaceRenderPage({ content }) {
                      )
                 })) : (
                     <></>
-                )};
+                )}
         </div>
     )
 }
