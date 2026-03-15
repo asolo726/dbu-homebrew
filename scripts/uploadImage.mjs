@@ -10,10 +10,19 @@
 
 import { put } from "@vercel/blob";
 import { readFile } from "fs/promises";
-import { config } from "dotenv";
+import { readFileSync } from "fs";
 import path from "path";
 
-config({ path: ".env.local" });
+// Load .env.local manually if BLOB_READ_WRITE_TOKEN is not set
+if (!process.env.BLOB_READ_WRITE_TOKEN) {
+  try {
+    const env = readFileSync(".env.local", "utf8");
+    for (const line of env.split("\n")) {
+      const [key, ...rest] = line.split("=");
+      if (key && rest.length) process.env[key.trim()] = rest.join("=").trim();
+    }
+  } catch {}
+}
 
 const filePath = process.argv[2];
 

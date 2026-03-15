@@ -32,15 +32,19 @@ const getAspectTooltip = (aspectName) => {
  */
 export default function Head({ Form }) {
   const requirementNameStyle = "font-bold text-dbu-header";
+  const areAuthorAndBannerAuthorDifferent = !(Form.head.bannerAuthor.toLowerCase() === Form.head.author.toLowerCase());
   return (
     <div className="flex-grow-1">
       <h1 className="text-dbu-header text-[2em] sm:text-[3em] font-bold text-center mb-4 tracking-wide">
         {Form.head.title}
       </h1>
-      <h3 className="text-dbu-header text-[1.5em] sm:text-[1.8em] italic text-center mb-10">
-        by {Form.head.author}
-      </h3>
-      {console.log(Form.head.banner == "")}
+      {!Form.head.dontShowAuthor ? (
+        <h3 className="text-dbu-header text-[1.5em] sm:text-[1.8em] italic text-center mb-10">
+          by {Form.head.author}
+        </h3>
+      ) : (
+        <></>
+      )}
       <Image
         src={
           Form.head.banner != ""
@@ -53,7 +57,7 @@ export default function Head({ Form }) {
         alt=""
         priority={true}
       />
-      {Form.head.bannerAuthor != "" && Form.head.bannerAuthor ? (
+      {Form.head.bannerAuthor != "" && Form.head.bannerAuthor && areAuthorAndBannerAuthorDifferent ? (
         <p className="text-md md:text-lg text-center mb-3">
           (Art Credit: {Form.head.bannerAuthor})
         </p>

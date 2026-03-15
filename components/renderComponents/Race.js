@@ -9,7 +9,7 @@ import RaceFeatures from "../dbuComponents/Race/raceFeatures";
 export default function RaceRenderPage({ content }) {
     const hasSubraces = content.subraces && content.subraces != "" && content.subraces != null;
     const headerStyle = "text-dbu-header text-center text-xl md:text-2xl my-3 font-bold tracking-widest";
-    const header2Style = "text-dbu-header text-[1.5em] sm:text-[1.8em] font-bold text-center mt-5 mb-5";
+    const header2Style = "text-dbu-header text-[1.5em] sm:text-[1.8em] font-bold text-center mt-5 mb-4";
     return (
         <div className="flex flex-col flex-col-1 max-w-5xl px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
             <Head Form={content} />
