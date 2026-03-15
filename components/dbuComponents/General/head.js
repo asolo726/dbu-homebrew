@@ -32,7 +32,13 @@ const getAspectTooltip = (aspectName) => {
  */
 export default function Head({ Form }) {
   const requirementNameStyle = "font-bold text-dbu-header";
-  const areAuthorAndBannerAuthorDifferent = !(Form.head.bannerAuthor.toLowerCase() === Form.head.author.toLowerCase());
+  const areAuthorAndBannerAuthorDifferent = () => {
+    try {
+      !(Form.head.bannerAuthor.toLowerCase() === Form.head.author.toLowerCase());
+    } catch (e) { // This is an easy way for accounting for cases where either bannerAuthor or author aren't present.
+      return false;
+    }
+  }
   return (
     <div className="flex-grow-1">
       <h1 className="text-dbu-header text-[2em] sm:text-[3em] font-bold text-center mb-4 tracking-wide">
