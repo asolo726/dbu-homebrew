@@ -7,7 +7,8 @@ export default function Ability({ abilityList = [{}], key }) {
     <div className="mt-2" key={key}>
       {abilityList.map((item, key) => {
         if ("condition" in item) {
-          const isLabel = item.condition.startsWith("–") || item.condition.startsWith("-");
+          const isLabel =
+            item.condition.startsWith("–") || item.condition.startsWith("-");
           if (isLabel) {
             const labelText = item.condition.replace(/^[–-]/, "").trim();
             return (
@@ -43,7 +44,8 @@ export default function Ability({ abilityList = [{}], key }) {
         } else if ("list" in item) {
           const depth = "sublist" in item ? item.sublist : 0;
           const marginLeft = `${(depth + 1) * 2.5}rem`;
-          const listStyleType = depth >= 2 ? "square" : depth >= 1 ? "circle" : "disc";
+          const listStyleType =
+            depth >= 2 ? "square" : depth >= 1 ? "circle" : "disc";
           return (
             <ul key={key} className="list-disc" style={{ marginLeft }}>
               {item.list.map((listItem, key) => {

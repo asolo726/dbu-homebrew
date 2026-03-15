@@ -29,11 +29,11 @@ export default function EnhancementRenderPage({ content }) {
             Transcendent Trait
           </p>
           <Trait
-              title={transcendentTrait.title}
-              desc={transcendentTrait.desc}
-              abilities={transcendentTrait.abilities}
-              key={key}
-            />
+            title={transcendentTrait.title}
+            desc={transcendentTrait.desc}
+            abilities={transcendentTrait.abilities}
+            key={key}
+          />
         </div>
       ) : (
         <></>

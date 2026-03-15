@@ -41,7 +41,7 @@ export default function Create() {
       name: "Race",
       link: "",
       imageLink: "",
-    }
+    },
   ];
 
   return (

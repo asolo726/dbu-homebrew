@@ -1,3 +1,1 @@
-export default function Factor({ factor }) {
-    
-}
+export default function Factor({ factor }) {}

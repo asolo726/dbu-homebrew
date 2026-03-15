@@ -108,7 +108,12 @@ export default async function Page({ params }) {
     const oEmbedUrl = `${SITE_URL}/api/oembed?url=${encodeURIComponent(`${SITE_URL}/${slug}`)}&title=${encodeURIComponent(content.head.title)}&author=${encodeURIComponent(content.head.author || "")}`;
     return (
       <>
-        <link rel="alternate" type="application/json+oembed" href={oEmbedUrl} title={content.head.title} />
+        <link
+          rel="alternate"
+          type="application/json+oembed"
+          href={oEmbedUrl}
+          title={content.head.title}
+        />
         <SinglePageGenerator content={content} />
       </>
     );

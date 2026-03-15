@@ -34,11 +34,14 @@ export default function Head({ Form }) {
   const requirementNameStyle = "font-bold text-dbu-header";
   const areAuthorAndBannerAuthorDifferent = () => {
     try {
-      !(Form.head.bannerAuthor.toLowerCase() === Form.head.author.toLowerCase());
-    } catch (e) { // This is an easy way for accounting for cases where either bannerAuthor or author aren't present.
+      !(
+        Form.head.bannerAuthor.toLowerCase() === Form.head.author.toLowerCase()
+      );
+    } catch (e) {
+      // This is an easy way for accounting for cases where either bannerAuthor or author aren't present.
       return false;
     }
-  }
+  };
   return (
     <div className="flex-grow-1">
       <h1 className="text-dbu-header text-[2em] sm:text-[3em] font-bold text-center mb-4 tracking-wide">
@@ -63,7 +66,9 @@ export default function Head({ Form }) {
         alt=""
         priority={true}
       />
-      {Form.head.bannerAuthor != "" && Form.head.bannerAuthor && areAuthorAndBannerAuthorDifferent ? (
+      {Form.head.bannerAuthor != "" &&
+      Form.head.bannerAuthor &&
+      areAuthorAndBannerAuthorDifferent ? (
         <p className="text-md md:text-lg text-center mb-3">
           (Art Credit: {Form.head.bannerAuthor})
         </p>
@@ -95,12 +100,13 @@ export default function Head({ Form }) {
           <></>
         )}
         {Form.head.transformationType ? (
-        <li>
-          <p>
-            <span className={requirementNameStyle}>Transformation Type:</span>{" "}
-            {Form.head.transformationType}
-          </p>
-        </li>) : (
+          <li>
+            <p>
+              <span className={requirementNameStyle}>Transformation Type:</span>{" "}
+              {Form.head.transformationType}
+            </p>
+          </li>
+        ) : (
           <></>
         )}
         {Form.head.formType ? (
@@ -169,7 +175,7 @@ export default function Head({ Form }) {
         ) : (
           <></>
         )}
-        { Form.head.preReq ? (
+        {Form.head.preReq ? (
           <li>
             <p>
               <span className={requirementNameStyle}>Prerequisite(s): </span>{" "}
@@ -228,15 +234,15 @@ export default function Head({ Form }) {
           <></>
         )}
         {Form.head.tier ? (
-        <li>
-          <p>
-            <span className={requirementNameStyle}>
-              Tier of Power Requirement:{" "}
-            </span>{" "}
-            {Form.head.tier +
-              (!Number.isNaN(Number(Form.head.tier)) ? "+" : "")}
-          </p>
-        </li>
+          <li>
+            <p>
+              <span className={requirementNameStyle}>
+                Tier of Power Requirement:{" "}
+              </span>{" "}
+              {Form.head.tier +
+                (!Number.isNaN(Number(Form.head.tier)) ? "+" : "")}
+            </p>
+          </li>
         ) : (
           <></>
         )}
@@ -280,7 +286,8 @@ export default function Head({ Form }) {
           <></>
         )}
       </ul>
-      {Form.head.attributeModifiers && Form.head.attributeModifiers.length > 0 ? (
+      {Form.head.attributeModifiers &&
+      Form.head.attributeModifiers.length > 0 ? (
         <div className="flex justify-center py-5">
           <table className="table-fixed w-full border-collapse text-center text-md md:text-xl font-light ">
             <thead>

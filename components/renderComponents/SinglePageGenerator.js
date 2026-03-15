@@ -48,13 +48,13 @@ export default function SinglePageGenerator({ content }) {
         <div>
           <FactorRenderPage content={content} />
         </div>
-      )
+      );
     case "Race":
       return (
         <div>
           <RaceRenderPage content={content} />
         </div>
-      )
+      );
     case "Temp":
       return <></>;
     default:
