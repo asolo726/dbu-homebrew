@@ -34,16 +34,18 @@ export default function Card({
     tierOfPower,
     author,
 }) {
+    console.log(pageType);
     return (
         <div
             className="card-glow flex flex-col w-full border border-[var(--card-color)] bg-[#282828] rounded-lg overflow-hidden transition-transform duration-200 hover:-translate-y-2"
-            data-page-type={pageType}
+            data-page-type={pageType.toLowerCase().trim()}
         >
             <div className="relative w-full h-[160px] shrink-0">
                 <Image
                     src={imageUrl}
                     alt={pageName}
                     fill
+                    sizes="(min-width: 1280px) 220px, (min-width: 768px) 33vw, 50vw"
                     className="object-cover"
                 />
             </div>

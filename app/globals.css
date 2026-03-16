@@ -49,9 +49,10 @@ body {
     0 28px 60px rgba(0, 0, 0, 0.95);
 }
 
-.card-glow[data-page-type="Awakening"]      { --card-color: #a855f7; }
-.card-glow[data-page-type="Race"]           { --card-color: #22c55e; }
-.card-glow[data-page-type="Factor"]         { --card-color: #22c55e; }
-.card-glow[data-page-type="Enhancement"]    { --card-color: #06b6d4; }
-.card-glow[data-page-type="Alternate"]      { --card-color: #eab308; }
-.card-glow[data-page-type="Legendary"] { --card-color: #ef4444; }
+.card-glow[data-page-type="awakening"]      { --card-color: #a855f7; }
+.card-glow[data-page-type="race"]           { --card-color: #22c55e; }
+.card-glow[data-page-type="factor"]         { --card-color: #22c55e; }
+.card-glow[data-page-type="enhancement"]    { --card-color: #06b6d4; }
+.card-glow[data-page-type="alternate"]      { --card-color: #eab308; }
+.card-glow[data-page-type="legendary"] { --card-color: #ef4444; }
+.card-glow[data-page-type="evolvedstage"] { --card-color: #9F2B68; }
