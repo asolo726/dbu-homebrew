@@ -32,13 +32,13 @@ export default function Card({
     pageType,
     raceRestriction,
     tierOfPower,
-    author
+    author,
 }) {
-
     return (
-        <div className="flex flex-col w-[200px] bg-[#282828] rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.89)] overflow-hidden">
-
-            {/* Image */}
+        <div
+            className="card-glow flex flex-col w-full border border-[var(--card-color)] bg-[#282828] rounded-lg overflow-hidden transition-transform duration-200 hover:-translate-y-2"
+            data-page-type={pageType}
+        >
             <div className="relative w-full h-[160px] shrink-0">
                 <Image
                     src={imageUrl}
@@ -47,37 +47,31 @@ export default function Card({
                     className="object-cover"
                 />
             </div>
-
-            {/* Content */}
             <div className="flex flex-col justify-between p-3 flex-1 overflow-hidden">
                 <div className="flex flex-col gap-1">
-
-                    {/* Page name */}
                     <h2 className="text-dbu-header font-semibold text-sm leading-tight truncate">
                         {pageName}
                     </h2>
-
-                    {/* Tier of power stars */}
                     <div className="flex gap-0.5">
-                        {Array.from({ length: 5 }, (_, i) => (
+                        {Array.from({ length: 7 }, (_, i) => (
                             <span
                                 key={i}
                                 className={`text-xs ${i < tierOfPower ? "text-yellow-400" : "text-white/30"}`}
                             >
                                 ★
                             </span>
-                        ))}
+                        ))}{" "}
                     </div>
+                    <div className="text-[0.5rem] italic">Tier of Power {tierOfPower}+</div>
 
                     {/* Page type + race restriction */}
-                    <p className="text-dbu-text text-[0.65rem] leading-snug line-clamp-2">
+                    <p className="text-dbu-text text-[0.65rem] leading-snug line-clamp-2 mt-1">
                         {pageType}{raceRestriction ? ` · ${raceRestriction}` : ""}
                     </p>
                 </div>
 
-                {/* Bottom row: author + link */}
-                <div className="flex items-center justify-between">
-                    <span className="text-dbu-text text-[0.55rem]">{author}</span>
+                <div className="flex items-center justify-between mt-2">
+                    <span className="text-dbu-header text-[0.55rem]">{author}</span>
                     {link && (
                         <Link
                             href={link}
