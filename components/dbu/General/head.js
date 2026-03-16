@@ -34,7 +34,7 @@ export default function Head({ Form }) {
   const requirementNameStyle = "font-bold text-dbu-header";
   const areAuthorAndBannerAuthorDifferent = () => {
     try {
-      !(
+      return !(
         Form.head.bannerAuthor.toLowerCase() === Form.head.author.toLowerCase()
       );
     } catch (e) {
@@ -66,9 +66,8 @@ export default function Head({ Form }) {
         alt=""
         priority={true}
       />
-      {Form.head.bannerAuthor != "" &&
-      Form.head.bannerAuthor &&
-      areAuthorAndBannerAuthorDifferent ? (
+      { Form.head.bannerAuthor &&
+      areAuthorAndBannerAuthorDifferent() ? (
         <p className="text-md md:text-lg text-center mb-3">
           (Art Credit: {Form.head.bannerAuthor})
         </p>

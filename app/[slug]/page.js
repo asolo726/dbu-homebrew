@@ -4,6 +4,12 @@ import searchContent from "../api/searchContent/route.js";
 const SITE_URL = "https://dbu-homebrew.vercel.app";
 const SLUG_PATTERN = /^(\w+[-]?)+$/;
 
+//This Regex pattern checks that a url search only contains alphanumerical characters and a -
+//Example: "Super-Saiyan-3" is a match. "{GetUsers} is not a match."
+//This site is very helpful: https://regex101.com
+export const pattern = /^(\w+[-]?)+$/;
+
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
 
@@ -60,10 +66,6 @@ export async function generateMetadata({ params }) {
 export default async function Page({ params }) {
   const { slug } = await params;
 
-  //This Regex pattern checks that a url search only contains alphanumerical characters and a -
-  //Example: "Super-Saiyan-3" is a match. "{GetUsers} is not a match."
-  //This site is very helpful: https://regex101.com
-  const pattern = /^(\w+[-]?)+$/;
   if (pattern.test(slug) === false) {
     return (
       <div className="flex flex-col justify-center">

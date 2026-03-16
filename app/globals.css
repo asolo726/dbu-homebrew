@@ -55,4 +55,4 @@ body {
 .card-glow[data-page-type="enhancement"]    { --card-color: #06b6d4; }
 .card-glow[data-page-type="alternate"]      { --card-color: #eab308; }
 .card-glow[data-page-type="legendary"] { --card-color: #ef4444; }
-.card-glow[data-page-type="evolvedstage"] { --card-color: #9F2B68; }
+.card-glow[data-page-type="evolved stage"] { --card-color: #9F2B68; }

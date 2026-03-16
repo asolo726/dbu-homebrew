@@ -1,8 +1,6 @@
 import Card from "./card"
 
-export default function CardGenerator({ pageData }) {
-    const entries = Object.values(pageData.Response).flat();
-
+export default function CardGenerator({ entries }) {
     return (
         <div className="grid gap-6 mt-6 mb-4 ml-2 p-6" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))" }}>
             {entries.map((entry, i) => (

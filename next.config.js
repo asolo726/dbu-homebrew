@@ -4,6 +4,7 @@ module.exports = {
       new URL("https://9pensrt47gzxrsro.public.blob.vercel-storage.com/**"),
       new URL("https://dbu-rpg-northgalaxy.vercel.app/**"),
     ],
+    qualities: [70, 75, 100]
   },
   async redirects() {
     return [

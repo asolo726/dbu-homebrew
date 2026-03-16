@@ -34,7 +34,17 @@ export default function Card({
     tierOfPower,
     author,
 }) {
-    console.log(link);
+    const pageTypeDisplay = {
+        "Awakening": "Awakening",
+        "Enhancement": "Enhancement Power",
+        "Alternate": "Alternate Form",
+        "Legendary": "Legendary Form",
+        "Evolved Stage": "Evolved Stage",
+        "Race": "Race",
+        "Factor": "Racial Factor"
+    }
+    const ToPIsString = typeof tierOfPower === 'string'; // This usually happens with evolved stages, where sometimes the stage's ToP depends on the og form.
+    const ToP = ToPIsString ? tierOfPower.match(/\d+\.?\d*/g).map(Number) : tierOfPower;
     return (
         <div
             className="card-glow flex flex-col w-full border border-[var(--card-color)] bg-[#282828] rounded-lg overflow-hidden transition-transform duration-200 hover:-translate-y-2"
@@ -46,6 +56,7 @@ export default function Card({
                     alt={pageName}
                     fill
                     sizes="(min-width: 1280px) 220px, (min-width: 768px) 33vw, 50vw"
+                    quality={100}
                     className="object-cover"
                 />
             </div>
@@ -54,21 +65,33 @@ export default function Card({
                     <h2 className="text-dbu-header font-semibold text-sm leading-tight truncate">
                         {pageName}
                     </h2>
-                    <div className="flex gap-0.5">
-                        {Array.from({ length: 7 }, (_, i) => (
-                            <span
-                                key={i}
-                                className={`text-xs ${i < tierOfPower ? "text-yellow-400" : "text-white/30"}`}
-                            >
-                                ★
-                            </span>
-                        ))}{" "}
-                    </div>
-                    <div className="text-[0.5rem] italic">Tier of Power {tierOfPower}+</div>
+                    {tierOfPower ? (
+                        <>
+                            <div className="flex gap-0.5">
+                                {/*
+                                * Three cases:
+                                * - Case 1: ToP is just a number. If it is, print out ToP number of stars in gold, make the remaining stars grey.
+                                * - Case 2: ToP has a number, but is a string. If it is, print out the ToP number of stars in gold, make the remaining stars white and put a question mark at the end. 
+                                * - Case 3: ToP has no number and is just a string. If it is, print out all the stars in white and put a question mark at the end.
+                                */}
+                                {Array.from({ length: 7 }, (_, i) => (
+                                    <span
+                                        key={i}
+                                        className={`text-xs ${i < ToP ? "text-yellow-400" : "text-white/30"}`}
+                                    >
+                                        ★
+                                    </span>
+                                ))}
+                                </div>
+                            <div className="text-[0.5rem] italic">{`Tier of Power ${tierOfPower}`}{!isNaN(tierOfPower) ? `+`: ` `}</div>
+                        </>
+                    ) : (
+                        <></>
+                    )}
 
                     {/* Page type + race restriction */}
                     <p className="text-dbu-text text-[0.65rem] leading-snug line-clamp-2 mt-1">
-                        {pageType}{raceRestriction ? ` · ${raceRestriction}` : ""}
+                        {pageTypeDisplay[pageType]}{raceRestriction ? ` · ${raceRestriction}` : ""}
                     </p>
                 </div>
 
