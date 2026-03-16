@@ -1,6 +1,6 @@
-import Head from "../dbuComponents/General/head";
-import Trait from "../../components/dbuComponents/General/trait";
-import MasteryTrait from "../dbuComponents/Form/masteryTrait";
+import Head from "../dbu/General/head";
+import Trait from "../../components/dbu/General/trait";
+import MasteryTrait from "../dbu/Transformations/masteryTrait";
 
 export default function AlternateRenderPage({ content }) {
   return (

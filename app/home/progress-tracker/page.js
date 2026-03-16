@@ -1,4 +1,4 @@
-import ProgressDataServer from "../../../components/ProgressBarComponents/ProgressDataServer";
+import ProgressDataServer from "../../../components/progress-bar/ProgressDataServer";
 
 export async function generateMetadata() {
   return {

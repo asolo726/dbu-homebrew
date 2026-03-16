@@ -2,6 +2,7 @@ module.exports = {
   images: {
     remotePatterns: [
       new URL("https://9pensrt47gzxrsro.public.blob.vercel-storage.com/**"),
+      new URL("https://dbu-rpg-northgalaxy.vercel.app/**"),
     ],
   },
   async redirects() {

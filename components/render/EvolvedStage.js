@@ -1,8 +1,8 @@
-import Head from "../dbuComponents/General/head";
-import Trait from "../../components/dbuComponents/General/trait";
-import MasteryTrait from "../dbuComponents/Form/masteryTrait";
-import LegendaryTrait from "../dbuComponents/Form/legendaryTrait";
-import AddendumBox from "../dbuComponents/General/addendumBox";
+import Head from "../dbu/General/head";
+import Trait from "../../components/dbu/General/trait";
+import MasteryTrait from "../dbu/Transformations/masteryTrait";
+import LegendaryTrait from "../dbu/Transformations/legendaryTrait";
+import AddendumBox from "../dbu/General/addendumBox";
 
 export default function EvolvedStageRenderPage({ content }) {
   return (

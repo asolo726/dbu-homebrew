@@ -1,6 +1,6 @@
-import Head from "../dbuComponents/General/head";
-import Trait from "../dbuComponents/General/trait";
-import RaceFeatures from "../dbuComponents/Race/raceFeatures";
+import Head from "../dbu/General/head";
+import Trait from "../dbu/General/trait";
+import RaceFeatures from "../dbu/Race/raceFeatures";
 
 /**
  * Note: We need to figure out a good way of handling subraces

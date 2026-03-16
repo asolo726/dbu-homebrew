@@ -1,7 +1,7 @@
-import Head from "../dbuComponents/General/head";
-import Trait from "../../components/dbuComponents/General/trait";
-import GrandAwakening from "../dbuComponents/Form/grandAwakening";
-import AddendumBox from "../dbuComponents/General/addendumBox";
+import Head from "../dbu/General/head";
+import Trait from "../../components/dbu/General/trait";
+import GrandAwakening from "../dbu/Transformations/grandAwakening";
+import AddendumBox from "../dbu/General/addendumBox";
 
 export default function AwakeningRenderPage({ content }) {
   return (

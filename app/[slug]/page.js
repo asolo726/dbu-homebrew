@@ -1,4 +1,4 @@
-import SinglePageGenerator from "../../components/renderComponents/SinglePageGenerator.js";
+import SinglePageGenerator from "../../components/render/SinglePageGenerator.js";
 import searchContent from "../api/searchContent/route.js";
 
 const SITE_URL = "https://dbu-homebrew.vercel.app";

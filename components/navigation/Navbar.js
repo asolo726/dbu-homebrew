@@ -6,7 +6,7 @@ import { RxCross1 } from "react-icons/rx";
 import Image from "next/image";
 import NavOption from "./navOption";
 import NavColumn from "./navColumn";
-import ProfileMenu from "../signInComponents/ProfileMenu";
+import ProfileMenu from "../signIn/ProfileMenu";
 
 export default function Navbar({ session }) {
   const [menuIsOpen, setMenuIsOpen] = useState(false);

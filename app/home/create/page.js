@@ -1,4 +1,4 @@
-import Create from "../../../components/creationComponents/Create";
+import Create from "../../../components/creation/Create";
 import { auth } from "../../../auth";
 import AuthSessionWrapper from "../../../contextProviders/AuthSessionWrapper";
 /**
