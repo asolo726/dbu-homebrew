@@ -8,7 +8,7 @@ export default function CardGenerator({ pageData }) {
             {entries.map((entry, i) => (
                 <Card
                     key={i}
-                    link={entry.head.keyName}
+                    link={`/${entry.head.keyName}`}
                     imageUrl={entry.head.banner}
                     pageName={entry.head.title}
                     pageType={entry.head.identity}

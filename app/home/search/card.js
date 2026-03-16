@@ -34,7 +34,7 @@ export default function Card({
     tierOfPower,
     author,
 }) {
-    console.log(pageType);
+    console.log(link);
     return (
         <div
             className="card-glow flex flex-col w-full border border-[var(--card-color)] bg-[#282828] rounded-lg overflow-hidden transition-transform duration-200 hover:-translate-y-2"
