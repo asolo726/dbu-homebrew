@@ -12,46 +12,47 @@ import RaceRenderPage from "./Race";
  */
 
 export default function SinglePageGenerator({ content }) {
+  const pageRenderStyle = "flex flex-col flex-col-1 w-full max-w-5xl justify-center content-center";
   switch (content.head.identity) {
     case "Awakening":
       return (
-        <div>
+        <div className={pageRenderStyle}>
           <AwakeningRenderPage content={content} />
         </div>
       );
     case "Alternate":
       return (
-        <div>
+        <div className={pageRenderStyle}>
           <AlternateRenderPage content={content} />
         </div>
       );
     case "Legendary":
       return (
-        <div>
+        <div className={pageRenderStyle}>
           <LegendaryRenderPage content={content} />
         </div>
       );
     case "Evolved Stage":
       return (
-        <div>
+        <div className={pageRenderStyle}>
           <EvolvedStageRenderPage content={content} />
         </div>
       );
     case "Enhancement":
       return (
-        <div>
+        <div className={pageRenderStyle}>
           <EnhancementRenderPage content={content} />
         </div>
       );
     case "Factor":
       return (
-        <div>
+        <div className={pageRenderStyle}>
           <FactorRenderPage content={content} />
         </div>
       );
     case "Race":
       return (
-        <div>
+        <div className={pageRenderStyle}>
           <RaceRenderPage content={content} />
         </div>
       );
