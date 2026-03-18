@@ -6,7 +6,8 @@ import { RxCross1 } from "react-icons/rx";
 import Image from "next/image";
 import NavOption from "./navOption";
 import NavColumn from "./navColumn";
-import ProfileMenu from "../signInComponents/ProfileMenu";
+import ProfileMenu from "../signIn/ProfileMenu";
+import NavbarSearch from "./NavbarSearch";
 
 export default function Navbar({ session }) {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
@@ -37,12 +38,19 @@ export default function Navbar({ session }) {
     { text: "Unique Abilities", link: "" },
   ];
 
+  const extrasOptions = [
+    { text: "0.9.3 Update Tracker", link: "/progress-tracker" },
+    { text: "DBU Race Tier List", link: "https://tiermaker.com/create/dbu-races-but-with-subraces-99065"},
+    { text: "DM Screen Sheet", link: "https://docs.google.com/spreadsheets/d/1SelN3jPptLpu0My1HaEkrIWBfASN0DMvCdiwouFoJRc/edit?usp=sharing"}
+  ]
+
   const navOptions = [
-    { text: "0.9.3 Update Tracker", link: "/home/progress-tracker" },
-    { text: "Transformations", link: "", list: transformationOptions },
-    { text: "Player", link: "", list: playerOptions },
-    { text: "Techniques", link: "", list: techniqueOptions },
-    { text: "Compendiums", link: "", list: [] },
+    { text: "Extras", link: "", list: extrasOptions},
+    //{ text: "0.9.3 Update Tracker", link: "/home/progress-tracker" },
+    //{ text: "Transformations", link: "", list: transformationOptions },
+    //{ text: "Player", link: "", list: playerOptions },
+    //{ text: "Techniques", link: "", list: techniqueOptions },
+    //{ text: "Compendiums", link: "", list: [] },
     // { text: "Sign Up", link: "" },
     // { text: "Log In", link: "/Login" },
   ];
@@ -52,7 +60,7 @@ export default function Navbar({ session }) {
   }
   const desktopNavMenu = () => {
     return (
-      <div id="innerDesktopNavMenu" className="flex flex-row place-content-end">
+      <div id="innerDesktopNavMenu" className="flex flex-row place-content-end items-center">
         {" "}
         {/* This needs to be changed to a recursive method so you can have submenus */}
         {navOptions.map((item, key) => (
@@ -63,6 +71,7 @@ export default function Navbar({ session }) {
             list={item.list}
           />
         ))}
+        <NavbarSearch />
         <ProfileMenu session={session} />
       </div>
     );
@@ -75,7 +84,7 @@ export default function Navbar({ session }) {
         className="flex flex-row self-center object-fit-cover col-span-1 max-h-[100%] w-full"
         width={3200}
         height={800}
-        quality={75}
+        quality={100}
         alt=""
         style={{
           objectFit: "cover",
@@ -120,6 +129,11 @@ export default function Navbar({ session }) {
           {desktopNavMenu()}
         </nav>
       </header>
+
+      {/* Mobile Search Bar */}
+      <div className="lg:hidden px-6 py-3 border-b border-dbu-line">
+        <NavbarSearch fullWidth />
+      </div>
 
       {/* Mobile Nav Menu */}
       <nav

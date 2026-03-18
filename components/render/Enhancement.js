@@ -1,11 +1,11 @@
-import Head from "../dbuComponents/General/head";
-import Trait from "../../components/dbuComponents/General/trait";
-import BurstLimit from "../../components/dbuComponents/Form/burstLimit";
-import MasteryTrait from "../dbuComponents/Form/masteryTrait";
+import Head from "../dbu/General/head";
+import Trait from "../../components/dbu/General/trait";
+import BurstLimit from "../../components/dbu/Transformations/burstLimit";
+import MasteryTrait from "../dbu/Transformations/masteryTrait";
 
 export default function EnhancementRenderPage({ content }) {
   return (
-    <div className="flex flex-col flex-col-1 max-w-5xl px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
+    <div className="flex flex-col flex-col-1 w-full max-w-5xl mx-auto px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
       <Head Form={content} />
       {content.traits.map((trait, key) => {
         return (

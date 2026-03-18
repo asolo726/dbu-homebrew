@@ -1,6 +1,6 @@
-import Head from "../dbuComponents/General/head";
-import Trait from "../dbuComponents/General/trait";
-import RaceFeatures from "../dbuComponents/Race/raceFeatures";
+import Head from "../dbu/General/head";
+import Trait from "../dbu/General/trait";
+import RaceFeatures from "../dbu/Race/raceFeatures";
 
 /**
  * Note: We need to figure out a good way of handling subraces
@@ -14,7 +14,7 @@ export default function RaceRenderPage({ content }) {
   const header2Style =
     "text-dbu-header text-[1.5em] sm:text-[1.8em] font-bold text-center mt-5 mb-4";
   return (
-    <div className="flex flex-col flex-col-1 max-w-5xl px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
+    <div className="flex flex-col flex-col-1 w-full max-w-5xl mx-auto px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
       <Head Form={content} />
       <RaceFeatures
         racialLifeModifier={content.raceFeatures.racialLifeModifier}

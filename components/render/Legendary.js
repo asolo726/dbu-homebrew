@@ -1,11 +1,11 @@
-import Head from "../dbuComponents/General/head";
-import Trait from "../../components/dbuComponents/General/trait";
-import LegendaryTrait from "../dbuComponents/Form/legendaryTrait";
-import AddendumBox from "../dbuComponents/General/addendumBox";
+import Head from "../dbu/General/head";
+import Trait from "../../components/dbu/General/trait";
+import LegendaryTrait from "../dbu/Transformations/legendaryTrait";
+import AddendumBox from "../dbu/General/addendumBox";
 
 export default function LegendaryRenderPage({ content }) {
   return (
-    <div className="flex flex-col flex-col-1 max-w-5xl px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
+    <div className="flex flex-col flex-col-1 w-full max-w-5xl mx-auto px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
       <Head Form={content} />
       {content.traits.map((trait, index) => {
         return (

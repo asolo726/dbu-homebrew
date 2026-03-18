@@ -63,7 +63,7 @@ export default function SegmentedProgressBar({
   return (
     <div className="flex items-center gap-6 mb-8 w-full">
       {/* Label with optional dropdown chevron */}
-      <div className="flex items-center gap-2 whitespace-nowrap">
+      <div className="flex items-center gap-2 min-w-0">
         {onToggleDropdown && (
           <button
             onClick={onToggleDropdown}
@@ -77,8 +77,15 @@ export default function SegmentedProgressBar({
 
       {/* Progress Bar Container - Darker Box Background */}
       <div className="flex-1 bg-gray-950 rounded-lg p-3">
-        <div className="flex gap-1">
-          {/* Segments */}
+        {/* Solid bar on small screens */}
+        <div className="block md:hidden h-8 rounded-sm bg-gray-800 overflow-hidden">
+          <div
+            className={`h-full transition-all rounded-sm ${segmentColor}`}
+            style={{ width: `${percentage}%` }}
+          />
+        </div>
+        {/* Segmented bar on larger screens */}
+        <div className="hidden md:flex gap-1">
           {segmentsArray.map((_, index) => (
             <div
               key={index}

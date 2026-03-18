@@ -3,12 +3,13 @@ export default function Table({ tableData }) {
   const { headers, rows } = tableData;
   //console.log("headers: ", headers, "rows: ", rows);
   return (
+    <div className="overflow-x-auto">
     <table className="w-full border-collapse text-center text-md font-light">
       <thead>
         <tr>
           {headers.map((item, key) => (
             <th
-              className="border border-dbu-header min-w-[6em] max-w-[10em] py-2 text-sm"
+              className="border border-dbu-header min-w-[7em] max-w-[15em] py-2 text-sm"
               key={key}
             >
               {item}
@@ -25,7 +26,7 @@ export default function Table({ tableData }) {
                 className={
                   key === row.length - 1
                     ? "border border-dbu-header py-2 w-auto px-3"
-                    : "border border-dbu-header min-w-[3em] max-w-[10em] py-2"
+                    : "border border-dbu-header min-w-[7em] max-w-[25em] py-2"
                 }
               >
                 {!Array.isArray(item) ? (
@@ -44,5 +45,6 @@ export default function Table({ tableData }) {
         ))}
       </tbody>
     </table>
+    </div>
   );
 }

@@ -34,7 +34,7 @@ export default function Head({ Form }) {
   const requirementNameStyle = "font-bold text-dbu-header";
   const areAuthorAndBannerAuthorDifferent = () => {
     try {
-      !(
+      return !(
         Form.head.bannerAuthor.toLowerCase() === Form.head.author.toLowerCase()
       );
     } catch (e) {
@@ -42,6 +42,7 @@ export default function Head({ Form }) {
       return false;
     }
   };
+  const imageSrc = Form.head.banner != "" ? Form.head.banner : "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp";
   return (
     <div className="flex-grow-1">
       <h1 className="text-dbu-header text-[2em] sm:text-[3em] font-bold text-center mb-4 tracking-wide">
@@ -54,21 +55,19 @@ export default function Head({ Form }) {
       ) : (
         <></>
       )}
-      <Image
-        src={
-          Form.head.banner != ""
-            ? Form.head.banner
-            : "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp"
-        }
-        className="justify-self-center max-w-[100%] mb-5"
-        width={1500}
-        height={1500}
-        alt=""
-        priority={true}
-      />
-      {Form.head.bannerAuthor != "" &&
-      Form.head.bannerAuthor &&
-      areAuthorAndBannerAuthorDifferent ? (
+      <a href={imageSrc} target="_blank">
+        <Image
+          src={imageSrc}
+          className="justify-self-center max-w-[100%] mb-5"
+          width={1500}
+          height={1500}
+          alt=""
+          priority={true}
+          quality={100}
+        />
+      </a>
+      { Form.head.bannerAuthor &&
+      areAuthorAndBannerAuthorDifferent() ? (
         <p className="text-md md:text-lg text-center mb-3">
           (Art Credit: {Form.head.bannerAuthor})
         </p>

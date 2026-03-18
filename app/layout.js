@@ -1,6 +1,5 @@
-import { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import NavbarServer from "../components/navComponents/NavbarServer";
+import NavbarServer from "../components/navigation/NavbarServer";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -27,7 +26,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col justify-center-safe`}
       >
         <NavbarServer />
-        <div className="grid justify-center">{children}</div>
+        <div className="flex flex-col items-center w-full">{children}</div>
       </body>
     </html>
   );

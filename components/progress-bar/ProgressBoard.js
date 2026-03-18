@@ -6,7 +6,7 @@ import {
   calculateProgress,
   countAllItems,
   renderPageProgressItems,
-} from "../../app/home/progress-tracker/progressTrackerUtil";
+} from "../../app/progress-tracker/progressTrackerUtil";
 
 export default function ProgressBoard({ progressData }) {
   // Progress data for all bars with colors and pageProgress data
@@ -114,7 +114,7 @@ export default function ProgressBoard({ progressData }) {
   const overallProgress = Math.round((totalProgress / maxTotalProgress) * 100);
 
   return (
-    <div className="p-6 w-400">
+    <div className="p-6 w-full max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-8">DBU Update Progress Tracker</h1>
 
       {/* Overall Progress Bar */}
