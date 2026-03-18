@@ -15,7 +15,7 @@ export default function CardGenerator({ entries }) {
                     author={entry.head.author}
                     enhancementType={entry.head.enhancementType} // Only for Enhancements (Standard, Special)
                     awakeningType={entry.head.awakeningType} // Only for Awakenings (Lesser, Greater, Super)
-                    awakeningOrigin={entry.head.awakeningType} // Only for Awakenings (Body, Mind)
+                    awakeningOrigin={entry.head.awakeningOrigin} // Only for Awakenings (Body, Mind)
                     tag={entry.head.tag} // For homebrew that is part of a set (E.g. Invincible, Pocket Monster)
                 />
             ))}
