@@ -1,18 +1,36 @@
 "use client";
-import { useState } from "react";
-import SearchBar from "../../app/home/search/searchBar";
-import CardGenerator from "../../app/home/search/cardGenerator";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import SearchBar from "../../app/search/searchBar";
+import CardGenerator from "../../app/search/cardGenerator";
 import FilterChips from "./FilterChips";
+import { Tooltip } from "react-tooltip";
 
 export default function SearchClient({ pageData }) {
-    const [query, setQuery] = useState("");
-    const [sortOrder, setSortOrder] = useState(null); // null | "asc" | "desc"
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
+    const [query, setQuery] = useState(searchParams.get("q") ?? "");
+    const [sortOrder, setSortOrder] = useState(searchParams.get("sort") ?? null);
     const [filters, setFilters] = useState({
-        authors: [],
-        aspects: [],
-        pageTypes: [],
-        races: [],
+        authors:   searchParams.get("authors")?.split(",").filter(Boolean)   ?? [],
+        aspects:   searchParams.get("aspects")?.split(",").filter(Boolean)   ?? [],
+        pageTypes: searchParams.get("pageTypes")?.split(",").filter(Boolean) ?? [],
+        races:     searchParams.get("races")?.split(",").filter(Boolean)     ?? [],
+        tags:      searchParams.get("tags")?.split(",").filter(Boolean)      ?? [],
     });
+
+    useEffect(() => {
+        const params = new URLSearchParams();
+        if (query)                  params.set("q",         query);
+        if (sortOrder)              params.set("sort",       sortOrder);
+        if (filters.authors.length)   params.set("authors",   filters.authors.join(","));
+        if (filters.aspects.length)   params.set("aspects",   filters.aspects.join(","));
+        if (filters.pageTypes.length) params.set("pageTypes", filters.pageTypes.join(","));
+        if (filters.races.length)     params.set("races",     filters.races.join(","));
+        if (filters.tags.length)      params.set("tags",      filters.tags.join(","));
+        router.replace(`?${params.toString()}`, { scroll: false });
+    }, [query, sortOrder, filters]);
 
     const entries = Object.values(pageData.Response).flat();
     const normalize = (s) => s.toLowerCase().replace(/\s+/g, "");
@@ -50,7 +68,10 @@ export default function SearchClient({ pageData }) {
                 .some(p => normalizeRace(p) === normalizeRace(r));
         });
 
-        return nameMatch && authorMatch && pageTypeMatch && aspectMatch && raceMatch;
+        const tagMatch = filters.tags.length === 0 ||
+            filters.tags.some(t => entry.head.tag?.includes(t));
+
+        return nameMatch && authorMatch && pageTypeMatch && aspectMatch && raceMatch && tagMatch;
     });
 
     const sorted = sortOrder
@@ -60,10 +81,24 @@ export default function SearchClient({ pageData }) {
           })
         : filtered;
 
+    const clearAll = () => {
+        setQuery("");
+        setSortOrder(null);
+        setFilters({ authors: [], aspects: [], pageTypes: [], races: [], tags: [] });
+    };
+
     return (
         <>
             <div className="flex gap-2">
                 <SearchBar query={query} onSearch={setQuery} />
+                <button
+                    onClick={clearAll}
+                    data-tooltip-id="clear-tooltip"
+                    data-tooltip-content="Clear all filters and search"
+                    className="shrink-0 px-3 py-1 rounded-md text-xs border border-dbu-line bg-dbu-bg2 text-dbu-text hover:border-dbu-header transition-all active:scale-90 active:bg-dbu-bg3"
+                >
+                    Clear
+                </button>
                 <select
                     value={sortOrder ?? "null"}
                     onChange={(e) => setSortOrder(e.target.value === "null" ? null : e.target.value)}
@@ -76,6 +111,10 @@ export default function SearchClient({ pageData }) {
             </div>
             <FilterChips filters={filters} setFilters={setFilters} entries={entries} />
             <CardGenerator entries={sorted} />
+            <Tooltip
+                id="clear-tooltip"
+                className="tooltip"
+            />
         </>
     );
 }

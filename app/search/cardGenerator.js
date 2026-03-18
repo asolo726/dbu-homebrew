@@ -13,6 +13,10 @@ export default function CardGenerator({ entries }) {
                     raceRestriction={entry.head.raceReq}
                     tierOfPower={entry.head.tier}
                     author={entry.head.author}
+                    enhancementType={entry.head.enhancementType} // Only for Enhancements (Standard, Special)
+                    awakeningType={entry.head.awakeningType} // Only for Awakenings (Lesser, Greater, Super)
+                    awakeningOrigin={entry.head.awakeningType} // Only for Awakenings (Body, Mind)
+                    tag={entry.head.tag} // For homebrew that is part of a set (E.g. Invincible, Pocket Monster)
                 />
             ))}
         </div>

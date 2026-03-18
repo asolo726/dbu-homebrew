@@ -1,0 +1,17 @@
+export const BASE_RACES = [
+    "Androids", "Angels", "Arcosians", "Bio-Androids", "Cerealians",
+    "Demons", "Earthlings", "Glass Tribe", "Herans", "Konatsians",
+    "Majins", "Neko-Majins", "Neo-Tuffles", "Saiyans", "Shadow Dragons",
+    "Shinjin", "Yardrats", "Custom Species", "Saibamen", "Animals",
+    "Robots", "Arlians", "Creatures", "Oni", "Zooners", "Tuffles",
+];
+
+export const PAGE_TYPES = {
+    "Awakening":     "Awakening",
+    "Enhancement":   "Enhancement Power",
+    "Alternate":     "Alternate Form",
+    "Legendary":     "Legendary Form",
+    "Evolved Stage": "Evolved Stage",
+    "Race":          "Race",
+    "Factor":        "Racial Factor",
+};

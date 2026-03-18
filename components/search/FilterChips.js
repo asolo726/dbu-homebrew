@@ -1,25 +1,8 @@
 "use client";
-
-const BASE_RACES = [
-    "Androids", "Angels", "Arcosians", "Bio-Androids", "Cerealians",
-    "Demons", "Earthlings", "Glass Tribe", "Herans", "Konatsians",
-    "Majins", "Neko-Majins", "Neo-Tuffles", "Saiyans", "Shadow Dragons",
-    "Shinjin", "Yardrats", "Custom Species", "Saibamen", "Animals",
-    "Robots", "Arlians", "Creatures", "Oni", "Zooners", "Tuffles",
-];
+import { BASE_RACES, PAGE_TYPES } from "./searchConstants";
 
 // Strip trailing 's' for plural-insensitive comparison
 const normalizeRace = (r) => r?.toLowerCase().replace(/s$/, "") ?? "";
-
-const PAGE_TYPES = {
-    "Awakening":    "Awakening",
-    "Enhancement":  "Enhancement Power",
-    "Alternate":    "Alternate Form",
-    "Legendary":    "Legendary Form",
-    "Evolved Stage":"Evolved Stage",
-    "Race":         "Race",
-    "Factor":       "Racial Factor",
-};
 
 function Chip({ label, active, onClick }) {
     return (
@@ -81,6 +64,8 @@ export default function FilterChips({ filters, setFilters, entries }) {
     });
     const races = ["Any Race", ...[...new Set([...BASE_RACES, ...dynamicRaces])].sort()];
 
+    const tags = [...new Set(entries.flatMap(e => e.head.tag ?? []))].sort();
+
     const toggle = (category, value) => {
         setFilters(prev => {
             const current = prev[category];
@@ -99,6 +84,7 @@ export default function FilterChips({ filters, setFilters, entries }) {
             <FilterGroup label="Author"  items={authors}                  category="authors"   filters={filters} onToggle={toggle} />
             <FilterGroup label="Aspects" items={aspects}                  category="aspects"   filters={filters} onToggle={toggle} />
             <FilterGroup label="Race"    items={races}                    category="races"     filters={filters} onToggle={toggle} />
+            <FilterGroup label="Tags"    items={tags}                     category="tags"      filters={filters} onToggle={toggle} />
         </div>
     );
 }

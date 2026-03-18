@@ -33,6 +33,10 @@ export default function Card({
     raceRestriction,
     tierOfPower,
     author,
+    enhancementType,
+    awakeningType,
+    awakeningOrigin,
+    tag
 }) {
     const pageTypeDisplay = {
         "Awakening": "Awakening",
@@ -45,6 +49,14 @@ export default function Card({
     }
     const ToPIsString = typeof tierOfPower === 'string'; // This usually happens with evolved stages, where sometimes the stage's ToP depends on the og form.
     const ToP = ToPIsString ? tierOfPower.match(/\d+\.?\d*/g).map(Number) : tierOfPower;
+    const cardAttributes = [
+        raceRestriction,
+        pageTypeDisplay[pageType],
+        enhancementType,
+        awakeningType,
+        awakeningOrigin,
+        tag
+    ];
     return (
         <div
             className="card-glow flex flex-col w-full border border-[var(--card-color)] bg-[#282828] rounded-lg overflow-hidden transition-transform duration-200 hover:-translate-y-2"
@@ -88,10 +100,9 @@ export default function Card({
                     ) : (
                         <></>
                     )}
-
-                    {/* Page type + race restriction */}
+                    {/* Card attributes */}
                     <p className="text-dbu-text text-[0.65rem] leading-snug line-clamp-2 mt-1">
-                        {pageTypeDisplay[pageType]}{raceRestriction ? ` · ${raceRestriction}` : ""}
+                        {cardAttributes.filter(Boolean).join(" · ")}
                     </p>
                 </div>
 

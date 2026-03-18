@@ -1,4 +1,4 @@
-import SearchDataServer from "../../../components/search/SearchDataServer";
+import SearchDataServer from "../../components/search/SearchDataServer";
 
 export default function Search() {
     return (
