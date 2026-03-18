@@ -36,7 +36,11 @@ const mapping = {};
 for (const filename of imageFiles) {
   const filePath = path.join(PUBLIC_DIR, filename);
   const buffer = await readFile(filePath);
-  const blob = await put(filename, buffer, { access: "public" });
+  const blob = await put(filename, buffer, {
+    access: "public",
+    contentDisposition: "inline",
+    allowOverwrite: true,
+  });
 
   const oldPath = `/${filename}`;
   mapping[oldPath] = blob.url;

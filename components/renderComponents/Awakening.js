@@ -1,4 +1,4 @@
-import Head from "../../components/dbuComponents/Form/head";
+import Head from "../dbuComponents/General/head";
 import Trait from "../../components/dbuComponents/General/trait";
 import GrandAwakening from "../dbuComponents/Form/grandAwakening";
 import AddendumBox from "../dbuComponents/General/addendumBox";

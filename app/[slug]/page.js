@@ -2,7 +2,7 @@ import SinglePageGenerator from "../../components/renderComponents/SinglePageGen
 import searchContent from "../api/searchContent/route.js";
 
 const SITE_URL = "https://dbu-homebrew.vercel.app";
-const SLUG_PATTERN = /^(\w+[-]?)+$/g;
+const SLUG_PATTERN = /^(\w+[-]?)+$/;
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }) {
   const result = searchResult.content[0];
   const title = result.head.title;
   const description = result.head.desc;
-  const image = result.head.banner != "" ? result.head.banner : `https://dbu-rpg-northgalaxy.vercel.app/9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp`;
+  const image = result.head.banner || `${SITE_URL}/whosthatzfighter.webp`;
   const url = `${SITE_URL}/${result.head.keyName}`;
 
   return {
@@ -63,7 +63,7 @@ export default async function Page({ params }) {
   //This Regex pattern checks that a url search only contains alphanumerical characters and a -
   //Example: "Super-Saiyan-3" is a match. "{GetUsers} is not a match."
   //This site is very helpful: https://regex101.com
-  const pattern = /^(\w+[-]?)+$/g;
+  const pattern = /^(\w+[-]?)+$/;
   if (pattern.test(slug) === false) {
     return (
       <div className="flex flex-col justify-center">
@@ -104,9 +104,17 @@ export default async function Page({ params }) {
     );
   }
   if (searchResult.content.length === 1) {
+    const content = searchResult.content[0];
+    const oEmbedUrl = `${SITE_URL}/api/oembed?url=${encodeURIComponent(`${SITE_URL}/${slug}`)}&title=${encodeURIComponent(content.head.title)}&author=${encodeURIComponent(content.head.author || "")}`;
     return (
       <>
-        <SinglePageGenerator content={searchResult.content[0]} />
+        <link
+          rel="alternate"
+          type="application/json+oembed"
+          href={oEmbedUrl}
+          title={content.head.title}
+        />
+        <SinglePageGenerator content={content} />
       </>
     );
   }

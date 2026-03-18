@@ -32,30 +32,50 @@ const getAspectTooltip = (aspectName) => {
  */
 export default function Head({ Form }) {
   const requirementNameStyle = "font-bold text-dbu-header";
+  const areAuthorAndBannerAuthorDifferent = () => {
+    try {
+      !(
+        Form.head.bannerAuthor.toLowerCase() === Form.head.author.toLowerCase()
+      );
+    } catch (e) {
+      // This is an easy way for accounting for cases where either bannerAuthor or author aren't present.
+      return false;
+    }
+  };
   return (
     <div className="flex-grow-1">
       <h1 className="text-dbu-header text-[2em] sm:text-[3em] font-bold text-center mb-4 tracking-wide">
         {Form.head.title}
       </h1>
-      <h3 className="text-dbu-header text-[1.5em] sm:text-[1.8em] italic text-center mb-10">
-        by {Form.head.author}
-      </h3>
+      {!Form.head.dontShowAuthor ? (
+        <h3 className="text-dbu-header text-[1.5em] sm:text-[1.8em] italic text-center mb-10">
+          by {Form.head.author}
+        </h3>
+      ) : (
+        <></>
+      )}
       <Image
-        src={Form.head.banner != "" ? Form.head.banner : "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp"}
+        src={
+          Form.head.banner != ""
+            ? Form.head.banner
+            : "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp"
+        }
         className="justify-self-center max-w-[100%] mb-5"
         width={1500}
         height={1500}
         alt=""
         priority={true}
       />
-      {Form.head.bannerAuthor != "" || Form.head.bannerAuthor ? (
+      {Form.head.bannerAuthor != "" &&
+      Form.head.bannerAuthor &&
+      areAuthorAndBannerAuthorDifferent ? (
         <p className="text-md md:text-lg text-center mb-3">
           (Art Credit: {Form.head.bannerAuthor})
         </p>
       ) : (
         <></>
       )}
-      <p className="text-pretty text-md tracking-wide md:text-lg">
+      <p className="text-pretty text-md tracking-wide md:text-lg whitespace-pre-wrap">
         {Form.head.desc}
       </p>
       <ul className="list-disc ml-10 mt-3 text-md md:text-lg">
@@ -79,12 +99,16 @@ export default function Head({ Form }) {
         ) : (
           <></>
         )}
-        <li>
-          <p>
-            <span className={requirementNameStyle}>Transformation Type:</span>{" "}
-            {Form.head.transformationType}
-          </p>
-        </li>
+        {Form.head.transformationType ? (
+          <li>
+            <p>
+              <span className={requirementNameStyle}>Transformation Type:</span>{" "}
+              {Form.head.transformationType}
+            </p>
+          </li>
+        ) : (
+          <></>
+        )}
         {Form.head.formType ? (
           <li>
             <p>
@@ -141,12 +165,26 @@ export default function Head({ Form }) {
         ) : (
           <></>
         )}
-        <li>
-          <p>
-            <span className={requirementNameStyle}>Prerequisite(s): </span>{" "}
-            {Form.head.preReq}
-          </p>
-        </li>
+        {Form.head.maxFactor ? (
+          <li>
+            <p>
+              <span className={requirementNameStyle}>Maximum Factor:</span>{" "}
+              {Form.head.maxFactor}
+            </p>
+          </li>
+        ) : (
+          <></>
+        )}
+        {Form.head.preReq ? (
+          <li>
+            <p>
+              <span className={requirementNameStyle}>Prerequisite(s): </span>{" "}
+              {Form.head.preReq}
+            </p>
+          </li>
+        ) : (
+          <></>
+        )}
         {Form.head.transLine ? (
           <li>
             <p>
@@ -195,16 +233,20 @@ export default function Head({ Form }) {
         ) : (
           <></>
         )}
-        <li>
-          <p>
-            <span className={requirementNameStyle}>
-              Tier of Power Requirement:{" "}
-            </span>{" "}
-            {Form.head.tier +
-              (!Number.isNaN(Number(Form.head.tier)) ? "+" : "")}
-          </p>
-        </li>
-        {Form.head.identity !== "Awakening" ? (
+        {Form.head.tier ? (
+          <li>
+            <p>
+              <span className={requirementNameStyle}>
+                Tier of Power Requirement:{" "}
+              </span>{" "}
+              {Form.head.tier +
+                (!Number.isNaN(Number(Form.head.tier)) ? "+" : "")}
+            </p>
+          </li>
+        ) : (
+          <></>
+        )}
+        {Form.head.aspects && Form.head.aspects.length > 0 ? (
           <li>
             <p>
               <span className={requirementNameStyle}>Aspects: </span>{" "}
@@ -244,50 +286,55 @@ export default function Head({ Form }) {
           <></>
         )}
       </ul>
-      <div className="flex justify-center py-5">
-        <table className="table-fixed w-full border-collapse text-center text-md md:text-xl font-light ">
-          <thead>
-            <tr>
-              {Form.head.attributeModifiers.map((modifier, id) => (
-                <th
-                  key={id}
-                  className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
-                >
-                  {modifier.attribute}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              {Form.head.attributeModifiers.map((modifier, id) =>
-                modifier.Bonus > 0 ? (
-                  <td
-                    className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
+      {Form.head.attributeModifiers &&
+      Form.head.attributeModifiers.length > 0 ? (
+        <div className="flex justify-center py-5">
+          <table className="table-fixed w-full border-collapse text-center text-md md:text-xl font-light ">
+            <thead>
+              <tr>
+                {Form.head.attributeModifiers.map((modifier, id) => (
+                  <th
                     key={id}
-                  >
-                    {modifier.Multiplier.length === 0
-                      ? `+${modifier.Bonus}`
-                      : `+${modifier.Bonus}(${modifier.Multiplier})`}
-                  </td>
-                ) : (
-                  <td
                     className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
-                    key={id}
                   >
-                    -
-                  </td>
-                ),
-              )}
-            </tr>
-          </tbody>
-        </table>
-        <Tooltip
-          id="my-tooltip"
-          className="tooltip"
-          style={{ maxWidth: "400px" }}
-        />
-      </div>
+                    {modifier.attribute}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                {Form.head.attributeModifiers.map((modifier, id) =>
+                  modifier.Bonus > 0 ? (
+                    <td
+                      className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
+                      key={id}
+                    >
+                      {modifier.Multiplier.length === 0
+                        ? `+${modifier.Bonus}`
+                        : `+${modifier.Bonus}(${modifier.Multiplier})`}
+                    </td>
+                  ) : (
+                    <td
+                      className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
+                      key={id}
+                    >
+                      -
+                    </td>
+                  ),
+                )}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <></>
+      )}
+      <Tooltip
+        id="my-tooltip"
+        className="tooltip"
+        style={{ maxWidth: "400px" }}
+      />
     </div>
   );
 }

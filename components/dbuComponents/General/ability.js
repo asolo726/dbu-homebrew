@@ -7,6 +7,22 @@ export default function Ability({ abilityList = [{}], key }) {
     <div className="mt-2" key={key}>
       {abilityList.map((item, key) => {
         if ("condition" in item) {
+          const isLabel =
+            item.condition.startsWith("–") || item.condition.startsWith("-");
+          if (isLabel) {
+            const labelText = item.condition.replace(/^[–-]/, "").trim();
+            return (
+              <p
+                className="text-dbu-text text-md md:text-lg text-left my-1"
+                key={key}
+              >
+                {"–"}
+                <span className="font-bold text-dbu-header">{labelText}</span>
+                {": "}
+                {item.desc}
+              </p>
+            );
+          }
           conditionAbilityCount++;
           return (
             <p
@@ -26,25 +42,17 @@ export default function Ability({ abilityList = [{}], key }) {
             </p>
           );
         } else if ("list" in item) {
-          let indentor = 10;
-          if ("sublist" in item) {
-            indentor += item.sublist * 10;
-          }
-          //console.log("indentor: ", indentor);
+          const depth = "sublist" in item ? item.sublist : 0;
+          const marginLeft = `${(depth + 1) * 2.5}rem`;
+          const listStyleType =
+            depth >= 2 ? "square" : depth >= 1 ? "circle" : "disc";
           return (
-            <ul key={key} className={`list-disc ml-${indentor}`}>
+            <ul key={key} className="list-disc" style={{ marginLeft }}>
               {item.list.map((listItem, key) => {
                 return (
                   <li
                     className="my-2 text-dbu-text text-md md:text-lg text-left"
-                    style={{
-                      listStyleType:
-                        indentor > 20
-                          ? "square"
-                          : indentor > 10
-                            ? "circle"
-                            : "disc",
-                    }}
+                    style={{ listStyleType }}
                     key={key}
                   >
                     {listItem}
@@ -54,19 +62,17 @@ export default function Ability({ abilityList = [{}], key }) {
             </ul>
           );
         } else if ("miniTraitList" in item) {
-          let indentor = 10;
-          if ("sublist" in item) {
-            indentor += item.sublist * 10;
-          }
+          const depth = "sublist" in item ? item.sublist : 0;
+          const marginLeft = `${(depth + 1) * 2.5}rem`;
           return (
-            <ul key={key} className="list-disc ml-10">
+            <ul key={key} className="list-disc" style={{ marginLeft }}>
               {item.miniTraitList.map((listItem, key) => {
                 return (
                   <li
                     className="my-2 text-dbu-text text-md md:text-lg text-left"
                     key={key}
                   >
-                    <span className="font-bold text-dbu-header">{`[${listItem.title}]: `}</span>
+                    <span className="font-bold text-dbu-header">{`${listItem.title}: `}</span>
                     {listItem.desc}
                   </li>
                 );
