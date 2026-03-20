@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { aspectData } from "../../Aspects/aspectData";
 import { Tooltip } from "../../../lib/reactTooltip";
+import EditableText from "../../edit/EditableText";
 
 /**
  * Generates formatted HTML tooltip for an aspect
@@ -69,20 +70,20 @@ export default function Head({ Form }) {
       { Form.head.bannerAuthor &&
       areAuthorAndBannerAuthorDifferent() ? (
         <p className="text-md md:text-lg text-center mb-3">
-          (Art Credit: {Form.head.bannerAuthor})
+          (Art Credit: <EditableText path="head.bannerAuthor" value={Form.head.bannerAuthor} />)
         </p>
       ) : (
         <></>
       )}
       <p className="text-pretty text-md tracking-wide md:text-lg whitespace-pre-wrap">
-        {Form.head.desc}
+        <EditableText path="head.desc" value={Form.head.desc} />
       </p>
       <ul className="list-disc ml-10 mt-3 text-md md:text-lg">
         {Form.head.raceReq ? (
           <li>
             <p>
               <span className={requirementNameStyle}>Racial Requirement:</span>{" "}
-              {Form.head.raceReq}
+              <EditableText path="head.raceReq" value={Form.head.raceReq} />
             </p>
           </li>
         ) : (
@@ -92,7 +93,7 @@ export default function Head({ Form }) {
           <li>
             <p>
               <span className={requirementNameStyle}>Evolved Stage Type:</span>{" "}
-              {Form.head.evolvedStageType}
+              <EditableText path="head.evolvedStageType" value={Form.head.evolvedStageType} />
             </p>
           </li>
         ) : (
@@ -102,7 +103,7 @@ export default function Head({ Form }) {
           <li>
             <p>
               <span className={requirementNameStyle}>Transformation Type:</span>{" "}
-              {Form.head.transformationType}
+              <EditableText path="head.transformationType" value={Form.head.transformationType} />
             </p>
           </li>
         ) : (
@@ -112,7 +113,7 @@ export default function Head({ Form }) {
           <li>
             <p>
               <span className={requirementNameStyle}>Form Type:</span>{" "}
-              {Form.head.formType}
+              <EditableText path="head.formType" value={Form.head.formType} />
             </p>
           </li>
         ) : (
@@ -122,7 +123,7 @@ export default function Head({ Form }) {
           <li>
             <p>
               <span className={requirementNameStyle}>Enhancement Type:</span>{" "}
-              {Form.head.enhancementType}
+              <EditableText path="head.enhancementType" value={Form.head.enhancementType} />
             </p>
           </li>
         ) : (
@@ -148,7 +149,7 @@ export default function Head({ Form }) {
           <li>
             <p>
               <span className={requirementNameStyle}>Awakening Type:</span>{" "}
-              {Form.head.awakeningType}
+              <EditableText path="head.awakeningType" value={Form.head.awakeningType} />
             </p>
           </li>
         ) : (
@@ -158,7 +159,7 @@ export default function Head({ Form }) {
           <li>
             <p>
               <span className={requirementNameStyle}>Awakening Origin:</span>{" "}
-              {Form.head.awakeningOrigin}
+              <EditableText path="head.awakeningOrigin" value={Form.head.awakeningOrigin} />
             </p>
           </li>
         ) : (
@@ -168,7 +169,7 @@ export default function Head({ Form }) {
           <li>
             <p>
               <span className={requirementNameStyle}>Maximum Factor:</span>{" "}
-              {Form.head.maxFactor}
+              <EditableText path="head.maxFactor" value={Form.head.maxFactor} />
             </p>
           </li>
         ) : (
@@ -178,7 +179,7 @@ export default function Head({ Form }) {
           <li>
             <p>
               <span className={requirementNameStyle}>Prerequisite(s): </span>{" "}
-              {Form.head.preReq}
+              <EditableText path="head.preReq" value={Form.head.preReq} />
             </p>
           </li>
         ) : (
@@ -190,7 +191,7 @@ export default function Head({ Form }) {
               <span className={requirementNameStyle}>
                 Transformation Line:{" "}
               </span>{" "}
-              {Form.head.transLine}
+              <EditableText path="head.transLine" value={Form.head.transLine} />
             </p>
           </li>
         ) : (
@@ -202,7 +203,7 @@ export default function Head({ Form }) {
               <span className={requirementNameStyle}>
                 Transformation Stage:{" "}
               </span>{" "}
-              {Form.head.transStage}
+              <EditableText path="head.transStage" value={Form.head.transStage} />
             </p>
           </li>
         ) : (
@@ -214,7 +215,7 @@ export default function Head({ Form }) {
               <span className={requirementNameStyle}>
                 Stress Test Requirement:{" "}
               </span>
-              {Form.head.stress}
+              <EditableText path="head.stress" value={Form.head.stress} />
             </p>
           </li>
         ) : (
@@ -226,7 +227,7 @@ export default function Head({ Form }) {
               <span className={requirementNameStyle}>
                 Maximum No of Stacks:{" "}
               </span>
-              {Form.head.maxStacks}
+              <EditableText path="head.maxStacks" value={Form.head.maxStacks} />
             </p>
           </li>
         ) : (

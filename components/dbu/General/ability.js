@@ -1,11 +1,12 @@
 import AddendumBox from "./addendumBox";
 import Table from "./table";
+import EditableText from "../../edit/EditableText";
 
-export default function Ability({ abilityList = [{}], key }) {
+export default function Ability({ abilityList = [{}], key, path }) {
   let conditionAbilityCount = 0;
   return (
     <div className="mt-2" key={key}>
-      {abilityList.map((item, key) => {
+      {abilityList.map((item, itemIndex) => {
         if ("condition" in item) {
           const isLabel =
             item.condition.startsWith("–") || item.condition.startsWith("-");
@@ -14,12 +15,19 @@ export default function Ability({ abilityList = [{}], key }) {
             return (
               <p
                 className="text-dbu-text text-md md:text-lg text-left my-1"
-                key={key}
+                key={itemIndex}
               >
                 {"–"}
                 <span className="font-bold text-dbu-header">{labelText}</span>
                 {": "}
-                {item.desc}
+                {path ? (
+                  <EditableText
+                    path={`${path}.abilities.${itemIndex}.desc`}
+                    value={item.desc}
+                  />
+                ) : (
+                  item.desc
+                )}
               </p>
             );
           }
@@ -27,7 +35,7 @@ export default function Ability({ abilityList = [{}], key }) {
           return (
             <p
               className="text-dbu-text text-md md:text-lg text-left my-1"
-              key={key}
+              key={itemIndex}
             >
               {"("}
               <span className="font-bold text-dbu-header">
@@ -38,7 +46,14 @@ export default function Ability({ abilityList = [{}], key }) {
                 {`${item.condition}`}
               </span>
               {"]: "}
-              {item.desc}
+              {path ? (
+                <EditableText
+                  path={`${path}.abilities.${itemIndex}.desc`}
+                  value={item.desc}
+                />
+              ) : (
+                item.desc
+              )}
             </p>
           );
         } else if ("list" in item) {
@@ -47,7 +62,7 @@ export default function Ability({ abilityList = [{}], key }) {
           const listStyleType =
             depth >= 2 ? "square" : depth >= 1 ? "circle" : "disc";
           return (
-            <ul key={key} className="list-disc" style={{ marginLeft }}>
+            <ul key={itemIndex} className="list-disc" style={{ marginLeft }}>
               {item.list.map((listItem, key) => {
                 return (
                   <li
@@ -65,7 +80,7 @@ export default function Ability({ abilityList = [{}], key }) {
           const depth = "sublist" in item ? item.sublist : 0;
           const marginLeft = `${(depth + 1) * 2.5}rem`;
           return (
-            <ul key={key} className="list-disc" style={{ marginLeft }}>
+            <ul key={itemIndex} className="list-disc" style={{ marginLeft }}>
               {item.miniTraitList.map((listItem, key) => {
                 return (
                   <li
@@ -81,7 +96,7 @@ export default function Ability({ abilityList = [{}], key }) {
           );
         } else if ("addendumBox" in item) {
           return (
-            <ul key={key} className="list-disc ml-10">
+            <ul key={itemIndex} className="list-disc ml-10">
               <AddendumBox
                 boxTitle={item.addendumBox.boxTitle}
                 title={item.addendumBox.title}
@@ -96,9 +111,8 @@ export default function Ability({ abilityList = [{}], key }) {
             headers: item.table.headers,
             rows: item.table.rows,
           };
-          //console.log(tableData);
           return (
-            <ul key={key} className="list-disc ml-10">
+            <ul key={itemIndex} className="list-disc ml-10">
               <Table tableData={tableData} />
             </ul>
           );

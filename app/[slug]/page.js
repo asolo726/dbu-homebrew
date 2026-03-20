@@ -1,5 +1,7 @@
 import SinglePageGenerator from "../../components/render/SinglePageGenerator.js";
+import EditModeWrapper from "../../components/edit/EditModeWrapper.js";
 import searchContent from "../api/searchContent/route.js";
+import { auth } from "../../auth";
 
 const SITE_URL = "https://dbu-homebrew.vercel.app";
 const SLUG_PATTERN = /^(\w+[-]?)+$/;
@@ -108,6 +110,7 @@ export default async function Page({ params }) {
   if (searchResult.content.length === 1) {
     const content = searchResult.content[0];
     const oEmbedUrl = `${SITE_URL}/api/oembed?url=${encodeURIComponent(`${SITE_URL}/${slug}`)}&title=${encodeURIComponent(content.head.title)}&author=${encodeURIComponent(content.head.author || "")}`;
+    const session = await auth();
     return (
       <>
         <link
@@ -116,7 +119,9 @@ export default async function Page({ params }) {
           href={oEmbedUrl}
           title={content.head.title}
         />
-        <SinglePageGenerator content={content} />
+        <EditModeWrapper canEdit={!!session} keyName={content.head.keyName}>
+          <SinglePageGenerator content={content} />
+        </EditModeWrapper>
       </>
     );
   }
