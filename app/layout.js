@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import NavbarServer from "../components/navComponents/NavbarServer";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css";
 
 const geistSans = Geist({
@@ -26,6 +27,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col justify-center-safe`}
       >
+        <SpeedInsights />
         <NavbarServer />
         <div className="grid justify-center">{children}</div>
       </body>
