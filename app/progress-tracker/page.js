@@ -10,7 +10,7 @@ export async function generateMetadata() {
       description:
         "A comprehensive progress tracker for the DBU 0.9.3 update, showcasing the current status of page updates, new content additions, and estimated time until completion.",
       images:
-        "https://dbu-rpg-northgalaxy.vercel.app/just_chilling_and_watching_the_progress.webp",
+        "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/just_chilling_and_watching_the_progress.webp",
       type: "website",
       siteName: "DBU: The Homebrew Galaxy",
     },
