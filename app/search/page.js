@@ -10,7 +10,7 @@ export async function generateMetadata() {
       description:
         "Looking for specific homebrew? This page has got you covered. Art by WildBryar.",
       images:
-        "https://dbu-rpg-northgalaxy.vercel.app/IreallyShouldn'tLetThatSaiyanHitBut_BlastHere_IWantPeopleToKnowThatBryarNamedItThisNotMeIAmNotResponsible.png",
+        "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/IreallyShouldn%27tLetThatSaiyanHitBut.png",
       type: "website",
       siteName: "DBU: The Homebrew Galaxy",
     },
