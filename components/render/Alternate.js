@@ -16,7 +16,9 @@ export default function AlternateRenderPage({ content }) {
           />
         );
       })}
-      <MasteryTrait masteryTraitList={content.masteryTrait} />
+      {content.masteryTrait && content.masteryTrait.length > 0 ? (
+        <MasteryTrait masteryTraitList={content.masteryTrait} />
+      ) : <></>}
     </div>
   );
 }
