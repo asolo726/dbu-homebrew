@@ -18,13 +18,13 @@ export default function EvolvedStageRenderPage({ content }) {
           />
         );
       })}
-      {content.legendaryTrait ? (
-        <LegendaryTrait legendaryTraitList={content.legendaryTrait} />
+      {content.masteryTrait && content.masteryTrait.length > 0 ? (
+        <MasteryTrait masteryTraitList={content.masteryTrait} />
       ) : (
         <></>
       )}
-      {content.masteryTrait ? (
-        <MasteryTrait masteryTraitList={content.masteryTrait} />
+      {content.legendaryTrait && content.legendaryTrait.length > 0 ? (
+        <LegendaryTrait legendaryTraitList={content.legendaryTrait} />
       ) : (
         <></>
       )}

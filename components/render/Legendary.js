@@ -1,7 +1,7 @@
 import Head from "../dbu/General/head";
 import Trait from "../../components/dbu/General/trait";
 import LegendaryTrait from "../dbu/Transformations/legendaryTrait";
-import AddendumBox from "../dbu/General/addendumBox";
+import MasteryTrait from "../dbu/Transformations/masteryTrait";
 
 export default function LegendaryRenderPage({ content }) {
   return (
@@ -17,6 +17,9 @@ export default function LegendaryRenderPage({ content }) {
           />
         );
       })}
+      {content.masteryTrait && content.masteryTrait.length > 0 ? (
+        <MasteryTrait masteryTraitList={content.masteryTrait} />
+      ) : <></>}
       <LegendaryTrait legendaryTraitList={content.legendaryTrait} />
     </div>
   );
