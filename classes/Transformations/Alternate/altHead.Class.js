@@ -16,6 +16,7 @@ class AlternateHead extends FormHead {
     transStage = "",
     transformationType = "Form",
     formType = "Alternate",
+    identity = "Alternate"
   } = {}) {
     super({
       title: title,
@@ -29,6 +30,7 @@ class AlternateHead extends FormHead {
       aspects: aspects,
       attributeModifiers: attributeModifiers,
       transformationType: transformationType,
+      identity: identity
     });
     this._stress = stress;
     this._transLine = transLine;

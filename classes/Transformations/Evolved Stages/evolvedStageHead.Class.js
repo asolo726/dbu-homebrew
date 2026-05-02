@@ -15,6 +15,7 @@ class EvolvedStageHead extends FormHead {
     evolvedStageType,
     transformationType = "Form",
     formType,
+    identity = "Evolved Stage"
   } = {}) {
     super({
       title: title,
@@ -28,6 +29,7 @@ class EvolvedStageHead extends FormHead {
       aspects: aspects,
       attributeModifiers: attributeModifiers,
       transformationType: transformationType,
+      identity: identity
     });
     ((this.evolvedStageType = evolvedStageType),
       (this._stress = stress),

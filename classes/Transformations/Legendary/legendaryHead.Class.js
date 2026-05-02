@@ -16,6 +16,7 @@ class LegendaryHead extends FormHead {
     transStage = "",
     transformationType = "Legendary Form",
     formType = "Transformation",
+    identity = "Legendary"
   } = {}) {
     super({
       title: title,
@@ -29,6 +30,7 @@ class LegendaryHead extends FormHead {
       aspects: aspects,
       attributeModifiers: attributeModifiers,
       transformationType: transformationType,
+      identity: identity
     });
     this._stress = stress;
     this._transLine = transLine;
