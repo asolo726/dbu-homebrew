@@ -14,14 +14,14 @@ export async function generateMetadata() {
       type: "website",
       siteName: "DBU: The Homebrew Galaxy",
     },
-    authors: [{ name: "Asolo" }, { name: "Blasteroid" }, {name: "WildBryar"}],
+    authors: [{ name: "Asolo" }, { name: "Blasteroid" }, { name: "WildBryar" }],
   };
 }
 
 export default function Search() {
-    return (
-        <div className="self-stretch w-full mr-4">
-            <SearchDataServer />
-        </div>
-    );
+  return (
+    <div className="self-stretch w-full mr-4">
+      <SearchDataServer />
+    </div>
+  );
 }

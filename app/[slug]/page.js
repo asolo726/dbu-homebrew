@@ -9,7 +9,6 @@ const SLUG_PATTERN = /^(\w+[-]?)+$/;
 //This site is very helpful: https://regex101.com
 export const pattern = /^(\w+[-]?)+$/;
 
-
 export async function generateMetadata({ params }) {
   const { slug } = await params;
 

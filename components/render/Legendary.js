@@ -19,7 +19,9 @@ export default function LegendaryRenderPage({ content }) {
       })}
       {content.masteryTrait && content.masteryTrait.length > 0 ? (
         <MasteryTrait masteryTraitList={content.masteryTrait} />
-      ) : <></>}
+      ) : (
+        <></>
+      )}
       <LegendaryTrait legendaryTraitList={content.legendaryTrait} />
     </div>
   );

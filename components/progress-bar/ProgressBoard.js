@@ -115,7 +115,7 @@ export default function ProgressBoard({ progressData }) {
 
   return (
     <div className="p-6 w-full max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">DBU Update Progress Tracker</h1>
+      <h1 className="text-3xl font-bold mb-8">DBU Unofficial Update Progress Tracker</h1>
 
       {/* Overall Progress Bar */}
       <div className="mb-12">
@@ -165,7 +165,7 @@ export default function ProgressBoard({ progressData }) {
             </div>
           </div>
 
-          <div className="mt-6 pt-6 border-t border-gray-700">
+          {/*<div className="mt-6 pt-6 border-t border-gray-700">
             <p className="text-gray-400 text-base mb-2">
               Estimated Time until Update is Complete
             </p>
@@ -173,7 +173,7 @@ export default function ProgressBoard({ progressData }) {
               {estimatedDaysRemaining} days
             </p>
             <p className="text-gray-500 text-sm">({formattedCompletionDate})</p>
-          </div>
+          </div>*/}
         </div>
       </div>
 

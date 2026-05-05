@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import NavbarServer from "../components/navigation/NavbarServer";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 const geistSans = Geist({
