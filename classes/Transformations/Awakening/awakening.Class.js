@@ -1,5 +1,6 @@
+import AwakeningHead from "./awakeningHead.Class";
 class Awakening {
-  constructor(head, traits = [], grandAwakening) {
+  constructor(head = new AwakeningHead(), traits = [], grandAwakening) {
     this._head = head;
     this._traits = traits;
     this._grandAwakening = grandAwakening; // Only for Super Awakenings
@@ -27,6 +28,15 @@ class Awakening {
 
   set grandAwakening(value) {
     this._grandAwakening = value;
+  }
+
+  toJson(){
+    const headJson = this._head.toJson();
+    return{
+      head: headJson,
+      traits: this._traits.map(trait => trait.toJson()),
+      grandAwakening: this._grandAwakening
+    }
   }
 }
 

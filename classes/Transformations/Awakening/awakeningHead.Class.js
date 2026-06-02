@@ -59,6 +59,27 @@ class AwakeningHead extends FormHead {
   set awakeningOrigin(value) {
     this._awakeningOrigin = value;
   }
+
+  toJson(){
+    return{
+      title: this._title,
+      banner: this._banner,
+      desc: this._desc,
+      bannerAuthor: this._bannerAuthor,
+      author: this._author,
+      raceReq: this._raceReq,
+      preReq: this._preReq,
+      tier: this._tier,
+      aspects: this._aspects,
+      attributeModifiers: this._attributeModifiers,
+      transformationType: this._transformationType,
+      identity: this._identity,
+      maxStacks: this._maxStacks,
+      awakeningType: this._awakeningType,
+      awakeningOrigin: this._awakeningOrigin,
+      keyName: this._keyName
+    }
+  }
 }
 
 export default AwakeningHead;

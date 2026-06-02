@@ -38,4 +38,8 @@ export default async function CreateLayout({ children }) {
  *
  * With this setup, everything inside of the Create Layout has access to the session info.
  * On top of that, for access to the subsequent pages
+ * 
+ * SOOOOOOOOOOOOOOOO THAT DOESNT WORK WITH LAYOUTS AND PAGES. :) 
+ * For that, we just need to import auth() inside the pages, every time. :) gonna fucking lose it. 
+ * 
  * */

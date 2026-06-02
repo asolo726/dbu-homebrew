@@ -11,7 +11,7 @@ class Head {
     this._desc = desc;
     this._bannerAuthor = bannerAuthor;
     this._identity = identity;
-    this._keyName = title.replaceAll(" ", "-");
+    this._keyName = title.replaceAll(" ", "-").toLowerCase();
   }
 
   get title() {

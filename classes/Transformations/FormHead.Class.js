@@ -2,7 +2,7 @@ import Head from "../General Classes/head.Class";
 class FormHead extends Head {
   constructor({
     title,
-    banner = "/whosthatzfighter.webp",
+    banner = "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp",
     desc = "",
     bannerAuthor = "",
     author = "",

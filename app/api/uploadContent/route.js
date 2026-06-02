@@ -4,13 +4,34 @@ import clientPromise from "../../../lib/mongoDBClient";
  * Uploads the content provided to the database. 
  * Determines what collection to use based on the content.identity value
  * 
- * @param {*} content JSON Object 
+ * @param The Object to be uploaded
  * @returns {"status": status}
  */
-export default async function uploadContent(creationOption, creationName, creationObject){
+export default async function uploadNewCreatedContent(creationObject){
     const session = await auth();
     
     const client = await clientPromise;
-    const db = client.db("content");
+    const dbCollection = client.db("content").collection(creationObject.head.identity);
+    
+    // Checking Creation Object Output
+    // console.log("Creation Object:\n", creationObject);
+    
+    //Name check------------------
+    // The underscores accessing the object variable is concerning, look into this later...
+    const searchQuery = {"head.keyName": creationObject._head._keyName};
+    const searchOptions = []; 
+    const nameCheck = await dbCollection.findOne(searchQuery, searchOptions);
+    if(nameCheck){
+        return {status: "Name Taken"};
+    }
+
+
+    const status = await dbCollection.insertOne(creationObject.toJson());
+    //Check if the insertion was successful
+    if(status.acknowledged != true){
+        return {status: "Failed"};
+    }
+
+    return {status: "Success"};
     
 }
