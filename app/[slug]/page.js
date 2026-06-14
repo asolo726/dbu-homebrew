@@ -37,12 +37,10 @@ export async function generateMetadata({ params }) {
   const toggle = result.head.toggle;
 
   try {
-      if (toggle) {
-        const toggleStatus = await checkToggle(toggle);
-        if (!toggleStatus) {
+    const toggleStatus = await checkToggle(toggle);
+    if (!toggleStatus) {
           return fail_return;
         }
-      }
   } catch (error) {
       console.error("Error checking toggle:", error);
       return fail_return;
@@ -102,12 +100,7 @@ export default async function Page({ params }) {
 
   const searchResult = await searchContent(slug);
   const toggle = searchResult.content[0].head.toggle;
-  console.log("Toggle for this content:", toggle);
-  let toggleStatus = true;
-  if (toggle) {
-    toggleStatus = await checkToggle(toggle);
-    console.log("Toggle status:", toggleStatus);
-  }
+  let toggleStatus = await checkToggle(toggle);
   
   // If search fails or toggle is off, return a page not found message.
   if (searchResult.status === "failed" || (toggle && !toggleStatus)) {

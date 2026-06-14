@@ -1,5 +1,6 @@
 import Card from "./card";
 
+
 export default function CardGenerator({ entries }) {
   return (
     <div

@@ -7,6 +7,11 @@ import clientPromise from "../../../lib/mongoDBClient";
  * @returns On Failed Search, returns "No User Found"
  */
 export default async function READ(toggleId) {
+  // Entries don't always have a toggle field, so return false if toggleId is not provided
+  if (!toggleId || toggleId === undefined) {
+    console.log("true");
+    return true;
+  };
   const toggleKey = "toggles." + toggleId;
   const client = await clientPromise;
   const db = client.db("Main");
@@ -14,5 +19,6 @@ export default async function READ(toggleId) {
     .collection("toggles")
     .findOne({ [toggleKey]: { $exists: true } }, { projection: { [toggleKey]: 1, _id: 0 } });
 
+  console.log("Toggle check result:", result["toggles"][toggleId]);
     return result["toggles"][toggleId];
 }
