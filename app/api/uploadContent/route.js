@@ -9,12 +9,13 @@ import clientPromise from "../../../lib/mongoDBClient";
  */
 export default async function uploadNewCreatedContent(creationObject){
     const session = await auth();
+
+    // Checking Creation Object Output
+    console.log("Creation Object:\n", creationObject);
     
     const client = await clientPromise;
-    const dbCollection = client.db("content").collection(creationObject.head.identity);
+    const dbCollection = client.db("content").collection(creationObject._head._identity);
     
-    // Checking Creation Object Output
-    // console.log("Creation Object:\n", creationObject);
     
     //Name check------------------
     // The underscores accessing the object variable is concerning, look into this later...

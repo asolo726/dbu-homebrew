@@ -32,10 +32,11 @@ class Awakening {
 
   toJson(){
     const headJson = this._head.toJson();
+    const grandAwakeningJson = this._grandAwakening.toJson();
     return{
       head: headJson,
       traits: this._traits.map(trait => trait.toJson()),
-      grandAwakening: this._grandAwakening
+      grandAwakening: grandAwakeningJson,
     }
   }
 }

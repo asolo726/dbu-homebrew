@@ -7,8 +7,6 @@ const SLUG_PATTERN = /^(\w+[-]?)+$/;
 //This Regex pattern checks that a url search only contains alphanumerical characters and a -
 //Example: "Super-Saiyan-3" is a match. "{GetUsers} is not a match."
 //This site is very helpful: https://regex101.com
-export const pattern = /^(\w+[-]?)+$/;
-
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -66,7 +64,7 @@ export async function generateMetadata({ params }) {
 export default async function Page({ params }) {
   const { slug } = await params;
 
-  if (pattern.test(slug) === false) {
+  if (SLUG_PATTERN.test(slug) === false) {
     return (
       <div className="flex flex-col justify-center">
         <h1>

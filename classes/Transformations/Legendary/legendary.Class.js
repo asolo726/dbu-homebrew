@@ -1,11 +1,11 @@
 class Legendary {
-  constructor({
+  constructor(
     head,
     traits = [],
-    masteryTrait,
-    legendaryTrait,
+    masteryTrait =[],
+    legendaryTrait = [],
     transformations = [],
-  } = {}) {
+  ) {
     this._head = head;
     this._traits = traits;
     this._masteryTrait = masteryTrait;
@@ -46,6 +46,16 @@ class Legendary {
   }
   set transformations(value) {
     this._transformations = value;
+  }
+
+  toJson() {
+    return {
+      head: this._head.toJson(),
+      traits: this._traits.map(trait => trait.toJson()),
+      masteryTrait: this._masteryTrait.map(trait => trait.toJson()),
+      legendaryTrait: this._legendaryTrait.map(trait => trait.toJson()),
+      transformations: this._transformations.map(trait => trait.toJson()),
+    };
   }
 }
 

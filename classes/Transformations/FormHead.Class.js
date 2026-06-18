@@ -4,8 +4,9 @@ class FormHead extends Head {
     title,
     banner = "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp",
     desc = "",
-    bannerAuthor = "",
     author = "",
+    authorID = "",
+    bannerAuthor = "",
     raceReq = "Any Race",
     preReq = "N/A",
     tier = "1",
@@ -14,8 +15,7 @@ class FormHead extends Head {
     transformationType,
     identity,
   } = {}) {
-    super(title, banner, desc, bannerAuthor);
-    this._author = author;
+    super(title, banner, desc, author, authorID, bannerAuthor);
     this._raceReq = raceReq;
     this._preReq = preReq;
     this._tier = tier;
@@ -25,12 +25,6 @@ class FormHead extends Head {
     this._identity = identity;
   }
 
-  get author() {
-    return this._author;
-  }
-  set author(value) {
-    this._author = value;
-  }
   get raceReq() {
     return this._raceReq;
   }

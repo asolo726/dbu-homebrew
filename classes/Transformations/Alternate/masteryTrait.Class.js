@@ -31,6 +31,14 @@ class MasteryTrait {
   set tables(value) {
     this._tables = value;
   }
+  toJson() {
+    return {
+      title: this._title,
+      desc: this._desc,
+      abilities: this._abilities,
+      tables: this._tables,
+    };
+  }
 }
 
 export default MasteryTrait;

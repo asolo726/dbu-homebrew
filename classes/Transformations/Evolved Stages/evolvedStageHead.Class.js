@@ -15,7 +15,7 @@ class EvolvedStageHead extends FormHead {
     evolvedStageType,
     transformationType = "Form",
     formType,
-    identity = "Evolved Stage"
+    identity = "EvolvedStage"
   } = {}) {
     super({
       title: title,
@@ -31,9 +31,9 @@ class EvolvedStageHead extends FormHead {
       transformationType: transformationType,
       identity: identity
     });
-    ((this.evolvedStageType = evolvedStageType),
-      (this._stress = stress),
-      (this._formType = formType));
+    this._evolvedStageType = evolvedStageType,
+    this._stress = stress,
+    this._formType = formType;
   }
 
   get evolvedStageType() {
@@ -58,6 +58,27 @@ class EvolvedStageHead extends FormHead {
 
   get formType() {
     return this._formType;
+  }
+
+  toJson(){
+    return{
+      title: this._title,
+      banner: this._banner,
+      desc: this._desc,
+      bannerAuthor: this._bannerAuthor,
+      author: this._author,
+      raceReq: this._raceReq,
+      preReq: this._preReq,
+      tier: this._tier,
+      aspects: this._aspects,
+      attributeModifiers: this._attributeModifiers,
+      transformationType: this._transformationType,
+      formType: this._formType,
+      identity: this._identity,
+      stress: this._stress,
+      evolvedStageType: this._evolvedStageType,
+      keyName: this._keyName
+    }
   }
 }
 

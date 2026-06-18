@@ -58,6 +58,26 @@ class EnhancementHead extends FormHead {
   set initialEnhancement(value) {
     this._initialEnhancement = value;
   }
+  toJson(){
+    return{
+      title: this._title,
+      banner: this._banner,
+      desc: this._desc,
+      bannerAuthor: this._bannerAuthor,
+      author: this._author,
+      raceReq: this._raceReq,
+      preReq: this._preReq,
+      tier: this._tier,
+      aspects: this._aspects,
+      attributeModifiers: this._attributeModifiers,
+      transformationType: this._transformationType,
+      enhancementType: this._enhancementType,
+      initialEnhancement: this._initialEnhancement,
+      stress: this._stress,
+      keyName: this._keyName,
+      identity: this._identity
+    }
+  }
 }
 
 export default EnhancementHead;

@@ -11,12 +11,20 @@ export default function Create({ submitForm }) {
     const [creationName, setCreationName] = useState("");
     const [formResult, setFormResult] = useState("");
     const router = useRouter();
+    const SLUG_PATTERN = /^(\w?[ -]?)+$/  //Only letters, spaces, and dashes. 
+
     const handleFormSubmit = async () => {
         const result = await submitForm(selectedCreationOption, creationName);
         setFormResult(result.result);
         if (result.result === "Success") {
             const newContentUrl = creationName.replaceAll(" ", "-").toLowerCase()
             router.push(`/${newContentUrl}`);
+        }
+    };
+
+    const onChange = (e) => {
+        if(SLUG_PATTERN.test(e.target.value)){
+            setCreationName(e.target.value);
         }
     };
 
@@ -82,7 +90,7 @@ export default function Create({ submitForm }) {
                         type="text"
                         placeholder="Creation Name"
                         value={creationName}
-                        onChange={(e) => setCreationName(e.target.value)}
+                        onChange={onChange}
                     />
                 </div>
                 <div className="flex justify-center">

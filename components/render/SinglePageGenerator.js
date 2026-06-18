@@ -32,7 +32,7 @@ export default function SinglePageGenerator({ content }) {
           <LegendaryRenderPage content={content} />
         </div>
       );
-    case "Evolved Stage":
+    case "EvolvedStage":
       return (
         <div className={pageRenderStyle}>
           <EvolvedStageRenderPage content={content} />

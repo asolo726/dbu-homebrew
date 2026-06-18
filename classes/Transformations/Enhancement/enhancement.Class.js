@@ -23,6 +23,14 @@ class Enhancement {
   set burstLimit(value) {
     this._burstLimit = value;
   }
+  toJson() {
+    const headJson = this._head.toJson();
+    return {
+      head: headJson,
+      traits: this._traits.map(trait => trait.toJson()),
+      burstLimit: this._burstLimit.map(burstLimit => burstLimit.toJson()),
+    };
+  }
 }
 
 export default Enhancement;
