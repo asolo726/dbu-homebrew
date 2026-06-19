@@ -42,7 +42,10 @@ export default function Head({ Form }) {
       return false;
     }
   };
-  const imageSrc = Form.head.banner != "" ? Form.head.banner : "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp";
+  const imageSrc =
+    Form.head.banner != ""
+      ? Form.head.banner
+      : "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp";
   return (
     <div className="grow">
       <h1 className="text-dbu-header text-[2em] sm:text-[3em] font-bold text-center mb-4 tracking-wide">

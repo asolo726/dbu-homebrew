@@ -1,5 +1,6 @@
 import SinglePageGenerator from "../../components/render/SinglePageGenerator.js";
 import searchContent from "../api/searchContent/route.js";
+import checkToggle from "../api/toggles/route.js";
 
 const SITE_URL = "https://dbu-homebrew.vercel.app";
 const SLUG_PATTERN = /^(\w+[-]?)+$/;
@@ -10,6 +11,11 @@ const SLUG_PATTERN = /^(\w+[-]?)+$/;
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
+  const fail_return = {
+      title: "Content Not Found",
+      description:
+        "The content you are looking for does not exist or has not been published yet.",
+    };
 
   if (!SLUG_PATTERN.test(slug)) {
     return { title: "Invalid URL" };
@@ -18,11 +24,7 @@ export async function generateMetadata({ params }) {
   const searchResult = await searchContent(slug);
 
   if (searchResult.status === "failed") {
-    return {
-      title: "Content Not Found",
-      description:
-        "The content you are looking for does not exist or has not been published yet.",
-    };
+    return fail_return;
   }
 
   const siteName = "DBU: The Homebrew Galaxy";
@@ -31,6 +33,17 @@ export async function generateMetadata({ params }) {
   const description = result.head.desc;
   const image = result.head.banner || `${SITE_URL}/whosthatzfighter.webp`;
   const url = `${SITE_URL}/${result.head.keyName}`;
+  const toggle = result.head.toggle;
+
+  try {
+    const toggleStatus = await checkToggle(toggle);
+    if (!toggleStatus) {
+          return fail_return;
+        }
+  } catch (error) {
+      console.error("Error checking toggle:", error);
+      return fail_return;
+  }
 
   return {
     title,
@@ -85,7 +98,11 @@ export default async function Page({ params }) {
   }
 
   const searchResult = await searchContent(slug);
-  if (searchResult.status === "failed") {
+  const toggle = searchResult.content[0].head.toggle;
+  let toggleStatus = await checkToggle(toggle);
+  
+  // If search fails or toggle is off, return a page not found message.
+  if (searchResult.status === "failed" || (toggle && !toggleStatus)) {
     return (
       <div className="flex flex-col justify-center">
         <h1>

@@ -16,6 +16,8 @@ export default function ProgressBoard({ progressData }) {
   // State for dropdown toggles - track which bars have open dropdowns
   const [openDropdowns, setOpenDropdowns] = useState({});
 
+  const [hideCompleted, setHideCompleted] = useState(false);
+
   const toggleDropdown = (label) => {
     setOpenDropdowns((prev) => ({
       ...prev,
@@ -101,9 +103,9 @@ export default function ProgressBoard({ progressData }) {
   const formattedCompletionDate = `${monthNames[estimatedCompletionDate.getMonth()]} ${estimatedCompletionDate.getDate()}, ${estimatedCompletionDate.getFullYear()}`;
 
   // Sort bars by progress (lowest first, so highest appears at bottom)
-  const sortedBars = [...progressBars].sort(
-    (a, b) => a.currentProgress - b.currentProgress,
-  );
+  const sortedBars = [...progressBars]
+    .sort((a, b) => a.currentProgress - b.currentProgress)
+    .filter((bar) => !hideCompleted || bar.currentProgress < 100);
 
   // Calculate overall progress
   const totalProgress = progressBars.reduce(
@@ -115,7 +117,7 @@ export default function ProgressBoard({ progressData }) {
 
   return (
     <div className="p-6 w-full max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">DBU Update Progress Tracker</h1>
+      <h1 className="text-3xl font-bold mb-8">DBU Unofficial Update Progress Tracker</h1>
 
       {/* Overall Progress Bar */}
       <div className="mb-12">
@@ -165,7 +167,7 @@ export default function ProgressBoard({ progressData }) {
             </div>
           </div>
 
-          <div className="mt-6 pt-6 border-t border-gray-700">
+          {/*<div className="mt-6 pt-6 border-t border-gray-700">
             <p className="text-gray-400 text-base mb-2">
               Estimated Time until Update is Complete
             </p>
@@ -173,8 +175,22 @@ export default function ProgressBoard({ progressData }) {
               {estimatedDaysRemaining} days
             </p>
             <p className="text-gray-500 text-sm">({formattedCompletionDate})</p>
-          </div>
+          </div>*/}
         </div>
+      </div>
+
+      {/* Hide Completed Toggle */}
+      <div className="flex justify-end mb-4">
+        <button
+          onClick={() => setHideCompleted((prev) => !prev)}
+          className={`px-4 py-2 rounded-lg font-mono text-sm transition-colors ${
+            hideCompleted
+              ? "bg-yellow-500 text-black hover:bg-yellow-400"
+              : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+          }`}
+        >
+          {hideCompleted ? "Show Completed" : "Hide Completed"}
+        </button>
       </div>
 
       {/* Individual Progress Bars - sorted */}
@@ -191,7 +207,7 @@ export default function ProgressBoard({ progressData }) {
           />
           {openDropdowns[bar.label] && (
             <div className="ml-6 mb-4 bg-gray-900 rounded-lg p-4">
-              {renderPageProgressItems(bar.pageProgress)}
+              {renderPageProgressItems(bar.pageProgress, 0, hideCompleted)}
             </div>
           )}
         </div>

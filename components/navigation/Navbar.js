@@ -40,12 +40,18 @@ export default function Navbar({ session }) {
 
   const extrasOptions = [
     { text: "0.9.3 Update Tracker", link: "/progress-tracker" },
-    { text: "DBU Race Tier List", link: "https://tiermaker.com/create/dbu-races-but-with-subraces-99065"},
-    { text: "DM Screen Sheet", link: "https://docs.google.com/spreadsheets/d/1SelN3jPptLpu0My1HaEkrIWBfASN0DMvCdiwouFoJRc/edit?usp=sharing"}
-  ]
+    {
+      text: "DBU Race Tier List",
+      link: "https://tiermaker.com/create/dbu-races-but-with-subraces-99065",
+    },
+    {
+      text: "DM Screen Sheet",
+      link: "https://docs.google.com/spreadsheets/d/1SelN3jPptLpu0My1HaEkrIWBfASN0DMvCdiwouFoJRc/edit?usp=sharing",
+    },
+  ];
 
   const navOptions = [
-    { text: "Extras", link: "", list: extrasOptions},
+    { text: "Extras", link: "", list: extrasOptions },
     //{ text: "0.9.3 Update Tracker", link: "/home/progress-tracker" },
     //{ text: "Transformations", link: "", list: transformationOptions },
     //{ text: "Player", link: "", list: playerOptions },
@@ -60,7 +66,10 @@ export default function Navbar({ session }) {
   }
   const desktopNavMenu = () => {
     return (
-      <div id="innerDesktopNavMenu" className="flex flex-row place-content-end items-center">
+      <div
+        id="innerDesktopNavMenu"
+        className="flex flex-row place-content-end items-center"
+      >
         {" "}
         {/* This needs to be changed to a recursive method so you can have submenus */}
         {navOptions.map((item, key) => (

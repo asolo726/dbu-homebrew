@@ -1,7 +1,7 @@
 import { auth } from "../../../auth";
 import clientPromise from "../../../lib/mongoDBClient";
 /**
- * Uploads the content provided to the database. 
+ * Uploads the content provided to the database.
  * Determines what collection to use based on the content.identity value
  * 
  * @param The Object to be uploaded

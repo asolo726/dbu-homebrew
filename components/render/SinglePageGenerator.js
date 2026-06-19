@@ -12,7 +12,8 @@ import RaceRenderPage from "./Race";
  */
 
 export default function SinglePageGenerator({ content }) {
-  const pageRenderStyle = "flex flex-col flex-col-1 w-full max-w-5xl justify-center content-center";
+  const pageRenderStyle =
+    "flex flex-col flex-col-1 w-full max-w-5xl justify-center content-center";
   switch (content.head.identity) {
     case "Awakening":
       return (

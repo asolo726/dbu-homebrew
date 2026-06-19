@@ -2,13 +2,13 @@ import ProgressDataServer from "../../components/progress-bar/ProgressDataServer
 
 export async function generateMetadata() {
   return {
-    title: "DBU 0.9.3 Update Progress Tracker",
+    title: "DBU 0.9.3 Unofficial Update Progress Tracker",
     description:
       "A comprehensive progress tracker for the DBU 0.9.3 update, showcasing the current status of page updates, new content additions, and estimated time until completion.",
     openGraph: {
-      title: "DBU 0.9.3 Update Progress Tracker",
+      title: "DBU 0.9.3 Unofficial Update Progress Tracker",
       description:
-        "A comprehensive progress tracker for the DBU 0.9.3 update, showcasing the current status of page updates, new content additions, and estimated time until completion.",
+        "An unofficial, comprehensive progress tracker for the DBU 0.9.3 update, showcasing the current status of page updates, new content additions, and estimated time until completion.",
       images:
         "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/just_chilling_and_watching_the_progress.webp",
       type: "website",
