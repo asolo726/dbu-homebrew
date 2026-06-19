@@ -16,6 +16,8 @@ export default function ProgressBoard({ progressData }) {
   // State for dropdown toggles - track which bars have open dropdowns
   const [openDropdowns, setOpenDropdowns] = useState({});
 
+  const [hideCompleted, setHideCompleted] = useState(false);
+
   const toggleDropdown = (label) => {
     setOpenDropdowns((prev) => ({
       ...prev,
@@ -101,9 +103,9 @@ export default function ProgressBoard({ progressData }) {
   const formattedCompletionDate = `${monthNames[estimatedCompletionDate.getMonth()]} ${estimatedCompletionDate.getDate()}, ${estimatedCompletionDate.getFullYear()}`;
 
   // Sort bars by progress (lowest first, so highest appears at bottom)
-  const sortedBars = [...progressBars].sort(
-    (a, b) => a.currentProgress - b.currentProgress,
-  );
+  const sortedBars = [...progressBars]
+    .sort((a, b) => a.currentProgress - b.currentProgress)
+    .filter((bar) => !hideCompleted || bar.currentProgress < 100);
 
   // Calculate overall progress
   const totalProgress = progressBars.reduce(
@@ -177,6 +179,20 @@ export default function ProgressBoard({ progressData }) {
         </div>
       </div>
 
+      {/* Hide Completed Toggle */}
+      <div className="flex justify-end mb-4">
+        <button
+          onClick={() => setHideCompleted((prev) => !prev)}
+          className={`px-4 py-2 rounded-lg font-mono text-sm transition-colors ${
+            hideCompleted
+              ? "bg-yellow-500 text-black hover:bg-yellow-400"
+              : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+          }`}
+        >
+          {hideCompleted ? "Show Completed" : "Hide Completed"}
+        </button>
+      </div>
+
       {/* Individual Progress Bars - sorted */}
       {sortedBars.map((bar, index) => (
         <div key={index} className="mb-4">
@@ -191,7 +207,7 @@ export default function ProgressBoard({ progressData }) {
           />
           {openDropdowns[bar.label] && (
             <div className="ml-6 mb-4 bg-gray-900 rounded-lg p-4">
-              {renderPageProgressItems(bar.pageProgress)}
+              {renderPageProgressItems(bar.pageProgress, 0, hideCompleted)}
             </div>
           )}
         </div>
