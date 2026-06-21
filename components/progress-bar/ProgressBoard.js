@@ -54,6 +54,10 @@ export default function ProgressBoard({ progressData }) {
     });
   }, [data]);
 
+  const nonHomebrewBars = progressBars.filter(
+    (bar) => !bar.label.toLowerCase().includes("homebrew"),
+  );
+
   let totalPages = 0;
   let completedPages = 0;
   let newContentCount = 0;
@@ -71,6 +75,20 @@ export default function ProgressBoard({ progressData }) {
   });
 
   const pagesLeftToUpdate = totalPages - completedPages;
+
+  let totalPagesNoHomebrew = 0;
+  let completedPagesNoHomebrew = 0;
+  nonHomebrewBars.forEach((bar) => {
+    const { completed, total } = countAllItems(bar.pageProgress);
+    let override = null;
+    try {
+      bar.pageCountOverride >= 0 ? (override = bar.pageCountOverride) : null;
+    } catch {}
+    totalPagesNoHomebrew += override ? override : total;
+    completedPagesNoHomebrew += override ? override : completed;
+  });
+
+  const pagesLeftNoHomebrew = totalPagesNoHomebrew - completedPagesNoHomebrew;
 
   // Calculate days since update began (October 13, 2025)
   const updateStartDate = new Date(2025, 9, 13); // October 13, 2025
@@ -107,13 +125,15 @@ export default function ProgressBoard({ progressData }) {
     .sort((a, b) => a.currentProgress - b.currentProgress)
     .filter((bar) => !hideCompleted || bar.currentProgress < 100);
 
-  // Calculate overall progress
-  const totalProgress = progressBars.reduce(
+  // Calculate overall progress (excluding Homebrew — not part of the main update)
+  const totalProgress = nonHomebrewBars.reduce(
     (sum, bar) => sum + bar.currentProgress,
     0,
   );
-  const maxTotalProgress = progressBars.length * 100;
-  const overallProgress = Math.round((totalProgress / maxTotalProgress) * 100);
+  const maxTotalProgress = nonHomebrewBars.length * 100;
+  const overallProgress = maxTotalProgress > 0
+    ? Math.round((totalProgress / maxTotalProgress) * 100)
+    : 0;
 
   return (
     <div className="p-6 w-full max-w-4xl mx-auto">
@@ -154,9 +174,19 @@ export default function ProgressBoard({ progressData }) {
               </p>
             </div>
             <div>
-              <p className="text-gray-400">Pages Left to Update</p>
+              <div className="flex items-center justify-center gap-1">
+                <p className="text-gray-400">Pages Left to Update</p>
+                <div className="relative group">
+                  <span className="text-gray-500 cursor-help text-sm select-none">ⓘ</span>
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 bg-gray-800 border border-gray-600 text-gray-200 text-xs rounded-lg p-3 shadow-xl z-10 text-left pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
+                    <p><strong className="text-white">X</strong> excludes the Homebrew progress bar. Homebrew content is not considered part of the 0.9.3 update, so it is omitted from the primary count and the overall progress bar.</p>
+                    <p className="mt-2"><strong className="text-white">Y</strong> is the total pages left across all categories, Homebrew included.</p>
+                  </div>
+                </div>
+              </div>
               <p className="text-yellow-400 font-bold text-2xl">
-                {pagesLeftToUpdate}
+                {pagesLeftNoHomebrew}{" "}
+                <span className="text-gray-500 font-normal text-lg">({pagesLeftToUpdate})</span>
               </p>
             </div>
             <div>
