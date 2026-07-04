@@ -10,7 +10,7 @@ export default function AddendumBox({
   abilities,
   traits, // optional array of { title, desc, abilities } for multi-trait boxes
 }) {
-  const [menuState, setMenuState] = useState(true); //True = Show, False = Hide
+  const [menuState, setMenuState] = useState(false); //True = Show, False = Hide
 
   return (
     <div className="border-1 border-dbu-header">

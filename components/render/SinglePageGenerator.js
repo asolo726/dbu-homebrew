@@ -5,62 +5,50 @@ import EvolvedStageRenderPage from "./EvolvedStage";
 import EnhancementRenderPage from "./Enhancement";
 import FactorRenderPage from "./Factor";
 import RaceRenderPage from "./Race";
+import CommentSection from "../comments/CommentSection";
+import { auth } from "../../auth";
 
-/**
- * Handles generating one page from the [slug] page request. Decides which render method to use depending on the transformationType received.
- * @returns
- */
+export default async function SinglePageGenerator({ content }) {
+  const session = await auth();
 
-export default function SinglePageGenerator({ content }) {
   const pageRenderStyle =
     "flex flex-col flex-col-1 w-full max-w-5xl justify-center content-center";
+
+  let pageContent;
   switch (content.head.identity) {
     case "Awakening":
-      return (
-        <div className={pageRenderStyle}>
-          <AwakeningRenderPage content={content} />
-        </div>
-      );
+      pageContent = <AwakeningRenderPage content={content} />;
+      break;
     case "Alternate":
-      return (
-        <div className={pageRenderStyle}>
-          <AlternateRenderPage content={content} />
-        </div>
-      );
+      pageContent = <AlternateRenderPage content={content} />;
+      break;
     case "Legendary":
-      return (
-        <div className={pageRenderStyle}>
-          <LegendaryRenderPage content={content} />
-        </div>
-      );
+      pageContent = <LegendaryRenderPage content={content} />;
+      break;
     case "Evolved Stage":
-      return (
-        <div className={pageRenderStyle}>
-          <EvolvedStageRenderPage content={content} />
-        </div>
-      );
+      pageContent = <EvolvedStageRenderPage content={content} />;
+      break;
     case "Enhancement":
-      return (
-        <div className={pageRenderStyle}>
-          <EnhancementRenderPage content={content} />
-        </div>
-      );
+      pageContent = <EnhancementRenderPage content={content} />;
+      break;
     case "Factor":
-      return (
-        <div className={pageRenderStyle}>
-          <FactorRenderPage content={content} />
-        </div>
-      );
+      pageContent = <FactorRenderPage content={content} />;
+      break;
     case "Race":
-      return (
-        <div className={pageRenderStyle}>
-          <RaceRenderPage content={content} />
-        </div>
-      );
+      pageContent = <RaceRenderPage content={content} />;
+      break;
     case "Temp":
       return <></>;
     default:
       return <>Something went wrong.</>;
-      break;
   }
+
+  return (
+    <div className={pageRenderStyle}>
+      {pageContent}
+      <div className="px-4 pb-16">
+        <CommentSection pageKey={content.head.keyName} session={session} />
+      </div>
+    </div>
+  );
 }
