@@ -215,7 +215,6 @@ export default function SettingsClient({ user, pageData }) {
                     tag={entry.head.tag}
                     keyName={entry.head.keyName}
                     upvotes={entry.head.upvotes ?? 0}
-                    downvotes={entry.head.downvotes ?? 0}
                     views={entry.head.views ?? 0}
                   />
                 ))}

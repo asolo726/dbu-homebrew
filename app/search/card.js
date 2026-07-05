@@ -16,7 +16,6 @@ export default function Card({
   tag,
   keyName,
   upvotes = 0,
-  downvotes = 0,
   views = 0,
 }) {
   const pageTypeDisplay = {
@@ -103,7 +102,6 @@ export default function Card({
               <PageVoteButtons
                 keyName={keyName}
                 initialUpvotes={upvotes}
-                initialDownvotes={downvotes}
                 small
               />
               <span className="flex items-center gap-1 text-gray-500 text-[0.6rem]">

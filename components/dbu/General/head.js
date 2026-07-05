@@ -87,7 +87,6 @@ export default function Head({ Form }) {
         <PageVoteButtons
           keyName={Form.head.keyName}
           initialUpvotes={Form.head.upvotes ?? 0}
-          initialDownvotes={Form.head.downvotes ?? 0}
         />
       </div>
       <Tooltip id="art-credit-tooltip" />
