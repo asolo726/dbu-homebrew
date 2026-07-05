@@ -10,6 +10,13 @@
   --color-dbu-bg3: #1f1f1f;
   --color-dbu-pos-aspect: #4caf50;
   --color-dbu-neg-aspect: #f44336;
+  --color-page-awakening: #a855f7;
+  --color-page-race: #22c55e;
+  --color-page-factor: #22c55e;
+  --color-page-enhancement: #06b6d4;
+  --color-page-alternate: #eab308;
+  --color-page-legendary: #ef4444;
+  --color-page-evolved-stage: #9f2b68;
 }
 
 :root {
@@ -52,23 +59,23 @@ body {
 }
 
 .card-glow[data-page-type="awakening"] {
-  --card-color: #a855f7;
+  --card-color: var(--color-page-awakening);
 }
 .card-glow[data-page-type="race"] {
-  --card-color: #22c55e;
+  --card-color: var(--color-page-race);
 }
 .card-glow[data-page-type="factor"] {
-  --card-color: #22c55e;
+  --card-color: var(--color-page-factor);
 }
 .card-glow[data-page-type="enhancement"] {
-  --card-color: #06b6d4;
+  --card-color: var(--color-page-enhancement);
 }
 .card-glow[data-page-type="alternate"] {
-  --card-color: #eab308;
+  --card-color: var(--color-page-alternate);
 }
 .card-glow[data-page-type="legendary"] {
-  --card-color: #ef4444;
+  --card-color: var(--color-page-legendary);
 }
 .card-glow[data-page-type="evolved stage"] {
-  --card-color: #9f2b68;
+  --card-color: var(--color-page-evolved-stage);
 }

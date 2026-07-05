@@ -3,18 +3,12 @@ import searchContent from "../api/searchContent/route.js";
 import checkToggle from "../api/toggles/route.js";
 import ViewTracker from "../../components/pages/ViewTracker.js";
 
-const SITE_URL = "https://dbu-homebrew.vercel.app";
+const SITE_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : "https://dbu-rpg-northgalaxy.vercel.app";
 const SLUG_PATTERN = /^(\w+[-]?)+$/;
 
-const PAGE_TYPE_COLORS = {
-  awakening: "#a855f7",
-  race: "#22c55e",
-  factor: "#22c55e",
-  enhancement: "#06b6d4",
-  alternate: "#eab308",
-  legendary: "#ef4444",
-  "evolved stage": "#9f2b68",
-};
+import pageTypeColors from "../../lib/pageTypeColors";
 
 //This Regex pattern checks that a url search only contains alphanumerical characters and a -
 //Example: "Super-Saiyan-3" is a match. "{GetUsers} is not a match."
@@ -46,7 +40,7 @@ export async function generateMetadata({ params }) {
   const image = result.head.banner || `${SITE_URL}/whosthatzfighter.webp`;
   const url = `${SITE_URL}/${result.head.keyName}`;
   const identity = (result.head.identity || "").toLowerCase();
-  const themeColor = PAGE_TYPE_COLORS[identity] || "#7c3aed";
+  const themeColor = pageTypeColors[identity] || "#7c3aed";
   const toggle = result.head.toggle;
 
   try {

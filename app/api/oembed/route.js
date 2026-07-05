@@ -1,4 +1,6 @@
-const SITE_URL = "https://dbu-homebrew.vercel.app";
+const SITE_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : "https://dbu-rpg-northgalaxy.vercel.app";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
