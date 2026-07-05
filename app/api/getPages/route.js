@@ -15,12 +15,27 @@ export default async function GET() {
   const result = {};
 
   try {
+    // Fetch all statistics in one query and build a keyName → stats map
+    const statsArr = await client
+      .db("Main")
+      .collection("statistics")
+      .find({}, { projection: { _id: 0 } })
+      .toArray();
+    const statsMap = Object.fromEntries(statsArr.map((s) => [s.keyName, s]));
+
     for await (const collection of collections) {
       const entries = await db
         .collection(collection.name)
         .find({}, { projection: { _id: 0 } })
         .toArray();
-      result[collection.name] = entries;
+
+      result[collection.name] = entries.map((entry) => {
+        const stats = statsMap[entry.head?.keyName];
+        entry.head.upvotes = stats?.upvotes ?? 0;
+        entry.head.downvotes = stats?.downvotes ?? 0;
+        entry.head.views = stats?.views ?? 0;
+        return entry;
+      });
     }
 
     return { Response: result };

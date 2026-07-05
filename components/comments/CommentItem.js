@@ -122,18 +122,19 @@ function formatTimestamp(ts) {
   return `${day} ${month} ${d.getFullYear()} ${hour}:${min}`;
 }
 
-function Avatar({ image, name, size }) {
+function Avatar({ image, name, size, isAuthor = false }) {
+  const strokeCls = isAuthor ? "ring-2 ring-white ring-offset-1 ring-offset-gray-950" : "";
   if (image) {
     return (
       <img
         src={image}
         alt={name}
         style={{ width: size, height: size, minWidth: size }}
-        className="rounded-full object-cover"
+        className={`rounded-full object-cover ${strokeCls}`}
       />
     );
   }
-  return <AnonAvatar size={size} />;
+  return <AnonAvatar size={size} className={strokeCls} />;
 }
 
 function InlineReplyInput({ onSubmit, onCancel }) {
@@ -298,7 +299,7 @@ function ReplyItem({ reply, commentId, parentReplyId = null, depth = 0 }) {
 
 // ── CommentItem ───────────────────────────────────────────────────────────────
 
-export default function CommentItem({ comment }) {
+export default function CommentItem({ comment, pageAuthor }) {
   const { myVote, castVote } = useVote(`c:${comment._id}`, {
     commentId: comment._id,
   });
@@ -328,14 +329,21 @@ export default function CommentItem({ comment }) {
     setShowReplyInput(false);
   };
 
+  const isAuthor = !!pageAuthor && comment.userName === pageAuthor;
+
   return (
     <div className="border-t border-gray-800 py-5">
       <div className="flex gap-4">
         <div className="flex flex-col items-center gap-1 shrink-0">
-          <Avatar image={comment.userImage} name={comment.userName} size={48} />
+          <Avatar image={comment.userImage} name={comment.userName} size={48} isAuthor={isAuthor} />
           <span className="text-gray-400 text-xs text-center max-w-15 wrap-break-word leading-tight">
             {comment.userName}
           </span>
+          {isAuthor && (
+            <span className="text-[0.55rem] text-gray-200 font-semibold tracking-wide uppercase border border-gray-400 rounded px-1.5 py-0.5">
+              Author
+            </span>
+          )}
         </div>
 
         <div className="flex-1 min-w-0">

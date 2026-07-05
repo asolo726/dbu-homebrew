@@ -50,11 +50,21 @@ export async function POST(request) {
   const sanitized = text.trim().slice(0, 2000);
   const session = await auth();
 
+  let displayName = "Anonymous Warrior";
+  if (session?.user?.email) {
+    const client = await clientPromise;
+    const userDoc = await client
+      .db() // use URI default — same db the MongoDBAdapter writes users to
+      .collection("users")
+      .findOne({ email: session.user.email }, { projection: { username: 1, name: 1 } });
+    displayName = userDoc?.name || "Anonymous Warrior";
+  }
+
   const comment = {
     pageKey,
     text: sanitized,
     userId: session?.user?.email || null,
-    userName: session?.user?.name || "Anonymous Warrior",
+    userName: displayName,
     userImage: session?.user?.image || null,
     timestamp: new Date(),
     upvotes: 0,

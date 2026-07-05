@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { aspectData } from "../../Aspects/aspectData";
 import { Tooltip } from "../../../lib/reactTooltip";
+import PageVoteButtons from "../../pages/PageVoteButtons";
 
 /**
  * Generates formatted HTML tooltip for an aspect
@@ -58,27 +59,38 @@ export default function Head({ Form }) {
       ) : (
         <></>
       )}
-      <Image
-        src={
-          Form.head.banner != ""
-            ? Form.head.banner
-            : "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp"
+      <div
+        className="justify-self-center max-w-full mb-3 cursor-default"
+        data-tooltip-id="art-credit-tooltip"
+        data-tooltip-content={
+          Form.head.bannerAuthor &&
+          Form.head.bannerAuthor !== "" &&
+          areAuthorAndBannerAuthorDifferent()
+            ? `Art Credit: ${Form.head.bannerAuthor}`
+            : undefined
         }
-        className="justify-self-center max-w-full mb-5"
-        width={1500}
-        height={1500}
-        alt=""
-        priority={true}
-      />
-      {Form.head.bannerAuthor != "" &&
-      Form.head.bannerAuthor &&
-      areAuthorAndBannerAuthorDifferent ? (
-        <p className="text-md md:text-lg text-center mb-3">
-          (Art Credit: {Form.head.bannerAuthor})
-        </p>
-      ) : (
-        <></>
-      )}
+      >
+        <Image
+          src={
+            Form.head.banner != ""
+              ? Form.head.banner
+              : "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp"
+          }
+          className="max-w-full"
+          width={1500}
+          height={1500}
+          alt=""
+          priority={true}
+        />
+      </div>
+      <div className="flex justify-center mb-5">
+        <PageVoteButtons
+          keyName={Form.head.keyName}
+          initialUpvotes={Form.head.upvotes ?? 0}
+          initialDownvotes={Form.head.downvotes ?? 0}
+        />
+      </div>
+      <Tooltip id="art-credit-tooltip" />
       <p className="text-pretty text-md tracking-wide md:text-lg whitespace-pre-wrap">
         {Form.head.desc}
       </p>

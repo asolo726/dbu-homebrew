@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import CommentItem from "./CommentItem";
 import AnonAvatar from "./AnonAvatar";
 
-export default function CommentSection({ pageKey, session }) {
+export default function CommentSection({ pageKey, session, pageAuthor }) {
   const [comments, setComments] = useState([]);
   const [total, setTotal] = useState(0);
   const [skip, setSkip] = useState(0);
@@ -115,7 +115,7 @@ export default function CommentSection({ pageKey, session }) {
       ) : (
         <>
           {comments.map((comment) => (
-            <CommentItem key={comment._id} comment={comment} />
+            <CommentItem key={comment._id} comment={comment} pageAuthor={pageAuthor} />
           ))}
           {comments.length < total && (
             <button

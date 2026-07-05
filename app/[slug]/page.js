@@ -1,6 +1,7 @@
 import SinglePageGenerator from "../../components/render/SinglePageGenerator.js";
 import searchContent from "../api/searchContent/route.js";
 import checkToggle from "../api/toggles/route.js";
+import ViewTracker from "../../components/pages/ViewTracker.js";
 
 const SITE_URL = "https://dbu-homebrew.vercel.app";
 const SLUG_PATTERN = /^(\w+[-]?)+$/;
@@ -132,6 +133,7 @@ export default async function Page({ params }) {
           href={oEmbedUrl}
           title={content.head.title}
         />
+        <ViewTracker keyName={content.head.keyName} />
         <SinglePageGenerator content={content} />
       </>
     );
