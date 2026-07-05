@@ -53,6 +53,12 @@ export default function CommentSection({ pageKey, session, pageAuthor }) {
         body: JSON.stringify({ pageKey, text: text.trim() }),
       });
       const newComment = await res.json();
+      // Mirror Reddit: auto-upvote your own comment
+      try {
+        const stored = JSON.parse(localStorage.getItem("dbu_comment_votes") || "{}");
+        stored[`c:${newComment._id}`] = "up";
+        localStorage.setItem("dbu_comment_votes", JSON.stringify(stored));
+      } catch {}
       setComments((prev) => [newComment, ...prev]);
       setTotal((t) => t + 1);
       setText("");
@@ -69,7 +75,7 @@ export default function CommentSection({ pageKey, session, pageAuthor }) {
 
       {/* Comment input */}
       <div className="flex gap-4 mb-8">
-        <div className="flex-shrink-0 pt-1">
+        <div className="shrink-0 pt-1">
           {user?.image ? (
             <img
               src={user.image}

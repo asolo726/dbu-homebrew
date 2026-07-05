@@ -60,14 +60,16 @@ export async function POST(request) {
     displayName = userDoc?.name || "Anonymous Warrior";
   }
 
+  const userId = session?.user?.email || null;
   const comment = {
     pageKey,
     text: sanitized,
-    userId: session?.user?.email || null,
+    userId,
     userName: displayName,
     userImage: session?.user?.image || null,
     timestamp: new Date(),
-    upvotes: 0,
+    upvotes: 1,
+    upvotedBy: userId ? [userId] : [],
     downvotes: 0,
     replies: [],
   };

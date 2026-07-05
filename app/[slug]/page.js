@@ -6,6 +6,16 @@ import ViewTracker from "../../components/pages/ViewTracker.js";
 const SITE_URL = "https://dbu-homebrew.vercel.app";
 const SLUG_PATTERN = /^(\w+[-]?)+$/;
 
+const PAGE_TYPE_COLORS = {
+  awakening: "#a855f7",
+  race: "#22c55e",
+  factor: "#22c55e",
+  enhancement: "#06b6d4",
+  alternate: "#eab308",
+  legendary: "#ef4444",
+  "evolved stage": "#9f2b68",
+};
+
 //This Regex pattern checks that a url search only contains alphanumerical characters and a -
 //Example: "Super-Saiyan-3" is a match. "{GetUsers} is not a match."
 //This site is very helpful: https://regex101.com
@@ -35,6 +45,8 @@ export async function generateMetadata({ params }) {
   const description = result.head.desc;
   const image = result.head.banner || `${SITE_URL}/whosthatzfighter.webp`;
   const url = `${SITE_URL}/${result.head.keyName}`;
+  const identity = (result.head.identity || "").toLowerCase();
+  const themeColor = PAGE_TYPE_COLORS[identity] || "#7c3aed";
   const toggle = result.head.toggle;
 
   try {
@@ -64,6 +76,9 @@ export async function generateMetadata({ params }) {
       title,
       description,
       images: [image],
+    },
+    other: {
+      "theme-color": themeColor,
     },
   };
 }
