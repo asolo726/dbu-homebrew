@@ -11,6 +11,7 @@ export default function NavbarSearch({ fullWidth = false }) {
   const [open, setOpen] = useState(false);
   const [pageTypes, setPageTypes] = useState([]);
   const [races, setRaces] = useState([]);
+  const [allTitles, setAllTitles] = useState(null);
   const inputRef = useRef(null);
 
   const toggle = (list, setList, value) =>
@@ -18,9 +19,22 @@ export default function NavbarSearch({ fullWidth = false }) {
       prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
     );
 
-  const submit = () => {
+  const submit = async () => {
+    const trimmed = query.trim();
+    if (trimmed) {
+      const res = await fetch(`/api/pages/exact-match?q=${encodeURIComponent(trimmed)}`);
+      const { keyName } = await res.json();
+      if (keyName) {
+        router.push(`/${keyName}`);
+        setOpen(false);
+        setQuery("");
+        setPageTypes([]);
+        setRaces([]);
+        return;
+      }
+    }
     const params = new URLSearchParams();
-    if (query) params.set("q", query);
+    if (trimmed) params.set("q", trimmed);
     if (pageTypes.length) params.set("pageTypes", pageTypes.join(","));
     if (races.length) params.set("races", races.join(","));
     router.push(`/search?${params.toString()}`);
@@ -45,7 +59,15 @@ export default function NavbarSearch({ fullWidth = false }) {
           ref={inputRef}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => setOpen(true)}
+          onFocus={() => {
+            setOpen(true);
+            if (allTitles === null) {
+              fetch("/api/pages/titles")
+                .then((r) => r.json())
+                .then(setAllTitles)
+                .catch(() => setAllTitles([]));
+            }
+          }}
           onBlur={() => setOpen(false)}
           onKeyDown={(e) => e.key === "Enter" && submit()}
           placeholder="Search..."
@@ -58,6 +80,32 @@ export default function NavbarSearch({ fullWidth = false }) {
           onMouseDown={(e) => e.preventDefault()}
           className="absolute top-full mt-2 right-0 bg-dbu-bg2 border border-dbu-line rounded-xl p-4 z-50 w-80 shadow-2xl"
         >
+          {query.trim() && allTitles?.length > 0 && (() => {
+            const q = query.trim().toLowerCase();
+            const suggestions = allTitles
+              .filter((t) => t.title.toLowerCase().includes(q))
+              .slice(0, 6);
+            return suggestions.length > 0 ? (
+              <div className="mb-4">
+                <p className="text-xs text-dbu-text/50 mb-1.5 uppercase tracking-wider">Pages</p>
+                {suggestions.map((t) => (
+                  <button
+                    key={t.keyName}
+                    onMouseDown={() => {
+                      router.push(`/${t.keyName}`);
+                      setOpen(false);
+                      setQuery("");
+                      setPageTypes([]);
+                      setRaces([]);
+                    }}
+                    className="block w-full text-left px-2 py-1.5 text-sm text-dbu-text hover:bg-dbu-line rounded transition-colors truncate"
+                  >
+                    {t.title}
+                  </button>
+                ))}
+              </div>
+            ) : null;
+          })()}
           <p className="text-xs text-dbu-text/50 mb-2 uppercase tracking-wider">
             Type
           </p>
