@@ -201,7 +201,7 @@ export default function SettingsClient({ user, pageData }) {
               >
                 {filteredEntries.map((entry, i) => (
                   <Card
-                    key={i}
+                    key={entry.head.keyName}
                     link={`/${entry.head.keyName}`}
                     imageUrl={entry.head.banner}
                     pageName={entry.head.title}
