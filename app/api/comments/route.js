@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import clientPromise from "../../../lib/mongoDBClient";
 import { auth } from "../../../auth";
-import { notifyPageAuthorNewComment } from "../../../lib/notifications";
 
 const COMMENTS_PER_PAGE = 20;
 
@@ -79,13 +78,6 @@ export async function POST(request) {
     const client = await clientPromise;
     const db = client.db("Main");
     const result = await db.collection("comments").insertOne(comment);
-
-    await notifyPageAuthorNewComment({
-      pageKey,
-      commenterEmail: userId,
-      commenterName: displayName,
-      commentText: sanitized,
-    });
 
     return NextResponse.json({
       ...comment,

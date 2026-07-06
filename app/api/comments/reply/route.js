@@ -3,7 +3,6 @@ import { ObjectId } from "mongodb";
 import { randomUUID } from "crypto";
 import clientPromise from "../../../../lib/mongoDBClient";
 import { auth } from "../../../../auth";
-import { notifyParentAuthorOnReply } from "../../../../lib/notifications";
 
 export async function POST(request) {
   const { commentId, parentReplyId, text } = await request.json();
@@ -45,14 +44,6 @@ export async function POST(request) {
         { $push: { replies: reply } }
       );
     }
-
-    await notifyParentAuthorOnReply({
-      commentId,
-      parentReplyId,
-      replierEmail: reply.userId,
-      replierName: reply.userName,
-      replyText: sanitized,
-    });
 
     return NextResponse.json(reply);
   } catch (error) {
