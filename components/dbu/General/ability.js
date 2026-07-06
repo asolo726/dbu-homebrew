@@ -80,8 +80,10 @@ export default function Ability({ abilityList = [{}], key }) {
             </ul>
           );
         } else if ("addendumBox" in item) {
+          const depth = "sublist" in item ? item.sublist : -1;
+          const marginLeft = depth >= 0 ? `${(depth + 1) * 2.5}rem` : undefined;
           return (
-            <ul key={key} className="list-disc ml-10">
+            <div key={key} style={marginLeft ? { marginLeft } : {}}>
               <AddendumBox
                 boxTitle={item.addendumBox.boxTitle}
                 title={item.addendumBox.title}
@@ -89,7 +91,7 @@ export default function Ability({ abilityList = [{}], key }) {
                 abilities={item.addendumBox.abilities}
                 traits={item.addendumBox.traits}
               />
-            </ul>
+            </div>
           );
         } else if ("table" in item) {
           const tableData = {

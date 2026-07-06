@@ -77,8 +77,8 @@ function useVote(voteKey, payload) {
 
 function VoteButtons({ myVote, upvotes, downvotes, onVote, small = false }) {
   const base = small
-    ? "flex items-center gap-1 text-xs border rounded px-2 py-0.5 transition-colors"
-    : "flex items-center gap-1 text-sm border rounded px-3 py-1 transition-colors";
+    ? "flex items-center gap-1 text-xs border rounded px-2 py-0.5 transition-colors cursor-pointer"
+    : "flex items-center gap-1 text-sm border rounded px-3 py-1 transition-colors cursor-pointer";
 
   // Each button is only disabled when the OTHER direction (or server-block) is active.
   // Clicking your own active vote un-votes it.
@@ -162,13 +162,13 @@ function InlineReplyInput({ onSubmit, onCancel }) {
         <button
           onClick={handleSubmit}
           disabled={submitting || !text.trim()}
-          className="text-amber-500 hover:text-amber-400 text-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="text-amber-500 hover:text-amber-400 text-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
         >
           Submit
         </button>
         <button
           onClick={onCancel}
-          className="text-gray-500 hover:text-gray-400 text-sm transition-colors"
+          className="text-gray-500 hover:text-gray-400 text-sm transition-colors cursor-pointer"
         >
           Cancel
         </button>
@@ -255,7 +255,7 @@ function ReplyItem({ reply, commentId, parentReplyId = null, depth = 0 }) {
                     setShowReplyInput((v) => !v);
                     setShowSubReplies(true);
                   }}
-                  className="text-amber-500 hover:text-amber-400 text-xs transition-colors"
+                  className="text-amber-500 hover:text-amber-400 text-xs transition-colors cursor-pointer"
                 >
                   ↩ Reply
                 </button>
@@ -284,7 +284,7 @@ function ReplyItem({ reply, commentId, parentReplyId = null, depth = 0 }) {
               {visibleSubReplies < subReplies.length && (
                 <button
                   onClick={() => setVisibleSubReplies((v) => v + 5)}
-                  className="text-amber-500 hover:text-amber-400 text-xs mt-2 transition-colors"
+                  className="text-amber-500 hover:text-amber-400 text-xs mt-2 transition-colors cursor-pointer"
                 >
                   Load more replies ({subReplies.length - visibleSubReplies} remaining)
                 </button>
@@ -366,7 +366,7 @@ export default function CommentItem({ comment, pageAuthor }) {
             {replies.length > 0 && (
               <button
                 onClick={() => setShowReplies((v) => !v)}
-                className="text-amber-500 hover:text-amber-400 text-sm transition-colors"
+                className="text-amber-500 hover:text-amber-400 text-sm transition-colors cursor-pointer"
               >
                 ↩ Replies ({replies.length})
               </button>
@@ -376,7 +376,7 @@ export default function CommentItem({ comment, pageAuthor }) {
                 setShowReplyInput((v) => !v);
                 setShowReplies(true);
               }}
-              className="text-amber-500 hover:text-amber-400 text-sm transition-colors"
+              className="text-amber-500 hover:text-amber-400 text-sm transition-colors cursor-pointer"
             >
               ↩ Reply
             </button>
@@ -402,7 +402,7 @@ export default function CommentItem({ comment, pageAuthor }) {
               {visibleReplies < replies.length && (
                 <button
                   onClick={() => setVisibleReplies((v) => v + 5)}
-                  className="text-amber-500 hover:text-amber-400 text-sm mt-3 transition-colors"
+                  className="text-amber-500 hover:text-amber-400 text-sm mt-3 transition-colors cursor-pointer"
                 >
                   Load more replies ({replies.length - visibleReplies} remaining)
                 </button>

@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 
 export default function ViewTracker({ keyName }) {
+
   useEffect(() => {
     fetch("/api/pages/views", {
       method: "POST",

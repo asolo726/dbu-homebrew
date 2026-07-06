@@ -83,11 +83,14 @@ export default function Head({ Form }) {
           priority={true}
         />
       </div>
-      <div className="flex justify-center mb-5">
+      <div className="flex flex-col items-center justify-center mr-5 mb-3">
         <PageVoteButtons
           keyName={Form.head.keyName}
           initialUpvotes={Form.head.upvotes ?? 0}
-        />
+        /> 
+        <p className="italic text-sm text-gray-500">
+          Like this homebrew? Give it an upvote!
+        </p>
       </div>
       <Tooltip id="art-credit-tooltip" />
       <p className="text-pretty text-md tracking-wide md:text-lg whitespace-pre-wrap">

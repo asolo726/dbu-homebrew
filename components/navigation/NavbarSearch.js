@@ -3,21 +3,7 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { FiSearch } from "react-icons/fi";
 import { BASE_RACES, PAGE_TYPES } from "../search/searchConstants";
-
-function Chip({ label, active, onMouseDown }) {
-  return (
-    <button
-      onMouseDown={onMouseDown}
-      className={`px-2 py-0.5 rounded-full text-xs border transition-colors ${
-        active
-          ? "bg-dbu-header text-dbu-bg border-dbu-header font-semibold"
-          : "border-dbu-line text-dbu-text hover:border-dbu-header"
-      }`}
-    >
-      {label}
-    </button>
-  );
-}
+import Chip from "../search/Chip";
 
 export default function NavbarSearch({ fullWidth = false }) {
   const router = useRouter();
@@ -51,7 +37,7 @@ export default function NavbarSearch({ fullWidth = false }) {
       >
         <button
           onClick={submit}
-          className="text-dbu-text/70 hover:text-dbu-text shrink-0"
+          className="text-dbu-text/70 hover:text-dbu-text shrink-0 cursor-pointer"
         >
           <FiSearch size={14} />
         </button>
@@ -82,6 +68,7 @@ export default function NavbarSearch({ fullWidth = false }) {
                 label={label}
                 active={pageTypes.includes(key)}
                 onMouseDown={() => toggle(pageTypes, setPageTypes, key)}
+                className="px-2 py-0.5"
               />
             ))}
           </div>
@@ -95,6 +82,7 @@ export default function NavbarSearch({ fullWidth = false }) {
                 label={r}
                 active={races.includes(r)}
                 onMouseDown={() => toggle(races, setRaces, r)}
+                className="px-2 py-0.5"
               />
             ))}
           </div>

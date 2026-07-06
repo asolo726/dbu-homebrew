@@ -67,8 +67,8 @@ export default function PageVoteButtons({
 
   if (small) {
     const btnCls = voted
-      ? "border rounded px-1.5 py-0.5 transition-colors text-green-400 border-green-700 bg-green-950"
-      : "border rounded px-1.5 py-0.5 transition-colors text-gray-300 border-gray-700 hover:text-green-400";
+      ? "border rounded px-1.5 py-0.5 transition-colors text-green-400 border-green-700 bg-green-950 cursor-pointer"
+      : "border rounded px-1.5 py-0.5 transition-colors text-gray-300 border-gray-700 hover:text-green-400 cursor-pointer";
 
     return (
       <div className="flex items-center gap-1 text-xs">
@@ -80,10 +80,10 @@ export default function PageVoteButtons({
     );
   }
 
-  const base = "flex items-center gap-1 border rounded px-3 py-1 transition-colors text-sm";
+  const base = "flex items-center gap-1 border rounded px-3 py-1 transition-colors text-sm cursor-pointer";
   const upCls = voted
-    ? `${base} text-green-400 border-green-700 bg-green-950 drop-shadow-[0_0_8px_#22c55e]`
-    : `${base} text-gray-300 border-gray-700 hover:text-green-400`;
+    ? `${base} text-green-400 border-green-700 bg-green-950 drop-shadow-[0_0_8px_#22c55e] cursor-pointer`
+    : `${base} text-gray-300 border-gray-700 hover:text-green-400 cursor-pointer`;
 
   return (
     <div className="flex items-center gap-2">
