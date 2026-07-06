@@ -1,4 +1,5 @@
 import SinglePageGenerator from "../../components/render/SinglePageGenerator.js";
+import EditModeWrapper from "../../components/edit/EditModeWrapper.js";
 import searchContent from "../api/searchContent/route.js";
 import checkToggle from "../api/toggles/route.js";
 import ViewTracker from "../../components/pages/ViewTracker.js";
@@ -148,7 +149,7 @@ export default async function Page({ params }) {
     );
   }
   if (searchResult.content.length === 1) {
-    const content = searchResult.content[0];
+    const content = JSON.parse(JSON.stringify(searchResult.content[0]));
     const oEmbedUrl = `${SITE_URL}/api/oembed?url=${encodeURIComponent(`${SITE_URL}/${slug}`)}&title=${encodeURIComponent(content.head.title)}&author=${encodeURIComponent(content.head.author || "")}`;
     return (
       <>
@@ -158,8 +159,10 @@ export default async function Page({ params }) {
           href={oEmbedUrl}
           title={content.head.title}
         />
-        <ViewTracker keyName={content.head.keyName} />
-        <SinglePageGenerator content={content} />
+        <ViewTracker keyName={content.head.keyName} isAuthor={viewerName === pageAuthor} />
+        <EditModeWrapper canEdit={viewerName === pageAuthor} keyName={content.head.keyName}>
+          <SinglePageGenerator content={content} />
+        </EditModeWrapper>
       </>
     );
   }

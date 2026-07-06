@@ -13,13 +13,14 @@ export default function EnhancementRenderPage({ content }) {
             title={trait.title}
             desc={trait.desc}
             abilities={trait.abilities}
+            path={`traits.${key}`}
             key={key}
           />
         );
       })}
-      <BurstLimit burstLimit={content.burstLimit} />
+      <BurstLimit burstLimit={content.burstLimit} path="burstLimit" />
       {content.masteryTrait ? (
-        <MasteryTrait masteryTraitList={content.masteryTrait} />
+        <MasteryTrait masteryTraitList={content.masteryTrait} path="masteryTrait" />
       ) : (
         <></>
       )}
@@ -29,10 +30,10 @@ export default function EnhancementRenderPage({ content }) {
             Transcendent Trait
           </p>
           <Trait
-            title={transcendentTrait.title}
-            desc={transcendentTrait.desc}
-            abilities={transcendentTrait.abilities}
-            key={key}
+            title={content.transcendentTrait.title}
+            desc={content.transcendentTrait.desc}
+            abilities={content.transcendentTrait.abilities}
+            path="transcendentTrait"
           />
         </div>
       ) : (

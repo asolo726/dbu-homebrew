@@ -32,6 +32,7 @@ export default function RaceRenderPage({ content }) {
             title={trait.title}
             desc={trait.desc}
             abilities={trait.abilities}
+            path={`primaryTraits.${index}`}
           />
         );
       })}
@@ -43,13 +44,14 @@ export default function RaceRenderPage({ content }) {
             title={trait.title}
             desc={trait.desc}
             abilities={trait.abilities}
+            path={`secondaryTraits.${index}`}
           />
         );
       })}
       {hasSubraces ? (
-        content.subraces.map((subrace, index) => {
+        content.subraces.map((subrace, subraceIndex) => {
           return (
-            <div key={index}>
+            <div key={subraceIndex}>
               <p className={header2Style}>
                 {`${subrace.subraceName} Subrace Traits`}
               </p>
@@ -60,6 +62,7 @@ export default function RaceRenderPage({ content }) {
                     title={trait.title}
                     desc={trait.desc}
                     abilities={trait.abilities}
+                    path={`subraces.${subraceIndex}.traits.${index}`}
                   />
                 );
               })}

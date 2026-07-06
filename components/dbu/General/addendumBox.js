@@ -9,6 +9,7 @@ export default function AddendumBox({
   desc = "",
   abilities,
   traits, // optional array of { title, desc, abilities } for multi-trait boxes
+  path,
 }) {
   const [menuState, setMenuState] = useState(false); //True = Show, False = Hide
   const [isHovering, setIsHovering] = useState(false); // True = hovering, False = not hovering
@@ -42,10 +43,12 @@ export default function AddendumBox({
               title={trait.title}
               desc={trait.desc}
               abilities={trait.abilities}
+              path={path ? `${path}.traits.${i}` : undefined}
+              disableEditActions
             />
           ))
         ) : (
-          <Trait title={title} desc={desc} abilities={abilities} />
+          <Trait title={title} desc={desc} abilities={abilities} path={path} disableEditActions />
         )}
       </div>
     </div>
