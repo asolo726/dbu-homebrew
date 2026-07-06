@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "../../../../auth";
 import clientPromise from "../../../../lib/mongoDBClient";
+import { checkAndNotifyUpvoteMilestone } from "../../../../lib/notifications";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -77,6 +78,10 @@ export async function POST(request) {
         { $inc: { [field]: 1 } },
         { upsert: true }
       );
+    }
+
+    if (voteType === "up") {
+      await checkAndNotifyUpvoteMilestone({ keyName });
     }
 
     return NextResponse.json({ success: true });
