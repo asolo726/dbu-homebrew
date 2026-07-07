@@ -14,6 +14,7 @@ export default function AwakeningRenderPage({ content }) {
             title={trait.title}
             desc={trait.desc}
             abilities={trait.abilities}
+            path={`traits.${index}`}
           />
         );
       })}

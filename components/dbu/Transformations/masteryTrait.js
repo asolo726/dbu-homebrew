@@ -1,6 +1,7 @@
-import Ability from "../General/ability";
+import Trait from "../General/trait";
 import Table from "../General/table";
-export default function MasteryTrait({ masteryTraitList = [] }) {
+
+export default function MasteryTrait({ masteryTraitList = [], path }) {
   const hasMultipleMasteryTraits = masteryTraitList.length > 1;
   return (
     <div className="mt-10">
@@ -8,15 +9,13 @@ export default function MasteryTrait({ masteryTraitList = [] }) {
         {!hasMultipleMasteryTraits ? "MASTERY TRAIT" : "MASTERY TRAIT(S)"}
       </p>
       {masteryTraitList.map((trait, key) => (
-        <div key={key} className="flex-grow-1 mt-2">
-          <p className="text-dbu-text text-md md:text-lg text-left">
-            <span className="font-bold text-dbu-header">
-              {trait.title + (hasMultipleMasteryTraits ? ` (${key + 1})` : "")}:
-            </span>{" "}
-            {trait.desc}
-          </p>
-          <Ability abilityList={trait.abilities} />
-          {/* Is this table section even doing anything? Check later... */}
+        <div key={key}>
+          <Trait
+            title={trait.title}
+            desc={trait.desc}
+            abilities={trait.abilities}
+            path={path ? `${path}.${key}` : undefined}
+          />
           {trait.tables &&
             trait.tables.map((table, tKey) => (
               <div key={tKey} className="mt-5 mb-5">

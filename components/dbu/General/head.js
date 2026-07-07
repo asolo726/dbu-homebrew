@@ -1,11 +1,11 @@
+"use client";
 import Image from "next/image";
 import { aspectData } from "../../Aspects/aspectData";
 import { Tooltip } from "../../../lib/reactTooltip";
 import PageVoteButtons from "../../pages/PageVoteButtons";
+import EditableText from "../../edit/EditableText";
+import { useEditMode } from "../../edit/EditModeContext";
 
-/**
- * Generates formatted HTML tooltip for an aspect
- */
 const getAspectTooltip = (aspectName) => {
   const cleanName = aspectName.replace(/\s*\(.*?\)$/, "");
   const aspectInfo = aspectData[cleanName];
@@ -27,26 +27,28 @@ const getAspectTooltip = (aspectName) => {
   </div>`;
 };
 
-/**
- *
- * @returns Head of the page. Including Title, Banner, Requirements, and Stat Buff Table
- */
 export default function Head({ Form }) {
+  const { isEditing, pendingChanges } = useEditMode() || {};
   const requirementNameStyle = "font-bold text-dbu-header";
+
   const areAuthorAndBannerAuthorDifferent = () => {
     try {
       return !(
         Form.head.bannerAuthor.toLowerCase() === Form.head.author.toLowerCase()
       );
     } catch (e) {
-      // This is an easy way for accounting for cases where either bannerAuthor or author aren't present.
       return false;
     }
   };
+
   const imageSrc =
     Form.head.banner != ""
       ? Form.head.banner
       : "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp";
+
+  // Get current (possibly pending) value of tier for formatting
+  const currentTier = pendingChanges?.["head.tier"] ?? Form.head.tier;
+
   return (
     <div className="grow">
       <h1 className="text-dbu-header text-[2em] sm:text-[3em] font-bold text-center mb-4 tracking-wide">
@@ -71,11 +73,7 @@ export default function Head({ Form }) {
         }
       >
         <Image
-          src={
-            Form.head.banner != ""
-              ? Form.head.banner
-              : "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp"
-          }
+          src={imageSrc}
           className="max-w-full"
           width={1500}
           height={1500}
@@ -87,21 +85,21 @@ export default function Head({ Form }) {
         <PageVoteButtons
           keyName={Form.head.keyName}
           initialUpvotes={Form.head.upvotes ?? 0}
-        /> 
+        />
         <p className="italic text-sm text-gray-500">
           Like this homebrew? Give it an upvote!
         </p>
       </div>
       <Tooltip id="art-credit-tooltip" />
       <p className="text-pretty text-md tracking-wide md:text-lg whitespace-pre-wrap">
-        {Form.head.desc}
+        <EditableText path="head.desc" value={Form.head.desc} />
       </p>
       <ul className="list-disc ml-10 mt-3 text-md md:text-lg">
         {Form.head.raceReq ? (
           <li>
             <p>
               <span className={requirementNameStyle}>Racial Requirement:</span>{" "}
-              {Form.head.raceReq}
+              <EditableText path="head.raceReq" value={Form.head.raceReq} />
             </p>
           </li>
         ) : (
@@ -111,7 +109,7 @@ export default function Head({ Form }) {
           <li>
             <p>
               <span className={requirementNameStyle}>Evolved Stage Type:</span>{" "}
-              {Form.head.evolvedStageType}
+              <EditableText path="head.evolvedStageType" value={Form.head.evolvedStageType} />
             </p>
           </li>
         ) : (
@@ -121,7 +119,7 @@ export default function Head({ Form }) {
           <li>
             <p>
               <span className={requirementNameStyle}>Transformation Type:</span>{" "}
-              {Form.head.transformationType}
+              <EditableText path="head.transformationType" value={Form.head.transformationType} />
             </p>
           </li>
         ) : (
@@ -131,7 +129,7 @@ export default function Head({ Form }) {
           <li>
             <p>
               <span className={requirementNameStyle}>Form Type:</span>{" "}
-              {Form.head.formType}
+              <EditableText path="head.formType" value={Form.head.formType} />
             </p>
           </li>
         ) : (
@@ -141,7 +139,7 @@ export default function Head({ Form }) {
           <li>
             <p>
               <span className={requirementNameStyle}>Enhancement Type:</span>{" "}
-              {Form.head.enhancementType}
+              <EditableText path="head.enhancementType" value={Form.head.enhancementType} />
             </p>
           </li>
         ) : (
@@ -167,7 +165,7 @@ export default function Head({ Form }) {
           <li>
             <p>
               <span className={requirementNameStyle}>Awakening Type:</span>{" "}
-              {Form.head.awakeningType}
+              <EditableText path="head.awakeningType" value={Form.head.awakeningType} />
             </p>
           </li>
         ) : (
@@ -177,7 +175,7 @@ export default function Head({ Form }) {
           <li>
             <p>
               <span className={requirementNameStyle}>Awakening Origin:</span>{" "}
-              {Form.head.awakeningOrigin}
+              <EditableText path="head.awakeningOrigin" value={Form.head.awakeningOrigin} />
             </p>
           </li>
         ) : (
@@ -187,7 +185,7 @@ export default function Head({ Form }) {
           <li>
             <p>
               <span className={requirementNameStyle}>Maximum Factor:</span>{" "}
-              {Form.head.maxFactor}
+              <EditableText path="head.maxFactor" value={Form.head.maxFactor} />
             </p>
           </li>
         ) : (
@@ -197,7 +195,7 @@ export default function Head({ Form }) {
           <li>
             <p>
               <span className={requirementNameStyle}>Prerequisite(s): </span>{" "}
-              {Form.head.preReq}
+              <EditableText path="head.preReq" value={Form.head.preReq} />
             </p>
           </li>
         ) : (
@@ -209,7 +207,7 @@ export default function Head({ Form }) {
               <span className={requirementNameStyle}>
                 Transformation Line:{" "}
               </span>{" "}
-              {Form.head.transLine}
+              <EditableText path="head.transLine" value={Form.head.transLine} />
             </p>
           </li>
         ) : (
@@ -221,7 +219,7 @@ export default function Head({ Form }) {
               <span className={requirementNameStyle}>
                 Transformation Stage:{" "}
               </span>{" "}
-              {Form.head.transStage}
+              <EditableText path="head.transStage" value={Form.head.transStage} />
             </p>
           </li>
         ) : (
@@ -233,7 +231,7 @@ export default function Head({ Form }) {
               <span className={requirementNameStyle}>
                 Stress Test Requirement:{" "}
               </span>
-              {Form.head.stress}
+              <EditableText path="head.stress" value={Form.head.stress} />
             </p>
           </li>
         ) : (
@@ -245,7 +243,7 @@ export default function Head({ Form }) {
               <span className={requirementNameStyle}>
                 Maximum No of Stacks:{" "}
               </span>
-              {Form.head.maxStacks}
+              <EditableText path="head.maxStacks" value={Form.head.maxStacks} />
             </p>
           </li>
         ) : (
@@ -257,8 +255,11 @@ export default function Head({ Form }) {
               <span className={requirementNameStyle}>
                 Tier of Power Requirement:{" "}
               </span>{" "}
-              {Form.head.tier +
-                (!Number.isNaN(Number(Form.head.tier)) ? "+" : "")}
+              {isEditing ? (
+                <EditableText path="head.tier" value={String(Form.head.tier)} />
+              ) : (
+                currentTier + (!Number.isNaN(Number(currentTier)) ? "+" : "")
+              )}
             </p>
           </li>
         ) : (
@@ -322,25 +323,39 @@ export default function Head({ Form }) {
             </thead>
             <tbody>
               <tr>
-                {Form.head.attributeModifiers.map((modifier, id) =>
-                  modifier.Bonus > 0 ? (
+                {Form.head.attributeModifiers.map((modifier, id) => {
+                  const currentBonus = pendingChanges?.[`head.attributeModifiers.${id}.Bonus`] ?? modifier.Bonus;
+                  const currentMultiplier = pendingChanges?.[`head.attributeModifiers.${id}.Multiplier`] ?? modifier.Multiplier;
+                  return (
                     <td
                       className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
                       key={id}
                     >
-                      {modifier.Multiplier.length === 0
-                        ? `+${modifier.Bonus}`
-                        : `+${modifier.Bonus}(${modifier.Multiplier})`}
+                      {isEditing ? (
+                        <div className="flex flex-col items-center gap-1">
+                          <div className="flex items-center gap-0.5">
+                            +<EditableText
+                              path={`head.attributeModifiers.${id}.Bonus`}
+                              value={String(modifier.Bonus)}
+                              className="w-10 text-center"
+                            />
+                          </div>
+                          <EditableText
+                            path={`head.attributeModifiers.${id}.Multiplier`}
+                            value={modifier.Multiplier}
+                            className="w-full text-center text-sm"
+                          />
+                        </div>
+                      ) : currentBonus > 0 ? (
+                        currentMultiplier.length === 0
+                          ? `+${currentBonus}`
+                          : `+${currentBonus}(${currentMultiplier})`
+                      ) : (
+                        "-"
+                      )}
                     </td>
-                  ) : (
-                    <td
-                      className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
-                      key={id}
-                    >
-                      -
-                    </td>
-                  ),
-                )}
+                  );
+                })}
               </tr>
             </tbody>
           </table>

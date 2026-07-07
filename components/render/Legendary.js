@@ -14,15 +14,16 @@ export default function LegendaryRenderPage({ content }) {
             title={trait.title}
             desc={trait.desc}
             abilities={trait.abilities}
+            path={`traits.${index}`}
           />
         );
       })}
       {content.masteryTrait && content.masteryTrait.length > 0 ? (
-        <MasteryTrait masteryTraitList={content.masteryTrait} />
+        <MasteryTrait masteryTraitList={content.masteryTrait} path="masteryTrait" />
       ) : (
         <></>
       )}
-      <LegendaryTrait legendaryTraitList={content.legendaryTrait} />
+      <LegendaryTrait legendaryTraitList={content.legendaryTrait} path="legendaryTrait" />
     </div>
   );
 }

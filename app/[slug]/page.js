@@ -1,7 +1,10 @@
 import SinglePageGenerator from "../../components/render/SinglePageGenerator.js";
+import EditModeWrapper from "../../components/edit/EditModeWrapper.js";
 import searchContent from "../api/searchContent/route.js";
 import checkToggle from "../api/toggles/route.js";
 import ViewTracker from "../../components/pages/ViewTracker.js";
+import { auth } from "../../auth";
+import clientPromise from "../../lib/mongoDBClient";
 
 const SITE_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
@@ -9,6 +12,17 @@ const SITE_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
 const SLUG_PATTERN = /^(\w+[-]?)+$/;
 
 import pageTypeColors from "../../lib/pageTypeColors";
+
+async function getViewerName() {
+  const session = await auth();
+  if (!session?.user?.email) return null;
+  const client = await clientPromise;
+  const user = await client
+    .db()
+    .collection("users")
+    .findOne({ email: session.user.email }, { projection: { name: 1 } });
+  return user?.name ?? null;
+}
 
 //This Regex pattern checks that a url search only contains alphanumerical characters and a -
 //Example: "Super-Saiyan-3" is a match. "{GetUsers} is not a match."
@@ -44,13 +58,14 @@ export async function generateMetadata({ params }) {
   const toggle = result.head.toggle;
 
   try {
-    const toggleStatus = await checkToggle(toggle);
+    const toggleStatus = await checkToggle(toggle, result.head.author);
     if (!toggleStatus) {
-          return fail_return;
-        }
+      const viewerName = await getViewerName();
+      if (viewerName !== result.head.author) return fail_return;
+    }
   } catch (error) {
-      console.error("Error checking toggle:", error);
-      return fail_return;
+    console.error("Error checking toggle:", error);
+    return fail_return;
   }
 
   return {
@@ -110,10 +125,12 @@ export default async function Page({ params }) {
 
   const searchResult = await searchContent(slug);
   const toggle = searchResult.content[0].head.toggle;
-  let toggleStatus = await checkToggle(toggle);
-  
-  // If search fails or toggle is off, return a page not found message.
-  if (searchResult.status === "failed" || (toggle && !toggleStatus)) {
+  const pageAuthor = searchResult.content[0].head.author;
+  let toggleStatus = await checkToggle(toggle, pageAuthor);
+  const viewerName = await getViewerName();
+
+  // If search fails or toggle is off (and viewer is not the author), show not found.
+  if (searchResult.status === "failed" || (toggle && !toggleStatus && viewerName !== pageAuthor)) {
     return (
       <div className="flex flex-col justify-center">
         <h1>
@@ -132,7 +149,7 @@ export default async function Page({ params }) {
     );
   }
   if (searchResult.content.length === 1) {
-    const content = searchResult.content[0];
+    const content = JSON.parse(JSON.stringify(searchResult.content[0]));
     const oEmbedUrl = `${SITE_URL}/api/oembed?url=${encodeURIComponent(`${SITE_URL}/${slug}`)}&title=${encodeURIComponent(content.head.title)}&author=${encodeURIComponent(content.head.author || "")}`;
     return (
       <>
@@ -142,8 +159,10 @@ export default async function Page({ params }) {
           href={oEmbedUrl}
           title={content.head.title}
         />
-        <ViewTracker keyName={content.head.keyName} />
-        <SinglePageGenerator content={content} />
+        <ViewTracker keyName={content.head.keyName} isAuthor={viewerName === pageAuthor} />
+        <EditModeWrapper canEdit={viewerName === pageAuthor} keyName={content.head.keyName}>
+          <SinglePageGenerator content={content} />
+        </EditModeWrapper>
       </>
     );
   }

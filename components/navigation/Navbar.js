@@ -15,12 +15,10 @@ export default function Navbar({ session }) {
   const testList = [{ text: "Option 1", link: "/option1" }];
   const transformationOptions = [
     {
-      text: "Lesser Awakenings",
+      text: "Awakenings",
       link: "/search?pageTypes=Awakening",
       list: testList,
     },
-    { text: "Greater Awakenings", link: "/search?pageTypes=Awakening" },
-    { text: "Super Awakenings", link: "/search?pageTypes=Awakening" },
     { text: "Enhancement Powers", link: "/search?pageTypes=Enhancement" },
     { text: "Alternate Forms", link: "/search?pageTypes=Alternate" },
     { text: "Legendary Forms", link: "/search?pageTypes=Legendary" },

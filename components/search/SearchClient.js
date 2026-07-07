@@ -37,6 +37,14 @@ export default function SearchClient({ pageData }) {
 
   const entries = Object.values(pageData.Response).flat();
   const normalize = (s) => s.toLowerCase().replace(/\s+/g, "");
+  const normalizeForMatch = (s) => s.trim().toLowerCase().replace(/\s+/g, "-");
+
+  const handleSearchEnter = () => {
+    const matches = entries.filter(
+      (e) => normalizeForMatch(e.head.title) === normalizeForMatch(query)
+    );
+    if (matches.length === 1) router.push(`/${matches[0].head.keyName}`);
+  };
 
   const filtered = entries.filter((entry) => {
     const nameMatch =
@@ -118,7 +126,12 @@ export default function SearchClient({ pageData }) {
   return (
     <>
       <div className="flex gap-2">
-        <SearchBar query={query} onSearch={setQuery} />
+        <SearchBar
+          query={query}
+          onSearch={setQuery}
+          onEnter={handleSearchEnter}
+          suggestions={entries.map((e) => e.head.title)}
+        />
         <button
           onClick={clearAll}
           data-tooltip-id="clear-tooltip"
