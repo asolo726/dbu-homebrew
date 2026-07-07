@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import NavbarServer from "../components/navigation/NavbarServer";
+import ScrollBackToTopButton from "../components/navigation/ScrollBackToTopButton";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
@@ -28,6 +29,7 @@ export default function RootLayout({ children }) {
       >
         <SpeedInsights />
         <NavbarServer />
+        <ScrollBackToTopButton />
         <div className="flex flex-col items-center w-full">{children}</div>
       </body>
     </html>

@@ -215,7 +215,7 @@ export default function SettingsClient({ user, pageData }) {
   };
 
   const tabClass = (tab) =>
-    `w-full text-left px-5 py-4 text-sm transition-colors border-b border-dbu-line ` +
+    `w-full text-left px-5 py-4 text-sm transition-colors border-b border-dbu-line cursor-pointer ` +
     (activeTab === tab
       ? "bg-[#2e2e2e] text-dbu-header"
       : "text-dbu-text hover:bg-[#292929] hover:text-dbu-header");
@@ -260,14 +260,14 @@ export default function SettingsClient({ user, pageData }) {
                     <button
                       onClick={handleSaveClick}
                       disabled={saving}
-                      className="shrink-0 px-5 py-3 rounded-md text-sm bg-dbu-link text-white hover:bg-dbu-link/90 disabled:opacity-50 transition-colors"
+                      className="shrink-0 px-5 py-3 rounded-md text-sm bg-dbu-link text-white hover:bg-dbu-link/90 disabled:opacity-50 transition-colors cursor-pointer"
                     >
                       {saving ? "Saving…" : "Save"}
                     </button>
                     <button
                       onClick={() => { setIsEditing(false); setEditValue(username); setSaveError(""); }}
                       disabled={saving}
-                      className="shrink-0 px-4 py-3 rounded-md text-sm border border-dbu-line text-dbu-text hover:border-dbu-header disabled:opacity-50 transition-colors"
+                      className="shrink-0 px-4 py-3 rounded-md text-sm border border-dbu-line text-dbu-text hover:border-dbu-header disabled:opacity-50 transition-colors cursor-pointer"
                     >
                       Cancel
                     </button>
@@ -279,7 +279,7 @@ export default function SettingsClient({ user, pageData }) {
                     </div>
                     <button
                       onClick={() => { setIsEditing(true); setSaveError(""); }}
-                      className="shrink-0 px-5 py-3 rounded-md text-sm border border-green-600 text-green-500 hover:bg-green-900/20 transition-colors"
+                      className="shrink-0 px-5 py-3 rounded-md text-sm border border-green-600 text-green-500 hover:bg-green-900/20 transition-colors cursor-pointer "
                     >
                       Change
                     </button>
@@ -380,7 +380,7 @@ export default function SettingsClient({ user, pageData }) {
                           <td className="px-5 py-4">
                             <button
                               onClick={() => openTogglePopup(t.name)}
-                              className="text-dbu-link text-sm hover:underline text-left"
+                              className="text-dbu-link text-sm hover:underline text-left cursor-pointer"
                             >
                               {t.name}
                             </button>
@@ -492,7 +492,7 @@ export default function SettingsClient({ user, pageData }) {
                           key={p.keyName}
                           onClick={() => moveToRight(p)}
                           title="Click to remove this toggle"
-                          className="block w-full text-left px-3 py-2 text-sm text-dbu-text hover:bg-dbu-line rounded transition-colors truncate"
+                          className="block w-full text-left px-3 py-2 text-sm text-dbu-text hover:bg-dbu-line rounded transition-colors truncate cursor-pointer"
                         >
                           {p.title}
                         </button>
@@ -515,7 +515,7 @@ export default function SettingsClient({ user, pageData }) {
                           key={p.keyName}
                           onClick={() => moveToLeft(p)}
                           title="Click to add this toggle"
-                          className="block w-full text-left px-3 py-2 text-sm text-dbu-text hover:bg-dbu-line rounded transition-colors truncate"
+                          className="block w-full text-left px-3 py-2 text-sm text-dbu-text hover:bg-dbu-line rounded transition-colors truncate cursor-pointer"
                         >
                           {p.title}
                         </button>
@@ -533,14 +533,14 @@ export default function SettingsClient({ user, pageData }) {
                 <button
                   onClick={handleBackdropClick}
                   disabled={popupSaving}
-                  className="px-4 py-2 rounded-md text-sm border border-dbu-line text-dbu-text hover:border-dbu-header disabled:opacity-50 transition-colors"
+                  className="px-4 py-2 rounded-md text-sm border border-dbu-line text-dbu-text hover:border-dbu-header disabled:opacity-50 transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={savePopupChanges}
                   disabled={popupSaving || popupLoading}
-                  className="px-4 py-2 rounded-md text-sm bg-dbu-link text-white hover:bg-dbu-link/90 disabled:opacity-50 transition-colors"
+                  className="px-4 py-2 rounded-md text-sm bg-dbu-link text-white hover:bg-dbu-link/90 disabled:opacity-50 transition-colors cursor-pointer"
                 >
                   {popupSaving ? "Saving…" : "Save"}
                 </button>

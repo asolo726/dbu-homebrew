@@ -65,7 +65,7 @@ export default function EditToolbar() {
         <button
           onClick={handleCancel}
           title="Cancel editing"
-          className="flex items-center gap-2 bg-dbu-bg3 border border-dbu-header text-dbu-text px-4 py-2 rounded-full shadow-lg hover:opacity-90 transition-opacity"
+          className="flex items-center gap-2 bg-dbu-bg3 border border-dbu-header text-dbu-text px-4 py-2 rounded-full shadow-lg hover:opacity-90 transition-opacity cursor-pointer"
         >
           <RiCloseFill size={18} />
           Cancel
@@ -74,7 +74,7 @@ export default function EditToolbar() {
       <button
         onClick={() => { setIsEditing(!isEditing); setSaveStatus(null); }}
         title={isEditing ? "Exit edit mode" : "Edit page"}
-        className={`p-4 rounded-full shadow-lg transition-colors ${
+        className={`p-4 rounded-full shadow-lg transition-colors cursor-pointer ${
           isEditing
             ? "bg-dbu-header text-dbu-bg"
             : "bg-dbu-bg3 border border-dbu-header text-dbu-header hover:bg-dbu-header hover:text-dbu-bg"
