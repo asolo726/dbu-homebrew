@@ -1,4 +1,9 @@
 export const aspectData = {
+  "Abosrbed Apparel": {
+    type: "Positive",
+    effects: "You lose all of your equipped Apparel while in this Transformation (regain and equip it when you leave this Transformation), but increase your Combat Rolls and Soak Value by 1/2 (rounded up) of the Apparel Bonus of the highest piece of Apparel that you had equipped (max. 2(T)).",
+    maxLevel: 0
+  },
   Armored: {
     type: "Positive",
     effects:
@@ -49,7 +54,7 @@ export const aspectData = {
   Heartbeat: {
     type: "Positive",
     effects:
-      "Surging Strength becomes [3/Round] if used solely on Transformations with the Heartbeat Aspect in that Combat Round. If you use Surging Strength to enter a Transformation with the Heartbeat Aspect, it ignores the 3/Encounter limit of Surging Strength.",
+      "If your Stress Bonus is equal to or higher than 4 less than the Stress Test Requirement (or combined Stress Test Requirement if used alongside another Transformation) of this Transformation, you may enter this Transformation for the duration of any Maneuver you use or any Maneuver that targets you. You cannot leave a Transformation to enter this Transformation, unless that Transformation is a lower Stage (see — Forms) of this Transformation, and if you do, you return to the lower Stage after concluding the Maneuver. \n\nIf this Transformation has the Graded Aspect, and you are already in this Transformation, you may instead enter a higher Grade for the duration of a Maneuver through the effects of this Aspect (as long as you meet the requirement in regards to the Stress Test Requirement of that Grade). \n\nYou can only use this effect to enter a Transformation through the effects of this Aspect a number of times per Combat Round equal to its levels in this Aspect.",
     maxLevel: 0,
   },
   "High Speed": {
@@ -155,12 +160,6 @@ export const aspectData = {
     type: "Negative",
     effects:
       "Upon entering this Transformation, destroy your Top Layer of Apparel.",
-    maxLevel: 0,
-  },
-  Dedicated: {
-    type: "Negative",
-    effects:
-      "You can only enter this Transformation through the Transformation Maneuver. This Aspect cannot be removed through any means aside from the effects of a Mastery Trait that specifically refers to it by name.",
     maxLevel: 0,
   },
   Difficult: {
