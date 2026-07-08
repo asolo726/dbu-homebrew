@@ -215,17 +215,17 @@ export default function SettingsClient({ user, pageData }) {
   };
 
   const tabClass = (tab) =>
-    `w-full text-left px-5 py-4 text-sm transition-colors border-b border-dbu-line cursor-pointer ` +
+    `flex-1 md:flex-none md:w-full text-center md:text-left px-3 md:px-5 py-3 md:py-4 text-xs md:text-sm whitespace-nowrap transition-colors md:border-b md:border-dbu-line cursor-pointer ` +
     (activeTab === tab
       ? "bg-[#2e2e2e] text-dbu-header"
       : "text-dbu-text hover:bg-[#292929] hover:text-dbu-header");
 
   return (
-    <div className="flex w-full">
-      {/* Left sidebar */}
-      <div className="w-52 shrink-0 border-r border-dbu-line flex flex-col">
+    <div className="flex flex-col md:flex-row w-full">
+      {/* Sidebar — horizontal tabs on mobile, vertical on desktop */}
+      <div className="flex md:flex-col md:w-52 md:shrink-0 border-b md:border-b-0 md:border-r border-dbu-line overflow-x-auto">
         <button onClick={() => setActiveTab("account")} className={tabClass("account")}>
-          Account Settings
+          Account
         </button>
         <button onClick={() => setActiveTab("authored")} className={tabClass("authored")}>
           Authored Pages
@@ -236,12 +236,12 @@ export default function SettingsClient({ user, pageData }) {
       </div>
 
       {/* Main content */}
-      <div className="flex-1 p-8 min-w-0">
+      <div className="flex-1 p-4 md:p-8 min-w-0">
 
         {/* ── Account tab ───────────────────────────────────────────────────── */}
         {activeTab === "account" && (
-          <div className="flex flex-col items-center gap-10 max-w-2xl mx-auto pt-8">
-            <div className="w-48 h-48 rounded-full overflow-hidden border-2 border-dbu-line shrink-0">
+          <div className="flex flex-col items-center gap-6 md:gap-10 max-w-2xl mx-auto pt-4 md:pt-8">
+            <div className="w-28 h-28 sm:w-36 sm:h-36 md:w-48 md:h-48 rounded-full overflow-hidden border-2 border-dbu-line shrink-0">
               <img src={user.image} alt="Profile" className="w-full h-full object-cover" />
             </div>
 
@@ -260,14 +260,14 @@ export default function SettingsClient({ user, pageData }) {
                     <button
                       onClick={handleSaveClick}
                       disabled={saving}
-                      className="shrink-0 px-5 py-3 rounded-md text-sm bg-dbu-link text-white hover:bg-dbu-link/90 disabled:opacity-50 transition-colors cursor-pointer"
+                      className="shrink-0 px-3 md:px-5 py-2 md:py-3 rounded-md text-sm bg-dbu-link text-white hover:bg-dbu-link/90 disabled:opacity-50 transition-colors cursor-pointer"
                     >
                       {saving ? "Saving…" : "Save"}
                     </button>
                     <button
                       onClick={() => { setIsEditing(false); setEditValue(username); setSaveError(""); }}
                       disabled={saving}
-                      className="shrink-0 px-4 py-3 rounded-md text-sm border border-dbu-line text-dbu-text hover:border-dbu-header disabled:opacity-50 transition-colors cursor-pointer"
+                      className="shrink-0 px-3 md:px-4 py-2 md:py-3 rounded-md text-sm border border-dbu-line text-dbu-text hover:border-dbu-header disabled:opacity-50 transition-colors cursor-pointer"
                     >
                       Cancel
                     </button>
@@ -279,7 +279,7 @@ export default function SettingsClient({ user, pageData }) {
                     </div>
                     <button
                       onClick={() => { setIsEditing(true); setSaveError(""); }}
-                      className="shrink-0 px-5 py-3 rounded-md text-sm border border-green-600 text-green-500 hover:bg-green-900/20 transition-colors cursor-pointer "
+                      className="shrink-0 px-3 md:px-5 py-2 md:py-3 rounded-md text-sm border border-green-600 text-green-500 hover:bg-green-900/20 transition-colors cursor-pointer"
                     >
                       Change
                     </button>
@@ -477,9 +477,9 @@ export default function SettingsClient({ user, pageData }) {
             {popupLoading ? (
               <div className="px-6 py-16 text-center text-dbu-text/40 text-sm">Loading…</div>
             ) : (
-              <div className="grid grid-cols-2" style={{ minHeight: "280px" }}>
+              <div className="grid grid-cols-1 sm:grid-cols-2" style={{ minHeight: "280px" }}>
                 {/* Left: pages WITH toggle */}
-                <div className="px-5 py-4">
+                <div className="px-5 py-4 border-b sm:border-b-0 border-dbu-line">
                   <p className="text-xs font-semibold uppercase tracking-wider text-dbu-text/40 mb-3">
                     Pages with toggle ({popupLeft.length})
                   </p>
@@ -502,7 +502,7 @@ export default function SettingsClient({ user, pageData }) {
                 </div>
 
                 {/* Right: pages WITHOUT toggle */}
-                <div className="border-l border-dbu-line px-5 py-4">
+                <div className="sm:border-l border-dbu-line px-5 py-4">
                   <p className="text-xs font-semibold uppercase tracking-wider text-dbu-text/40 mb-3">
                     Pages without toggle ({popupRight.length})
                   </p>

@@ -159,7 +159,7 @@ export default async function Page({ params }) {
           href={oEmbedUrl}
           title={content.head.title}
         />
-        <ViewTracker keyName={content.head.keyName} isAuthor={viewerName === pageAuthor} />
+        <ViewTracker keyName={content.head.keyName} title={content.head.title} isAuthor={viewerName === pageAuthor} />
         <EditModeWrapper canEdit={viewerName === pageAuthor} keyName={content.head.keyName}>
           <SinglePageGenerator content={content} />
         </EditModeWrapper>

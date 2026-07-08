@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-function AbilityPreview({ type, conditionText, labelText, desc }) {
+function AbilityPreview({ type, conditionText, labelText, desc, refName }) {
   const empty = <span className="italic text-dbu-text/30">…</span>;
 
   if (type === "label") {
@@ -12,6 +12,16 @@ function AbilityPreview({ type, conditionText, labelText, desc }) {
         <span className="font-bold text-dbu-header">{display}</span>
         {": "}
         {desc.trim() || empty}
+      </p>
+    );
+  }
+
+  if (type === "seeref") {
+    return (
+      <p className="text-dbu-text text-md text-left my-1">
+        {"(See —"}
+        <span className="text-dbu-link">{refName.trim() || empty}</span>
+        {")"}
       </p>
     );
   }
@@ -36,14 +46,22 @@ export default function AddAbilityModal({ onSave, onClose }) {
   const [conditionText, setConditionText] = useState("");
   const [labelText, setLabelText] = useState("");
   const [desc, setDesc] = useState("");
+  const [refName, setRefName] = useState("");
+  const [refUrl, setRefUrl] = useState("");
 
   const isValid =
-    type === "label" ? labelText.trim() !== "" : conditionText.trim() !== "";
+    type === "label"
+      ? labelText.trim() !== ""
+      : type === "seeref"
+      ? refName.trim() !== "" && refUrl.trim() !== ""
+      : conditionText.trim() !== "";
 
   function handleSave() {
     if (!isValid) return;
     if (type === "label") {
       onSave({ condition: `– ${labelText.trim()}`, desc: desc.trim() });
+    } else if (type === "seeref") {
+      onSave({ seeRef: { name: refName.trim(), url: refUrl.trim() } });
     } else {
       onSave({ condition: conditionText.trim(), desc: desc.trim() });
     }
@@ -86,9 +104,10 @@ export default function AddAbilityModal({ onSave, onClose }) {
             <div className="flex gap-2">
               {typeBtn("condition", "Condition")}
               {typeBtn("label", "Label")}
+              {typeBtn("seeref", "See Ref")}
             </div>
 
-            {type === "condition" ? (
+            {type === "condition" && (
               <div className="flex flex-col gap-1">
                 <label className="text-xs text-dbu-text/50">Condition</label>
                 <input
@@ -98,7 +117,9 @@ export default function AddAbilityModal({ onSave, onClose }) {
                   className={inputClass}
                 />
               </div>
-            ) : (
+            )}
+
+            {type === "label" && (
               <div className="flex flex-col gap-1">
                 <label className="text-xs text-dbu-text/50">Label Name</label>
                 <input
@@ -110,16 +131,42 @@ export default function AddAbilityModal({ onSave, onClose }) {
               </div>
             )}
 
-            <div className="flex flex-col gap-1">
-              <label className="text-xs text-dbu-text/50">Description</label>
-              <textarea
-                value={desc}
-                onChange={(e) => setDesc(e.target.value)}
-                placeholder="Ability description…"
-                rows={4}
-                className={`${inputClass} resize-none`}
-              />
-            </div>
+            {type === "seeref" && (
+              <>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs text-dbu-text/50">Display Name</label>
+                  <input
+                    value={refName}
+                    onChange={(e) => setRefName(e.target.value)}
+                    placeholder="e.g. Super Saiyan"
+                    className={inputClass}
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs text-dbu-text/50">URL</label>
+                  <input
+                    type="url"
+                    value={refUrl}
+                    onChange={(e) => setRefUrl(e.target.value)}
+                    placeholder="https://…"
+                    className={inputClass}
+                  />
+                </div>
+              </>
+            )}
+
+            {type !== "seeref" && (
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-dbu-text/50">Description</label>
+                <textarea
+                  value={desc}
+                  onChange={(e) => setDesc(e.target.value)}
+                  placeholder="Ability description…"
+                  rows={4}
+                  className={`${inputClass} resize-none`}
+                />
+              </div>
+            )}
           </div>
 
           {/* Preview */}
@@ -131,6 +178,7 @@ export default function AddAbilityModal({ onSave, onClose }) {
                 conditionText={conditionText}
                 labelText={labelText}
                 desc={desc}
+                refName={refName}
               />
             </div>
           </div>

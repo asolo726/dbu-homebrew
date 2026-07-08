@@ -132,6 +132,46 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
               />
             </div>
           );
+        } else if ("seeRef" in item) {
+          const nameVal = item.seeRef.name;
+          const urlVal = item.seeRef.url;
+          if (isEditing && path) {
+            inner = (
+              <div className="my-1">
+                <div className="flex items-baseline gap-1 text-dbu-text text-md md:text-lg">
+                  {"(See —"}
+                  <EditableText
+                    path={`${path}.abilities.${itemIndex}.seeRef.name`}
+                    value={nameVal}
+                  />
+                  {")"}
+                </div>
+                <div className="flex items-center gap-1 text-xs text-dbu-text/50 mt-0.5">
+                  <span className="shrink-0">URL:</span>
+                  <EditableText
+                    path={`${path}.abilities.${itemIndex}.seeRef.url`}
+                    value={urlVal}
+                    className="text-xs"
+                  />
+                </div>
+              </div>
+            );
+          } else {
+            inner = (
+              <p className="text-dbu-text text-md md:text-lg text-left my-1">
+                {"(See —"}
+                <a
+                  href={urlVal}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-dbu-link hover:underline"
+                >
+                  {nameVal}
+                </a>
+                {")"}
+              </p>
+            );
+          }
         } else if ("table" in item) {
           inner = (
             <ul className="list-disc ml-10">
