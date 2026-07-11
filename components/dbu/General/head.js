@@ -116,8 +116,11 @@ export default function Head({ Form }) {
       )}
 
       {/* Image with upload overlay in edit mode */}
-      <div
-        className="justify-self-center max-w-full mb-3 relative cursor-default"
+      <a
+        className="justify-self-center max-w-full mb-3 relative cursor-default block"
+        href={!isEditing ? currentBanner : undefined}
+        target={!isEditing ? "_blank" : undefined}
+        rel="noreferrer"
         data-tooltip-id="art-credit-tooltip"
         data-tooltip-content={
           !isEditing &&
@@ -130,7 +133,7 @@ export default function Head({ Form }) {
       >
         <Image
           src={currentBanner}
-          className="max-w-full"
+          className="max-w-full cursor-pointer"
           width={1500}
           height={1500}
           alt=""
@@ -153,7 +156,7 @@ export default function Head({ Form }) {
             />
           </label>
         )}
-      </div>
+      </a>
 
       {/* Art credit editable in edit mode */}
       {isEditing && (
