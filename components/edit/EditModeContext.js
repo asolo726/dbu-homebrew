@@ -7,8 +7,9 @@ export function useEditMode() {
   return useContext(EditModeContext);
 }
 
-export function EditModeProvider({ children, keyName, toggleStatus }) {
+export function EditModeProvider({ children, keyName, toggleStatus, contributorEmail = null, contributorName = null, isAdmin = false }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [isContributing, setIsContributing] = useState(false);
   const [pendingChanges, _setPendingChanges] = useState({});
   // [length, index] as state so canUndo/canRedo are reactive
   const [historyMeta, setHistoryMeta] = useState({ len: 1, idx: 0 });
@@ -91,6 +92,9 @@ export function EditModeProvider({ children, keyName, toggleStatus }) {
     <EditModeContext.Provider
       value={{
         isEditing, setIsEditing,
+        isContributing, setIsContributing,
+        contributorEmail, contributorName,
+        isAdmin,
         pendingChanges, setChange, setArrayChange, clearChanges, hasChanges,
         undo, redo, canUndo, canRedo,
         keyName, toggleStatus,

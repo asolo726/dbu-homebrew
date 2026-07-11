@@ -2,17 +2,19 @@
 import { useEditMode } from "./EditModeContext";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { RiPencilFill, RiSaveFill, RiCloseFill, RiArrowGoBackLine, RiArrowGoForwardLine } from "react-icons/ri";
+import { RiPencilFill, RiSaveFill, RiCloseFill, RiArrowGoBackLine, RiArrowGoForwardLine, RiAddCircleFill } from "react-icons/ri";
 
-export default function EditToolbar() {
-  const { isEditing, setIsEditing, hasChanges, pendingChanges, clearChanges, keyName, undo, redo, canUndo, canRedo } = useEditMode();
+export default function EditToolbar({ canEdit, canContribute }) {
+  const { isEditing, setIsEditing, isContributing, setIsContributing, hasChanges, pendingChanges, clearChanges, keyName, undo, redo, canUndo, canRedo } = useEditMode();
   const [saving, setSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState(null); // "success" | "error" | null
   const router = useRouter();
 
+  const isActive = isEditing || isContributing;
+
   // Ctrl+Z / Ctrl+Y keyboard shortcuts (skip when user is in a text field)
   useEffect(() => {
-    if (!isEditing) return;
+    if (!isActive) return;
     function onKeyDown(e) {
       const active = document.activeElement;
       const isTextField =
@@ -31,7 +33,7 @@ export default function EditToolbar() {
     }
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [isEditing, undo, redo]);
+  }, [isActive, undo, redo]);
 
   async function handleSave() {
     setSaving(true);
@@ -46,6 +48,7 @@ export default function EditToolbar() {
         setSaveStatus("success");
         clearChanges();
         setIsEditing(false);
+        setIsContributing(false);
         router.refresh();
       } else {
         setSaveStatus("error");
@@ -60,6 +63,17 @@ export default function EditToolbar() {
   function handleCancel() {
     clearChanges();
     setIsEditing(false);
+    setIsContributing(false);
+    setSaveStatus(null);
+  }
+
+  function toggleEditMode() {
+    setIsEditing(!isEditing);
+    setSaveStatus(null);
+  }
+
+  function toggleContributeMode() {
+    setIsContributing(!isContributing);
     setSaveStatus(null);
   }
 
@@ -73,7 +87,7 @@ export default function EditToolbar() {
       {saveStatus === "success" && (
         <p className="text-green-400 text-sm bg-dbu-bg3 px-3 py-1 rounded">Saved!</p>
       )}
-      {isEditing && hasChanges && (
+      {isActive && hasChanges && (
         <button
           onClick={handleSave}
           disabled={saving}
@@ -84,16 +98,17 @@ export default function EditToolbar() {
           {saving ? "Saving..." : "Save"}
         </button>
       )}
-      {isEditing && (
+      {isActive && (
         <button
           onClick={handleCancel}
-          title="Cancel editing"
+          title={isEditing ? "Cancel editing" : "Cancel contributing"}
           className="flex items-center gap-2 bg-dbu-bg3 border border-dbu-header text-dbu-text px-4 py-2 rounded-full shadow-lg hover:opacity-90 transition-opacity cursor-pointer"
         >
           <RiCloseFill size={18} />
           Cancel
         </button>
-      )}{isEditing && (
+      )}
+      {isActive && (
         <div className="flex gap-2">
           <button onClick={undo} disabled={!canUndo} title="Undo (Ctrl+Z)" className={ghostBtn}>
             <RiArrowGoBackLine size={18} />
@@ -103,17 +118,32 @@ export default function EditToolbar() {
           </button>
         </div>
       )}
-      <button
-        onClick={() => { setIsEditing(!isEditing); setSaveStatus(null); }}
-        title={isEditing ? "Exit edit mode" : "Edit page"}
-        className={`p-4 rounded-full shadow-lg transition-colors cursor-pointer ${
-          isEditing
-            ? "bg-dbu-header text-dbu-bg"
-            : "bg-dbu-bg3 border border-dbu-header text-dbu-header hover:bg-dbu-header hover:text-dbu-bg"
-        }`}
-      >
-        <RiPencilFill size={20} />
-      </button>
+      {canEdit && (
+        <button
+          onClick={toggleEditMode}
+          title={isEditing ? "Exit edit mode" : "Edit page"}
+          className={`p-4 rounded-full shadow-lg transition-colors cursor-pointer ${
+            isEditing
+              ? "bg-dbu-header text-dbu-bg"
+              : "bg-dbu-bg3 border border-dbu-header text-dbu-header hover:bg-dbu-header hover:text-dbu-bg"
+          }`}
+        >
+          <RiPencilFill size={20} />
+        </button>
+      )}
+      {canContribute && (
+        <button
+          onClick={toggleContributeMode}
+          title={isContributing ? "Exit contribute mode" : "Add your contribution"}
+          className={`p-4 rounded-full shadow-lg transition-colors cursor-pointer ${
+            isContributing
+              ? "bg-dbu-header text-dbu-bg"
+              : "bg-dbu-bg3 border border-dbu-header text-dbu-header hover:bg-dbu-header hover:text-dbu-bg"
+          }`}
+        >
+          <RiAddCircleFill size={20} />
+        </button>
+      )}
     </div>
   );
 }

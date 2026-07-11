@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import CommentItem from "./CommentItem";
 import AnonAvatar from "./AnonAvatar";
 
-export default function CommentSection({ pageKey, session, pageAuthor }) {
+export default function CommentSection({ pageKey, session, pageAuthor, viewerIsAdmin = false }) {
   const [comments, setComments] = useState([]);
   const [total, setTotal] = useState(0);
   const [skip, setSkip] = useState(0);
@@ -40,6 +40,18 @@ export default function CommentSection({ pageKey, session, pageAuthor }) {
       setSkip((s) => s + 20);
     } finally {
       setLoadingMore(false);
+    }
+  };
+
+  const deleteComment = async (commentId) => {
+    const res = await fetch("/api/comments", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ commentId }),
+    });
+    if (res.ok) {
+      setComments((prev) => prev.filter((c) => c._id !== commentId));
+      setTotal((t) => t - 1);
     }
   };
 
@@ -121,7 +133,13 @@ export default function CommentSection({ pageKey, session, pageAuthor }) {
       ) : (
         <>
           {comments.map((comment) => (
-            <CommentItem key={comment._id} comment={comment} pageAuthor={pageAuthor} />
+            <CommentItem
+              key={comment._id}
+              comment={comment}
+              pageAuthor={pageAuthor}
+              viewerIsAdmin={viewerIsAdmin}
+              onDelete={viewerIsAdmin ? deleteComment : undefined}
+            />
           ))}
           {comments.length < total && (
             <button

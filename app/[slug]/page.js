@@ -13,15 +13,15 @@ const SLUG_PATTERN = /^(\w+[-]?)+$/;
 
 import pageTypeColors from "../../lib/pageTypeColors";
 
-async function getViewerName() {
+async function getViewerInfo() {
   const session = await auth();
-  if (!session?.user?.email) return null;
+  if (!session?.user?.email) return { name: null, email: null, isAdmin: false };
   const client = await clientPromise;
   const user = await client
     .db()
     .collection("users")
-    .findOne({ email: session.user.email }, { projection: { name: 1 } });
-  return user?.name ?? null;
+    .findOne({ email: session.user.email }, { projection: { name: 1, type: 1 } });
+  return { name: user?.name ?? null, email: session.user.email, isAdmin: user?.type === "admin" };
 }
 
 //This Regex pattern checks that a url search only contains alphanumerical characters and a -
@@ -60,8 +60,8 @@ export async function generateMetadata({ params }) {
   try {
     const toggleStatus = await checkToggle(toggle, result.head.author);
     if (!toggleStatus) {
-      const viewerName = await getViewerName();
-      if (viewerName !== result.head.author) return fail_return;
+      const { name: viewerName, email: viewerEmail, isAdmin } = await getViewerInfo();
+      if (viewerName !== result.head.author && !isAdmin) return fail_return;
     }
   } catch (error) {
     console.error("Error checking toggle:", error);
@@ -127,10 +127,10 @@ export default async function Page({ params }) {
   const toggle = searchResult.content[0].head.toggle;
   const pageAuthor = searchResult.content[0].head.author;
   let toggleStatus = await checkToggle(toggle, pageAuthor);
-  const viewerName = await getViewerName();
+  const { name: viewerName, email: viewerEmail, isAdmin } = await getViewerInfo();
 
-  // If search fails or toggle is off (and viewer is not the author), show not found.
-  if (searchResult.status === "failed" || (toggle && !toggleStatus && viewerName !== pageAuthor)) {
+  // If search fails or toggle is off (and viewer is not the author or an admin), show not found.
+  if (searchResult.status === "failed" || (toggle && !toggleStatus && viewerName !== pageAuthor && !isAdmin)) {
     return (
       <div className="flex flex-col justify-center">
         <h1>
@@ -160,9 +160,24 @@ export default async function Page({ params }) {
           title={content.head.title}
         />
         <ViewTracker keyName={content.head.keyName} title={content.head.title} isAuthor={viewerName === pageAuthor} />
-        <EditModeWrapper canEdit={viewerName === pageAuthor} keyName={content.head.keyName} toggleStatus={toggleStatus}>
-          <SinglePageGenerator content={content} />
-        </EditModeWrapper>
+        {(() => {
+          const canEdit = viewerName === pageAuthor || isAdmin;
+          const allowlist = content.head.communityAllowlist ?? [];
+          const canContribute = !canEdit && !!content.head.isCommunity && !!viewerEmail && allowlist.includes(viewerEmail);
+          return (
+            <EditModeWrapper
+              canEdit={canEdit}
+              canContribute={canContribute}
+              keyName={content.head.keyName}
+              toggleStatus={toggleStatus}
+              contributorEmail={viewerEmail}
+              contributorName={viewerName}
+              isAdmin={isAdmin}
+            >
+              <SinglePageGenerator content={content} />
+            </EditModeWrapper>
+          );
+        })()}
       </>
     );
   }

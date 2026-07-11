@@ -26,6 +26,7 @@ export default function Card({
     "Evolved Stage": "Evolved Stage",
     Race: "Race",
     Factor: "Racial Factor",
+    Other: "Other",
   };
   const ToPIsString = typeof tierOfPower === "string";
   const ToP = ToPIsString

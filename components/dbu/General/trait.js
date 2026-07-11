@@ -6,7 +6,7 @@ import { useEditMode } from "../../edit/EditModeContext";
 import AddAbilityModal from "../../edit/AddAbilityModal";
 import { RiAddFill, RiSubtractFill } from "react-icons/ri";
 
-export default function Trait({ title = "", desc = "", abilities, path, disableEditActions = false }) {
+export default function Trait({ title = "", desc = "", abilities, path, disableEditActions = false, contributor = null }) {
   const ctx = useEditMode();
   const isEditing = ctx?.isEditing ?? false;
   const pendingChanges = ctx?.pendingChanges ?? {};
@@ -171,6 +171,12 @@ export default function Trait({ title = "", desc = "", abilities, path, disableE
 
       {!disableEditActions && showAddModal && (
         <AddAbilityModal onSave={handleAdd} onClose={() => setShowAddModal(false)} />
+      )}
+
+      {contributor && (
+        <p className="text-xs text-white italic mt-2 opacity-60">
+          (Added by {contributor.name})
+        </p>
       )}
     </div>
   );

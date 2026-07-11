@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { ObjectId } from "mongodb";
 import clientPromise from "../../../lib/mongoDBClient";
 import { auth } from "../../../auth";
 
@@ -51,13 +52,15 @@ export async function POST(request) {
   const session = await auth();
 
   let displayName = "Anonymous Warrior";
+  let commenterIsAdmin = false;
   if (session?.user?.email) {
     const client = await clientPromise;
     const userDoc = await client
-      .db() // use URI default — same db the MongoDBAdapter writes users to
+      .db()
       .collection("users")
-      .findOne({ email: session.user.email }, { projection: { username: 1, name: 1 } });
+      .findOne({ email: session.user.email }, { projection: { name: 1, type: 1 } });
     displayName = userDoc?.name || "Anonymous Warrior";
+    commenterIsAdmin = userDoc?.type === "admin";
   }
 
   const userId = session?.user?.email || null;
@@ -67,6 +70,7 @@ export async function POST(request) {
     userId,
     userName: displayName,
     userImage: session?.user?.image || null,
+    isAdmin: commenterIsAdmin,
     timestamp: new Date(),
     upvotes: 1,
     upvotedBy: userId ? [userId] : [],
@@ -86,6 +90,44 @@ export async function POST(request) {
     });
   } catch (error) {
     console.error("POST /api/comments error:", error);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
+  }
+}
+
+export async function DELETE(request) {
+  const session = await auth();
+  if (!session?.user?.email) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { commentId } = await request.json();
+  if (!commentId) {
+    return NextResponse.json({ error: "commentId required" }, { status: 400 });
+  }
+
+  const client = await clientPromise;
+  const userDoc = await client
+    .db()
+    .collection("users")
+    .findOne({ email: session.user.email }, { projection: { type: 1 } });
+
+  if (userDoc?.type !== "admin") {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  try {
+    const db = client.db("Main");
+    const result = await db
+      .collection("comments")
+      .deleteOne({ _id: new ObjectId(commentId) });
+
+    if (result.deletedCount === 0) {
+      return NextResponse.json({ error: "Comment not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("DELETE /api/comments error:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

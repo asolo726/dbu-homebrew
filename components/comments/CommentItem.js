@@ -299,7 +299,7 @@ function ReplyItem({ reply, commentId, parentReplyId = null, depth = 0 }) {
 
 // ── CommentItem ───────────────────────────────────────────────────────────────
 
-export default function CommentItem({ comment, pageAuthor }) {
+export default function CommentItem({ comment, pageAuthor, viewerIsAdmin = false, onDelete }) {
   const { myVote, castVote } = useVote(`c:${comment._id}`, {
     commentId: comment._id,
   });
@@ -310,6 +310,7 @@ export default function CommentItem({ comment, pageAuthor }) {
   const [visibleReplies, setVisibleReplies] = useState(5);
   const [showReplies, setShowReplies] = useState(false);
   const [showReplyInput, setShowReplyInput] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const vote = (dir) =>
     castVote(dir, (delta) => {
@@ -330,6 +331,14 @@ export default function CommentItem({ comment, pageAuthor }) {
   };
 
   const isAuthor = !!pageAuthor && comment.userName === pageAuthor;
+  const commenterIsAdmin = !!comment.isAdmin;
+
+  const handleDelete = async () => {
+    if (deleting || !onDelete) return;
+    setDeleting(true);
+    await onDelete(comment._id);
+    setDeleting(false);
+  };
 
   return (
     <div className="border-t border-gray-800 py-5">
@@ -342,6 +351,11 @@ export default function CommentItem({ comment, pageAuthor }) {
           {isAuthor && (
             <span className="text-[0.55rem] text-gray-200 font-semibold tracking-wide uppercase border border-gray-400 rounded px-1.5 py-0.5">
               Author
+            </span>
+          )}
+          {commenterIsAdmin && !isAuthor && (
+            <span className="text-[0.55rem] text-amber-400 font-semibold tracking-wide uppercase border border-amber-500 rounded px-1.5 py-0.5">
+              Admin
             </span>
           )}
         </div>
@@ -380,6 +394,15 @@ export default function CommentItem({ comment, pageAuthor }) {
             >
               ↩ Reply
             </button>
+            {viewerIsAdmin && (
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                className="text-red-500 hover:text-red-400 text-sm transition-colors cursor-pointer disabled:opacity-40"
+              >
+                {deleting ? "Deleting…" : "Delete"}
+              </button>
+            )}
           </div>
 
           {showReplyInput && (
