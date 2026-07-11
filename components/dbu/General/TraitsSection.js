@@ -15,6 +15,7 @@ export default function TraitsSection({ traits = [], basePath }) {
   const ctx = useEditMode();
   const isEditing = ctx?.isEditing ?? false;
   const isContributing = ctx?.isContributing ?? false;
+  const isCommunity = ctx?.isCommunity ?? false;
   const contributorEmail = ctx?.contributorEmail ?? null;
   const contributorName = ctx?.contributorName ?? null;
   const pendingChanges = ctx?.pendingChanges ?? {};
@@ -44,14 +45,18 @@ export default function TraitsSection({ traits = [], basePath }) {
     setArrayChange(basePath, currentTraits.filter((_, i) => i !== index));
   }
 
+  function withContributor(base) {
+    return isCommunity && contributorEmail
+      ? { ...base, contributor: { email: contributorEmail, name: contributorName } }
+      : base;
+  }
+
   function newTrait() {
-    const base = { title: "New Trait", desc: "Description", abilities: [] };
-    return isContributing ? { ...base, contributor: { email: contributorEmail, name: contributorName } } : base;
+    return withContributor({ title: "New Trait", desc: "Description", abilities: [] });
   }
 
   function newSection() {
-    const base = { sectional: { title: "New Section" } };
-    return isContributing ? { ...base, contributor: { email: contributorEmail, name: contributorName } } : base;
+    return withContributor({ sectional: { title: "New Section" } });
   }
 
   function handleAddTrait() {

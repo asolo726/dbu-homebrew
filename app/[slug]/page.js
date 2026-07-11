@@ -173,6 +173,7 @@ export default async function Page({ params }) {
               contributorEmail={viewerEmail}
               contributorName={viewerName}
               isAdmin={isAdmin}
+              isCommunity={!!content.head.isCommunity}
             >
               <SinglePageGenerator content={content} />
             </EditModeWrapper>

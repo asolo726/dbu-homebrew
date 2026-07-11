@@ -122,16 +122,21 @@ export default function Trait({ title = "", desc = "", abilities, path, disableE
 
   return (
     <div className="flex-grow-1 mt-4">
-      {(title !== "" || desc !== "") && (
+      {(isEditing && path) ? (
+        <p className="text-dbu-text text-md md:text-lg text-left">
+          <span className="font-bold text-dbu-header">
+            <EditableText path={`${path}.title`} value={title} />:{" "}
+          </span>
+          <EditableText path={`${path}.desc`} value={desc} />
+        </p>
+      ) : (title !== "" || desc !== "") ? (
         <p className="text-dbu-text text-md md:text-lg text-left">
           {title !== "" && (
-            <span className="font-bold text-dbu-header">
-              {path ? <EditableText path={`${path}.title`} value={title} /> : title}:{" "}
-            </span>
+            <span className="font-bold text-dbu-header">{title}:{" "}</span>
           )}
-          {path ? <EditableText path={`${path}.desc`} value={desc} /> : desc}
+          {desc}
         </p>
-      )}
+      ) : null}
 
       <Ability
         abilityList={currentAbilities}

@@ -7,7 +7,7 @@ export function useEditMode() {
   return useContext(EditModeContext);
 }
 
-export function EditModeProvider({ children, keyName, toggleStatus, contributorEmail = null, contributorName = null, isAdmin = false }) {
+export function EditModeProvider({ children, keyName, toggleStatus, contributorEmail = null, contributorName = null, isAdmin = false, isCommunity = false }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isContributing, setIsContributing] = useState(false);
   const [pendingChanges, _setPendingChanges] = useState({});
@@ -94,7 +94,7 @@ export function EditModeProvider({ children, keyName, toggleStatus, contributorE
         isEditing, setIsEditing,
         isContributing, setIsContributing,
         contributorEmail, contributorName,
-        isAdmin,
+        isAdmin, isCommunity,
         pendingChanges, setChange, setArrayChange, clearChanges, hasChanges,
         undo, redo, canUndo, canRedo,
         keyName, toggleStatus,

@@ -168,7 +168,7 @@ export default function Head({ Form }) {
         rel="noreferrer"
       >
         <div
-          className="relative cursor-default"
+          className="relative cursor-pointer"
           data-tooltip-id="art-credit-tooltip"
           data-tooltip-content={
             !isEditing &&
@@ -229,9 +229,15 @@ export default function Head({ Form }) {
         </p>
       </div>
       <Tooltip id="art-credit-tooltip" />
-      <p className="text-pretty text-md tracking-wide md:text-lg whitespace-pre-wrap">
-        <EditableText path="head.desc" value={Form.head.desc} />
-      </p>
+      {(isEditing || Form.head.desc) && (
+        <p className="text-pretty text-md tracking-wide md:text-lg whitespace-pre-wrap">
+          <EditableText
+            path="head.desc"
+            value={Form.head.desc ?? ""}
+            className="block w-full min-h-6"
+          />
+        </p>
+      )}
       <ul className="list-disc ml-10 mt-3 text-md md:text-lg">
         {Form.head.raceReq ? (
           <li>
