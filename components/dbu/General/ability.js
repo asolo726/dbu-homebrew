@@ -5,7 +5,7 @@ import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
 import { RiArrowUpLine, RiArrowDownLine } from "react-icons/ri";
 
-export default function Ability({ abilityList = [{}], key, path, selectedIndices, onToggleSelect, onMove }) {
+export default function Ability({ abilityList = [{}], key, path, selectedIndices, onToggleSelect, onMove, onUpdateAbility }) {
   const { isEditing } = useEditMode() || {};
   let conditionAbilityCount = 0;
 
@@ -23,8 +23,18 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
             const labelText = item.condition.replace(/^[–-]/, "").trim();
             inner = (
               <p className="text-dbu-text text-md md:text-lg text-left my-1">
-                {"–"}
-                <span className="font-bold text-dbu-header">{labelText}</span>
+                {/* In view mode show – as static prefix; in edit mode it's part of the editable condition string */}
+                {!isEditing && "–"}
+                <span className="font-bold text-dbu-header">
+                  {path ? (
+                    <EditableText
+                      path={`${path}.abilities.${itemIndex}.condition`}
+                      value={item.condition}
+                    />
+                  ) : (
+                    labelText
+                  )}
+                </span>
                 {": "}
                 {path ? (
                   <EditableText
@@ -46,7 +56,14 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
                 </span>
                 {")-["}
                 <span className="font-bold text-dbu-header">
-                  {item.condition}
+                  {path ? (
+                    <EditableText
+                      path={`${path}.abilities.${itemIndex}.condition`}
+                      value={item.condition}
+                    />
+                  ) : (
+                    item.condition
+                  )}
                 </span>
                 {"]: "}
                 {path ? (
@@ -66,56 +83,88 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
           const listStyleType =
             depth >= 2 ? "square" : depth >= 1 ? "circle" : "disc";
           inner = (
-            <ul className="list-disc" style={{ marginLeft }}>
-              {item.list.map((listItem, i) => (
-                <li
-                  className="my-2 text-dbu-text text-md md:text-lg text-left"
-                  style={{ listStyleType }}
-                  key={i}
-                >
-                  {path ? (
-                    <EditableText
-                      path={`${path}.abilities.${itemIndex}.list.${i}`}
-                      value={listItem}
-                    />
-                  ) : (
-                    listItem
-                  )}
-                </li>
-              ))}
-            </ul>
+            <div>
+              <ul style={{ marginLeft, listStyleType }}>
+                {item.list.map((listItem, i) => (
+                  <li
+                    className="my-2 text-dbu-text text-md md:text-lg text-left"
+                    key={i}
+                  >
+                    {path ? (
+                      <EditableText
+                        path={`${path}.abilities.${itemIndex}.list.${i}`}
+                        value={listItem}
+                      />
+                    ) : (
+                      listItem
+                    )}
+                    {isEditing && onUpdateAbility && (
+                      <button
+                        onClick={() => onUpdateAbility(itemIndex, { type: "list:remove", index: i })}
+                        className="ml-2 text-red-400/40 hover:text-red-400 text-sm leading-none"
+                        title="Remove bullet"
+                      >×</button>
+                    )}
+                  </li>
+                ))}
+              </ul>
+              {isEditing && onUpdateAbility && (
+                <button
+                  onClick={() => onUpdateAbility(itemIndex, { type: "list:add" })}
+                  style={{ marginLeft }}
+                  className="text-xs text-dbu-text/40 hover:text-dbu-header mt-0.5"
+                >+ Add bullet</button>
+              )}
+            </div>
           );
         } else if ("miniTraitList" in item) {
           const depth = "sublist" in item ? item.sublist : 0;
           const marginLeft = `${(depth + 1) * 2.5}rem`;
+          const listStyleType = depth >= 2 ? "square" : depth >= 1 ? "circle" : "disc";
           inner = (
-            <ul className="list-disc" style={{ marginLeft }}>
-              {item.miniTraitList.map((listItem, i) => (
-                <li
-                  className="my-2 text-dbu-text text-md md:text-lg text-left"
-                  key={i}
-                >
-                  <span className="font-bold text-dbu-header">
+            <div>
+              <ul style={{ marginLeft, listStyleType }}>
+                {item.miniTraitList.map((listItem, i) => (
+                  <li
+                    className="my-2 text-dbu-text text-md md:text-lg text-left"
+                    key={i}
+                  >
+                    <span className="font-bold text-dbu-header">
+                      {path ? (
+                        <EditableText
+                          path={`${path}.abilities.${itemIndex}.miniTraitList.${i}.title`}
+                          value={listItem.title}
+                        />
+                      ) : (
+                        listItem.title
+                      )}:{" "}
+                    </span>
                     {path ? (
                       <EditableText
-                        path={`${path}.abilities.${itemIndex}.miniTraitList.${i}.title`}
-                        value={listItem.title}
+                        path={`${path}.abilities.${itemIndex}.miniTraitList.${i}.desc`}
+                        value={listItem.desc}
                       />
                     ) : (
-                      listItem.title
-                    )}:{" "}
-                  </span>
-                  {path ? (
-                    <EditableText
-                      path={`${path}.abilities.${itemIndex}.miniTraitList.${i}.desc`}
-                      value={listItem.desc}
-                    />
-                  ) : (
-                    listItem.desc
-                  )}
-                </li>
-              ))}
-            </ul>
+                      listItem.desc
+                    )}
+                    {isEditing && onUpdateAbility && (
+                      <button
+                        onClick={() => onUpdateAbility(itemIndex, { type: "miniTraitList:remove", index: i })}
+                        className="ml-2 text-red-400/40 hover:text-red-400 text-sm leading-none"
+                        title="Remove item"
+                      >×</button>
+                    )}
+                  </li>
+                ))}
+              </ul>
+              {isEditing && onUpdateAbility && (
+                <button
+                  onClick={() => onUpdateAbility(itemIndex, { type: "miniTraitList:add" })}
+                  style={{ marginLeft }}
+                  className="text-xs text-dbu-text/40 hover:text-dbu-header mt-0.5"
+                >+ Add item</button>
+              )}
+            </div>
           );
         } else if ("addendumBox" in item) {
           const depth = "sublist" in item ? item.sublist : -1;

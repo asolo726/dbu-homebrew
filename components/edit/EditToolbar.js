@@ -1,16 +1,37 @@
 "use client";
 import { useEditMode } from "./EditModeContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { RiPencilFill } from "react-icons/ri";
-import { RiSaveFill } from "react-icons/ri";
-import { RiCloseFill } from "react-icons/ri";
+import { RiPencilFill, RiSaveFill, RiCloseFill, RiArrowGoBackLine, RiArrowGoForwardLine } from "react-icons/ri";
 
 export default function EditToolbar() {
-  const { isEditing, setIsEditing, hasChanges, pendingChanges, clearChanges, keyName } = useEditMode();
+  const { isEditing, setIsEditing, hasChanges, pendingChanges, clearChanges, keyName, undo, redo, canUndo, canRedo } = useEditMode();
   const [saving, setSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState(null); // "success" | "error" | null
   const router = useRouter();
+
+  // Ctrl+Z / Ctrl+Y keyboard shortcuts (skip when user is in a text field)
+  useEffect(() => {
+    if (!isEditing) return;
+    function onKeyDown(e) {
+      const active = document.activeElement;
+      const isTextField =
+        active?.tagName === "TEXTAREA" ||
+        active?.tagName === "INPUT" ||
+        active?.contentEditable === "true";
+      if (isTextField) return;
+
+      if (e.ctrlKey && !e.shiftKey && e.key === "z") {
+        e.preventDefault();
+        undo();
+      } else if (e.ctrlKey && (e.key === "y" || (e.shiftKey && e.key === "z"))) {
+        e.preventDefault();
+        redo();
+      }
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [isEditing, undo, redo]);
 
   async function handleSave() {
     setSaving(true);
@@ -42,6 +63,8 @@ export default function EditToolbar() {
     setSaveStatus(null);
   }
 
+  const ghostBtn = "p-2.5 rounded-full shadow-lg transition-colors cursor-pointer bg-dbu-bg3 border border-dbu-line text-dbu-text hover:border-dbu-header hover:text-dbu-header disabled:opacity-25 disabled:cursor-not-allowed";
+
   return (
     <div className="fixed bottom-6 right-6 flex flex-col items-end gap-2 z-50">
       {saveStatus === "error" && (
@@ -55,7 +78,7 @@ export default function EditToolbar() {
           onClick={handleSave}
           disabled={saving}
           title="Save changes"
-          className="flex items-center gap-2 bg-dbu-header text-dbu-bg px-4 py-2 rounded-full font-bold shadow-lg hover:opacity-90 disabled:opacity-50 transition-opacity"
+          className="flex items-center gap-2 bg-dbu-header text-dbu-bg px-4 py-2 rounded-full font-bold shadow-lg hover:opacity-90 disabled:opacity-50 transition-opacity cursor-pointer"
         >
           <RiSaveFill size={18} />
           {saving ? "Saving..." : "Save"}
@@ -70,6 +93,15 @@ export default function EditToolbar() {
           <RiCloseFill size={18} />
           Cancel
         </button>
+      )}{isEditing && (
+        <div className="flex gap-2">
+          <button onClick={undo} disabled={!canUndo} title="Undo (Ctrl+Z)" className={ghostBtn}>
+            <RiArrowGoBackLine size={18} />
+          </button>
+          <button onClick={redo} disabled={!canRedo} title="Redo (Ctrl+Y)" className={ghostBtn}>
+            <RiArrowGoForwardLine size={18} />
+          </button>
+        </div>
       )}
       <button
         onClick={() => { setIsEditing(!isEditing); setSaveStatus(null); }}

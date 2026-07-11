@@ -7,7 +7,7 @@ function ScrollBackToTopButton() {
 
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 300) {
+            if (window.scrollY > 1200) {
                 setScrollBackToTopButton(true);
             } else {
                 setScrollBackToTopButton(false);
@@ -26,7 +26,7 @@ function ScrollBackToTopButton() {
     return (
         <div className="fixed bottom-6 left-6 flex flex-col items-end gap-2 z-50">
             <button
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                onClick={() => window.scrollTo({ top: 500, behavior: 'smooth' })}
                 title="Back to top"
                 className="p-4 rounded-full shadow-lg transition-colors bg-dbu-bg3 border border-dbu-text text-dbu-text hover:bg-dbu-header hover:text-dbu-bg cursor-pointer"
             >

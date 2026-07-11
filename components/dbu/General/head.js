@@ -29,14 +29,20 @@ const getAspectTooltip = (aspectName) => {
 };
 
 export default function Head({ Form }) {
-  const { isEditing, pendingChanges, setChange } = useEditMode() || {};
+  const editMode = useEditMode();
+  const { isEditing, pendingChanges, setChange, toggleStatus } = editMode || {};
+  const isAuthor = editMode !== null;
   const requirementNameStyle = "font-bold text-dbu-header";
   const [uploading, setUploading] = useState(false);
+  const toggle = Form.head.toggle;
+  const author = Form.head.author;
+
+  const isPublic = !toggle || !!toggleStatus;
 
   const areAuthorAndBannerAuthorDifferent = () => {
     try {
       return !(
-        Form.head.bannerAuthor.toLowerCase() === Form.head.author.toLowerCase()
+        Form.head.bannerAuthor.toLowerCase() === author.toLowerCase()
       );
     } catch (e) {
       return false;
@@ -70,9 +76,22 @@ export default function Head({ Form }) {
 
   return (
     <div className="grow">
-      <h1 className="text-dbu-header text-[2em] sm:text-[3em] font-bold text-center mb-4 tracking-wide">
-        {Form.head.title}
-      </h1>
+      <div className="flex items-center justify-center gap-2 mb-4">
+        <h1 className="text-dbu-header text-[2em] sm:text-[3em] font-bold text-center tracking-wide">
+          {Form.head.title}
+        </h1>
+        {isAuthor && (
+          <span
+            className={`self-center text-[0.55rem] font-semibold tracking-wide uppercase border rounded px-1.5 py-0.5 ${
+              isPublic
+                ? "text-green-400 border-green-500"
+                : "text-gray-200 border-gray-400"
+            }`}
+          >
+            {isPublic ? "Public" : "Hidden"}
+          </span>
+        )}
+      </div>
 
       {/* Author line — always visible in edit mode so the toggle is accessible */}
       {(isEditing || !currentDontShowAuthor) && (

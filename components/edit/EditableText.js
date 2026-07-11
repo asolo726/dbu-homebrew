@@ -22,52 +22,42 @@ function parseInlineLinks(text) {
 
 export default function EditableText({ path, value, className = "" }) {
   const ctx = useEditMode();
-  const textareaRef = useRef(null);
+  const spanRef = useRef(null);
 
   if (!ctx) return <>{parseInlineLinks(value)}</>;
 
   const { isEditing, setChange, pendingChanges } = ctx;
-  const current = path in pendingChanges ? pendingChanges[path] : value;
+  const current = (path && path in pendingChanges) ? pendingChanges[path] : (value ?? "");
 
+  // Sync DOM when `current` changes from outside (e.g. undo/redo).
+  // Skip while this element has focus — we must not clobber the cursor.
   useEffect(() => {
-    const el = textareaRef.current;
-    // Skip hidden elements (e.g. inside a closed AddendumBox) — scrollHeight is 0 when display:none
-    if (isEditing && el && el.offsetParent !== null) {
-      el.style.height = "auto";
-      el.style.height = el.scrollHeight + "px";
+    const el = spanRef.current;
+    if (!el || !isEditing) return;
+    if (document.activeElement === el) return;
+    if (el.innerText !== current) {
+      el.textContent = current ?? "";
     }
-
-    if (!isEditing || !el) return;
-    if (el.offsetParent !== null) return; // already handled above
-
-    // Watch for when it enters the viewport (e.g. AddendumBox opens)
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          el.style.height = "auto";
-          el.style.height = el.scrollHeight + "px";
-          observer.disconnect();
-        }
-      },
-      { threshold: 0 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
   }, [isEditing, current]);
 
-  if (!isEditing) return <>{parseInlineLinks(current)}</>;
+  if (!isEditing || !path) return <>{parseInlineLinks(current)}</>;
+
+  // Ref callback: populates initial content synchronously on mount
+  // to avoid a flash of empty text before the effect runs.
+  function attachRef(node) {
+    spanRef.current = node;
+    if (node && node.textContent === "") {
+      node.textContent = current ?? "";
+    }
+  }
 
   return (
-    <textarea
-      ref={textareaRef}
-      className={`bg-transparent border-b border-dbu-header resize-none w-full outline-none leading-snug ${className}`}
-      value={current ?? ""}
-      rows={1}
-      onChange={(e) => {
-        setChange(path, e.target.value);
-        e.target.style.height = "auto";
-        e.target.style.height = e.target.scrollHeight + "px";
-      }}
+    <span
+      ref={attachRef}
+      contentEditable
+      suppressContentEditableWarning
+      className={`border-b border-dbu-header outline-none whitespace-pre-wrap ${className}`}
+      onInput={(e) => setChange(path, e.currentTarget.innerText)}
     />
   );
 }

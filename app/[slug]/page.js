@@ -160,7 +160,7 @@ export default async function Page({ params }) {
           title={content.head.title}
         />
         <ViewTracker keyName={content.head.keyName} title={content.head.title} isAuthor={viewerName === pageAuthor} />
-        <EditModeWrapper canEdit={viewerName === pageAuthor} keyName={content.head.keyName}>
+        <EditModeWrapper canEdit={viewerName === pageAuthor} keyName={content.head.keyName} toggleStatus={toggleStatus}>
           <SinglePageGenerator content={content} />
         </EditModeWrapper>
       </>
