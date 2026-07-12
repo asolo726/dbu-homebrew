@@ -35,4 +35,5 @@ export const PAGE_TYPES = {
   "Evolved Stage": "Evolved Stage",
   Race: "Race",
   Factor: "Racial Factor",
+  Other: "Other",
 };

@@ -1,5 +1,5 @@
 import Head from "../dbu/General/head";
-import Trait from "../../components/dbu/General/trait";
+import TraitsSection from "../dbu/General/TraitsSection";
 
 export default function FactorRenderPage({ content }) {
   const hasMultipleFactorTraits = content.traits.length > 1;
@@ -9,16 +9,7 @@ export default function FactorRenderPage({ content }) {
       <p className="text-dbu-header text-center text-md md:text-2xl my-3 font-bold tracking-widest">
         {hasMultipleFactorTraits ? "Factor Traits" : "Factor Trait"}
       </p>
-      {content.traits.map((trait, index) => {
-        return (
-          <Trait
-            key={index}
-            title={trait.title}
-            desc={trait.desc}
-            abilities={trait.abilities}
-          />
-        );
-      })}
+      <TraitsSection traits={content.traits} basePath="traits" />
     </div>
   );
 }

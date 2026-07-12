@@ -1,6 +1,5 @@
 import Card from "./card";
 
-
 export default function CardGenerator({ entries }) {
   return (
     <div
@@ -9,7 +8,7 @@ export default function CardGenerator({ entries }) {
     >
       {entries.map((entry, i) => (
         <Card
-          key={i}
+          key={entry.head.keyName}
           link={`/${entry.head.keyName}`}
           imageUrl={entry.head.banner}
           pageName={entry.head.title}
@@ -17,10 +16,13 @@ export default function CardGenerator({ entries }) {
           raceRestriction={entry.head.raceReq}
           tierOfPower={entry.head.tier}
           author={entry.head.author}
-          enhancementType={entry.head.enhancementType} // Only for Enhancements (Standard, Special)
-          awakeningType={entry.head.awakeningType} // Only for Awakenings (Lesser, Greater, Super)
-          awakeningOrigin={entry.head.awakeningOrigin} // Only for Awakenings (Body, Mind)
-          tag={entry.head.tag} // For homebrew that is part of a set (E.g. Invincible, Pocket Monster)
+          enhancementType={entry.head.enhancementType}
+          awakeningType={entry.head.awakeningType}
+          awakeningOrigin={entry.head.awakeningOrigin}
+          tag={entry.head.tag}
+          keyName={entry.head.keyName}
+          upvotes={entry.head.upvotes ?? 0}
+          views={entry.head.views ?? 0}
         />
       ))}
     </div>

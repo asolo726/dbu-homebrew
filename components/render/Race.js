@@ -1,16 +1,10 @@
 import Head from "../dbu/General/head";
-import Trait from "../dbu/General/trait";
+import TraitsSection from "../dbu/General/TraitsSection";
 import RaceFeatures from "../dbu/Race/raceFeatures";
-
-/**
- * Note: We need to figure out a good way of handling subraces
- */
 
 export default function RaceRenderPage({ content }) {
   const hasSubraces =
     content.subraces && content.subraces != "" && content.subraces != null;
-  const headerStyle =
-    "text-dbu-header text-center text-xl md:text-2xl my-3 font-bold tracking-widest";
   const header2Style =
     "text-dbu-header text-[1.5em] sm:text-[1.8em] font-bold text-center mt-5 mb-4";
   return (
@@ -25,47 +19,21 @@ export default function RaceRenderPage({ content }) {
         availableFactors={content.raceFeatures.availableFactors}
       />
       <p className={header2Style}>Primary Racial Traits</p>
-      {content.primaryTraits.map((trait, index) => {
-        return (
-          <Trait
-            key={index}
-            title={trait.title}
-            desc={trait.desc}
-            abilities={trait.abilities}
-          />
-        );
-      })}
+      <TraitsSection traits={content.primaryTraits} basePath="primaryTraits" />
       <p className={header2Style}>Secondary Racial Traits</p>
-      {content.secondaryTraits.map((trait, index) => {
-        return (
-          <Trait
-            key={index}
-            title={trait.title}
-            desc={trait.desc}
-            abilities={trait.abilities}
-          />
-        );
-      })}
+      <TraitsSection traits={content.secondaryTraits} basePath="secondaryTraits" />
       {hasSubraces ? (
-        content.subraces.map((subrace, index) => {
-          return (
-            <div key={index}>
-              <p className={header2Style}>
-                {`${subrace.subraceName} Subrace Traits`}
-              </p>
-              {subrace.traits.map((trait, index) => {
-                return (
-                  <Trait
-                    key={index}
-                    title={trait.title}
-                    desc={trait.desc}
-                    abilities={trait.abilities}
-                  />
-                );
-              })}
-            </div>
-          );
-        })
+        content.subraces.map((subrace, subraceIndex) => (
+          <div key={subraceIndex}>
+            <p className={header2Style}>
+              {`${subrace.subraceName} Subrace Traits`}
+            </p>
+            <TraitsSection
+              traits={subrace.traits}
+              basePath={`subraces.${subraceIndex}.traits`}
+            />
+          </div>
+        ))
       ) : (
         <></>
       )}

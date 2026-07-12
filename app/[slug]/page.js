@@ -1,9 +1,28 @@
 import SinglePageGenerator from "../../components/render/SinglePageGenerator.js";
+import EditModeWrapper from "../../components/edit/EditModeWrapper.js";
 import searchContent from "../api/searchContent/route.js";
 import checkToggle from "../api/toggles/route.js";
+import ViewTracker from "../../components/pages/ViewTracker.js";
+import { auth } from "../../auth";
+import clientPromise from "../../lib/mongoDBClient";
 
-const SITE_URL = "https://dbu-homebrew.vercel.app";
+const SITE_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : "https://dbu-rpg-northgalaxy.vercel.app";
 const SLUG_PATTERN = /^(\w+[-]?)+$/;
+
+import pageTypeColors from "../../lib/pageTypeColors";
+
+async function getViewerInfo() {
+  const session = await auth();
+  if (!session?.user?.email) return { name: null, email: null, isAdmin: false };
+  const client = await clientPromise;
+  const user = await client
+    .db()
+    .collection("users")
+    .findOne({ email: session.user.email }, { projection: { name: 1, type: 1 } });
+  return { name: user?.name ?? null, email: session.user.email, isAdmin: user?.type === "admin" };
+}
 
 //This Regex pattern checks that a url search only contains alphanumerical characters and a -
 //Example: "Super-Saiyan-3" is a match. "{GetUsers} is not a match."
@@ -33,16 +52,19 @@ export async function generateMetadata({ params }) {
   const description = result.head.desc;
   const image = result.head.banner || `${SITE_URL}/whosthatzfighter.webp`;
   const url = `${SITE_URL}/${result.head.keyName}`;
+  const identity = (result.head.identity || "").toLowerCase();
+  const themeColor = pageTypeColors[identity] || "#7c3aed";
   const toggle = result.head.toggle;
 
   try {
-    const toggleStatus = await checkToggle(toggle);
+    const toggleStatus = await checkToggle(toggle, result.head.author);
     if (!toggleStatus) {
-          return fail_return;
-        }
+      const { name: viewerName, email: viewerEmail, isAdmin } = await getViewerInfo();
+      if (viewerName !== result.head.author && !isAdmin) return fail_return;
+    }
   } catch (error) {
-      console.error("Error checking toggle:", error);
-      return fail_return;
+    console.error("Error checking toggle:", error);
+    return fail_return;
   }
 
   return {
@@ -62,6 +84,9 @@ export async function generateMetadata({ params }) {
       title,
       description,
       images: [image],
+    },
+    other: {
+      "theme-color": themeColor,
     },
   };
 }
@@ -99,10 +124,12 @@ export default async function Page({ params }) {
 
   const searchResult = await searchContent(slug);
   const toggle = searchResult.content[0].head.toggle;
-  let toggleStatus = await checkToggle(toggle);
-  
-  // If search fails or toggle is off, return a page not found message.
-  if (searchResult.status === "failed" || (toggle && !toggleStatus)) {
+  const pageAuthor = searchResult.content[0].head.author;
+  let toggleStatus = await checkToggle(toggle, pageAuthor);
+  const { name: viewerName, email: viewerEmail, isAdmin } = await getViewerInfo();
+
+  // If search fails or toggle is off (and viewer is not the author or an admin), show not found.
+  if (searchResult.status === "failed" || (toggle && !toggleStatus && viewerName !== pageAuthor && !isAdmin)) {
     return (
       <div className="flex flex-col justify-center">
         <h1>
@@ -121,7 +148,7 @@ export default async function Page({ params }) {
     );
   }
   if (searchResult.content.length === 1) {
-    const content = searchResult.content[0];
+    const content = JSON.parse(JSON.stringify(searchResult.content[0]));
     const oEmbedUrl = `${SITE_URL}/api/oembed?url=${encodeURIComponent(`${SITE_URL}/${slug}`)}&title=${encodeURIComponent(content.head.title)}&author=${encodeURIComponent(content.head.author || "")}`;
     return (
       <>
@@ -131,7 +158,26 @@ export default async function Page({ params }) {
           href={oEmbedUrl}
           title={content.head.title}
         />
-        <SinglePageGenerator content={content} />
+        <ViewTracker keyName={content.head.keyName} title={content.head.title} isAuthor={viewerName === pageAuthor} />
+        {(() => {
+          const canEdit = viewerName === pageAuthor || isAdmin;
+          const allowlist = content.head.communityAllowlist ?? [];
+          const canContribute = !canEdit && !!content.head.isCommunity && !!viewerEmail && allowlist.includes(viewerEmail);
+          return (
+            <EditModeWrapper
+              canEdit={canEdit}
+              canContribute={canContribute}
+              keyName={content.head.keyName}
+              toggleStatus={toggleStatus}
+              contributorEmail={viewerEmail}
+              contributorName={viewerName}
+              isAdmin={isAdmin}
+              isCommunity={!!content.head.isCommunity}
+            >
+              <SinglePageGenerator content={content} />
+            </EditModeWrapper>
+          );
+        })()}
       </>
     );
   }

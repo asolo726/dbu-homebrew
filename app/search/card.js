@@ -1,29 +1,6 @@
-/**
- * Content includes:
- * - Page Link
- * - Page Image
- * - Page Name
- * - Page Type
- *  - Awakening
- *      - Lesser Awakening
- *      - Greater Awakening
- *      - Super Awakening
- *  - Enhancement Power
- *      - Standard Enhancement
- *      - Special Enhancement
- *  - Form
- *      - Alternate Form
- *      - Legendary Form
- *  - Evolved Stage
- *  - Race
- *  - Factor
- * - Race Restriction?
- * - Tier of Power?
- * - Author
- */
-
 import Image from "next/image";
 import Link from "next/link";
+import PageVoteButtons from "../../components/pages/PageVoteButtons";
 
 export default function Card({
   link,
@@ -37,6 +14,9 @@ export default function Card({
   awakeningType,
   awakeningOrigin,
   tag,
+  keyName,
+  upvotes = 0,
+  views = 0,
 }) {
   const pageTypeDisplay = {
     Awakening: "Awakening",
@@ -46,8 +26,9 @@ export default function Card({
     "Evolved Stage": "Evolved Stage",
     Race: "Race",
     Factor: "Racial Factor",
+    Other: "Other",
   };
-  const ToPIsString = typeof tierOfPower === "string"; // This usually happens with evolved stages, where sometimes the stage's ToP depends on the og form.
+  const ToPIsString = typeof tierOfPower === "string";
   const ToP = ToPIsString
     ? tierOfPower.match(/\d+\.?\d*/g).map(Number)
     : tierOfPower;
@@ -59,6 +40,7 @@ export default function Card({
     awakeningOrigin,
     tag,
   ];
+
   return (
     <div
       className="card-glow flex flex-col w-full border border-[var(--card-color)] bg-[#282828] rounded-lg overflow-hidden transition-transform duration-200 hover:-translate-y-2"
@@ -82,12 +64,6 @@ export default function Card({
           {tierOfPower ? (
             <>
               <div className="flex gap-0.5">
-                {/*
-                 * Three cases:
-                 * - Case 1: ToP is just a number. If it is, print out ToP number of stars in gold, make the remaining stars grey.
-                 * - Case 2: ToP has a number, but is a string. If it is, print out the ToP number of stars in gold, make the remaining stars white and put a question mark at the end.
-                 * - Case 3: ToP has no number and is just a string. If it is, print out all the stars in white and put a question mark at the end.
-                 */}
                 {Array.from({ length: 7 }, (_, i) => (
                   <span
                     key={i}
@@ -105,21 +81,34 @@ export default function Card({
           ) : (
             <></>
           )}
-          {/* Card attributes */}
           <p className="text-dbu-text text-[0.65rem] leading-snug line-clamp-2 mt-1">
             {cardAttributes.filter(Boolean).join(" · ")}
           </p>
         </div>
 
-        <div className="flex items-center justify-between mt-2">
-          <span className="text-dbu-header text-[0.55rem]">{author}</span>
-          {link && (
-            <Link
-              href={link}
-              className="text-[0.65rem] bg-dbu-link/90 hover:bg-dbu-link text-white px-3 py-1 rounded-full transition-colors"
-            >
-              View Page
-            </Link>
+        <div className="flex flex-col mt-2 gap-1.5">
+          <div className="flex items-center justify-between">
+            <span className="text-dbu-header text-[0.55rem]">{author}</span>
+            {link && (
+              <Link
+                href={link}
+                className="text-[0.65rem] bg-dbu-link/90 hover:bg-dbu-link text-white px-3 py-1 rounded-full transition-colors"
+              >
+                View Page
+              </Link>
+            )}
+          </div>
+          {keyName && (
+            <div className="flex items-center justify-between">
+              <PageVoteButtons
+                keyName={keyName}
+                initialUpvotes={upvotes}
+                small
+              />
+              <span className="flex items-center gap-1 text-gray-500 text-[0.6rem]">
+                👁 {views}
+              </span>
+            </div>
           )}
         </div>
       </div>

@@ -11,6 +11,7 @@ export default function ProfileMenu({ session }) {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const listOptions = [
     // session ? <a href="/home/create">Create</a> : "" ,
+    ...(session ? [<a href="/home/settings">Settings</a>] : []),
     <SignIn session={session} />,
   ];
   const listCss =

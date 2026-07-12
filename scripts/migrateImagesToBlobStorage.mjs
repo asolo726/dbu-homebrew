@@ -13,7 +13,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PUBLIC_DIR = path.join(__dirname, "../public");
+const PUBLIC_DIR = path.join(__dirname, "../public/Pokemon");
 
 const IMAGE_EXTENSIONS = new Set([
   ".webp",

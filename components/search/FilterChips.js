@@ -1,23 +1,9 @@
 "use client";
 import { BASE_RACES, PAGE_TYPES } from "./searchConstants";
+import Chip from "./Chip";
 
 // Strip trailing 's' for plural-insensitive comparison
 const normalizeRace = (r) => r?.toLowerCase().replace(/s$/, "") ?? "";
-
-function Chip({ label, active, onClick }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`px-3 py-1 rounded-full text-xs transition-colors border ${
-        active
-          ? "bg-dbu-header text-dbu-bg border-dbu-header font-semibold"
-          : "bg-transparent text-dbu-text/70 border-dbu-line hover:border-dbu-text/50"
-      }`}
-    >
-      {label}
-    </button>
-  );
-}
 
 function FilterGroup({
   label,

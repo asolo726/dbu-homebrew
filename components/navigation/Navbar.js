@@ -15,16 +15,14 @@ export default function Navbar({ session }) {
   const testList = [{ text: "Option 1", link: "/option1" }];
   const transformationOptions = [
     {
-      text: "Lesser Awakenings",
-      link: "",
+      text: "Awakenings",
+      link: "/search?pageTypes=Awakening",
       list: testList,
     },
-    { text: "Greater Awakenings", link: "" },
-    { text: "Super Awakenings", link: "" },
-    { text: "Enhancement Powers", link: "" },
-    { text: "Alternate Forms", link: "" },
-    { text: "Legendary Forms", link: "" },
-    { text: "Evolved Stages", link: "" },
+    { text: "Enhancement Powers", link: "/search?pageTypes=Enhancement" },
+    { text: "Alternate Forms", link: "/search?pageTypes=Alternate" },
+    { text: "Legendary Forms", link: "/search?pageTypes=Legendary" },
+    { text: "Evolved Stages", link: "/search?pageTypes=Evolved+Stage" },
   ];
   const playerOptions = [
     { text: "Races", link: "" },
@@ -34,12 +32,10 @@ export default function Navbar({ session }) {
   ];
   const techniqueOptions = [
     { text: "Signature Techniques", link: "" },
-    { text: "Auras", link: "" },
     { text: "Unique Abilities", link: "" },
   ];
 
   const extrasOptions = [
-    { text: "0.9.3 Update Tracker", link: "/progress-tracker" },
     {
       text: "DBU Race Tier List",
       link: "https://tiermaker.com/create/dbu-races-but-with-subraces-99065",
@@ -53,7 +49,7 @@ export default function Navbar({ session }) {
   const navOptions = [
     { text: "Extras", link: "", list: extrasOptions },
     //{ text: "0.9.3 Update Tracker", link: "/home/progress-tracker" },
-    //{ text: "Transformations", link: "", list: transformationOptions },
+    { text: "Transformations", link: "", list: transformationOptions },
     //{ text: "Player", link: "", list: playerOptions },
     //{ text: "Techniques", link: "", list: techniqueOptions },
     //{ text: "Compendiums", link: "", list: [] },
