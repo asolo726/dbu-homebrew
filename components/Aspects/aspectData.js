@@ -244,3 +244,8 @@ export const aspectData = {
     maxLevel: 0,
   },
 };
+
+
+export const getBaseAspects = () => {
+  return Object.keys(aspectData).map((aspect) => aspect.replace(/\s*\(.*?\)$/, ""));
+}

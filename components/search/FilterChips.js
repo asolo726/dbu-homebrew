@@ -1,6 +1,7 @@
 "use client";
 import { BASE_RACES, PAGE_TYPES } from "./searchConstants";
 import Chip from "./Chip";
+import {getBaseAspects} from "../Aspects/aspectData.js";
 
 // Strip trailing 's' for plural-insensitive comparison
 const normalizeRace = (r) => r?.toLowerCase().replace(/s$/, "") ?? "";
@@ -40,6 +41,7 @@ export default function FilterChips({ filters, setFilters, entries }) {
       aspectSet.add(a.name.replace(/\s*\(.*?\)$/, "")),
     );
   });
+  aspectSet.add(...getBaseAspects()); 
   const aspects = [...aspectSet].sort();
 
   const dynamicRaces = [];
