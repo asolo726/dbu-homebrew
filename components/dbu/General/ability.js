@@ -26,24 +26,16 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
                 {/* In view mode show – as static prefix; in edit mode it's part of the editable condition string */}
                 {!isEditing && "–"}
                 <span className="font-bold text-dbu-header">
-                  {path ? (
-                    <EditableText
-                      path={`${path}.abilities.${itemIndex}.condition`}
+                  <EditableText
+                      path={path ? `${path}.abilities.${itemIndex}.condition` : undefined}
                       value={item.condition}
                     />
-                  ) : (
-                    labelText
-                  )}
                 </span>
                 {": "}
-                {path ? (
-                  <EditableText
-                    path={`${path}.abilities.${itemIndex}.desc`}
+                <EditableText
+                    path={path ? `${path}.abilities.${itemIndex}.desc` : undefined}
                     value={item.desc}
                   />
-                ) : (
-                  item.desc
-                )}
               </p>
             );
           } else {
@@ -56,24 +48,16 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
                 </span>
                 {")-["}
                 <span className="font-bold text-dbu-header">
-                  {path ? (
-                    <EditableText
-                      path={`${path}.abilities.${itemIndex}.condition`}
+                  <EditableText
+                      path={path ? `${path}.abilities.${itemIndex}.condition` : undefined}
                       value={item.condition}
                     />
-                  ) : (
-                    item.condition
-                  )}
                 </span>
                 {"]: "}
-                {path ? (
-                  <EditableText
-                    path={`${path}.abilities.${itemIndex}.desc`}
+                <EditableText
+                    path={path ? `${path}.abilities.${itemIndex}.desc` : undefined}
                     value={item.desc}
                   />
-                ) : (
-                  item.desc
-                )}
               </p>
             );
           }
@@ -90,14 +74,10 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
                     className="my-2 text-dbu-text text-md md:text-lg text-left"
                     key={i}
                   >
-                    {path ? (
-                      <EditableText
-                        path={`${path}.abilities.${itemIndex}.list.${i}`}
-                        value={listItem}
-                      />
-                    ) : (
-                      listItem
-                    )}
+                    <EditableText
+                      path={ path ? `${path}.abilities.${itemIndex}.list.${i}` : undefined }
+                      value={listItem}
+                    />
                     {isEditing && onUpdateAbility && (
                       <button
                         onClick={() => onUpdateAbility(itemIndex, { type: "list:remove", index: i })}
@@ -130,23 +110,16 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
                     key={i}
                   >
                     <span className="font-bold text-dbu-header">
-                      {path ? (
-                        <EditableText
-                          path={`${path}.abilities.${itemIndex}.miniTraitList.${i}.title`}
+                      <EditableText
+                          path={path ? `${path}.abilities.${itemIndex}.miniTraitList.${i}.title` : undefined}
                           value={listItem.title}
                         />
-                      ) : (
-                        listItem.title
-                      )}:{" "}
+                        :{" "}
                     </span>
-                    {path ? (
-                      <EditableText
-                        path={`${path}.abilities.${itemIndex}.miniTraitList.${i}.desc`}
-                        value={listItem.desc}
-                      />
-                    ) : (
-                      listItem.desc
-                    )}
+                    <EditableText
+                      path={path ? `${path}.abilities.${itemIndex}.miniTraitList.${i}.desc` : undefined}
+                      value={listItem.desc}
+                    />
                     {isEditing && onUpdateAbility && (
                       <button
                         onClick={() => onUpdateAbility(itemIndex, { type: "miniTraitList:remove", index: i })}
