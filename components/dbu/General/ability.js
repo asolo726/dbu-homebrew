@@ -24,7 +24,7 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
             inner = (
               <p className="text-dbu-text text-md md:text-lg text-left my-1">
                 {/* In view mode show – as static prefix; in edit mode it's part of the editable condition string */}
-                {!isEditing && "–"}
+                {!isEditing }
                 <span className="font-bold text-dbu-header">
                   <EditableText
                       path={path ? `${path}.abilities.${itemIndex}.condition` : undefined}

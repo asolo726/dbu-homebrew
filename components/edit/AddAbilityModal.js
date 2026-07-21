@@ -185,7 +185,7 @@ export default function AddAbilityModal({ onSave, onClose }) {
           {/* Form */}
           <div className="w-1/2 p-6 flex flex-col gap-4">
             <div className="flex gap-2">
-              {typeBtn("condition", "Condition")}
+              {typeBtn("condition", "Effect")}
               {typeBtn("label", "Label")}
               {typeBtn("list", "List")}
               {typeBtn("addendumbox", "Box")}
@@ -193,7 +193,7 @@ export default function AddAbilityModal({ onSave, onClose }) {
 
             {type === "condition" && (
               <div className="flex flex-col gap-1">
-                <label className="text-xs text-dbu-text/50">Condition</label>
+                <label className="text-xs text-dbu-text/50">Keywords</label>
                 <input
                   value={conditionText}
                   onChange={(e) => setConditionText(e.target.value)}
@@ -220,8 +220,8 @@ export default function AddAbilityModal({ onSave, onClose }) {
                 <div className="flex items-center justify-between">
                   <label className="text-xs text-dbu-text/50">Format</label>
                   <div className="flex gap-0.5 rounded-md border border-dbu-line p-0.5">
-                    {subtypeBtn("plain", "Plain")}
-                    {subtypeBtn("bold", "Bold")}
+                    {subtypeBtn("plain", "Simple List")}
+                    {subtypeBtn("bold", "Effects List")}
                   </div>
                 </div>
 
@@ -232,9 +232,9 @@ export default function AddAbilityModal({ onSave, onClose }) {
                     onChange={(e) => setListDepth(Number(e.target.value))}
                     className={inputClass}
                   >
-                    <option value={0}>• Disc — level 1</option>
-                    <option value={1}>◦ Circle — level 2</option>
-                    <option value={2}>▪ Square — level 3</option>
+                    <option value={0}>• Disc — Indent 1</option>
+                    <option value={1}>◦ Circle — Indent 2</option>
+                    <option value={2}>▪ Square — Indent 3</option>
                   </select>
                 </div>
 
@@ -280,7 +280,7 @@ export default function AddAbilityModal({ onSave, onClose }) {
                         <input
                           value={item.title}
                           onChange={(e) => updateMiniItem(i, "title", e.target.value)}
-                          placeholder="Bold title…"
+                          placeholder="Name [Keywords]..."
                           className={inputClass}
                         />
                         <input
