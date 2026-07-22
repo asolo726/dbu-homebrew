@@ -103,7 +103,7 @@ export default function AddAbilityModal({ onSave, onClose }) {
   function handleSave() {
     if (!isValid) return;
     if (type === "label") {
-      onSave({ condition: `– ${labelText.trim()}`, desc: desc.trim() });
+      onSave({ condition: `–${labelText.trim()}`, desc: desc.trim() });
     } else if (type === "addendumbox") {
       onSave({
         addendumBox: {
