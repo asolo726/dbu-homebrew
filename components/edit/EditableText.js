@@ -6,12 +6,9 @@ import { useEffect, useRef } from "react";
 function parseInlineLinks(text) {
   if (!text || typeof text !== "string" || !text.includes("[")) return text;
   const parts = text.split(/(\[[^\]]+\]\([^)]+\))/g);
-  console.log("parts", parts);
   if (parts.length === 1) return text;
   return parts.map((part, i) => {
-    console.log("part", i, part);
     const match = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
-    console.log("match", i, match);
     if (match) {
       return (
         <a key={i} href={match[2]} target="_blank" rel="noopener noreferrer" className="text-dbu-link hover:underline">

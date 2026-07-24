@@ -2,17 +2,19 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { aspectData } from "../../Aspects/aspectData";
+import { getAspects } from "../../Aspects/aspectData";
 import { Tooltip } from "../../../lib/reactTooltip";
 import PageVoteButtons from "../../pages/PageVoteButtons";
 import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
 
+const aspects = await getAspects(); // Fetch aspects once at the top level
+
 const getAspectTooltip = (aspectName) => {
   const cleanName = aspectName.replace(/\s*\(.*?\)$/, "");
-  const aspectInfo = aspectData[cleanName];
-  const isPositive = aspectInfo.type === "Positive";
-  const textColorClass = isPositive
+  const aspectInfo = aspects.find((a) => a.name === cleanName);
+  console.log("Aspect Info:", aspectInfo);
+  const textColorClass = aspectInfo.isPositive
     ? "text-dbu-pos-aspect"
     : "text-dbu-neg-aspect";
 
@@ -21,10 +23,10 @@ const getAspectTooltip = (aspectName) => {
       ${cleanName}
     </div>
     <div class="italic text-sm mb-2 text-gray-300">
-      ${aspectInfo.type} Aspect
+      ${aspectInfo.isPositive ? "Positive" : "Negative"} Aspect
     </div>
     <div class="text-sm leading-relaxed text-gray-100">
-      ${aspectInfo.effects}
+      ${aspectInfo.effects?.replace(/\\n/g, "<br>")}
     </div>
   </div>`;
 };
