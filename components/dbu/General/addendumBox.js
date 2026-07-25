@@ -2,7 +2,7 @@
 import Trait from "./trait";
 import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RxChevronRight } from "react-icons/rx";
 import { RiAddFill, RiSubtractFill, RiDeleteBinLine } from "react-icons/ri";
 
@@ -34,6 +34,11 @@ export default function AddendumBox({
       : traits;
 
   const isMultiTrait = currentTraits != null;
+
+  // There are special kinds of boxes that should always be open. Such
+  // as Signature Techniques, Unique Abilities, etc. A way we can account
+  // for this is to check if there's a boxTitle or not.
+  const isOpenBox = boxTitle === '';
 
   // Read current single-trait values (merging any scalar edits) for conversion
   function resolveCurrentSingleTrait() {
@@ -87,6 +92,15 @@ export default function AddendumBox({
     />
   );
 
+  // When a user starts editing, it's convienient to open all the boxes.
+  useEffect(() => {
+    if (isEditing) {
+      setMenuState(true);
+    }
+    console.log(isOpenBox)
+    
+  }, [isEditing])
+
   return (
     <div className="border border-dbu-header">
       {isEditing ? (
@@ -102,6 +116,10 @@ export default function AddendumBox({
             <EditableText path={path ? `${path}.boxTitle` : undefined} value={boxTitle} />
           </p>
         </div>
+      ) : isOpenBox ? (
+        <button
+          className="flex items-center gap-2 w-full text-left px-3 py-3 cursor-pointer font-sans"
+        />
       ) : (
         <button
           className="flex items-center gap-2 w-full text-left px-3 py-3 cursor-pointer font-sans"
