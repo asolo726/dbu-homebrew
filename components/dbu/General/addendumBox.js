@@ -93,8 +93,9 @@ export default function AddendumBox({
   );
 
   // When a user starts editing, it's convienient to open all the boxes.
+  // OpenBoxes should also always be open.
   useEffect(() => {
-    if (isEditing) {
+    if (isEditing || isOpenBox) {
       setMenuState(true);
     }
     console.log(isOpenBox)
@@ -118,7 +119,7 @@ export default function AddendumBox({
         </div>
       ) : isOpenBox ? (
         <button
-          className="flex items-center gap-2 w-full text-left px-3 py-3 cursor-pointer font-sans"
+          className="flex items-center gap-2 w-full text-left px-3 py-3 font-sans"
         />
       ) : (
         <button
