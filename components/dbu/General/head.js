@@ -13,7 +13,8 @@ const aspects = await getAspects(); // Fetch aspects once at the top level
 const getAspectTooltip = (aspectName) => {
   const cleanName = aspectName.replace(/\s*\(.*?\)$/, "");
   const aspectInfo = aspects.find((a) => a.name === cleanName);
-  console.log("Aspect Info:", aspectInfo);
+  try {
+  //console.log("Aspect Info:", aspectInfo);
   const textColorClass = aspectInfo.isPositive
     ? "text-dbu-pos-aspect"
     : "text-dbu-neg-aspect";
@@ -29,6 +30,10 @@ const getAspectTooltip = (aspectName) => {
       ${aspectInfo.effects?.replace(/\\n/g, "<br>")}
     </div>
   </div>`;
+  }
+  catch (e) {
+    console.log("error loading aspect tooltip for: ", cleanName);
+  }
 };
 
 export default function Head({ Form }) {

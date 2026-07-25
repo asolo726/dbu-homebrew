@@ -5,7 +5,7 @@ import clientPromise from "../../../lib/mongoDBClient";
  * @param {*} searchParam
  * @returns
  */
-async function findContent(searchParam) {
+export async function findContent(searchParam) {
   const client = await clientPromise;
   const db = client.db("content");
   const collections = await db.listCollections({}, { nameOnly: true }); //Returns found collections as an array of strings
