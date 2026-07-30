@@ -132,9 +132,11 @@ export default function Trait({ title = "", desc = "", abilities, path, disableE
       ) : (title !== "" || desc !== "") ? (
         <p className="text-dbu-text text-md md:text-lg text-left">
           {title !== "" && (
-            <span className="font-bold text-dbu-header">{title}:{" "}</span>
+            <span className="font-bold text-dbu-header">
+              <EditableText value={title} />:{" "}
+            </span>
           )}
-          {desc}
+          <EditableText value={desc} />
         </p>
       ) : null}
 

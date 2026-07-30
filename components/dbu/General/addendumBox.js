@@ -4,7 +4,7 @@ import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
 import { useState } from "react";
 import { RxChevronRight } from "react-icons/rx";
-import { RiAddFill, RiDeleteBinLine } from "react-icons/ri";
+import { RiAddFill, RiSubtractFill, RiDeleteBinLine } from "react-icons/ri";
 
 export default function AddendumBox({
   boxTitle,
@@ -18,6 +18,13 @@ export default function AddendumBox({
   const { isEditing, pendingChanges = {}, setArrayChange } = ctx;
   const [menuState, setMenuState] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+  const isContributing = ctx?.isContributing ?? false;
+  const isCommunity = ctx?.isCommunity ?? false;
+  const contributorEmail = ctx?.contributorEmail ?? null;
+  const contributorName = ctx?.contributorName ?? null;
+
+  const btnPlusYellow =
+  "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-dbu-header/50 text-dbu-header bg-dbu-header/10 hover:bg-dbu-header/20 transition-colors";
 
   // Resolve current traits array from pendingChanges, falling back to prop
   const traitsKey = path ? `${path}.traits` : null;
@@ -45,6 +52,23 @@ export default function AddendumBox({
     } else {
       // Convert single-trait to multi-trait, preserving any pending edits
       setArrayChange(traitsKey, [resolveCurrentSingleTrait(), newTrait]);
+    }
+  }
+
+  function withContributor(base) {
+    return isCommunity && contributorEmail
+      ? { ...base, contributor: { email: contributorEmail, name: contributorName } }
+      : base;
+  }
+
+  function handleAddSection() {
+    if (!path || !setArrayChange) return;
+    const newSection = withContributor({ sectional: { title: "New Section" } });
+    if (isMultiTrait) {
+      setArrayChange(traitsKey, [...currentTraits, newSection]);
+    } else {
+      // Convert single-trait to multi-trait, preserving any pending edits
+      setArrayChange(traitsKey, [resolveCurrentSingleTrait(), newSection]);
     }
   }
 
@@ -92,7 +116,38 @@ export default function AddendumBox({
 
       <div className={menuState ? "block px-3 pb-3" : "hidden"}>
         {isMultiTrait ? (
-          currentTraits.map((trait, i) => (
+          currentTraits.map((trait, i) => {
+             if ("sectional" in trait) {
+                      const titlePath = path ? `${path}.${i}.sectional.title` : null;
+                      return (
+                        <div key={i} className="mt-10">
+                          <p className="text-dbu-header text-center text-xl md:text-2xl my-3 font-bold tracking-widest">
+                            {titlePath ? (
+                              <EditableText path={titlePath} value={trait.sectional.title} className="text-center" />
+                            ) : (
+                              trait.sectional.title
+                            )}
+                          </p>
+                          {trait.contributor && (
+                            <p className="text-xs text-white italic text-center mt-1 opacity-60">
+                              (Added by {trait.contributor.name})
+                            </p>
+                          )}
+                          {isEditing && path && (
+                            <div className="flex justify-between items-center mt-2">
+                              <button onClick={() => handleRemoveTrait(i)} title="Delete section" className={"flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-red-500/50 text-red-400 bg-red-900/20 hover:bg-red-900/40 transition-colors"}>
+                                <RiSubtractFill size={16} />
+                              </button>
+                                <button onClick={() => handleAddTraitAfter(i)} title="Add trait below section" className={"flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-white/30 text-white bg-white/10 hover:bg-white/20 transition-colors"}>
+                                  <RiAddFill size={16} />
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }
+            return (
+            
             <div key={i}>
               <Trait
                 title={trait.title}
@@ -111,14 +166,14 @@ export default function AddendumBox({
                   </button>
                 </div>
               )}
-            </div>
-          ))
+            </div>);
+          })
         ) : (
           <Trait title={title} desc={desc} abilities={abilities} path={path} />
         )}
 
         {isEditing && path && (
-          <div className="mt-3">
+          <div className="mt-3 flex gap-2">
             <button
               onClick={handleAddTrait}
               title="Add trait"
@@ -126,6 +181,10 @@ export default function AddendumBox({
             >
               <RiAddFill size={16} />
               Add Trait
+            </button>
+            <button onClick={handleAddSection} title="Add section header" className={btnPlusYellow}>
+              <RiAddFill size={16} />
+              Add Section
             </button>
           </div>
         )}
