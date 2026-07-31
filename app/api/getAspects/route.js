@@ -55,27 +55,32 @@ async function getCustomAspects() {
  */
 export async function GET() {
   const client = await clientPromise;
-  const db = client.db("Main");
+  try {
+    const db = client.db("Main");
 
-  const data = await db.collection("aspects").findOne({}, { projection: { _id: 0 } });
-  const positiveAspects = data.positiveAspects.map((aspect) =>
-    new Aspect(
-      aspect.name,
-      true,
-      aspect.effects,
-      aspect.maxLevel ? aspect.maxLevel : 0,
-      false
-    )
-  );
-  const negativeAspects = data.negativeAspects.map((aspect) =>
-    new Aspect(
-      aspect.name,
-      false,
-      aspect.effects,
-      aspect.maxLevel ? aspect.maxLevel : 0,
-      false
-    )
-  );
-  const customAspects = await getCustomAspects();
-  return Response.json({ positiveAspects: positiveAspects, negativeAspects: negativeAspects, customAspects: customAspects});
+    const data = await db.collection("aspects").findOne({}, { projection: { _id: 0 } });
+    const positiveAspects = data.positiveAspects.map((aspect) =>
+      new Aspect(
+        aspect.name,
+        true,
+        aspect.effects,
+        aspect.maxLevel ? aspect.maxLevel : 0,
+        false
+      )
+    );
+    const negativeAspects = data.negativeAspects.map((aspect) =>
+      new Aspect(
+        aspect.name,
+        false,
+        aspect.effects,
+        aspect.maxLevel ? aspect.maxLevel : 0,
+        false
+      )
+    );
+    const customAspects = await getCustomAspects();
+    return Response.json({ positiveAspects: positiveAspects, negativeAspects: negativeAspects, customAspects: customAspects});
+  }
+  catch (e) {
+    return { Response: "No Data Found" };
+  }
 }
