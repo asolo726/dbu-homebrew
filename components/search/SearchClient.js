@@ -11,7 +11,7 @@ export default function SearchClient({ pageData }) {
   const searchParams = useSearchParams();
 
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
-  const [sortOrder, setSortOrder] = useState(searchParams.get("sort") ?? null);
+  const [sortOrder, setSortOrder] = useState(searchParams.get("sort") ?? "asc");
   const [filters, setFilters] = useState({
     authors: searchParams.get("authors")?.split(",").filter(Boolean) ?? [],
     aspects: searchParams.get("aspects")?.split(",").filter(Boolean) ?? [],
@@ -147,7 +147,6 @@ export default function SearchClient({ pageData }) {
           }
           className="shrink-0 w-auto px-2 py-1 mr-6 rounded-md text-xs border border-dbu-line bg-dbu-bg2 text-dbu-text focus:outline-none focus:border-dbu-header"
         >
-          <option value="null">Default</option>
           <option value="asc">A→Z</option>
           <option value="desc">Z→A</option>
         </select>
