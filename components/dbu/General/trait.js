@@ -9,9 +9,11 @@ import { RiAddFill, RiSubtractFill } from "react-icons/ri";
 export default function Trait({ title = "", desc = "", abilities, path, disableEditActions = false, contributor = null }) {
   const ctx = useEditMode();
   const isEditing = ctx?.isEditing ?? false;
+  const isContributing = ctx?.isContributing ?? false;
   const pendingChanges = ctx?.pendingChanges ?? {};
   const setChange = ctx?.setChange;
   const setArrayChange = ctx?.setArrayChange;
+  const canEditContent = (isEditing || isContributing) && path;
 
   const [selectedIndices, setSelectedIndices] = useState(new Set());
   const [showAddModal, setShowAddModal] = useState(false);
@@ -122,7 +124,7 @@ export default function Trait({ title = "", desc = "", abilities, path, disableE
 
   return (
     <div className="flex-grow-1 mt-4">
-      {(isEditing && path) ? (
+      {(canEditContent && path) ? (
         <p className="text-dbu-text text-md md:text-lg text-left">
           <span className="font-bold text-dbu-header">
             <EditableText path={`${path}.title`} value={title} />:{" "}
@@ -150,7 +152,7 @@ export default function Trait({ title = "", desc = "", abilities, path, disableE
       />
 
       {/* Add / Remove buttons — only in edit mode, only when a path exists, and not inside AddendumBox */}
-      {isEditing && path && !disableEditActions && (
+      {canEditContent && (
         <div className="flex justify-between items-center mt-3">
           {/* Remove selected — bottom left, red */}
           <button
@@ -176,7 +178,7 @@ export default function Trait({ title = "", desc = "", abilities, path, disableE
         </div>
       )}
 
-      {!disableEditActions && showAddModal && (
+      {canEditContent && showAddModal && (
         <AddAbilityModal onSave={handleAdd} onClose={() => setShowAddModal(false)} />
       )}
 
