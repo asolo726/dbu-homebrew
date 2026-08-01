@@ -9,21 +9,22 @@ export default function EditableText({ path, value, className = "" }) {
 
   if (!ctx) return <>{parseAndFormat(value)}</>;
 
-  const { isEditing, setChange, pendingChanges } = ctx;
+  const { isEditing, isContributing, setChange, pendingChanges } = ctx;
+  const canEdit = isEditing || isContributing;
   const current = (path && path in pendingChanges) ? pendingChanges[path] : (value ?? "");
 
   // Sync DOM when `current` changes from outside (e.g. undo/redo).
   // Skip while this element has focus — we must not clobber the cursor.
   useEffect(() => {
     const el = spanRef.current;
-    if (!el || !isEditing) return;
+    if (!el || !canEdit) return;
     if (document.activeElement === el) return;
     if (el.innerText !== current) {
       el.textContent = current ?? "";
     }
-  }, [isEditing, current]);
+  }, [canEdit, current]);
 
-  if (!isEditing || !path) return <>{parseAndFormat(current)}</>;
+  if (!canEdit || !path) return <>{parseAndFormat(current)}</>;
 
   // Ref callback: populates initial content synchronously on mount
   // to avoid a flash of empty text before the effect runs.

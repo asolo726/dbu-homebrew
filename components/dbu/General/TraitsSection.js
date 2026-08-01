@@ -126,16 +126,16 @@ export default function TraitsSection({ traits = [], basePath }) {
                   (Added by {item.contributor.name})
                 </p>
               )}
-              {isActive && basePath && editable && (
+              {isActive && basePath  && (
                 <div className="flex justify-between items-center mt-2">
                   <button onClick={() => removeAt(index)} title="Delete section" className={btnMinus}>
-                    <RiSubtractFill size={16} />
+                    <RiSubtractFill size={16} /> Delete Section
                   </button>
                   <button onClick={() => sortTraitsBelow(index)} title="alphabetize traits" className={sortBtn}>
                     Alphabetize Traits?  
                   </button>
                   <button onClick={() => handleAddTraitAfter(index)} title="Add trait below section" className={btnPlus}>
-                    <RiAddFill size={16} />
+                    <RiAddFill size={16} /> Add Trait
                   </button>
                 </div>
               )}
@@ -150,6 +150,7 @@ export default function TraitsSection({ traits = [], basePath }) {
               desc={item.desc}
               abilities={item.abilities}
               contributor={item.contributor ?? null}
+              disableEditActions={!editable}
               path={basePath && editable ? `${basePath}.${index}` : undefined}
             />
             {isActive && basePath && editable && (
@@ -160,6 +161,7 @@ export default function TraitsSection({ traits = [], basePath }) {
               </div>
             )}
           </div>
+          
         );
       })}
 

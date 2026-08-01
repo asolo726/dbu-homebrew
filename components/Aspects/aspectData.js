@@ -13,6 +13,5 @@ export const getAspects = async () => {
   const data = await response.json();
   let aspects = [];
   aspects = [...data.positiveAspects, ...data.negativeAspects, ...data.customAspects];
-  console.log("Custom Aspects:", ...data.customAspects);
   return aspects;
 }

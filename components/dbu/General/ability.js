@@ -6,7 +6,8 @@ import { useEditMode } from "../../edit/EditModeContext";
 import { RiArrowUpLine, RiArrowDownLine } from "react-icons/ri";
 
 export default function Ability({ abilityList = [{}], key, path, selectedIndices, onToggleSelect, onMove, onUpdateAbility }) {
-  const { isEditing } = useEditMode() || {};
+  const { isEditing, isContributing, contributorEmail } = useEditMode() || {};
+  const canEdit = isEditing || isContributing;
   let conditionAbilityCount = 0;
 
   return (
@@ -24,7 +25,7 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
             inner = (
               <p className="text-dbu-text text-md md:text-lg text-left my-1">
                 {/* In view mode show – as static prefix; in edit mode it's part of the editable condition string */}
-                {!isEditing}
+                {!canEdit}
                 <span className="font-bold text-dbu-header">
                   <EditableText
                       path={path ? `${path}.abilities.${itemIndex}.condition` : undefined}
@@ -78,7 +79,7 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
                       path={ path ? `${path}.abilities.${itemIndex}.list.${i}` : undefined }
                       value={listItem}
                     />
-                    {isEditing && onUpdateAbility && (
+                    {canEdit && onUpdateAbility && (
                       <button
                         onClick={() => onUpdateAbility(itemIndex, { type: "list:remove", index: i })}
                         className="ml-2 text-red-400/40 hover:text-red-400 text-sm leading-none"
@@ -88,7 +89,7 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
                   </li>
                 ))}
               </ul>
-              {isEditing && onUpdateAbility && (
+              {canEdit && onUpdateAbility && (
                 <button
                   onClick={() => onUpdateAbility(itemIndex, { type: "list:add" })}
                   style={{ marginLeft }}
@@ -120,7 +121,7 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
                       path={path ? `${path}.abilities.${itemIndex}.miniTraitList.${i}.desc` : undefined}
                       value={listItem.desc}
                     />
-                    {isEditing && onUpdateAbility && (
+                    {canEdit && onUpdateAbility && (
                       <button
                         onClick={() => onUpdateAbility(itemIndex, { type: "miniTraitList:remove", index: i })}
                         className="ml-2 text-red-400/40 hover:text-red-400 text-sm leading-none"
@@ -130,7 +131,7 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
                   </li>
                 ))}
               </ul>
-              {isEditing && onUpdateAbility && (
+              {canEdit && onUpdateAbility && (
                 <button
                   onClick={() => onUpdateAbility(itemIndex, { type: "miniTraitList:add" })}
                   style={{ marginLeft }}
@@ -157,7 +158,7 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
         } else if ("seeRef" in item) {
           const nameVal = item.seeRef.name;
           const urlVal = item.seeRef.url;
-          if (isEditing && path) {
+          if (canEdit && path) {
             inner = (
               <div className="my-1">
                 <div className="flex items-baseline gap-1 text-dbu-text text-md md:text-lg">
@@ -205,7 +206,7 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
         if (inner == null) return null;
 
         // In edit mode wrap each item with a checkbox + move buttons for selection/reordering
-        if (isEditing && onToggleSelect) {
+        if (canEdit && onToggleSelect) {
           const checked = selectedIndices?.has(itemIndex) ?? false;
           const isFirst = itemIndex === 0;
           const isLast = itemIndex === abilityList.length - 1;

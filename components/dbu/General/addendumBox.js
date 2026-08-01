@@ -98,13 +98,12 @@ export default function AddendumBox({
     if (isEditing || isOpenBox) {
       setMenuState(true);
     }
-    console.log(isOpenBox)
     
   }, [isEditing])
 
   return (
     <div className="border border-dbu-header">
-      {isEditing ? (
+      {(isEditing || isContributing) ? (
         <div
           className="flex items-center gap-2 w-full px-3 py-3"
           onMouseEnter={() => setIsHovering(true)}
@@ -152,7 +151,7 @@ export default function AddendumBox({
                               (Added by {trait.contributor.name})
                             </p>
                           )}
-                          {isEditing && path && (
+                          {(isEditing || isContributing) && path && (
                             <div className="flex justify-between items-center mt-2">
                               <button onClick={() => handleRemoveTrait(i)} title="Delete section" className={"flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-red-500/50 text-red-400 bg-red-900/20 hover:bg-red-900/40 transition-colors"}>
                                 <RiSubtractFill size={16} />
@@ -174,7 +173,7 @@ export default function AddendumBox({
                 abilities={trait.abilities}
                 path={path ? `${path}.traits.${i}` : undefined}
               />
-              {isEditing && path && (
+              {(isEditing || isContributing) && path && (
                 <div className="flex justify-start mt-1 mb-2">
                   <button
                     onClick={() => handleRemoveTrait(i)}
@@ -191,7 +190,7 @@ export default function AddendumBox({
           <Trait title={title} desc={desc} abilities={abilities} path={path} />
         )}
 
-        {isEditing && path && (
+        {(isEditing || isContributing) && path && (
           <div className="mt-3 flex gap-2">
             <button
               onClick={handleAddTrait}
