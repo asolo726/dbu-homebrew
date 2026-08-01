@@ -55,12 +55,13 @@ export async function generateMetadata({ params }) {
   const identity = (result.head.identity || "").toLowerCase();
   const themeColor = pageTypeColors[identity] || "#7c3aed";
   const toggle = result.head.toggle;
+  const author = result.head.author;
 
   try {
-    const toggleStatus = await checkToggle(toggle, result.head.author);
+    const toggleStatus = await checkToggle(toggle, author);
     if (!toggleStatus) {
       const { name: viewerName, email: viewerEmail, isAdmin } = await getViewerInfo();
-      if (viewerName !== result.head.author && !isAdmin) return fail_return;
+      if (viewerName !== author && !isAdmin) return fail_return;
     }
   } catch (error) {
     console.error("Error checking toggle:", error);
@@ -124,16 +125,9 @@ export default async function Page({ params }) {
 
   
   const searchResult = await searchContent(slug);
-  let toggle;
-  let pageAuthor;
-  let toggleStatus;
-  // Try Block to catch if the search fails
-  try{
-    toggle = searchResult.content[0].head.toggle;
-    pageAuthor = searchResult.content[0].head.author;
-    toggleStatus = await checkToggle(toggle, pageAuthor);
-  } catch (error) {
-  }
+  const toggle = searchResult.content[0].head.toggle ?? null;
+  const pageAuthor = searchResult.content[0].head.author ?? null;
+  const toggleStatus = toggle && pageAuthor ? await checkToggle(toggle, pageAuthor) : true;
   
   const { name: viewerName, email: viewerEmail, isAdmin } = await getViewerInfo();
 
