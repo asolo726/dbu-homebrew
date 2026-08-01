@@ -1,6 +1,15 @@
 import clientPromise from "../../../lib/mongoDBClient";
 import searchContent from "../searchContent/route.js";
-import {Aspect} from "../../../components/Aspects/aspectData.js";
+
+/**
+ * Aspect Shape:
+ * title: String
+ * isPositive: Boolean
+ * effects: String
+ * maxLevel: Number
+ * isCustom: Boolean
+ */
+
 
 /**
  * Get Custom Aspects.
@@ -30,13 +39,13 @@ async function getCustomAspects() {
       // 3. Only push if both title and desc exist
       if (trait.title && desc) {
         customAspects.push(
-          new Aspect(
-            trait.title,
-            aspectType,
-            desc,
-            0,
-            true
-          )
+          {
+            name: trait.title,
+            isPositive: aspectType,
+            effects: desc,
+            maxLevel: 0,
+            isCustom: true
+          }
         );
       }
     });
@@ -59,26 +68,27 @@ export async function GET() {
     const db = client.db("Main");
 
     const data = await db.collection("aspects").findOne({}, { projection: { _id: 0 } });
-    const positiveAspects = data.positiveAspects.map((aspect) =>
-      new Aspect(
-        aspect.name,
-        true,
-        aspect.effects,
-        aspect.maxLevel ? aspect.maxLevel : 0,
-        false
-      )
-    );
-    const negativeAspects = data.negativeAspects.map((aspect) =>
-      new Aspect(
-        aspect.name,
-        false,
-        aspect.effects,
-        aspect.maxLevel ? aspect.maxLevel : 0,
-        false
-      )
-    );
+    const positiveAspects = data.positiveAspects.map((aspect) => {
+      return {
+        name: aspect.name,
+        isPositive: true,
+        effects: aspect.effects,
+        maxLevel: aspect.maxLevel ? aspect.maxLevel : 0,
+        isCustom: false
+      };
+    });
+    const negativeAspects = data.negativeAspects.map((aspect) => {
+      return {
+        name: aspect.name,
+        isPositive: false,
+        effects: aspect.effects,
+        maxLevel: aspect.maxLevel ? aspect.maxLevel : 0,
+        isCustom: false
+      };
+    });
+
     const customAspects = await getCustomAspects();
-    return Response.json({ positiveAspects: positiveAspects, negativeAspects: negativeAspects, customAspects: customAspects});
+    return Response.json({ positiveAspects: positiveAspects, negativeAspects: negativeAspects, customAspects: customAspects });
   }
   catch (e) {
     return { Response: "No Data Found" };
