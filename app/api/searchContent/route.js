@@ -54,7 +54,7 @@ export default async function GET(slug) {
   if (resultArr.length >= 1) {
     return { status: "success", content: resultArr };
   } else {
-    return { status: "failed" };
+    return { status: "failed", content: [] };
   }
 }
 

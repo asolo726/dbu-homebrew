@@ -24,6 +24,13 @@ async function getViewerInfo() {
   return { name: user?.name ?? null, email: session.user.email, isAdmin: user?.type === "admin" };
 }
 
+function getFirstContent(searchResult) {
+  if (!searchResult || searchResult.status !== "success") return null;
+   return Array.isArray(searchResult.content) && searchResult.content.length > 0 
+    ? searchResult.content[0] 
+    : null;
+}
+
 //This Regex pattern checks that a url search only contains alphanumerical characters and a -
 //Example: "Super-Saiyan-3" is a match. "{GetUsers} is not a match."
 //This site is very helpful: https://regex101.com
@@ -41,13 +48,13 @@ export async function generateMetadata({ params }) {
   }
 
   const searchResult = await searchContent(slug);
+  const result = getFirstContent(searchResult);
 
-  if (searchResult.status === "failed") {
+  if (!result) {
     return fail_return;
   }
 
   const siteName = "DBU: The Homebrew Galaxy";
-  const result = searchResult.content[0];
   const title = result.head.title;
   const description = result.head.desc;
   const image = result.head.banner || `${SITE_URL}/whosthatzfighter.webp`;
@@ -125,14 +132,15 @@ export default async function Page({ params }) {
 
   
   const searchResult = await searchContent(slug);
-  const toggle = searchResult.content[0].head.toggle ?? null;
-  const pageAuthor = searchResult.content[0].head.author ?? null;
+  const firstContent = getFirstContent(searchResult);
+  const toggle = firstContent?.head.toggle ?? null;
+  const pageAuthor = firstContent?.head.author ?? null;
   const toggleStatus = toggle && pageAuthor ? await checkToggle(toggle, pageAuthor) : true;
   
   const { name: viewerName, email: viewerEmail, isAdmin } = await getViewerInfo();
 
   // If search fails or toggle is off (and viewer is not the author or an admin), show not found.
-  if (searchResult.status === "failed" || (toggle && !toggleStatus && viewerName !== pageAuthor && !isAdmin)) {
+  if (!firstContent || (toggle && !toggleStatus && viewerName !== pageAuthor && !isAdmin)) {
     return (
       <div className="flex flex-col justify-center">
         <h1>
@@ -151,7 +159,7 @@ export default async function Page({ params }) {
     );
   }
   if (searchResult.content.length === 1) {
-    const content = JSON.parse(JSON.stringify(searchResult.content[0]));
+    const content = JSON.parse(JSON.stringify(firstContent));
     const oEmbedUrl = `${SITE_URL}/api/oembed?url=${encodeURIComponent(`${SITE_URL}/${slug}`)}&title=${encodeURIComponent(content.head.title)}&author=${encodeURIComponent(content.head.author || "")}`;
     return (
       <>
