@@ -24,16 +24,10 @@ async function getViewerInfo() {
   return { name: user?.name ?? null, email: session.user.email, isAdmin: user?.type === "admin" };
 }
 
-function getFirstContent(searchResult) {
-  if (!searchResult || searchResult.status !== "success") return null;
-   return Array.isArray(searchResult.content) && searchResult.content.length > 0 
-    ? searchResult.content[0] 
-    : null;
-}
-
 //This Regex pattern checks that a url search only contains alphanumerical characters and a -
 //Example: "Super-Saiyan-3" is a match. "{GetUsers} is not a match."
 //This site is very helpful: https://regex101.com
+export const pattern = /^(\w+[-]?)+$/;
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -48,13 +42,13 @@ export async function generateMetadata({ params }) {
   }
 
   const searchResult = await searchContent(slug);
-  const result = getFirstContent(searchResult);
 
-  if (!result) {
+  if (searchResult.status === "failed") {
     return fail_return;
   }
 
   const siteName = "DBU: The Homebrew Galaxy";
+  const result = searchResult.content[0];
   const title = result.head.title;
   const description = result.head.desc;
   const image = result.head.banner || `${SITE_URL}/whosthatzfighter.webp`;
@@ -62,13 +56,12 @@ export async function generateMetadata({ params }) {
   const identity = (result.head.identity || "").toLowerCase();
   const themeColor = pageTypeColors[identity] || "#7c3aed";
   const toggle = result.head.toggle;
-  const author = result.head.author;
 
   try {
-    const toggleStatus = await checkToggle(toggle, author);
+    const toggleStatus = await checkToggle(toggle, result.head.author);
     if (!toggleStatus) {
       const { name: viewerName, email: viewerEmail, isAdmin } = await getViewerInfo();
-      if (viewerName !== author && !isAdmin) return fail_return;
+      if (viewerName !== result.head.author && !isAdmin) return fail_return;
     }
   } catch (error) {
     console.error("Error checking toggle:", error);
@@ -110,7 +103,7 @@ export async function generateMetadata({ params }) {
 export default async function Page({ params }) {
   const { slug } = await params;
 
-  if (SLUG_PATTERN.test(slug) === false) {
+  if (pattern.test(slug) === false) {
     return (
       <div className="flex flex-col justify-center">
         <h1>
@@ -130,17 +123,14 @@ export default async function Page({ params }) {
     );
   }
 
-  
   const searchResult = await searchContent(slug);
-  const firstContent = getFirstContent(searchResult);
-  const toggle = firstContent?.head.toggle ?? null;
-  const pageAuthor = firstContent?.head.author ?? null;
-  const toggleStatus = toggle && pageAuthor ? await checkToggle(toggle, pageAuthor) : true;
-  
+  const toggle = searchResult.content[0].head.toggle;
+  const pageAuthor = searchResult.content[0].head.author;
+  let toggleStatus = await checkToggle(toggle, pageAuthor);
   const { name: viewerName, email: viewerEmail, isAdmin } = await getViewerInfo();
 
   // If search fails or toggle is off (and viewer is not the author or an admin), show not found.
-  if (!firstContent || (toggle && !toggleStatus && viewerName !== pageAuthor && !isAdmin)) {
+  if (searchResult.status === "failed" || (toggle && !toggleStatus && viewerName !== pageAuthor && !isAdmin)) {
     return (
       <div className="flex flex-col justify-center">
         <h1>
@@ -159,7 +149,7 @@ export default async function Page({ params }) {
     );
   }
   if (searchResult.content.length === 1) {
-    const content = JSON.parse(JSON.stringify(firstContent));
+    const content = JSON.parse(JSON.stringify(searchResult.content[0]));
     const oEmbedUrl = `${SITE_URL}/api/oembed?url=${encodeURIComponent(`${SITE_URL}/${slug}`)}&title=${encodeURIComponent(content.head.title)}&author=${encodeURIComponent(content.head.author || "")}`;
     return (
       <>
