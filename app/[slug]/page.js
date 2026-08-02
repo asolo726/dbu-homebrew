@@ -121,7 +121,7 @@ export default async function Page({ params }) {
         </button>
       </div>
     );
-  }
+  } 
 
   const searchResult = await searchContent(slug);
   const toggle = searchResult.content[0].head.toggle;
