@@ -5,6 +5,7 @@ class AlternateHead extends FormHead {
     banner,
     desc,
     author,
+    authorID,
     bannerAuthor,
     raceReq,
     preReq,
@@ -16,19 +17,22 @@ class AlternateHead extends FormHead {
     transStage = "",
     transformationType = "Form",
     formType = "Alternate",
+    identity = "Alternate"
   } = {}) {
     super({
       title: title,
       banner: banner,
       desc: desc,
-      bannerAuthor: bannerAuthor,
       author: author,
+      authorID: authorID,
+      bannerAuthor: bannerAuthor,
       raceReq: raceReq,
       preReq: preReq,
       tier: tier,
       aspects: aspects,
       attributeModifiers: attributeModifiers,
       transformationType: transformationType,
+      identity: identity
     });
     this._stress = stress;
     this._transLine = transLine;
@@ -60,6 +64,29 @@ class AlternateHead extends FormHead {
   }
   get formType() {
     return this._formType;
+  }
+
+  toJson() {
+    return{
+      title: this._title,
+      banner: this._banner,
+      desc: this._desc,
+      author: this._author,
+      authorID: this._authorID,
+      bannerAuthor: this._bannerAuthor,
+      raceReq: this._raceReq,
+      preReq: this._preReq,
+      tier: this._tier,
+      aspects: this._aspects,
+      attributeModifiers: this._attributeModifiers,
+      transformationType: this._transformationType,
+      formType: this._formType,
+      identity: this._identity,
+      stress: this._stress,
+      transLine: this._transLine,
+      transStage: this._transStage,
+      keyName: this._keyName
+    }
   }
 }
 

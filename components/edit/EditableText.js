@@ -1,49 +1,30 @@
 "use client";
 import { useEditMode } from "./EditModeContext";
 import { useEffect, useRef } from "react";
-
-// Parses [text](url) markdown links into <a> elements for display mode
-function parseInlineLinks(text) {
-  if (!text || typeof text !== "string" || !text.includes("[")) return text;
-  const parts = text.split(/(\[[^\]]+\]\([^)]+\))/g);
-  console.log("parts", parts);
-  if (parts.length === 1) return text;
-  return parts.map((part, i) => {
-    console.log("part", i, part);
-    const match = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
-    console.log("match", i, match);
-    if (match) {
-      return (
-        <a key={i} href={match[2]} target="_blank" rel="noopener noreferrer" className="text-dbu-link hover:underline">
-          {match[1]}
-        </a>
-      );
-    }
-    return part;
-  });
-}
+import {parseAndFormat} from './util/parserFunctions';
 
 export default function EditableText({ path, value, className = "" }) {
   const ctx = useEditMode();
   const spanRef = useRef(null);
 
-  if (!ctx) return <>{parseInlineLinks(value)}</>;
+  if (!ctx) return <>{parseAndFormat(value)}</>;
 
-  const { isEditing, setChange, pendingChanges } = ctx;
+  const { isEditing, isContributing, setChange, pendingChanges } = ctx;
+  const canEdit = isEditing || isContributing;
   const current = (path && path in pendingChanges) ? pendingChanges[path] : (value ?? "");
 
   // Sync DOM when `current` changes from outside (e.g. undo/redo).
   // Skip while this element has focus — we must not clobber the cursor.
   useEffect(() => {
     const el = spanRef.current;
-    if (!el || !isEditing) return;
+    if (!el || !canEdit) return;
     if (document.activeElement === el) return;
     if (el.innerText !== current) {
       el.textContent = current ?? "";
     }
-  }, [isEditing, current]);
+  }, [canEdit, current]);
 
-  if (!isEditing || !path) return <>{parseInlineLinks(current)}</>;
+  if (!canEdit || !path) return <>{parseAndFormat(current)}</>;
 
   // Ref callback: populates initial content synchronously on mount
   // to avoid a flash of empty text before the effect runs.

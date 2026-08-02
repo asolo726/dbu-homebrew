@@ -1,6 +1,7 @@
 import Head from "../dbu/General/head";
 import TraitsSection from "../dbu/General/TraitsSection";
 import MasteryTrait from "../dbu/Transformations/masteryTrait";
+import LegendaryTrait from "../dbu/Transformations/legendaryTrait";
 
 export default function AlternateRenderPage({ content }) {
   return (
@@ -9,6 +10,11 @@ export default function AlternateRenderPage({ content }) {
       <TraitsSection traits={content.traits} basePath="traits" />
       {content.masteryTrait && content.masteryTrait.length > 0 ? (
         <MasteryTrait masteryTraitList={content.masteryTrait} path="masteryTrait" />
+      ) : (
+        <></>
+      )}
+      {content.legendaryTrait && content.legendaryTrait.length > 0 ? (
+        <LegendaryTrait legendaryTraitList={content.legendaryTrait} path="legendaryTrait" />
       ) : (
         <></>
       )}

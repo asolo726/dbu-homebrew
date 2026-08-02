@@ -16,6 +16,7 @@ class LegendaryHead extends FormHead {
     transStage = "",
     transformationType = "Legendary Form",
     formType = "Transformation",
+    identity = "Legendary"
   } = {}) {
     super({
       title: title,
@@ -29,6 +30,7 @@ class LegendaryHead extends FormHead {
       aspects: aspects,
       attributeModifiers: attributeModifiers,
       transformationType: transformationType,
+      identity: identity
     });
     this._stress = stress;
     this._transLine = transLine;
@@ -66,6 +68,28 @@ class LegendaryHead extends FormHead {
 
   get formType() {
     return this._formType;
+  }
+
+  toJson() {
+    return {
+      title: this._title,
+      banner: this._banner,
+      desc: this._desc,
+      bannerAuthor: this._bannerAuthor,
+      author: this._author,
+      raceReq: this._raceReq,
+      preReq: this._preReq,
+      tier: this._tier,
+      aspects: this._aspects,
+      attributeModifiers: this._attributeModifiers,
+      transformationType: this._transformationType,
+      formType: this._formType,
+      identity: this._identity,
+      stress: this._stress,
+      transLine: this._transLine,
+      transStage: this._transStage,
+      keyName: this._keyName
+    };
   }
 }
 

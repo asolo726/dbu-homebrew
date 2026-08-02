@@ -23,6 +23,13 @@ class GrandAwakening {
   set ability(value) {
     this._abilities = value;
   }
+  toJson() {
+    return {
+      title: this._title,
+      desc: this._desc,
+      abilities: this._abilities,
+    };
+  }
 }
 
 export default GrandAwakening;
