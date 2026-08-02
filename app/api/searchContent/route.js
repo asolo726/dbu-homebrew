@@ -5,7 +5,7 @@ import clientPromise from "../../../lib/mongoDBClient";
  * @param {*} searchParam
  * @returns
  */
-export async function findContent(searchParam) {
+async function findContent(searchParam) {
   const client = await clientPromise;
   const db = client.db("content");
   const collections = await db.listCollections({}, { nameOnly: true }); //Returns found collections as an array of strings
@@ -54,7 +54,7 @@ export default async function GET(slug) {
   if (resultArr.length >= 1) {
     return { status: "success", content: resultArr };
   } else {
-    return { status: "failed", content: [] };
+    return { status: "failed" };
   }
 }
 

@@ -23,13 +23,6 @@ class Trait {
   set abilities(value) {
     this._abilities = value;
   }
-  toJson() {
-    return {
-      title: this._title,
-      desc: this._desc,
-      abilities: this._abilities,
-    };
-  }
 }
 
 export default Trait;

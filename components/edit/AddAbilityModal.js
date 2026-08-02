@@ -89,23 +89,11 @@ export default function AddAbilityModal({ onSave, onClose }) {
   const [miniItems, setMiniItems] = useState([{ title: "", desc: "" }]);
   const [listDepth, setListDepth] = useState(0);
 
-  /** 
-   * Depending on type of content the user is adding, the code prevent them from adding it if
-   * it fails a specific criteria.
-   * - Label: Labels must have name (i.e, a title).
-   * - Addendum Box: Addendum Boxes must either have:
-   *   - A title
-   *   - A trait with both a title and a description (Open Box)
-   * - List: 
-   *   - If adding a standard list, at least one entry in the list needs to have text.
-   *   - If adding an effects list (i.e, a list with labels), there must be at least one entry with a non-empty label.
-   * - Effect: An effect (i.e, an ability for a trait) must have text in the keywords field.
-  */
   const isValid =
     type === "label"
       ? labelText.trim() !== ""
       : type === "addendumbox"
-      ? boxTitle.trim() !== "" || boxTraitTitle.trim() !== "" && boxTraitDesc.trim() !== ""
+      ? boxTitle.trim() !== ""
       : type === "list"
       ? listSubtype === "bold"
         ? miniItems.some((it) => it.title.trim() !== "" || it.desc.trim() !== "")

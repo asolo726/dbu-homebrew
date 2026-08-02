@@ -9,10 +9,4 @@ class Ability {
   set abilityList(value) {
     this._abilityList = value;
   }
-
-  toJson() {
-    return {
-      abilityList: this._abilityList,
-    };
-  }
 }

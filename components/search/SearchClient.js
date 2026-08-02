@@ -11,7 +11,7 @@ export default function SearchClient({ pageData }) {
   const searchParams = useSearchParams();
 
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
-  const [sortOrder, setSortOrder] = useState(searchParams.get("sort") ?? "asc");
+  const [sortOrder, setSortOrder] = useState(searchParams.get("sort") ?? null);
   const [filters, setFilters] = useState({
     authors: searchParams.get("authors")?.split(",").filter(Boolean) ?? [],
     aspects: searchParams.get("aspects")?.split(",").filter(Boolean) ?? [],
@@ -136,7 +136,7 @@ export default function SearchClient({ pageData }) {
           onClick={clearAll}
           data-tooltip-id="clear-tooltip"
           data-tooltip-content="Clear all filters and search"
-          className="shrink-0 px-3 py-1 rounded-md text-xs border border-dbu-line bg-dbu-bg2 text-dbu-text hover:border-dbu-header transition-all active:scale-90 active:bg-dbu-bg3 cursor-pointer"
+          className="shrink-0 px-3 py-1 rounded-md text-xs border border-dbu-line bg-dbu-bg2 text-dbu-text hover:border-dbu-header transition-all active:scale-90 active:bg-dbu-bg3"
         >
           Clear
         </button>
@@ -145,8 +145,9 @@ export default function SearchClient({ pageData }) {
           onChange={(e) =>
             setSortOrder(e.target.value === "null" ? null : e.target.value)
           }
-          className="shrink-0 w-auto px-2 py-1 mr-6 rounded-md text-xs border border-dbu-line bg-dbu-bg2 text-dbu-text focus:outline-none focus:border-dbu-header cursor-pointer"
+          className="shrink-0 w-auto px-2 py-1 mr-6 rounded-md text-xs border border-dbu-line bg-dbu-bg2 text-dbu-text focus:outline-none focus:border-dbu-header"
         >
+          <option value="null">Default</option>
           <option value="asc">A→Z</option>
           <option value="desc">Z→A</option>
         </select>

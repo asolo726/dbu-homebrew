@@ -1,7 +1,7 @@
 class Table {
   constructor(headers, rows) {
-    this.headers = headers;
-    this.rows = rows;
+    this._headers = headers;
+    this._rows = rows;
   }
 
   get headers() {

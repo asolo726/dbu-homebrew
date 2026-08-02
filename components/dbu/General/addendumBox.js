@@ -2,7 +2,7 @@
 import Trait from "./trait";
 import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { RxChevronRight } from "react-icons/rx";
 import { RiAddFill, RiSubtractFill, RiDeleteBinLine } from "react-icons/ri";
 
@@ -34,11 +34,6 @@ export default function AddendumBox({
       : traits;
 
   const isMultiTrait = currentTraits != null;
-
-  // There are special kinds of boxes that should always be open. Such
-  // as Signature Techniques, Unique Abilities, etc. A way we can account
-  // for this is to check if there's a boxTitle or not.
-  const isOpenBox = boxTitle === '';
 
   // Read current single-trait values (merging any scalar edits) for conversion
   function resolveCurrentSingleTrait() {
@@ -92,18 +87,9 @@ export default function AddendumBox({
     />
   );
 
-  // When a user starts editing, it's convienient to open all the boxes.
-  // OpenBoxes should also always be open.
-  useEffect(() => {
-    if (isEditing || isOpenBox) {
-      setMenuState(true);
-    }
-    
-  }, [isEditing])
-
   return (
     <div className="border border-dbu-header">
-      {(isEditing || isContributing) ? (
+      {isEditing ? (
         <div
           className="flex items-center gap-2 w-full px-3 py-3"
           onMouseEnter={() => setIsHovering(true)}
@@ -116,10 +102,6 @@ export default function AddendumBox({
             <EditableText path={path ? `${path}.boxTitle` : undefined} value={boxTitle} />
           </p>
         </div>
-      ) : isOpenBox ? (
-        <button
-          className="flex items-center gap-2 w-full text-left px-3 py-3 font-sans"
-        />
       ) : (
         <button
           className="flex items-center gap-2 w-full text-left px-3 py-3 cursor-pointer font-sans"
@@ -151,7 +133,7 @@ export default function AddendumBox({
                               (Added by {trait.contributor.name})
                             </p>
                           )}
-                          {(isEditing || isContributing) && path && (
+                          {isEditing && path && (
                             <div className="flex justify-between items-center mt-2">
                               <button onClick={() => handleRemoveTrait(i)} title="Delete section" className={"flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-red-500/50 text-red-400 bg-red-900/20 hover:bg-red-900/40 transition-colors"}>
                                 <RiSubtractFill size={16} />
@@ -173,7 +155,7 @@ export default function AddendumBox({
                 abilities={trait.abilities}
                 path={path ? `${path}.traits.${i}` : undefined}
               />
-              {(isEditing || isContributing) && path && (
+              {isEditing && path && (
                 <div className="flex justify-start mt-1 mb-2">
                   <button
                     onClick={() => handleRemoveTrait(i)}
@@ -190,7 +172,7 @@ export default function AddendumBox({
           <Trait title={title} desc={desc} abilities={abilities} path={path} />
         )}
 
-        {(isEditing || isContributing) && path && (
+        {isEditing && path && (
           <div className="mt-3 flex gap-2">
             <button
               onClick={handleAddTrait}

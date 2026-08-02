@@ -2,11 +2,32 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { aspectData } from "../../Aspects/aspectData";
 import { Tooltip } from "../../../lib/reactTooltip";
 import PageVoteButtons from "../../pages/PageVoteButtons";
 import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
-import { getAspectTooltip, handleImageUpload, customAspectNames } from "./util/headUtil";
+
+const getAspectTooltip = (aspectName) => {
+  const cleanName = aspectName.replace(/\s*\(.*?\)$/, "");
+  const aspectInfo = aspectData[cleanName];
+  const isPositive = aspectInfo.type === "Positive";
+  const textColorClass = isPositive
+    ? "text-dbu-pos-aspect"
+    : "text-dbu-neg-aspect";
+
+  return `<div class="p-3">
+    <div class="text-lg font-bold ${textColorClass} mb-1">
+      ${cleanName}
+    </div>
+    <div class="italic text-sm mb-2 text-gray-300">
+      ${aspectInfo.type} Aspect
+    </div>
+    <div class="text-sm leading-relaxed text-gray-100">
+      ${aspectInfo.effects}
+    </div>
+  </div>`;
+};
 
 export default function Head({ Form }) {
   const editMode = useEditMode();
@@ -40,6 +61,16 @@ export default function Head({ Form }) {
     }
   }
 
+  const areAuthorAndBannerAuthorDifferent = () => {
+    try {
+      return !(
+        Form.head.bannerAuthor.toLowerCase() === author.toLowerCase()
+      );
+    } catch (e) {
+      return false;
+    }
+  };
+
   const currentBanner =
     pendingChanges?.["head.banner"] ??
     (Form.head.banner !== "" ? Form.head.banner : null) ??
@@ -53,6 +84,20 @@ export default function Head({ Form }) {
   // Community pages always hide the author credit
   const currentDontShowAuthor =
     currentIsCommunity || (pendingChanges?.["head.dontShowAuthor"] ?? Form.head.dontShowAuthor ?? false);
+
+  async function handleImageUpload(file) {
+    if (!file || !setChange) return;
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/uploadImage", { method: "POST", body: fd });
+      const data = await res.json();
+      if (data.url) setChange("head.banner", data.url);
+    } finally {
+      setUploading(false);
+    }
+  }
 
   return (
     <div className="grow">
@@ -128,7 +173,8 @@ export default function Head({ Form }) {
           data-tooltip-content={
             !isEditing &&
             Form.head.bannerAuthor &&
-            Form.head.bannerAuthor !== ""
+            Form.head.bannerAuthor !== "" &&
+            areAuthorAndBannerAuthorDifferent()
               ? `Art Credit: ${Form.head.bannerAuthor}`
               : undefined
           }
@@ -376,7 +422,7 @@ export default function Head({ Form }) {
                       data-tooltip-html={getAspectTooltip(aspect.name)}
                       className="cursor-help"
                     >
-                      <span className={`${customAspectNames.includes(aspect.name) ? "underline" : ""}`}>{aspect.name}</span>
+                      {aspect.name}
                     </a>
                     {aspect.link && (
                       <>
