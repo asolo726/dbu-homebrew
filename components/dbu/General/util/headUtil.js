@@ -1,19 +1,33 @@
-// Gets aspects from the database.
-const getAspects = async () => {
-  const response = await fetch("/api/getAspects");
-  const data = await response.json();
-  let aspects = [];
-  aspects = [...data.positiveAspects, ...data.negativeAspects, ...data.customAspects];
-  return aspects;
+"use client";
+"use client";
+
+let aspects = [];
+let aspectsLoaded = false;
+let aspectsPromise = null;
+
+export async function loadAspects() {
+    if (aspectsLoaded) return aspects;
+
+    if (!aspectsPromise) {
+        aspectsPromise = fetch("/api/getAspects")
+            .then((res) => res.json())
+            .then((data) => {
+                aspects = [
+                    ...data.positiveAspects,
+                    ...data.negativeAspects,
+                    ...data.customAspects
+                ];
+
+                aspectsLoaded = true;
+                return aspects;
+            });
+    }
+
+    return aspectsPromise;
 }
 
-// We can fetch aspects once and reuse them for tooltips to avoid multiple network requests.
-const aspects = await getAspects();
+export const getCustomAspectNames = () => aspects.filter((aspect) => aspect.isCustom).map((aspect) => aspect.name);
 
-// We get custom aspects to determine if we should italicize the aspect name on the page.
-export const customAspectNames = aspects.filter((aspect) => aspect.isCustom).map((aspect) => aspect.name);
-
-// Handles the special tooltip for aspects when a user hovers over an aspect name.
 export const getAspectTooltip = (aspectName) => {
   const cleanName = aspectName.replace(/\s*\(.*?\)$/, "");
   const aspectInfo = aspects.find((a) => a.name === cleanName);

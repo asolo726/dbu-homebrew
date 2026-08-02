@@ -1,12 +1,12 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import { useRouter } from "next/navigation";
 import { Tooltip } from "../../../lib/reactTooltip";
 import PageVoteButtons from "../../pages/PageVoteButtons";
 import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
-import { getAspectTooltip, handleImageUpload, customAspectNames } from "./util/headUtil";
+import { loadAspects, getAspectTooltip, handleImageUpload, getCustomAspectNames } from "./util/headUtil";
 
 export default function Head({ Form }) {
   const editMode = useEditMode();
@@ -19,6 +19,7 @@ export default function Head({ Form }) {
   const router = useRouter();
   const toggle = Form.head.toggle;
   const author = Form.head.author;
+  const [aspectsReady, setAspectsReady] = useState(false);
 
   const isPublic = localPublic !== null ? localPublic : (!toggle || !!toggleStatus);
 
@@ -39,6 +40,19 @@ export default function Head({ Form }) {
       setToggling(false);
     }
   }
+
+  useEffect(() => {
+    let cancelled = false;
+
+    loadAspects().then(() => {
+      if (!cancelled) setAspectsReady(true);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  const customAspectNames = getCustomAspectNames();
 
   const currentBanner =
     pendingChanges?.["head.banner"] ??
@@ -369,11 +383,12 @@ export default function Head({ Form }) {
               <span className={requirementNameStyle}>Aspects: </span>{" "}
               {Form.head.aspects.map((aspect, id) => {
                 const lastAspect = id === Form.head.aspects.length - 1;
+                const tooltipHtml = aspectsReady ? getAspectTooltip(aspect.name) : "";
                 return (
                   <span key={id}>
                     <a
                       data-tooltip-id="my-tooltip"
-                      data-tooltip-html={getAspectTooltip(aspect.name)}
+                      data-tooltip-html={tooltipHtml}
                       className="cursor-help"
                     >
                       <span className={`${customAspectNames.includes(aspect.name) ? "underline" : ""}`}>{aspect.name}</span>
