@@ -4,7 +4,7 @@ export default function LegendaryTrait({ legendaryTraitList = [], path }) {
   return (
     <div className="mt-10">
       <p className="text-dbu-header text-center text-md md:text-2xl my-3 font-bold tracking-widest">
-        {legendaryTraitList.length < 1 ? "LEGENDARY TRAIT" : "LEGENDARY TRAITS"}
+        {legendaryTraitList.length > 1 ? "LEGENDARY TRAIT(S)" : "LEGENDARY TRAIT"}
       </p>
       {legendaryTraitList.map((trait, key) => (
         <Trait

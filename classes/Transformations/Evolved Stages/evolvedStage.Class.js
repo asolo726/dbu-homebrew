@@ -1,5 +1,5 @@
 class EvolvedStage {
-  constructor({ head, traits = [], masteryTrait, legendaryTrait } = {}) {
+  constructor(head, traits = [], masteryTrait = [], legendaryTrait = []) {
     this._head = head;
     this._traits = traits;
     this._masteryTrait = masteryTrait;
@@ -33,6 +33,16 @@ class EvolvedStage {
   set legendaryTrait(value) {
     this._legendaryTrait = value;
   }
+
+  toJson() {
+    return {
+      head: this._head.toJson(),
+      traits: this._traits.map(trait => trait.toJson()),
+      masteryTrait: this._masteryTrait.map(trait => trait.toJson()),
+      legendaryTrait: this._legendaryTrait.map(trait => trait.toJson()),
+    };
+  }
+
 }
 
 export default EvolvedStage;
