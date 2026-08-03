@@ -1,4 +1,6 @@
 
+
+
 let aspects = [];
 let aspectsLoaded = false;
 let aspectsPromise = null;
@@ -51,18 +53,3 @@ export const getAspectTooltip = (aspectName) => {
     console.log("error loading aspect tooltip for: ", cleanName);
   }
 };
-
-// Allows users to upload an image and set the banner URL in the head object.
-export async function handleImageUpload(file) {
-    if (!file || !setChange) return;
-    setUploading(true);
-    try {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await fetch("/api/uploadImage", { method: "POST", body: fd });
-      const data = await res.json();
-      if (data.url) setChange("head.banner", data.url);
-    } finally {
-      setUploading(false);
-    }
-}
