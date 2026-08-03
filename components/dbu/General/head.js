@@ -6,7 +6,7 @@ import { Tooltip } from "../../../lib/reactTooltip";
 import PageVoteButtons from "../../pages/PageVoteButtons";
 import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
-import { loadAspects, getAspectTooltip, handleImageUpload, getCustomAspectNames } from "./util/headUtil";
+import { loadAspects, getAspectTooltip, getCustomAspectNames } from "./util/headUtil";
 
 export default function Head({ Form }) {
   const editMode = useEditMode();
@@ -40,6 +40,21 @@ export default function Head({ Form }) {
       setToggling(false);
     }
   }
+
+  // Allows users to upload an image and set the banner URL in the head object.
+  async function handleImageUpload(file) {
+    if (!file || !setChange) return;
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/uploadImage", { method: "POST", body: fd });
+      const data = await res.json();
+      if (data.url) setChange("head.banner", data.url);
+    } finally {
+      setUploading(false);
+    }
+}
 
   useEffect(() => {
     let cancelled = false;
