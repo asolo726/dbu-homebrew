@@ -136,7 +136,7 @@ export default function AddendumBox({
         {isMultiTrait ? (
           currentTraits.map((trait, i) => {
              if ("sectional" in trait) {
-                      const titlePath = path ? `${path}.${i}.sectional.title` : null;
+                      const titlePath = path ? `${path}.traits.${i}.sectional.title` : null;
                       return (
                         <div key={i} className="mt-10">
                           <p className="text-dbu-header text-center text-xl md:text-2xl my-3 font-bold tracking-widest">
