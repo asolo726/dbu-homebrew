@@ -7,6 +7,7 @@ import PageVoteButtons from "../../pages/PageVoteButtons";
 import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
 import { loadAspects, getAspectTooltip, getCustomAspectNames } from "./util/headUtil";
+import { ScrollToTop } from "../../navigation/ScrollBackToTopButton";
 
 export default function Head({ Form }) {
   const editMode = useEditMode();
@@ -55,7 +56,17 @@ export default function Head({ Form }) {
       setUploading(false);
     }
 }
+  // This useEffect scrolls the user to the top of a page, but only if they haven't visited the page before in this session. 
+  // It uses sessionStorage to track whether the user has visited the page, and if not, it scrolls to the top instantly and sets a flag in sessionStorage to prevent future automatic scrolling during the same session.
+  useEffect(() => {
+    const hasVisited = sessionStorage.getItem("hasVisitedPage");
+    if (hasVisited !== Form.head.keyName) {
+      ScrollToTop('instant');
+      sessionStorage.setItem("hasVisitedPage", Form.head.keyName);
+    }
+  }, []);
 
+  // This effect loads the aspect data for tooltips. It sets a flag when the data is ready to avoid rendering tooltips with missing content.
   useEffect(() => {
     let cancelled = false;
 
