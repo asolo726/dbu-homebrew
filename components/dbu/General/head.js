@@ -98,7 +98,11 @@ export default function Head({ Form }) {
     <div className="grow">
       <div className="flex items-center justify-center gap-2 mb-4">
         <h1 className="text-dbu-header text-[2em] sm:text-[3em] font-bold text-center tracking-wide">
-          {Form.head.title}
+          {isEditing ? (
+            <EditableText path="head.title" value={Form.head.title} />
+          ) : (
+            Form.head.title
+          )}
         </h1>
         {currentIsCommunity && (
           <span className="self-center text-[0.55rem] font-semibold tracking-wide uppercase border rounded px-1.5 py-0.5 text-blue-300 border-blue-400">

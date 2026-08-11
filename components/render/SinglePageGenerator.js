@@ -53,6 +53,7 @@ export default async function SinglePageGenerator({ content }) {
   return (
     <div className={pageRenderStyle}>
       {pageContent}
+      {/* Reminder: Delete this eventually */}
       <div className="px-4 pb-4">
         <CommunitySettings
           keyName={content.head.keyName}

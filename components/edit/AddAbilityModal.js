@@ -178,7 +178,6 @@ export default function AddAbilityModal({ onSave, onClose }) {
   return (
     <div
       className="fixed inset-0 bg-black/60 flex items-center justify-center z-60"
-      onClick={onClose}
     >
       <div
         className="bg-dbu-bg2 border border-dbu-line rounded-lg w-full max-w-3xl mx-4 shadow-2xl overflow-hidden"
