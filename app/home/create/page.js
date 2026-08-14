@@ -6,6 +6,8 @@ import createAlternate from "../../../components/creation/CreateOptions/Alternat
 import createEnhancement from "../../../components/creation/CreateOptions/Enhancement";
 import createLegendary from "../../../components/creation/CreateOptions/Legendary";
 import createEvolvedStage from "../../../components/creation/CreateOptions/EvolvedStage";
+import createRace from "../../../components/creation/CreateOptions/Race";
+import createFactor from "../../../components/creation/CreateOptions/Factor";
 
 
 /**
@@ -55,7 +57,12 @@ export default async function Create_Page() {
       case "Legendary":
         creationObject = createLegendary(creationName, author);
         break;  
-      
+      case "Race":
+        creationObject = createRace(creationName, author);
+        break;
+      case "Factor": 
+        creationObject = createFactor(creationName, author);
+        break;
       default:
         break;
     }
