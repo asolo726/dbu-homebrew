@@ -122,11 +122,17 @@ export default async function Page({ params }) {
       </div>
     );
   } 
-
   const searchResult = await searchContent(slug);
-  const toggle = searchResult.content[0].head.toggle;
-  const pageAuthor = searchResult.content[0].head.author;
-  let toggleStatus = await checkToggle(toggle, pageAuthor);
+  let toggle;
+  let pageAuthor;
+  let toggleStatus;
+  // Try Block to catch if the search fails
+  try{
+    toggle = searchResult.content[0].head.toggle;
+    pageAuthor = searchResult.content[0].head.author;
+    toggleStatus = await checkToggle(toggle, pageAuthor);
+  } catch (error) {
+  }
   const { name: viewerName, email: viewerEmail, isAdmin } = await getViewerInfo();
 
   // If search fails or toggle is off (and viewer is not the author or an admin), show not found.
