@@ -21,7 +21,7 @@ export default async function Create_Page() {
    * Handles data submission from the Create component. 
    * @param {*} creationOption 
    * @param {*} creationName 
-   * @returns Status object. Can be {result: "Sucesss"} or {result: "Failed"} or {result: "Name Taken"}
+   * @returns Status object. Can be {result: "Success"} or {result: "Failed"} or {result: "Name Taken"}
    */
   
   const session = await auth();
@@ -29,9 +29,8 @@ export default async function Create_Page() {
   const submitForm = async (creationOption, creationName) => {
     'use server'
     let creationObject = "none";
-    let author = session.user.name;
-    let authorID = session.user.id;
-    console.log("authorID: ", authorID);
+    const author = session.user.name;
+    const authorID = session.user.id;
     
     if(creationOption === "") {
       return { result: "Please Select a Creation Option."};
@@ -43,33 +42,33 @@ export default async function Create_Page() {
         break;
       
       case "Alternate":
-        creationObject = createAlternate(creationName, author);
+        creationObject = createAlternate(creationName, author, authorID);
         break;
       
       case "Enhancement":
-        creationObject = createEnhancement(creationName, author);
+        creationObject = createEnhancement(creationName, author, authorID);
         break;
 
       case "Evolved Stage":
-        creationObject = createEvolvedStage(creationName, author);
+        creationObject = createEvolvedStage(creationName, author, authorID);
         break;
       
       case "Legendary":
-        creationObject = createLegendary(creationName, author);
+        creationObject = createLegendary(creationName, author, authorID);
         break;  
       case "Race":
-        creationObject = createRace(creationName, author);
+        creationObject = createRace(creationName, author, authorID);
         break;
       case "Factor": 
-        creationObject = createFactor(creationName, author);
+        creationObject = createFactor(creationName, author, authorID);
         break;
       default:
         break;
     }
 
     // console.log(creationObject);
-    const uploadContentStatus = await uploadNewCreatedContent(creationObject);
-    const result = await uploadContentStatus;
+    const uploadContentStatus = /*DO NOT REMOVE AWAIT.*/ await uploadNewCreatedContent(creationObject);
+    const result = uploadContentStatus;
     
     return { result: result.status};
     

@@ -10,7 +10,7 @@ export default async function CreateLayout({ children }) {
         Hmmm, looks like you don't have access to this site. Let's get you back
         home
       </h1>
-      <button className="mt-10">
+      <button type="button" className="mt-10">
         <a
           className="p-5 rounded-xl bg-dbu-link text-white font-bold "
           href="/"

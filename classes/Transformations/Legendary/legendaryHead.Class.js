@@ -14,8 +14,8 @@ class LegendaryHead extends FormHead {
     stress = "1",
     transLine = "",
     transStage = "",
-    transformationType = "Legendary Form",
-    formType = "Transformation",
+    transformationType = "Form",
+    formType = "Legendary",
     identity = "Legendary"
   } = {}) {
     super({

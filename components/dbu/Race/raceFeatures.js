@@ -24,7 +24,7 @@ export default function RaceFeatures({
     availableFactors != "";
   const requirementNameStyle = "font-bold text-dbu-header";
   return (
-    <div className="border-1 border-dbu-header space-y-6 p-2">
+    <div className="border border-dbu-header space-y-6 p-2">
       <p>
         <span className={requirementNameStyle}>Attribute Score Increase:</span>{" "}
         {attributeScores}
