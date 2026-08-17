@@ -9,7 +9,8 @@ export default function createEvolvedStage(name : string, author : string, autho
         identity: "Evolved Stage",
         banner: "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp",
         tag : "",
-        dontShowAuthor: false
+        dontShowAuthor: false,
+        bannerAuthor: ""
     }
     head.desc = ""
     head.raceReq = "Any Race"

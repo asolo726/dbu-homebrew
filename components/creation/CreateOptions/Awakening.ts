@@ -8,7 +8,8 @@ function createAwakening(name : string, author : string, authorID : number) {
         identity: "Awakening",
         banner: "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp",
         tag : "",
-        dontShowAuthor: false
+        dontShowAuthor: false,
+        bannerAuthor: ""
     }
 
     head.desc = ""

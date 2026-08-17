@@ -9,8 +9,12 @@ function createRace(name : string, author: string, authorID: number){
         identity: "Race",
         banner: "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp",
         tag : "",
-        dontShowAuthor: false
+        dontShowAuthor: false,
+        bannerAuthor: ""
     }
+
+    head.tag = ""
+
     let Race = {
         head: head,
         raceFeatures : {

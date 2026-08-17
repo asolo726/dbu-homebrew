@@ -14,7 +14,8 @@ export default function createAlternate(name : string, author : string, authorID
         identity: "Alternate",
         banner: "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp",
         tag : "",
-        dontShowAuthor: false
+        dontShowAuthor: false,
+        bannerAuthor: ""
     }
 
     head.desc = ""

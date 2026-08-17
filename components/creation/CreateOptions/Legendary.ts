@@ -9,7 +9,8 @@ export default function createLegendary(name : string, author : string, authorID
         identity: "Legendary",
         banner: "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp",
         tag : "",
-        dontShowAuthor: false
+        dontShowAuthor: false,
+        bannerAuthor: ""
     }
 
     head.desc = ""

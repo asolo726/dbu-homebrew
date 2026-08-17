@@ -9,7 +9,8 @@ export default function createEnhancement(name : string, author : string, author
         identity: "Enhancement",
         banner: "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp",
         tag : "",
-        dontShowAuthor: false
+        dontShowAuthor: false,
+        bannerAuthor: ""
     }
 
     head.desc = ""
