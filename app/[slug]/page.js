@@ -111,7 +111,7 @@ export default async function Page({ params }) {
           numbers, and - is acceptable.
         </h1>
         <h1>Anything else makes you look fishy. And I DON'T. LIKE. FISHES.</h1>
-        <button className="mt-10">
+        <button type="button" className="mt-10">
           <a
             className="p-5 rounded-xl bg-dbu-link text-white font-bold "
             href="/"
@@ -143,7 +143,7 @@ export default async function Page({ params }) {
           Hmmm, looks like that doesn't exist. That page probably doesn't exist
           or hasn't been published yet.
         </h1>
-        <button className="mt-10">
+        <button type="button" className="mt-10">
           <a
             className="p-5 rounded-xl bg-dbu-link text-white font-bold "
             href="/"

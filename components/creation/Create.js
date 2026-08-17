@@ -95,6 +95,7 @@ export default function Create({ submitForm }) {
                 </div>
                 <div className="flex justify-center">
                     <button
+                        type="button"
                         className="p-3 my-3 text-white text-md md:text-lg md:max-w-30  font-bold tracking-widest bg-dbu-link rounded-xl hover:bg-dbu-link-hover cursor-pointer"
                         onClick={() => handleFormSubmit()}
                     >

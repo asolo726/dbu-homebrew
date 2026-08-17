@@ -14,12 +14,13 @@ export default async function uploadNewCreatedContent(creationObject){
     console.log("Creation Object:\n", creationObject);
     
     const client = await clientPromise;
-    const dbCollection = client.db("content").collection(creationObject._head._identity);
+    const contentCollection = creationObject.head.identity.replace(" ", "");
+    const dbCollection = client.db("content").collection(contentCollection);
     
     
     //Name check------------------
     // The underscores accessing the object variable is concerning, look into this later...
-    const searchQuery = {"head.keyName": creationObject._head._keyName};
+    const searchQuery = {"head.keyName": creationObject.head.keyName};
     const searchOptions = []; 
     const nameCheck = await dbCollection.findOne(searchQuery, searchOptions);
     if(nameCheck){
@@ -27,7 +28,7 @@ export default async function uploadNewCreatedContent(creationObject){
     }
 
 
-    const status = await dbCollection.insertOne(creationObject.toJson());
+    const status = await dbCollection.insertOne(creationObject);
     //Check if the insertion was successful
     if(status.acknowledged != true){
         return {status: "Failed"};
