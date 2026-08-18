@@ -14,7 +14,8 @@ export default function AttributeModsTable({
     isEditing,
     pendingChanges,
 }: Readonly<AttributeModsTableProps>) {
-    if (attrTable.length > 0) {
+    if (attrTable === undefined) return;
+    else if (attrTable.length > 0) {
         return (
             <div className="flex justify-center py-5">
                 <table className="table-fixed w-full border-collapse text-center text-md md:text-xl font-light ">

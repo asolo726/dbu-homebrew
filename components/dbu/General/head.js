@@ -374,8 +374,7 @@ export default function Head({ Form }) {
                     spanStyle={requirementNameStyle}
                     spanText="Maximum No of Stacks: "
                 />
-                {console.log("\nObj Test: ", Object.hasOwn(Form.head, "tier"))}
-                {console.log("\nlength Test: ", Form.head.tier)}
+                
                 {Object.hasOwn(Form.head, "tier") ? (Form.head.tier.length > 0 || isEditing) && (
                     <li>
                         <p>
