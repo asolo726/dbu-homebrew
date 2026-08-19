@@ -1,7 +1,6 @@
+import { AspectModal } from "../../../../components/edit/AspectsModal";
 
-
-
-let aspects = [];
+export let aspects = [];
 let aspectsLoaded = false;
 let aspectsPromise = null;
 

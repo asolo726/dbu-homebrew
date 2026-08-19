@@ -6,8 +6,10 @@ import { Tooltip } from "../../../lib/reactTooltip";
 import PageVoteButtons from "../../pages/PageVoteButtons";
 import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
-import { loadAspects, getAspectTooltip, getCustomAspectNames } from "./util/headUtil";
+import { loadAspects, getAspectTooltip, getCustomAspectNames, AddAspectsButton} from "./util/headUtil";
 import { ScrollToTop } from "../../navigation/ScrollBackToTopButton";
+import { RiAddFill } from "react-icons/ri";
+import AspectsModal from "../../../components/edit/AspectsModal";
 
 export default function Head({ Form }) {
   const editMode = useEditMode();
@@ -21,6 +23,7 @@ export default function Head({ Form }) {
   const toggle = Form.head.toggle;
   const author = Form.head.author;
   const [aspectsReady, setAspectsReady] = useState(false);
+  const [showAspectModal, setShowAspectModal] = useState(false);
 
   const isPublic = localPublic !== null ? localPublic : (!toggle || !!toggleStatus);
 
@@ -442,6 +445,14 @@ export default function Head({ Form }) {
                   </span>
                 );
               })}
+              {isEditing && (
+                <button
+                  onClick={() => setShowAspectModal(true)}
+                  title="Add aspect"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-white/30 text-white bg-white/10 hover:bg-white/20 transition-colors cursor-pointer">
+                    <RiAddFill size={8} />
+                </button>
+              )}
             </p>
           </li>
         ) : (
@@ -505,6 +516,16 @@ export default function Head({ Form }) {
         </div>
       ) : (
         <></>
+      )}
+      {isEditing && showAspectModal && (
+        <AspectsModal
+          currentAspects={pendingChanges?.["head.aspects"] ?? Form.head.aspects}
+          onSave={(newAspect) => {
+            const updatedAspects = [...(pendingChanges?.["head.aspects"] ?? Form.head.aspects), newAspect];
+            setPendingChanges({ ...pendingChanges, "head.aspects": updatedAspects });
+          }}
+          onClose={() => setShowAspectModal(false)}
+        />
       )}
       <Tooltip
         id="my-tooltip"
