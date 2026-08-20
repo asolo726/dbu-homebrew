@@ -19,4 +19,5 @@ export const ATTR_MOD_DEFAULT = [
     { attribute: "SC", Bonus: 0, Multiplier: "T" },
     { attribute: "IN", Bonus: 0, Multiplier: "T" },
     { attribute: "MA", Bonus: 0, Multiplier: "T" },
+    { attribute: "PE", Bonus: 0, Multiplier: "T" },
 ];

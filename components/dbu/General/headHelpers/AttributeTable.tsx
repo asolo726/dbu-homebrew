@@ -14,6 +14,27 @@ export default function AttributeModsTable({
     isEditing,
     pendingChanges,
 }: Readonly<AttributeModsTableProps>) {
+
+    const multiplierDisplay = (currentBonus : number, currentMultiplier : string) => {
+        // For some reason, when the multiplier is empty, it's a \n value ??? 
+        if (currentBonus > 0){
+            if (currentMultiplier === "\n"){
+                return `+${currentBonus}`;
+            } else {
+                return `+${currentBonus}(${currentMultiplier})`;
+            }
+        } else {
+            return '-';
+        }
+    }
+/**
+ * currentMultiplier === "" ? (
+                    `+${currentBonus}`
+                ) : (
+                    `+${currentBonus}(${currentMultiplier})`
+                )
+
+ */
     if (attrTable === undefined) return;
     else if (attrTable.length > 0) {
         return (
@@ -62,18 +83,10 @@ export default function AttributeModsTable({
                                                 <EditableText
                                                     path={`head.attributeModifiers.${id}.Multiplier`}
                                                     value={modifier.Multiplier}
-                                                    className="w-full text-center text-sm"
+                                                    className="w-full text-center text-md"
                                                 />
                                             </div>
-                                        ) : currentBonus > 0 ? (
-                                            currentMultiplier.length === 0 ? (
-                                                `+${currentBonus}`
-                                            ) : (
-                                                `+${currentBonus}(${currentMultiplier})`
-                                            )
-                                        ) : (
-                                            "-"
-                                        )}
+                                        ) : multiplierDisplay(currentBonus, currentMultiplier)}
                                     </td>
                                 );
                             })}

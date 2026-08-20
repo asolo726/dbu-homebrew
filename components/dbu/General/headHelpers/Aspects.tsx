@@ -30,7 +30,7 @@ export default function Aspects({
                             : "";
                         return (
                             <span key={id}>
-                                <a
+                                <span
                                     data-tooltip-id="my-tooltip"
                                     data-tooltip-html={tooltipHtml}
                                     className="cursor-help"
@@ -40,7 +40,7 @@ export default function Aspects({
                                     >
                                         {aspect.name}
                                     </span>
-                                </a>
+                                </span>
                                 {aspect.link && (
                                     <>
                                         {" "}
