@@ -18,7 +18,7 @@ export default function AttributeModsTable({
     const multiplierDisplay = (currentBonus : number, currentMultiplier : string) => {
         // For some reason, when the multiplier is empty, it's a \n value ??? 
         if (currentBonus > 0){
-            if (currentMultiplier === "\n"){
+            if (currentMultiplier === "\n" || currentMultiplier === ""){
                 return `+${currentBonus}`;
             } else {
                 return `+${currentBonus}(${currentMultiplier})`;
