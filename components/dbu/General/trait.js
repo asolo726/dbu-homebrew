@@ -156,6 +156,7 @@ export default function Trait({ title = "", desc = "", abilities, path, disableE
         <div className="flex justify-between items-center mt-3">
           {/* Remove selected — bottom left, red */}
           <button
+            type="button"
             onClick={handleRemove}
             disabled={selectedIndices.size === 0}
             title="Remove selected abilities"
@@ -169,6 +170,7 @@ export default function Trait({ title = "", desc = "", abilities, path, disableE
 
           {/* Add ability — bottom right, white */}
           <button
+            type="button"
             onClick={() => setShowAddModal(true)}
             title="Add ability"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-white/30 text-white bg-white/10 hover:bg-white/20 transition-colors"

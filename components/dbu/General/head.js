@@ -399,6 +399,7 @@ export default function Head({ Form }) {
                     isEditing={isEditing}
                     spanStyle={requirementNameStyle}
                     aspectsReady={aspectsReady}
+                    pendingChanges={pendingChanges}
                 />
             </ul>
             <AttributeModsTable

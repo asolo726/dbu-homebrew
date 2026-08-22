@@ -1,17 +1,20 @@
 import EditableText from "@/components/edit/EditableText";
 import { getAspectTooltip } from "@/components/dbu/General/util/headUtil";
 import { useState } from "react";
-interface AspectList {
+import AspectsModal from "@/components/edit/AspectModal";
+export interface Aspect {
     name: string;
     level: number;
+    maxLevel?: number;
     link?: { name: string; url: string };
 }
 interface AspectsProps {
-    aspects: AspectList[];
+    aspects: Aspect[];
     customAspectNames: string[];
     spanStyle: string;
     aspectsReady: boolean;
     isEditing: boolean;
+    pendingChanges: {};
 }
 
 export default function Aspects({
@@ -20,15 +23,21 @@ export default function Aspects({
     spanStyle,
     aspectsReady,
     isEditing,
+    pendingChanges,
 }: Readonly<AspectsProps>) {
-    const btnStyle  = "ml-2 gap-1.5 px-3 py-1.5 rounded-md text-sm border border-white/30 text-white bg-white/10 hover:bg-white/20 transition-colors";
+    const btnStyle =
+        "ml-2 gap-1.5 px-3 py-1.5 rounded-md text-sm border border-white/30 text-white bg-white/10 hover:bg-white/20 transition-colors";
     const [aspectWindowOpen, setAspectWindowOpen] = useState(false);
+
+    const onSave = () => {};
+
+    const onClose = () => {};
 
     const toggleAspectWindowState = () => {
         setAspectWindowOpen(!aspectWindowOpen);
     };
 
-    if (aspects && aspects.length > 0) {
+    if (aspects) {
         // Normal Render
         if (!isEditing) {
             return (
@@ -81,16 +90,31 @@ export default function Aspects({
 
         // Editing Render
         return (
-            <li>
-                <p>
-                    <span className={spanStyle}>Aspects: </span>{" "}
-                    <button type="button" className={btnStyle} onClick={toggleAspectWindowState}>
-                        <span> 
-                            Edit
-                        </span>
-                    </button>
-                </p>
-            </li>
+            <>
+                <li>
+                    <p>
+                        <span className={spanStyle}>Aspects: </span>{" "}
+                        <button
+                            type="button"
+                            className={btnStyle}
+                            onClick={toggleAspectWindowState}
+                        >
+                            <span>Edit</span>
+                        </button>
+                    </p>
+                </li>
+                    {
+                        aspectWindowOpen && (
+                            <div className="fixed inset-0 z-50 flex items-center justify-center">
+                                <AspectsModal
+                                    currentAspects={aspects}
+                                    onSave={(newAspect : Aspect) => {}}
+                                    onClose={() => setAspectWindowOpen(false)}
+                                />
+                            </div>
+                        )
+                    }
+                </>
         );
     }
 }
