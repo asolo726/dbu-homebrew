@@ -1,7 +1,7 @@
 
 
 
-let aspects = [];
+export let aspects = [];
 let aspectsLoaded = false;
 let aspectsPromise = null;
 

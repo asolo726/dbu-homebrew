@@ -40,7 +40,7 @@ export default function EditableText({ path, value, className = "" }) {
       ref={attachRef}
       contentEditable
       suppressContentEditableWarning
-      className={`border-b border-dbu-header outline-none whitespace-pre-wrap ${className}`}
+      className={`pr-1 border-b border-dbu-header outline-none whitespace-pre-wrap ${className}`}
       onInput={(e) => setChange(path, e.currentTarget.innerText)}
     />
   );

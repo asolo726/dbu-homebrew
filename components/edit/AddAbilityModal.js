@@ -151,6 +151,7 @@ export default function AddAbilityModal({ onSave, onClose }) {
 
   const subtypeBtn = (s, label) => (
     <button
+      type="button"
       onClick={() => setListSubtype(s)}
       className={`px-3 py-1 rounded text-xs transition-colors ${
         listSubtype === s
@@ -164,6 +165,7 @@ export default function AddAbilityModal({ onSave, onClose }) {
 
   const typeBtn = (t, label) => (
     <button
+      type="button"
       onClick={() => setType(t)}
       className={`flex-1 py-2 rounded-md text-sm border transition-colors ${
         type === t
