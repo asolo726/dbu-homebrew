@@ -5,6 +5,7 @@ import {
 } from "../../components/dbu/General/util/headUtil.js";
 import { Tooltip } from "../../lib/reactTooltip.js";
 import { useState, useEffect } from "react";
+import EditableText from "./EditableText.js";
 
 export default function AspectsModal({ currentAspects, onSave, onClose }) {
     const [positiveAspectOptions, setPositiveAspectOptions] = useState([]);
@@ -75,15 +76,27 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
                                     >
                                         {aspect.name}
                                     </a>
-                                    <div>
-                                        {aspect.maxLevel ? (
+                                    {aspect.level ? (
+                                        <div className=" ml-2 border-l border-dbu-line">
+                                            <span className="ml-2 text-sm text-dbu-text/70">
+                                                <EditableText
+                                                    path={`head.aspects.${id}.level`}
+                                                    value={aspect.level}
+                                                />
+                                            </span>
+                                        </div>
+                                    ) : (
+                                        <></>
+                                    )}
+                                    {aspect.maxLevel ? (
+                                        <div>
                                             <span className="ml-2 text-xs text-dbu-text/70">
                                                 0
                                             </span>
-                                        ) : (
-                                            <></>
-                                        )}
-                                    </div>
+                                        </div>
+                                    ) : (
+                                        <></>
+                                    )}
                                 </div>
                             );
                         })}
