@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { RxArrowUp, RxInfoCircled } from "react-icons/rx";
 import { prettifyAspects } from "../../components/dbu/General/util/headUtil.js";
 
+
 export default function AspectsModal({ currentAspects, onSave, onClose }) {
   const [editedAspects, setEditedAspects] = useState(currentAspects); // A copy of the current aspects, to be edited by the user.
 
@@ -35,7 +36,11 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
   };
 
   const addAspect = (aspect) => {
-    const newEditedAspects = [...editedAspects, aspect];
+    const aspectToAdd = {
+        name: aspect.name,
+        level: 0 // Placeholder
+    };
+    const newEditedAspects = [...editedAspects, aspectToAdd];
     setEditedAspects(prettifyAspects(newEditedAspects));
   };
 
@@ -129,8 +134,8 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
             Cancel
           </button>
           <button
-            className="px-4 py-2 rounded bg-dbu-link  text-white hover:bg-dbu-link/90"
-            onClick={() => console.log("Saving Aspects. (Placeholder)")}
+            className="px-4 py-2 rounded bg-dbu-link  text-white hover:bg-dbu-link/90 cursor-pointer"
+            onClick={() => onSave(editedAspects)}
           >
             Save
           </button>

@@ -18,6 +18,7 @@ interface AspectsProps {
   aspectsReady: boolean;
   isEditing: boolean;
   pendingChanges: {};
+  handleAspectChange: (value: {}) => void
 }
 
 export default function Aspects({
@@ -27,14 +28,16 @@ export default function Aspects({
   aspectsReady,
   isEditing,
   pendingChanges,
+  handleAspectChange
 }: Readonly<AspectsProps>) {
   const btnStyle =
     "ml-2 gap-1.5 px-3 py-1.5 rounded-md text-sm border border-white/30 text-white bg-white/10 hover:bg-white/20 transition-colors";
   const [aspectWindowOpen, setAspectWindowOpen] = useState(false);
 
-  const onSave = () => {};
-
-  const onClose = () => {};
+  const onSave = (newAspects: any) => {
+    handleAspectChange(newAspects);
+    setAspectWindowOpen(false);
+  };
 
   const toggleAspectWindowState = () => {
     setAspectWindowOpen(!aspectWindowOpen);
@@ -109,7 +112,7 @@ export default function Aspects({
           <div className="fixed inset-0 z-50 flex items-center justify-center">
             <AspectsModal
               currentAspects={sortedAspects}
-              onSave={(newAspect: Aspect) => {}}
+              onSave={onSave}
               onClose={() => setAspectWindowOpen(false)}
             />
           </div>

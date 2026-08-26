@@ -51,6 +51,11 @@ export default function Head({ Form }) {
     }
   }
 
+  // Saves Aspects when user changes them with modal
+  function handleAspectChange(newAspects) {
+    setChange?.("head.aspects", newAspects);
+  };
+
   // Allows users to upload an image and set the banner URL in the head object.
   async function handleImageUpload(file) {
     if (!file || !setChange) return;
@@ -402,6 +407,7 @@ export default function Head({ Form }) {
           spanStyle={requirementNameStyle}
           aspectsReady={aspectsReady}
           pendingChanges={pendingChanges}
+          handleAspectChange={handleAspectChange}
         />
       </ul>
       <AttributeModsTable
