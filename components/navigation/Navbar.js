@@ -14,7 +14,7 @@ export default function Navbar({ session }) {
   const dropdownCss = menuIsOpen ? " block" : " hidden";
   const testList = [{ text: "Option 1", link: "/option1" }];
   const transformationOptions = [
-    { text: "Aspects", link: "/aspects"},
+    { text: "Aspects", link: "/aspects" },
     {
       text: "Awakenings",
       link: "/search?pageTypes=Awakening",
@@ -35,23 +35,23 @@ export default function Navbar({ session }) {
     { text: "Unique Abilities", link: "/unique-abilities" },
   ];
   const communityOptions = [
-    { text: "Aspects", link: "/aspects"},
-    { text: "Additional Rules", link: "/additional-rules"},
-    { text: "Alternate Upbringing", link: "/alternate-upbringing"},
-    { text: "Bestial Traits", link: "/bestial-traits"},
-    { text: "Custom Species", link: "/custom-species-expansion"},
-    { text: "Genetic Splicing/Bio-Focus", link: "/genetic-focus"},
-    { text: "Monstrous Traits", link: "/monstrous-traits"},
-    { text: "Monster", link: "/monster"},
-    { text: "Mutation", link: "/mutation"},
-    { text: "Talents", link: "/talents"},
+    { text: "Aspects", link: "/aspects" },
+    { text: "Additional Rules", link: "/additional-rules" },
+    { text: "Alternate Upbringing", link: "/alternate-upbringing" },
+    { text: "Bestial Traits", link: "/bestial-traits" },
+    { text: "Custom Species", link: "/custom-species-expansion" },
+    { text: "Genetic Splicing/Bio-Focus", link: "/genetic-focus" },
+    { text: "Monstrous Traits", link: "/monstrous-traits" },
+    { text: "Monster", link: "/monster" },
+    { text: "Mutation", link: "/mutation" },
+    { text: "Talents", link: "/talents" },
   ];
   const compendiumOptions = [
-    { text: "Base DBU Expansion", link: "/search?tags=Base+DBU+Expansion"},
-    { text: "Invincible", link: "/search?tags=Invincible"},
-    { text: "Meme", link: "/search?tags=Meme"},
-    { text: "Pocket Monsters", link: "/search?tags=Pocket+Monsters"},
-  ]
+    { text: "Base DBU Expansion", link: "/search?tags=Base+DBU+Expansion" },
+    { text: "Invincible", link: "/search?tags=Invincible" },
+    { text: "Meme", link: "/search?tags=Meme" },
+    { text: "Pocket Monsters", link: "/search?tags=Pocket+Monsters" },
+  ];
 
   const extrasOptions = [
     {

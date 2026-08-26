@@ -53,7 +53,9 @@ export default function NavbarSearch({ fullWidth = false }) {
     }
     const trimmed = query.trim();
     if (trimmed) {
-      const res = await fetch(`/api/pages/exact-match?q=${encodeURIComponent(trimmed)}`);
+      const res = await fetch(
+        `/api/pages/exact-match?q=${encodeURIComponent(trimmed)}`,
+      );
       const { keyName } = await res.json();
       if (keyName) {
         navigateTo(keyName);
@@ -108,7 +110,9 @@ export default function NavbarSearch({ fullWidth = false }) {
           onFocus={() => {
             setOpen(true);
             try {
-              const stored = JSON.parse(localStorage.getItem("recentPages") || "[]");
+              const stored = JSON.parse(
+                localStorage.getItem("recentPages") || "[]",
+              );
               setRecentPages(stored);
             } catch {}
             if (allTitles === null) {

@@ -52,7 +52,10 @@ export async function POST(request) {
   const userDoc = await client
     .db()
     .collection("users")
-    .findOne({ email: session.user.email }, { projection: { name: 1, type: 1 } });
+    .findOne(
+      { email: session.user.email },
+      { projection: { name: 1, type: 1 } },
+    );
 
   const isAdmin = userDoc?.type === "admin";
   const userName = userDoc?.name;
@@ -62,23 +65,32 @@ export async function POST(request) {
   const collections = await db.listCollections({}, { nameOnly: true });
 
   for await (const col of collections) {
-    const doc = await db.collection(col.name).findOne(
-      { "head.keyName": keyName },
-      { projection: { "head.author": 1, "head.isCommunity": 1, "head.communityAllowlist": 1 } }
-    );
+    const doc = await db
+      .collection(col.name)
+      .findOne(
+        { "head.keyName": keyName },
+        {
+          projection: {
+            "head.author": 1,
+            "head.isCommunity": 1,
+            "head.communityAllowlist": 1,
+          },
+        },
+      );
     if (!doc) continue;
 
     const isAuthor = doc.head.author === userName;
-    const inAllowlist = doc.head.isCommunity && (doc.head.communityAllowlist ?? []).includes(session.user.email);
+    const inAllowlist =
+      doc.head.isCommunity &&
+      (doc.head.communityAllowlist ?? []).includes(session.user.email);
 
     if (!isAdmin && !isAuthor && !inAllowlist) {
       return Response.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const result = await db.collection(col.name).updateOne(
-      { "head.keyName": keyName },
-      { $set: safeChanges }
-    );
+    const result = await db
+      .collection(col.name)
+      .updateOne({ "head.keyName": keyName }, { $set: safeChanges });
     return Response.json({ success: true, modified: result.modifiedCount });
   }
 

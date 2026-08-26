@@ -8,7 +8,10 @@ export async function POST(request) {
   const { commentId, parentReplyId, text } = await request.json();
 
   if (!commentId || !text?.trim()) {
-    return NextResponse.json({ error: "commentId and text required" }, { status: 400 });
+    return NextResponse.json(
+      { error: "commentId and text required" },
+      { status: 400 },
+    );
   }
 
   const sanitized = text.trim().slice(0, 2000);
@@ -32,17 +35,21 @@ export async function POST(request) {
 
     if (parentReplyId) {
       // Sub-reply: nest inside an existing top-level reply
-      await db.collection("comments").updateOne(
-        { _id: new ObjectId(commentId) },
-        { $push: { "replies.$[r].replies": reply } },
-        { arrayFilters: [{ "r._id": parentReplyId }] }
-      );
+      await db
+        .collection("comments")
+        .updateOne(
+          { _id: new ObjectId(commentId) },
+          { $push: { "replies.$[r].replies": reply } },
+          { arrayFilters: [{ "r._id": parentReplyId }] },
+        );
     } else {
       // Top-level reply on the comment
-      await db.collection("comments").updateOne(
-        { _id: new ObjectId(commentId) },
-        { $push: { replies: reply } }
-      );
+      await db
+        .collection("comments")
+        .updateOne(
+          { _id: new ObjectId(commentId) },
+          { $push: { replies: reply } },
+        );
     }
 
     return NextResponse.json(reply);

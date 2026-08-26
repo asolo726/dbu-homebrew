@@ -21,7 +21,10 @@ export default function RaceRenderPage({ content }) {
       <p className={header2Style}>Primary Racial Traits</p>
       <TraitsSection traits={content.primaryTraits} basePath="primaryTraits" />
       <p className={header2Style}>Secondary Racial Traits</p>
-      <TraitsSection traits={content.secondaryTraits} basePath="secondaryTraits" />
+      <TraitsSection
+        traits={content.secondaryTraits}
+        basePath="secondaryTraits"
+      />
       {hasSubraces ? (
         content.subraces.map((subrace, subraceIndex) => (
           <div key={subraceIndex}>

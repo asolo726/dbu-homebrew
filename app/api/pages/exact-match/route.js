@@ -26,7 +26,10 @@ export async function GET(request) {
     const viewerName = await getViewerName(client, session);
 
     // Fetch all toggle statuses in one query
-    const togglesDoc = await client.db("Main").collection("toggles").findOne({});
+    const togglesDoc = await client
+      .db("Main")
+      .collection("toggles")
+      .findOne({});
     const toggleMap = togglesDoc?.toggles ?? {};
     const isToggleEnabled = (toggleId, author) => {
       if (!toggleId || !author) return true;
@@ -34,25 +37,41 @@ export async function GET(request) {
     };
 
     const contentDb = client.db("content");
-    const collections = await contentDb.listCollections({}, { nameOnly: true }).toArray();
+    const collections = await contentDb
+      .listCollections({}, { nameOnly: true })
+      .toArray();
 
     const matches = [];
     for (const col of collections) {
       const pages = await contentDb
         .collection(col.name)
-        .find({}, { projection: { "head.title": 1, "head.keyName": 1, "head.author": 1, "head.toggle": 1, _id: 0 } })
+        .find(
+          {},
+          {
+            projection: {
+              "head.title": 1,
+              "head.keyName": 1,
+              "head.author": 1,
+              "head.toggle": 1,
+              _id: 0,
+            },
+          },
+        )
         .toArray();
 
       for (const p of pages) {
         if (normalizeForMatch(p.head.title) !== normalized) continue;
         // Visible if: no toggle, toggle enabled, or viewer is the author
         const visible =
-          isToggleEnabled(p.head.toggle, p.head.author) || (viewerName && p.head.author === viewerName);
+          isToggleEnabled(p.head.toggle, p.head.author) ||
+          (viewerName && p.head.author === viewerName);
         if (visible) matches.push(p.head.keyName);
       }
     }
 
-    return NextResponse.json({ keyName: matches.length === 1 ? matches[0] : null });
+    return NextResponse.json({
+      keyName: matches.length === 1 ? matches[0] : null,
+    });
   } catch (err) {
     console.error("GET /api/pages/exact-match error:", err);
     return NextResponse.json({ keyName: null });

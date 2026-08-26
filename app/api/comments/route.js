@@ -45,7 +45,10 @@ export async function POST(request) {
   const { pageKey, text } = await request.json();
 
   if (!pageKey || !text?.trim()) {
-    return NextResponse.json({ error: "pageKey and text required" }, { status: 400 });
+    return NextResponse.json(
+      { error: "pageKey and text required" },
+      { status: 400 },
+    );
   }
 
   const sanitized = text.trim().slice(0, 2000);
@@ -58,7 +61,10 @@ export async function POST(request) {
     const userDoc = await client
       .db()
       .collection("users")
-      .findOne({ email: session.user.email }, { projection: { name: 1, type: 1 } });
+      .findOne(
+        { email: session.user.email },
+        { projection: { name: 1, type: 1 } },
+      );
     displayName = userDoc?.name || "Anonymous Warrior";
     commenterIsAdmin = userDoc?.type === "admin";
   }

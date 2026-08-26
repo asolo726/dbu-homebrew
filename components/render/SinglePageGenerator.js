@@ -60,7 +60,12 @@ export default async function SinglePageGenerator({ content }) {
         />
       </div>
       <div className="px-4 pb-16">
-        <CommentSection pageKey={content.head.keyName} session={session} pageAuthor={content.head.author} viewerIsAdmin={isAdmin} />
+        <CommentSection
+          pageKey={content.head.keyName}
+          session={session}
+          pageAuthor={content.head.author}
+          viewerIsAdmin={isAdmin}
+        />
       </div>
     </div>
   );

@@ -2,14 +2,26 @@
 import { useState } from "react";
 import { RxChevronRight } from "react-icons/rx";
 
-function AbilityPreview({ type, conditionText, labelText, desc, boxTitle, listSubtype, listItems, miniItems, listDepth }) {
+function AbilityPreview({
+  type,
+  conditionText,
+  labelText,
+  desc,
+  boxTitle,
+  listSubtype,
+  listItems,
+  miniItems,
+  listDepth,
+}) {
   const empty = <span className="italic text-dbu-text/30">…</span>;
 
   if (type === "label") {
     return (
       <p className="text-dbu-text text-md text-left my-1">
         {"–"}
-        <span className="font-bold text-dbu-header">{labelText.trim() || empty}</span>
+        <span className="font-bold text-dbu-header">
+          {labelText.trim() || empty}
+        </span>
         {": "}
         {desc.trim() || empty}
       </p>
@@ -28,19 +40,33 @@ function AbilityPreview({ type, conditionText, labelText, desc, boxTitle, listSu
   }
 
   if (type === "list") {
-    const styleType = listDepth >= 2 ? "square" : listDepth >= 1 ? "circle" : "disc";
+    const styleType =
+      listDepth >= 2 ? "square" : listDepth >= 1 ? "circle" : "disc";
     const ml = `${(listDepth + 1) * 2.5}rem`;
     if (listSubtype === "bold") {
-      const filled = miniItems.filter((it) => it.title.trim() || it.desc.trim());
+      const filled = miniItems.filter(
+        (it) => it.title.trim() || it.desc.trim(),
+      );
       return (
         <ul style={{ marginLeft: ml }}>
           {filled.length === 0 ? (
-            <li className="my-2 text-dbu-text/30 italic text-sm" style={{ listStyleType: styleType }}>…</li>
+            <li
+              className="my-2 text-dbu-text/30 italic text-sm"
+              style={{ listStyleType: styleType }}
+            >
+              …
+            </li>
           ) : (
             filled.map((item, i) => (
-              <li key={i} className="my-2 text-dbu-text text-md text-left" style={{ listStyleType: styleType }}>
+              <li
+                key={i}
+                className="my-2 text-dbu-text text-md text-left"
+                style={{ listStyleType: styleType }}
+              >
                 {item.title.trim() && (
-                  <span className="font-bold text-dbu-header">{item.title.trim()}: </span>
+                  <span className="font-bold text-dbu-header">
+                    {item.title.trim()}:{" "}
+                  </span>
                 )}
                 {item.desc}
               </li>
@@ -53,10 +79,21 @@ function AbilityPreview({ type, conditionText, labelText, desc, boxTitle, listSu
     return (
       <ul style={{ marginLeft: ml }}>
         {filled.length === 0 ? (
-          <li className="my-2 text-dbu-text/30 italic text-sm" style={{ listStyleType: styleType }}>…</li>
+          <li
+            className="my-2 text-dbu-text/30 italic text-sm"
+            style={{ listStyleType: styleType }}
+          >
+            …
+          </li>
         ) : (
           filled.map((item, i) => (
-            <li key={i} className="my-2 text-dbu-text text-md text-left" style={{ listStyleType: styleType }}>{item}</li>
+            <li
+              key={i}
+              className="my-2 text-dbu-text text-md text-left"
+              style={{ listStyleType: styleType }}
+            >
+              {item}
+            </li>
           ))
         )}
       </ul>
@@ -66,7 +103,9 @@ function AbilityPreview({ type, conditionText, labelText, desc, boxTitle, listSu
   return (
     <p className="text-dbu-text text-md text-left my-1">
       {"(1)-["}
-      <span className="font-bold text-dbu-header">{conditionText.trim() || empty}</span>
+      <span className="font-bold text-dbu-header">
+        {conditionText.trim() || empty}
+      </span>
       {"]: "}
       {desc.trim() || empty}
     </p>
@@ -89,28 +128,31 @@ export default function AddAbilityModal({ onSave, onClose }) {
   const [miniItems, setMiniItems] = useState([{ title: "", desc: "" }]);
   const [listDepth, setListDepth] = useState(0);
 
-  /** 
+  /**
    * Depending on type of content the user is adding, the code prevent them from adding it if
    * it fails a specific criteria.
    * - Label: Labels must have name (i.e, a title).
    * - Addendum Box: Addendum Boxes must either have:
    *   - A title
    *   - A trait with both a title and a description (Open Box)
-   * - List: 
+   * - List:
    *   - If adding a standard list, at least one entry in the list needs to have text.
    *   - If adding an effects list (i.e, a list with labels), there must be at least one entry with a non-empty label.
    * - Effect: An effect (i.e, an ability for a trait) must have text in the keywords field.
-  */
+   */
   const isValid =
     type === "label"
       ? labelText.trim() !== ""
       : type === "addendumbox"
-      ? boxTitle.trim() !== "" || boxTraitTitle.trim() !== "" && boxTraitDesc.trim() !== ""
-      : type === "list"
-      ? listSubtype === "bold"
-        ? miniItems.some((it) => it.title.trim() !== "" || it.desc.trim() !== "")
-        : listItems.some((s) => s.trim() !== "")
-      : conditionText.trim() !== "";
+        ? boxTitle.trim() !== "" ||
+          (boxTraitTitle.trim() !== "" && boxTraitDesc.trim() !== "")
+        : type === "list"
+          ? listSubtype === "bold"
+            ? miniItems.some(
+                (it) => it.title.trim() !== "" || it.desc.trim() !== "",
+              )
+            : listItems.some((s) => s.trim() !== "")
+          : conditionText.trim() !== "";
 
   function handleSave() {
     if (!isValid) return;
@@ -128,7 +170,9 @@ export default function AddAbilityModal({ onSave, onClose }) {
     } else if (type === "list") {
       const depth = listDepth > 0 ? { sublist: listDepth } : {};
       if (listSubtype === "bold") {
-        const filtered = miniItems.filter((it) => it.title.trim() || it.desc.trim());
+        const filtered = miniItems.filter(
+          (it) => it.title.trim() || it.desc.trim(),
+        );
         onSave({ miniTraitList: filtered, ...depth });
       } else {
         const filtered = listItems.filter((s) => s.trim());
@@ -146,7 +190,9 @@ export default function AddAbilityModal({ onSave, onClose }) {
   }
 
   function updateMiniItem(i, field, val) {
-    setMiniItems(miniItems.map((it, j) => j === i ? { ...it, [field]: val } : it));
+    setMiniItems(
+      miniItems.map((it, j) => (j === i ? { ...it, [field]: val } : it)),
+    );
   }
 
   const subtypeBtn = (s, label) => (
@@ -190,7 +236,11 @@ export default function AddAbilityModal({ onSave, onClose }) {
         <div className="px-6 py-4 border-b border-dbu-line">
           <h2 className="text-dbu-header font-semibold">Add to Trait?</h2>
           <p className="text-xs text-dbu-text/50 mt-0.5">
-            Tip: use <code className="text-dbu-header/80">[text](url)</code> in any description for inline hyperlinks, e.g. <code className="text-dbu-header/80">(See —[Passive Abilities](url))</code>
+            Tip: use <code className="text-dbu-header/80">[text](url)</code> in
+            any description for inline hyperlinks, e.g.{" "}
+            <code className="text-dbu-header/80">
+              (See —[Passive Abilities](url))
+            </code>
           </p>
         </div>
 
@@ -265,17 +315,23 @@ export default function AddAbilityModal({ onSave, onClose }) {
                         />
                         {listItems.length > 1 && (
                           <button
-                            onClick={() => setListItems(listItems.filter((_, j) => j !== i))}
+                            onClick={() =>
+                              setListItems(listItems.filter((_, j) => j !== i))
+                            }
                             className="text-red-400 hover:text-red-300 shrink-0 text-lg leading-none"
                             title="Remove item"
-                          >×</button>
+                          >
+                            ×
+                          </button>
                         )}
                       </div>
                     ))}
                     <button
                       onClick={() => setListItems([...listItems, ""])}
                       className="text-xs text-dbu-text/50 hover:text-dbu-header text-left"
-                    >+ Add item</button>
+                    >
+                      + Add item
+                    </button>
                   </div>
                 )}
 
@@ -283,32 +339,47 @@ export default function AddAbilityModal({ onSave, onClose }) {
                   <div className="flex flex-col gap-2">
                     <label className="text-xs text-dbu-text/50">Items</label>
                     {miniItems.map((item, i) => (
-                      <div key={i} className="flex flex-col gap-1 border border-dbu-line/50 rounded p-2 relative">
+                      <div
+                        key={i}
+                        className="flex flex-col gap-1 border border-dbu-line/50 rounded p-2 relative"
+                      >
                         {miniItems.length > 1 && (
                           <button
-                            onClick={() => setMiniItems(miniItems.filter((_, j) => j !== i))}
+                            onClick={() =>
+                              setMiniItems(miniItems.filter((_, j) => j !== i))
+                            }
                             className="absolute top-1 right-1 text-red-400 hover:text-red-300 text-lg leading-none"
                             title="Remove item"
-                          >×</button>
+                          >
+                            ×
+                          </button>
                         )}
                         <input
                           value={item.title}
-                          onChange={(e) => updateMiniItem(i, "title", e.target.value)}
+                          onChange={(e) =>
+                            updateMiniItem(i, "title", e.target.value)
+                          }
                           placeholder="Name [Keywords]..."
                           className={inputClass}
                         />
                         <input
                           value={item.desc}
-                          onChange={(e) => updateMiniItem(i, "desc", e.target.value)}
+                          onChange={(e) =>
+                            updateMiniItem(i, "desc", e.target.value)
+                          }
                           placeholder="Description…"
                           className={inputClass}
                         />
                       </div>
                     ))}
                     <button
-                      onClick={() => setMiniItems([...miniItems, { title: "", desc: "" }])}
+                      onClick={() =>
+                        setMiniItems([...miniItems, { title: "", desc: "" }])
+                      }
                       className="text-xs text-dbu-text/50 hover:text-dbu-header text-left"
-                    >+ Add item</button>
+                    >
+                      + Add item
+                    </button>
                   </div>
                 )}
               </>
@@ -317,7 +388,9 @@ export default function AddAbilityModal({ onSave, onClose }) {
             {type === "addendumbox" && (
               <>
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs text-dbu-text/50">Box Title <span className="text-red-400">*</span></label>
+                  <label className="text-xs text-dbu-text/50">
+                    Box Title <span className="text-red-400">*</span>
+                  </label>
                   <input
                     value={boxTitle}
                     onChange={(e) => setBoxTitle(e.target.value)}
@@ -326,7 +399,9 @@ export default function AddAbilityModal({ onSave, onClose }) {
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs text-dbu-text/50">Trait Title (optional)</label>
+                  <label className="text-xs text-dbu-text/50">
+                    Trait Title (optional)
+                  </label>
                   <input
                     value={boxTraitTitle}
                     onChange={(e) => setBoxTraitTitle(e.target.value)}
@@ -335,7 +410,9 @@ export default function AddAbilityModal({ onSave, onClose }) {
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs text-dbu-text/50">Trait Description (optional)</label>
+                  <label className="text-xs text-dbu-text/50">
+                    Trait Description (optional)
+                  </label>
                   <textarea
                     value={boxTraitDesc}
                     onChange={(e) => setBoxTraitDesc(e.target.value)}

@@ -4,18 +4,23 @@ import { useState, useEffect } from "react";
 const LS_KEY = "dbu_page_votes";
 
 function readVotes() {
-  try { return JSON.parse(localStorage.getItem(LS_KEY) || "{}"); }
-  catch { return {}; }
+  try {
+    return JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+  } catch {
+    return {};
+  }
 }
 function persistVote(key) {
   try {
-    const v = readVotes(); v[key] = "up";
+    const v = readVotes();
+    v[key] = "up";
     localStorage.setItem(LS_KEY, JSON.stringify(v));
   } catch {}
 }
 function clearVote(key) {
   try {
-    const v = readVotes(); delete v[key];
+    const v = readVotes();
+    delete v[key];
     localStorage.setItem(LS_KEY, JSON.stringify(v));
   } catch {}
 }
@@ -75,12 +80,15 @@ export default function PageVoteButtons({
         <button onClick={cast} className={btnCls}>
           ▲
         </button>
-        <span className="text-gray-300 min-w-[1rem] text-center">{upvotes}</span>
+        <span className="text-gray-300 min-w-[1rem] text-center">
+          {upvotes}
+        </span>
       </div>
     );
   }
 
-  const base = "flex items-center gap-1 border rounded px-3 py-1 transition-colors text-sm cursor-pointer";
+  const base =
+    "flex items-center gap-1 border rounded px-3 py-1 transition-colors text-sm cursor-pointer";
   const upCls = voted
     ? `${base} text-green-400 border-green-700 bg-green-950 drop-shadow-[0_0_8px_#22c55e] cursor-pointer`
     : `${base} text-gray-300 border-gray-700 hover:text-green-400 cursor-pointer`;

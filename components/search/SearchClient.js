@@ -41,7 +41,7 @@ export default function SearchClient({ pageData }) {
 
   const handleSearchEnter = () => {
     const matches = entries.filter(
-      (e) => normalizeForMatch(e.head.title) === normalizeForMatch(query)
+      (e) => normalizeForMatch(e.head.title) === normalizeForMatch(query),
     );
     if (matches.length === 1) router.push(`/${matches[0].head.keyName}`);
   };
@@ -161,15 +161,17 @@ export default function SearchClient({ pageData }) {
           <option value="desc">Z→A</option>
         </select>
       </div>
-        <div className={`w-full p-2 bg-dbu-bg2 border border-dbu-line text-dbu-text ${openFiltersDrawer ? 'block px-3 pb-3' : 'hidden'}`}>
-          {
-            <FilterChips
-              filters={filters}
-              setFilters={setFilters}
-              entries={entries}
-            />
-          }
-        </div>
+      <div
+        className={`w-full p-2 bg-dbu-bg2 border border-dbu-line text-dbu-text ${openFiltersDrawer ? "block px-3 pb-3" : "hidden"}`}
+      >
+        {
+          <FilterChips
+            filters={filters}
+            setFilters={setFilters}
+            entries={entries}
+          />
+        }
+      </div>
       <CardGenerator entries={sorted} />
       <Tooltip id="clear-tooltip" className="tooltip" />
     </>

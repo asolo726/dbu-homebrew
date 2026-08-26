@@ -2,7 +2,17 @@
 import { EditModeProvider } from "./EditModeContext";
 import EditToolbar from "./EditToolbar";
 
-export default function EditModeWrapper({ children, canEdit, canContribute, keyName, toggleStatus, contributorEmail, contributorName, isAdmin, isCommunity }) {
+export default function EditModeWrapper({
+  children,
+  canEdit,
+  canContribute,
+  keyName,
+  toggleStatus,
+  contributorEmail,
+  contributorName,
+  isAdmin,
+  isCommunity,
+}) {
   if (!canEdit && !canContribute) return <>{children}</>;
 
   return (

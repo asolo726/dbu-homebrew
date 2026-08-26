@@ -44,7 +44,7 @@ export default function SettingsClient({ user, pageData }) {
 
   // ── Toggle popup ───────────────────────────────────────────────────────────
   const [popupToggle, setPopupToggle] = useState(null);
-  const [popupLeft, setPopupLeft] = useState([]);   // pages WITH toggle
+  const [popupLeft, setPopupLeft] = useState([]); // pages WITH toggle
   const [popupRight, setPopupRight] = useState([]); // pages WITHOUT toggle
   const [origLeft, setOrigLeft] = useState([]);
   const [popupLoading, setPopupLoading] = useState(false);
@@ -68,7 +68,9 @@ export default function SettingsClient({ user, pageData }) {
   }, [activeTab, togglePage]);
 
   const handleToggleSwitch = async (name, enabled) => {
-    setToggleList((prev) => prev.map((t) => (t.name === name ? { ...t, enabled } : t)));
+    setToggleList((prev) =>
+      prev.map((t) => (t.name === name ? { ...t, enabled } : t)),
+    );
     await fetch("/api/settings/toggles", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -84,7 +86,9 @@ export default function SettingsClient({ user, pageData }) {
     setOrigLeft([]);
     setPopupError("");
     try {
-      const r = await fetch(`/api/settings/toggles/pages?toggle=${encodeURIComponent(name)}`);
+      const r = await fetch(
+        `/api/settings/toggles/pages?toggle=${encodeURIComponent(name)}`,
+      );
       const data = await r.json();
       setPopupLeft(data.withToggle ?? []);
       setPopupRight(data.withoutToggle ?? []);
@@ -132,7 +136,11 @@ export default function SettingsClient({ user, pageData }) {
       const r = await fetch("/api/settings/toggles/pages", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ toggleName: popupToggle, addPages, removePages }),
+        body: JSON.stringify({
+          toggleName: popupToggle,
+          addPages,
+          removePages,
+        }),
       });
       if (!r.ok) throw new Error("Save failed");
       setOrigLeft([...popupLeft]);
@@ -150,7 +158,7 @@ export default function SettingsClient({ user, pageData }) {
   const filteredEntries = authoredEntries.filter(
     (e) =>
       !authoredQuery.trim() ||
-      normalize(e.head.title).includes(normalize(authoredQuery))
+      normalize(e.head.title).includes(normalize(authoredQuery)),
   );
 
   // ── Account save helpers ───────────────────────────────────────────────────
@@ -224,29 +232,43 @@ export default function SettingsClient({ user, pageData }) {
     <div className="flex flex-col md:flex-row w-full">
       {/* Sidebar — horizontal tabs on mobile, vertical on desktop */}
       <div className="flex md:flex-col md:w-52 md:shrink-0 border-b md:border-b-0 md:border-r border-dbu-line overflow-x-auto">
-        <button onClick={() => setActiveTab("account")} className={tabClass("account")}>
+        <button
+          onClick={() => setActiveTab("account")}
+          className={tabClass("account")}
+        >
           Account
         </button>
-        <button onClick={() => setActiveTab("authored")} className={tabClass("authored")}>
+        <button
+          onClick={() => setActiveTab("authored")}
+          className={tabClass("authored")}
+        >
           Authored Pages
         </button>
-        <button onClick={() => setActiveTab("toggles")} className={tabClass("toggles")}>
+        <button
+          onClick={() => setActiveTab("toggles")}
+          className={tabClass("toggles")}
+        >
           Page Toggles
         </button>
       </div>
 
       {/* Main content */}
       <div className="flex-1 p-4 md:p-8 min-w-0">
-
         {/* ── Account tab ───────────────────────────────────────────────────── */}
         {activeTab === "account" && (
           <div className="flex flex-col items-center gap-6 md:gap-10 max-w-2xl mx-auto pt-4 md:pt-8">
             <div className="w-28 h-28 sm:w-36 sm:h-36 md:w-48 md:h-48 rounded-full overflow-hidden border-2 border-dbu-line shrink-0">
-              <img src={user.image} alt="Profile" className="w-full h-full object-cover" />
+              <img
+                src={user.image}
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
             </div>
 
             <div className="w-full">
-              <label className="block text-sm text-dbu-text/50 mb-2 ml-1">Username</label>
+              <label className="block text-sm text-dbu-text/50 mb-2 ml-1">
+                Username
+              </label>
               <div className="flex items-center gap-3">
                 {isEditing ? (
                   <>
@@ -265,7 +287,11 @@ export default function SettingsClient({ user, pageData }) {
                       {saving ? "Saving…" : "Save"}
                     </button>
                     <button
-                      onClick={() => { setIsEditing(false); setEditValue(username); setSaveError(""); }}
+                      onClick={() => {
+                        setIsEditing(false);
+                        setEditValue(username);
+                        setSaveError("");
+                      }}
                       disabled={saving}
                       className="shrink-0 px-3 md:px-4 py-2 md:py-3 rounded-md text-sm border border-dbu-line text-dbu-text hover:border-dbu-header disabled:opacity-50 transition-colors cursor-pointer"
                     >
@@ -278,7 +304,10 @@ export default function SettingsClient({ user, pageData }) {
                       {username}
                     </div>
                     <button
-                      onClick={() => { setIsEditing(true); setSaveError(""); }}
+                      onClick={() => {
+                        setIsEditing(true);
+                        setSaveError("");
+                      }}
                       className="shrink-0 px-3 md:px-5 py-2 md:py-3 rounded-md text-sm border border-green-600 text-green-500 hover:bg-green-900/20 transition-colors cursor-pointer"
                     >
                       Change
@@ -286,11 +315,15 @@ export default function SettingsClient({ user, pageData }) {
                   </>
                 )}
               </div>
-              {saveError && <p className="text-red-400 text-xs mt-1 ml-1">{saveError}</p>}
+              {saveError && (
+                <p className="text-red-400 text-xs mt-1 ml-1">{saveError}</p>
+              )}
             </div>
 
             <div className="w-full">
-              <label className="block text-sm text-dbu-text/50 mb-2 ml-1">Email</label>
+              <label className="block text-sm text-dbu-text/50 mb-2 ml-1">
+                Email
+              </label>
               <div className="px-4 py-3 rounded-md bg-dbu-bg2 border border-dbu-line text-dbu-text/60 text-base select-all">
                 {user.email}
               </div>
@@ -317,7 +350,9 @@ export default function SettingsClient({ user, pageData }) {
             ) : (
               <div
                 className="grid gap-6 mt-6 mb-4"
-                style={{ gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))" }}
+                style={{
+                  gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+                }}
               >
                 {filteredEntries.map((entry) => (
                   <Card
@@ -346,9 +381,12 @@ export default function SettingsClient({ user, pageData }) {
         {/* ── Page Toggles tab ──────────────────────────────────────────────── */}
         {activeTab === "toggles" && (
           <div className="max-w-3xl mx-auto pt-2">
-            <h2 className="text-xl font-semibold text-dbu-header mb-1">Page Toggles</h2>
+            <h2 className="text-xl font-semibold text-dbu-header mb-1">
+              Page Toggles
+            </h2>
             <p className="text-sm text-dbu-text/50 mb-6">
-              Toggles control page visibility. Click a toggle name to manage which pages it applies to.
+              Toggles control page visibility. Click a toggle name to manage
+              which pages it applies to.
             </p>
 
             {togglesLoading ? (
@@ -375,7 +413,11 @@ export default function SettingsClient({ user, pageData }) {
                       {toggleList.map((t, idx) => (
                         <tr
                           key={t.name}
-                          className={idx < toggleList.length - 1 ? "border-b border-dbu-line" : ""}
+                          className={
+                            idx < toggleList.length - 1
+                              ? "border-b border-dbu-line"
+                              : ""
+                          }
                         >
                           <td className="px-5 py-4">
                             <button
@@ -389,7 +431,9 @@ export default function SettingsClient({ user, pageData }) {
                             <div className="flex justify-end">
                               <Toggle
                                 checked={t.enabled}
-                                onChange={(val) => handleToggleSwitch(t.name, val)}
+                                onChange={(val) =>
+                                  handleToggleSwitch(t.name, val)
+                                }
                               />
                             </div>
                           </td>
@@ -430,12 +474,17 @@ export default function SettingsClient({ user, pageData }) {
       {showModal && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
           <div className="bg-dbu-bg2 border border-dbu-line rounded-lg p-8 max-w-sm w-full mx-4 shadow-2xl">
-            <h2 className="text-dbu-header text-lg font-semibold mb-3">Update Author Name?</h2>
+            <h2 className="text-dbu-header text-lg font-semibold mb-3">
+              Update Author Name?
+            </h2>
             <p className="text-dbu-text text-sm mb-6">
               You have pages listed under{" "}
               <span className="text-dbu-header font-medium">"{username}"</span>.
               Would you like to update the Author field on those pages to{" "}
-              <span className="text-dbu-header font-medium">"{pendingNewName}"</span>?
+              <span className="text-dbu-header font-medium">
+                "{pendingNewName}"
+              </span>
+              ?
             </p>
             <div className="flex gap-3 justify-end">
               <button
@@ -475,9 +524,14 @@ export default function SettingsClient({ user, pageData }) {
 
             {/* Popup body */}
             {popupLoading ? (
-              <div className="px-6 py-16 text-center text-dbu-text/40 text-sm">Loading…</div>
+              <div className="px-6 py-16 text-center text-dbu-text/40 text-sm">
+                Loading…
+              </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2" style={{ minHeight: "280px" }}>
+              <div
+                className="grid grid-cols-1 sm:grid-cols-2"
+                style={{ minHeight: "280px" }}
+              >
                 {/* Left: pages WITH toggle */}
                 <div className="px-5 py-4 border-b sm:border-b-0 border-dbu-line">
                   <p className="text-xs font-semibold uppercase tracking-wider text-dbu-text/40 mb-3">
@@ -528,7 +582,11 @@ export default function SettingsClient({ user, pageData }) {
 
             {/* Popup footer */}
             <div className="px-6 py-4 border-t border-dbu-line flex items-center justify-between">
-              <div>{popupError && <p className="text-red-400 text-xs">{popupError}</p>}</div>
+              <div>
+                {popupError && (
+                  <p className="text-red-400 text-xs">{popupError}</p>
+                )}
+              </div>
               <div className="flex gap-3">
                 <button
                   onClick={handleBackdropClick}
@@ -554,9 +612,12 @@ export default function SettingsClient({ user, pageData }) {
       {showUnsavedWarning && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-60">
           <div className="bg-dbu-bg2 border border-dbu-line rounded-lg p-6 max-w-sm w-full mx-4 shadow-2xl">
-            <h3 className="text-dbu-header font-semibold mb-2">Unsaved Changes</h3>
+            <h3 className="text-dbu-header font-semibold mb-2">
+              Unsaved Changes
+            </h3>
             <p className="text-dbu-text text-sm mb-5">
-              You have unsaved changes to this toggle's page assignments. Close without saving?
+              You have unsaved changes to this toggle's page assignments. Close
+              without saving?
             </p>
             <div className="flex gap-3 justify-end">
               <button
@@ -566,7 +627,10 @@ export default function SettingsClient({ user, pageData }) {
                 Keep Editing
               </button>
               <button
-                onClick={() => { setShowUnsavedWarning(false); setPopupToggle(null); }}
+                onClick={() => {
+                  setShowUnsavedWarning(false);
+                  setPopupToggle(null);
+                }}
                 className="px-4 py-2 rounded-md text-sm bg-red-700 text-white hover:bg-red-600 transition-colors"
               >
                 Close Without Saving

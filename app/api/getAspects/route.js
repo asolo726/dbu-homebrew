@@ -10,7 +10,6 @@ import searchContent from "../searchContent/route.js";
  * isCustom: Boolean
  */
 
-
 /**
  * Get Custom Aspects.
  */
@@ -26,7 +25,7 @@ async function getCustomAspects() {
     traits.forEach((trait) => {
       // 1. Check if this item is a section header (like Positive or Negative Aspects)
       const sectionTitle = trait.sectional?.title || trait.title;
-      
+
       if (sectionTitle === "Negative Aspects") {
         aspectType = false;
         return; // Move to the next item
@@ -38,15 +37,13 @@ async function getCustomAspects() {
 
       // 3. Only push if both title and desc exist
       if (trait.title && desc) {
-        customAspects.push(
-          {
-            name: trait.title,
-            isPositive: aspectType,
-            effects: desc,
-            maxLevel: 0,
-            isCustom: true
-          }
-        );
+        customAspects.push({
+          name: trait.title,
+          isPositive: aspectType,
+          effects: desc,
+          maxLevel: 0,
+          isCustom: true,
+        });
       }
     });
 
@@ -67,14 +64,16 @@ export async function GET() {
   try {
     const db = client.db("Main");
 
-    const data = await db.collection("aspects").findOne({}, { projection: { _id: 0 } });
+    const data = await db
+      .collection("aspects")
+      .findOne({}, { projection: { _id: 0 } });
     const positiveAspects = data.positiveAspects.map((aspect) => {
       return {
         name: aspect.name,
         isPositive: true,
         effects: aspect.effects,
         maxLevel: aspect.maxLevel ? aspect.maxLevel : 0,
-        isCustom: false
+        isCustom: false,
       };
     });
     const negativeAspects = data.negativeAspects.map((aspect) => {
@@ -83,14 +82,17 @@ export async function GET() {
         isPositive: false,
         effects: aspect.effects,
         maxLevel: aspect.maxLevel ? aspect.maxLevel : 0,
-        isCustom: false
+        isCustom: false,
       };
     });
 
     const customAspects = await getCustomAspects();
-    return Response.json({ positiveAspects: positiveAspects, negativeAspects: negativeAspects, customAspects: customAspects });
-  }
-  catch (e) {
+    return Response.json({
+      positiveAspects: positiveAspects,
+      negativeAspects: negativeAspects,
+      customAspects: customAspects,
+    });
+  } catch (e) {
     return { Response: "No Data Found" };
   }
 }

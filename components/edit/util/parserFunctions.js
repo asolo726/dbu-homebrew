@@ -7,7 +7,13 @@ function parseInlineLinks(text) {
     const match = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
     if (match) {
       return (
-        <a key={i} href={match[2]} target="_blank" rel="noopener noreferrer" className="text-dbu-link hover:underline">
+        <a
+          key={i}
+          href={match[2]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-dbu-link hover:underline"
+        >
           {match[1]}
         </a>
       );
@@ -37,9 +43,12 @@ function parseBoldText(text) {
     }
 
     parts.push(
-      <span key={`${match.index}-${match[0]}`} className="font-bold text-dbu-header">
+      <span
+        key={`${match.index}-${match[0]}`}
+        className="font-bold text-dbu-header"
+      >
         {match[1]}
-      </span>
+      </span>,
     );
 
     lastIndex = match.index + match[0].length;
@@ -73,7 +82,7 @@ function parseItalicText(text) {
     parts.push(
       <span key={`${match.index}-${match[0]}`} className="italic">
         {match[1]}
-      </span>
+      </span>,
     );
 
     lastIndex = match.index + match[0].length;

@@ -14,9 +14,6 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
   const [positiveAspectOptions, setPositiveAspectOptions] = useState([]);
   const [negativeAspectOptions, setNegativeAspectOptions] = useState([]);
 
-  const [selectedPos, setSelectedPos] = useState([]);
-  const [selectedNeg, setSelectedNeg] = useState([]);
-
   // Make an Aspect List for the select boxes, filtering out aspects that are already in currentAspects
   // Can reuse the code for the Toggle Select in SettingsClient, but this is simpler since we don't need to worry about the "selected" state of the aspects, just the options available to select from
 
@@ -40,14 +37,6 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
   const addAspect = (aspect) => {
     const newEditedAspects = [...editedAspects, aspect];
     setEditedAspects(prettifyAspects(newEditedAspects));
-  };
-
-  const handleSave = () => {
-    const chosenNames = [...selectedPos, ...selectedNeg];
-    const chosenAspects = chosenNames
-      .map((name) => aspects.find((a) => a.name === name))
-      .filter(Boolean);
-    onSave(chosenAspects);
   };
 
   return (
@@ -141,7 +130,7 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
           </button>
           <button
             className="px-4 py-2 rounded bg-dbu-link  text-white hover:bg-dbu-link/90"
-            onClick={handleSave}
+            onClick={() => console.log("Saving Aspects. (Placeholder)")}
           >
             Save
           </button>

@@ -2,10 +2,30 @@
 import { useEditMode } from "./EditModeContext";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { RiPencilFill, RiSaveFill, RiCloseFill, RiArrowGoBackLine, RiArrowGoForwardLine, RiAddCircleFill } from "react-icons/ri";
+import {
+  RiPencilFill,
+  RiSaveFill,
+  RiCloseFill,
+  RiArrowGoBackLine,
+  RiArrowGoForwardLine,
+  RiAddCircleFill,
+} from "react-icons/ri";
 
 export default function EditToolbar({ canEdit, canContribute }) {
-  const { isEditing, setIsEditing, isContributing, setIsContributing, hasChanges, pendingChanges, clearChanges, keyName, undo, redo, canUndo, canRedo } = useEditMode();
+  const {
+    isEditing,
+    setIsEditing,
+    isContributing,
+    setIsContributing,
+    hasChanges,
+    pendingChanges,
+    clearChanges,
+    keyName,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
+  } = useEditMode();
   const [saving, setSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState(null); // "success" | "error" | null
   const router = useRouter();
@@ -26,7 +46,10 @@ export default function EditToolbar({ canEdit, canContribute }) {
       if (e.ctrlKey && !e.shiftKey && e.key === "z") {
         e.preventDefault();
         undo();
-      } else if (e.ctrlKey && (e.key === "y" || (e.shiftKey && e.key === "z"))) {
+      } else if (
+        e.ctrlKey &&
+        (e.key === "y" || (e.shiftKey && e.key === "z"))
+      ) {
         e.preventDefault();
         redo();
       }
@@ -77,15 +100,20 @@ export default function EditToolbar({ canEdit, canContribute }) {
     setSaveStatus(null);
   }
 
-  const ghostBtn = "p-2.5 rounded-full shadow-lg transition-colors cursor-pointer bg-dbu-bg3 border border-dbu-line text-dbu-text hover:border-dbu-header hover:text-dbu-header disabled:opacity-25 disabled:cursor-not-allowed";
+  const ghostBtn =
+    "p-2.5 rounded-full shadow-lg transition-colors cursor-pointer bg-dbu-bg3 border border-dbu-line text-dbu-text hover:border-dbu-header hover:text-dbu-header disabled:opacity-25 disabled:cursor-not-allowed";
 
   return (
     <div className="fixed bottom-6 right-6 flex flex-col items-end gap-2 z-50">
       {saveStatus === "error" && (
-        <p className="text-red-400 text-sm bg-dbu-bg3 px-3 py-1 rounded">Failed to save.</p>
+        <p className="text-red-400 text-sm bg-dbu-bg3 px-3 py-1 rounded">
+          Failed to save.
+        </p>
       )}
       {saveStatus === "success" && (
-        <p className="text-green-400 text-sm bg-dbu-bg3 px-3 py-1 rounded">Saved!</p>
+        <p className="text-green-400 text-sm bg-dbu-bg3 px-3 py-1 rounded">
+          Saved!
+        </p>
       )}
       {isActive && hasChanges && (
         <button
@@ -110,10 +138,20 @@ export default function EditToolbar({ canEdit, canContribute }) {
       )}
       {isActive && (
         <div className="flex gap-2">
-          <button onClick={undo} disabled={!canUndo} title="Undo (Ctrl+Z)" className={ghostBtn}>
+          <button
+            onClick={undo}
+            disabled={!canUndo}
+            title="Undo (Ctrl+Z)"
+            className={ghostBtn}
+          >
             <RiArrowGoBackLine size={18} />
           </button>
-          <button onClick={redo} disabled={!canRedo} title="Redo (Ctrl+Y)" className={ghostBtn}>
+          <button
+            onClick={redo}
+            disabled={!canRedo}
+            title="Redo (Ctrl+Y)"
+            className={ghostBtn}
+          >
             <RiArrowGoForwardLine size={18} />
           </button>
         </div>
@@ -134,7 +172,9 @@ export default function EditToolbar({ canEdit, canContribute }) {
       {canContribute && (
         <button
           onClick={toggleContributeMode}
-          title={isContributing ? "Exit contribute mode" : "Add your contribution"}
+          title={
+            isContributing ? "Exit contribute mode" : "Add your contribution"
+          }
           className={`p-4 rounded-full shadow-lg transition-colors cursor-pointer ${
             isContributing
               ? "bg-dbu-header text-dbu-bg"

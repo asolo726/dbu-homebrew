@@ -5,7 +5,15 @@ import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
 import { RiArrowUpLine, RiArrowDownLine } from "react-icons/ri";
 
-export default function Ability({ abilityList = [{}], key, path, selectedIndices, onToggleSelect, onMove, onUpdateAbility }) {
+export default function Ability({
+  abilityList = [{}],
+  key,
+  path,
+  selectedIndices,
+  onToggleSelect,
+  onMove,
+  onUpdateAbility,
+}) {
   const { isEditing, isContributing, contributorEmail } = useEditMode() || {};
   const canEdit = isEditing || isContributing;
   let conditionAbilityCount = 0;
@@ -28,15 +36,21 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
                 {!canEdit}
                 <span className="font-bold text-dbu-header">
                   <EditableText
-                      path={path ? `${path}.abilities.${itemIndex}.condition` : undefined}
-                      value={item.condition}
-                    />
+                    path={
+                      path
+                        ? `${path}.abilities.${itemIndex}.condition`
+                        : undefined
+                    }
+                    value={item.condition}
+                  />
                 </span>
                 {": "}
                 <EditableText
-                    path={path ? `${path}.abilities.${itemIndex}.desc` : undefined}
-                    value={item.desc}
-                  />
+                  path={
+                    path ? `${path}.abilities.${itemIndex}.desc` : undefined
+                  }
+                  value={item.desc}
+                />
               </p>
             );
           } else {
@@ -50,15 +64,21 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
                 {")-["}
                 <span className="font-bold text-dbu-header">
                   <EditableText
-                      path={path ? `${path}.abilities.${itemIndex}.condition` : undefined}
-                      value={item.condition}
-                    />
+                    path={
+                      path
+                        ? `${path}.abilities.${itemIndex}.condition`
+                        : undefined
+                    }
+                    value={item.condition}
+                  />
                 </span>
                 {"]: "}
                 <EditableText
-                    path={path ? `${path}.abilities.${itemIndex}.desc` : undefined}
-                    value={item.desc}
-                  />
+                  path={
+                    path ? `${path}.abilities.${itemIndex}.desc` : undefined
+                  }
+                  value={item.desc}
+                />
               </p>
             );
           }
@@ -76,32 +96,48 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
                     key={i}
                   >
                     <EditableText
-                      path={ path ? `${path}.abilities.${itemIndex}.list.${i}` : undefined }
+                      path={
+                        path
+                          ? `${path}.abilities.${itemIndex}.list.${i}`
+                          : undefined
+                      }
                       value={listItem}
                     />
                     {canEdit && onUpdateAbility && (
                       <button
-                        onClick={() => onUpdateAbility(itemIndex, { type: "list:remove", index: i })}
+                        onClick={() =>
+                          onUpdateAbility(itemIndex, {
+                            type: "list:remove",
+                            index: i,
+                          })
+                        }
                         className="ml-2 text-red-400/40 hover:text-red-400 text-sm leading-none"
                         title="Remove bullet"
-                      >×</button>
+                      >
+                        ×
+                      </button>
                     )}
                   </li>
                 ))}
               </ul>
               {canEdit && onUpdateAbility && (
                 <button
-                  onClick={() => onUpdateAbility(itemIndex, { type: "list:add" })}
+                  onClick={() =>
+                    onUpdateAbility(itemIndex, { type: "list:add" })
+                  }
                   style={{ marginLeft }}
                   className="text-xs text-dbu-text/40 hover:text-dbu-header mt-0.5"
-                >+ Add bullet</button>
+                >
+                  + Add bullet
+                </button>
               )}
             </div>
           );
         } else if ("miniTraitList" in item) {
           const depth = "sublist" in item ? item.sublist : 0;
           const marginLeft = `${(depth + 1) * 2.5}rem`;
-          const listStyleType = depth >= 2 ? "square" : depth >= 1 ? "circle" : "disc";
+          const listStyleType =
+            depth >= 2 ? "square" : depth >= 1 ? "circle" : "disc";
           inner = (
             <div>
               <ul style={{ marginLeft, listStyleType }}>
@@ -112,31 +148,50 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
                   >
                     <span className="font-bold text-dbu-header">
                       <EditableText
-                          path={path ? `${path}.abilities.${itemIndex}.miniTraitList.${i}.title` : undefined}
-                          value={listItem.title}
-                        />
-                        :{" "}
+                        path={
+                          path
+                            ? `${path}.abilities.${itemIndex}.miniTraitList.${i}.title`
+                            : undefined
+                        }
+                        value={listItem.title}
+                      />
+                      :{" "}
                     </span>
                     <EditableText
-                      path={path ? `${path}.abilities.${itemIndex}.miniTraitList.${i}.desc` : undefined}
+                      path={
+                        path
+                          ? `${path}.abilities.${itemIndex}.miniTraitList.${i}.desc`
+                          : undefined
+                      }
                       value={listItem.desc}
                     />
                     {canEdit && onUpdateAbility && (
                       <button
-                        onClick={() => onUpdateAbility(itemIndex, { type: "miniTraitList:remove", index: i })}
+                        onClick={() =>
+                          onUpdateAbility(itemIndex, {
+                            type: "miniTraitList:remove",
+                            index: i,
+                          })
+                        }
                         className="ml-2 text-red-400/40 hover:text-red-400 text-sm leading-none"
                         title="Remove item"
-                      >×</button>
+                      >
+                        ×
+                      </button>
                     )}
                   </li>
                 ))}
               </ul>
               {canEdit && onUpdateAbility && (
                 <button
-                  onClick={() => onUpdateAbility(itemIndex, { type: "miniTraitList:add" })}
+                  onClick={() =>
+                    onUpdateAbility(itemIndex, { type: "miniTraitList:add" })
+                  }
                   style={{ marginLeft }}
                   className="text-xs text-dbu-text/40 hover:text-dbu-header mt-0.5"
-                >+ Add item</button>
+                >
+                  + Add item
+                </button>
               )}
             </div>
           );
@@ -151,7 +206,11 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
                 desc={item.addendumBox.desc}
                 abilities={item.addendumBox.abilities}
                 traits={item.addendumBox.traits}
-                path={path ? `${path}.abilities.${itemIndex}.addendumBox` : undefined}
+                path={
+                  path
+                    ? `${path}.abilities.${itemIndex}.addendumBox`
+                    : undefined
+                }
               />
             </div>
           );
@@ -198,7 +257,12 @@ export default function Ability({ abilityList = [{}], key, path, selectedIndices
         } else if ("table" in item) {
           inner = (
             <ul className="list-disc ml-10">
-              <Table tableData={{ headers: item.table.headers, rows: item.table.rows }} />
+              <Table
+                tableData={{
+                  headers: item.table.headers,
+                  rows: item.table.rows,
+                }}
+              />
             </ul>
           );
         }

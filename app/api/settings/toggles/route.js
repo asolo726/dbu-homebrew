@@ -9,7 +9,10 @@ async function getViewerRecord(client, session) {
   const user = await client
     .db()
     .collection("users")
-    .findOne({ email: session.user.email }, { projection: { name: 1, type: 1 } });
+    .findOne(
+      { email: session.user.email },
+      { projection: { name: 1, type: 1 } },
+    );
   return user ?? null;
 }
 
@@ -28,7 +31,8 @@ export async function GET(request) {
     const client = await clientPromise;
     const viewer = await getViewerRecord(client, session);
     const viewerName = viewer?.name;
-    if (!viewerName) return NextResponse.json({ error: "User not found" }, { status: 404 });
+    if (!viewerName)
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
 
     const toggleKey = `toggles.${viewerName}`;
     const doc = await client
@@ -36,11 +40,14 @@ export async function GET(request) {
       .collection("toggles")
       .findOne(
         { [toggleKey]: { $exists: true } },
-        { projection: { [toggleKey]: 1, _id: 0 } }
+        { projection: { [toggleKey]: 1, _id: 0 } },
       );
 
     const userToggles = doc?.toggles?.[viewerName] ?? {};
-    const entries = Object.entries(userToggles).map(([name, enabled]) => ({ name, enabled }));
+    const entries = Object.entries(userToggles).map(([name, enabled]) => ({
+      name,
+      enabled,
+    }));
     const total = entries.length;
     const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
     const start = (page - 1) * PER_PAGE;
@@ -65,13 +72,17 @@ export async function PATCH(request) {
   try {
     const { toggleName, enabled, targetAuthor } = await request.json();
     if (!toggleName || typeof enabled !== "boolean") {
-      return NextResponse.json({ error: "toggleName and enabled required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "toggleName and enabled required" },
+        { status: 400 },
+      );
     }
 
     const client = await clientPromise;
     const viewer = await getViewerRecord(client, session);
     const viewerName = viewer?.name;
-    if (!viewerName) return NextResponse.json({ error: "User not found" }, { status: 404 });
+    if (!viewerName)
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
 
     // targetAuthor lets an admin flip another user's toggle
     if (targetAuthor && targetAuthor !== viewerName) {
@@ -80,7 +91,8 @@ export async function PATCH(request) {
       }
     }
 
-    const authorKey = (targetAuthor && targetAuthor !== viewerName) ? targetAuthor : viewerName;
+    const authorKey =
+      targetAuthor && targetAuthor !== viewerName ? targetAuthor : viewerName;
     const toggleKey = `toggles.${authorKey}.${toggleName}`;
     await client
       .db("Main")

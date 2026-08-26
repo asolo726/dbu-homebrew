@@ -1,8 +1,9 @@
 export const aspectData = {
   "Abosrbed Apparel": {
     type: "Positive",
-    effects: "You lose all of your equipped Apparel while in this Transformation (regain and equip it when you leave this Transformation), but increase your Combat Rolls and Soak Value by 1/2 (rounded up) of the Apparel Bonus of the highest piece of Apparel that you had equipped (max. 2(T)).",
-    maxLevel: 0
+    effects:
+      "You lose all of your equipped Apparel while in this Transformation (regain and equip it when you leave this Transformation), but increase your Combat Rolls and Soak Value by 1/2 (rounded up) of the Apparel Bonus of the highest piece of Apparel that you had equipped (max. 2(T)).",
+    maxLevel: 0,
   },
   Armored: {
     type: "Positive",
@@ -245,7 +246,8 @@ export const aspectData = {
   },
 };
 
-
 export const getBaseAspects = () => {
-  return Object.keys(aspectData).map((aspect) => aspect.replace(/\s*\(.*?\)$/, ""));
-}
+  return Object.keys(aspectData).map((aspect) =>
+    aspect.replace(/\s*\(.*?\)$/, ""),
+  );
+};

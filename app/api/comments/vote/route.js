@@ -4,8 +4,13 @@ import clientPromise from "../../../../lib/mongoDBClient";
 import { auth } from "../../../../auth";
 
 export async function POST(request) {
-  const { commentId, replyId, parentReplyId, voteType, remove = false } =
-    await request.json();
+  const {
+    commentId,
+    replyId,
+    parentReplyId,
+    voteType,
+    remove = false,
+  } = await request.json();
 
   if (!commentId || !["up", "down"].includes(voteType)) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
@@ -38,14 +43,21 @@ export async function POST(request) {
                 { "r._id": parentReplyId },
                 { "sr._id": replyId, [`sr.${fieldBy}`]: userId },
               ],
-            }
+            },
           );
         } else {
-          result = await db.collection("comments").updateOne(
-            { _id: new ObjectId(commentId) },
-            { $inc: { [`replies.$[r].replies.$[sr].${field}`]: -1 } },
-            { arrayFilters: [{ "r._id": parentReplyId }, { "sr._id": replyId }] }
-          );
+          result = await db
+            .collection("comments")
+            .updateOne(
+              { _id: new ObjectId(commentId) },
+              { $inc: { [`replies.$[r].replies.$[sr].${field}`]: -1 } },
+              {
+                arrayFilters: [
+                  { "r._id": parentReplyId },
+                  { "sr._id": replyId },
+                ],
+              },
+            );
         }
       } else if (replyId) {
         if (userId) {
@@ -55,25 +67,31 @@ export async function POST(request) {
               $inc: { [`replies.$[r].${field}`]: -1 },
               $pull: { [`replies.$[r].${fieldBy}`]: userId },
             },
-            { arrayFilters: [{ "r._id": replyId, [`r.${fieldBy}`]: userId }] }
+            { arrayFilters: [{ "r._id": replyId, [`r.${fieldBy}`]: userId }] },
           );
         } else {
-          result = await db.collection("comments").updateOne(
-            { _id: new ObjectId(commentId), "replies._id": replyId },
-            { $inc: { [`replies.$.${field}`]: -1 } }
-          );
+          result = await db
+            .collection("comments")
+            .updateOne(
+              { _id: new ObjectId(commentId), "replies._id": replyId },
+              { $inc: { [`replies.$.${field}`]: -1 } },
+            );
         }
       } else {
         if (userId) {
-          result = await db.collection("comments").updateOne(
-            { _id: new ObjectId(commentId), [fieldBy]: userId },
-            { $inc: { [field]: -1 }, $pull: { [fieldBy]: userId } }
-          );
+          result = await db
+            .collection("comments")
+            .updateOne(
+              { _id: new ObjectId(commentId), [fieldBy]: userId },
+              { $inc: { [field]: -1 }, $pull: { [fieldBy]: userId } },
+            );
         } else {
-          result = await db.collection("comments").updateOne(
-            { _id: new ObjectId(commentId) },
-            { $inc: { [field]: -1 } }
-          );
+          result = await db
+            .collection("comments")
+            .updateOne(
+              { _id: new ObjectId(commentId) },
+              { $inc: { [field]: -1 } },
+            );
         }
       }
     } else {
@@ -95,14 +113,21 @@ export async function POST(request) {
                   [`sr.${otherBy}`]: { $ne: userId },
                 },
               ],
-            }
+            },
           );
         } else {
-          result = await db.collection("comments").updateOne(
-            { _id: new ObjectId(commentId) },
-            { $inc: { [`replies.$[r].replies.$[sr].${field}`]: 1 } },
-            { arrayFilters: [{ "r._id": parentReplyId }, { "sr._id": replyId }] }
-          );
+          result = await db
+            .collection("comments")
+            .updateOne(
+              { _id: new ObjectId(commentId) },
+              { $inc: { [`replies.$[r].replies.$[sr].${field}`]: 1 } },
+              {
+                arrayFilters: [
+                  { "r._id": parentReplyId },
+                  { "sr._id": replyId },
+                ],
+              },
+            );
         }
       } else if (replyId) {
         if (userId) {
@@ -120,13 +145,15 @@ export async function POST(request) {
             {
               $inc: { [`replies.$.${field}`]: 1 },
               $addToSet: { [`replies.$.${fieldBy}`]: userId },
-            }
+            },
           );
         } else {
-          result = await db.collection("comments").updateOne(
-            { _id: new ObjectId(commentId), "replies._id": replyId },
-            { $inc: { [`replies.$.${field}`]: 1 } }
-          );
+          result = await db
+            .collection("comments")
+            .updateOne(
+              { _id: new ObjectId(commentId), "replies._id": replyId },
+              { $inc: { [`replies.$.${field}`]: 1 } },
+            );
         }
       } else {
         if (userId) {
@@ -136,13 +163,15 @@ export async function POST(request) {
               [fieldBy]: { $ne: userId },
               [otherBy]: { $ne: userId },
             },
-            { $inc: { [field]: 1 }, $addToSet: { [fieldBy]: userId } }
+            { $inc: { [field]: 1 }, $addToSet: { [fieldBy]: userId } },
           );
         } else {
-          result = await db.collection("comments").updateOne(
-            { _id: new ObjectId(commentId) },
-            { $inc: { [field]: 1 } }
-          );
+          result = await db
+            .collection("comments")
+            .updateOne(
+              { _id: new ObjectId(commentId) },
+              { $inc: { [field]: 1 } },
+            );
         }
       }
 

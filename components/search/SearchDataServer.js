@@ -25,7 +25,10 @@ async function filterPagesByToggles(pageData, viewerName) {
         // Authors always see their own pages regardless of toggle
         if (viewerName && entry.head?.author === viewerName) return entry;
         if (entry.head?.toggle) {
-          const enabled = await checkToggle(entry.head.toggle, entry.head.author);
+          const enabled = await checkToggle(
+            entry.head.toggle,
+            entry.head.author,
+          );
           return enabled ? entry : null;
         }
         return entry;

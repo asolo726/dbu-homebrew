@@ -14,7 +14,10 @@ export async function POST(request) {
     return Response.json({ error: "No file provided" }, { status: 400 });
   }
 
-  const blob = await put(file.name, file, { access: "public", allowOverwrite: true});
+  const blob = await put(file.name, file, {
+    access: "public",
+    allowOverwrite: true,
+  });
 
   return Response.json({ url: blob.url });
 }

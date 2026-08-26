@@ -3,7 +3,12 @@ import { useState, useEffect } from "react";
 import CommentItem from "./CommentItem";
 import AnonAvatar from "./AnonAvatar";
 
-export default function CommentSection({ pageKey, session, pageAuthor, viewerIsAdmin = false }) {
+export default function CommentSection({
+  pageKey,
+  session,
+  pageAuthor,
+  viewerIsAdmin = false,
+}) {
   const [comments, setComments] = useState([]);
   const [total, setTotal] = useState(0);
   const [skip, setSkip] = useState(0);
@@ -26,14 +31,16 @@ export default function CommentSection({ pageKey, session, pageAuthor, viewerIsA
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [pageKey]);
 
   const loadMore = async () => {
     setLoadingMore(true);
     try {
       const res = await fetch(
-        `/api/comments?pageKey=${encodeURIComponent(pageKey)}&skip=${skip}`
+        `/api/comments?pageKey=${encodeURIComponent(pageKey)}&skip=${skip}`,
       );
       const data = await res.json();
       setComments((prev) => [...prev, ...(data.comments ?? [])]);
@@ -67,7 +74,9 @@ export default function CommentSection({ pageKey, session, pageAuthor, viewerIsA
       const newComment = await res.json();
       // Mirror Reddit: auto-upvote your own comment
       try {
-        const stored = JSON.parse(localStorage.getItem("dbu_comment_votes") || "{}");
+        const stored = JSON.parse(
+          localStorage.getItem("dbu_comment_votes") || "{}",
+        );
         stored[`c:${newComment._id}`] = "up";
         localStorage.setItem("dbu_comment_votes", JSON.stringify(stored));
       } catch {}
@@ -116,7 +125,10 @@ export default function CommentSection({ pageKey, session, pageAuthor, viewerIsA
           {!user && (
             <p className="text-gray-500 text-xs mt-2 text-center">
               Posting as Anonymous Warrior.{" "}
-              <a href="/login" className="text-amber-500 hover:text-amber-400 transition-colors">
+              <a
+                href="/login"
+                className="text-amber-500 hover:text-amber-400 transition-colors"
+              >
                 Sign in
               </a>{" "}
               to use your account.
@@ -129,7 +141,9 @@ export default function CommentSection({ pageKey, session, pageAuthor, viewerIsA
       {loading ? (
         <p className="text-gray-500 text-sm py-4">Loading comments…</p>
       ) : comments.length === 0 ? (
-        <p className="text-gray-500 text-sm py-4">No comments yet. Be the first!</p>
+        <p className="text-gray-500 text-sm py-4">
+          No comments yet. Be the first!
+        </p>
       ) : (
         <>
           {comments.map((comment) => (
