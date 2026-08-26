@@ -7,7 +7,15 @@ export function useEditMode() {
   return useContext(EditModeContext);
 }
 
-export function EditModeProvider({ children, keyName, toggleStatus, contributorEmail = null, contributorName = null, isAdmin = false, isCommunity = false }) {
+export function EditModeProvider({
+  children,
+  keyName,
+  toggleStatus,
+  contributorEmail = null,
+  contributorName = null,
+  isAdmin = false,
+  isCommunity = false,
+}) {
   const [isEditing, setIsEditing] = useState(false);
   const [isContributing, setIsContributing] = useState(false);
   const [pendingChanges, _setPendingChanges] = useState({});
@@ -32,7 +40,10 @@ export function EditModeProvider({ children, keyName, toggleStatus, contributorE
     // Cap at 50 entries
     if (historyRef.current.length > 51) historyRef.current.shift();
     else historyIdxRef.current++;
-    setHistoryMeta({ len: historyRef.current.length, idx: historyIdxRef.current });
+    setHistoryMeta({
+      len: historyRef.current.length,
+      idx: historyIdxRef.current,
+    });
   }
 
   function setChange(path, value) {
@@ -65,7 +76,10 @@ export function EditModeProvider({ children, keyName, toggleStatus, contributorE
     historyIdxRef.current--;
     const restored = historyRef.current[historyIdxRef.current];
     _apply(restored);
-    setHistoryMeta({ len: historyRef.current.length, idx: historyIdxRef.current });
+    setHistoryMeta({
+      len: historyRef.current.length,
+      idx: historyIdxRef.current,
+    });
   }
 
   function redo() {
@@ -73,7 +87,10 @@ export function EditModeProvider({ children, keyName, toggleStatus, contributorE
     historyIdxRef.current++;
     const restored = historyRef.current[historyIdxRef.current];
     _apply(restored);
-    setHistoryMeta({ len: historyRef.current.length, idx: historyIdxRef.current });
+    setHistoryMeta({
+      len: historyRef.current.length,
+      idx: historyIdxRef.current,
+    });
   }
 
   function clearChanges() {
@@ -91,13 +108,25 @@ export function EditModeProvider({ children, keyName, toggleStatus, contributorE
   return (
     <EditModeContext.Provider
       value={{
-        isEditing, setIsEditing,
-        isContributing, setIsContributing,
-        contributorEmail, contributorName,
-        isAdmin, isCommunity,
-        pendingChanges, setChange, setArrayChange, clearChanges, hasChanges,
-        undo, redo, canUndo, canRedo,
-        keyName, toggleStatus,
+        isEditing,
+        setIsEditing,
+        isContributing,
+        setIsContributing,
+        contributorEmail,
+        contributorName,
+        isAdmin,
+        isCommunity,
+        pendingChanges,
+        setChange,
+        setArrayChange,
+        clearChanges,
+        hasChanges,
+        undo,
+        redo,
+        canUndo,
+        canRedo,
+        keyName,
+        toggleStatus,
       }}
     >
       {children}

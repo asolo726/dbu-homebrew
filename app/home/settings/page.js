@@ -8,18 +8,18 @@ export default async function SettingsPage() {
   const client = await clientPromise;
 
   const testDb = client.db(); // use URI default — same db the MongoDBAdapter writes users to
-  const userData =
-    (await testDb.collection("users").findOne(
-      { email: session.user.email },
-      { projection: { _id: 0 } }
-    )) ?? {
-      name: session.user.name,
-      email: session.user.email,
-      image: session.user.image,
-    };
+  const userData = (await testDb
+    .collection("users")
+    .findOne({ email: session.user.email }, { projection: { _id: 0 } })) ?? {
+    name: session.user.name,
+    email: session.user.email,
+    image: session.user.image,
+  };
 
   const contentDb = client.db("content");
-  const collections = await contentDb.listCollections({}, { nameOnly: true }).toArray();
+  const collections = await contentDb
+    .listCollections({}, { nameOnly: true })
+    .toArray();
   const pageResponse = {};
   for (const col of collections) {
     pageResponse[col.name] = await contentDb

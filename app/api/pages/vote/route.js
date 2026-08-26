@@ -12,10 +12,9 @@ export async function GET(request) {
   try {
     const client = await clientPromise;
     const db = client.db("Main");
-    const doc = await db.collection("statistics").findOne(
-      { keyName },
-      { projection: { upvotes: 1, downvotes: 1 } }
-    );
+    const doc = await db
+      .collection("statistics")
+      .findOne({ keyName }, { projection: { upvotes: 1, downvotes: 1 } });
     return NextResponse.json({
       upvotes: doc?.upvotes ?? 0,
       downvotes: doc?.downvotes ?? 0,
@@ -49,7 +48,7 @@ export async function POST(request) {
       if (userId) {
         await col.updateOne(
           { keyName },
-          { $inc: { [field]: -1 }, $pull: { [fieldBy]: userId } }
+          { $inc: { [field]: -1 }, $pull: { [fieldBy]: userId } },
         );
       } else {
         await col.updateOne({ keyName }, { $inc: { [field]: -1 } });
@@ -61,12 +60,21 @@ export async function POST(request) {
       // Ensure doc exists before the conditional update
       await col.updateOne(
         { keyName },
-        { $setOnInsert: { keyName, upvotes: 0, downvotes: 0, views: 0, upvotedBy: [], downvotedBy: [] } },
-        { upsert: true }
+        {
+          $setOnInsert: {
+            keyName,
+            upvotes: 0,
+            downvotes: 0,
+            views: 0,
+            upvotedBy: [],
+            downvotedBy: [],
+          },
+        },
+        { upsert: true },
       );
       const result = await col.updateOne(
         { keyName, [fieldBy]: { $ne: userId }, [otherBy]: { $ne: userId } },
-        { $inc: { [field]: 1 }, $addToSet: { [fieldBy]: userId } }
+        { $inc: { [field]: 1 }, $addToSet: { [fieldBy]: userId } },
       );
       if (result.modifiedCount === 0) {
         return NextResponse.json({ error: "Already voted" }, { status: 409 });
@@ -75,7 +83,7 @@ export async function POST(request) {
       await col.updateOne(
         { keyName },
         { $inc: { [field]: 1 } },
-        { upsert: true }
+        { upsert: true },
       );
     }
 

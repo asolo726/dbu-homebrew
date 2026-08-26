@@ -3,37 +3,34 @@ import clientPromise from "../../../lib/mongoDBClient";
 /**
  * Uploads the content provided to the database.
  * Determines what collection to use based on the content.identity value
- * 
+ *
  * @param The Object to be uploaded
  * @returns {"status": status}
  */
-export default async function uploadNewCreatedContent(creationObject){
-    const session = await auth();
+export default async function uploadNewCreatedContent(creationObject) {
+  const session = await auth();
 
-    // Checking Creation Object Output
-    console.log("Creation Object:\n", creationObject);
-    
-    const client = await clientPromise;
-    const contentCollection = creationObject.head.identity.replace(" ", "");
-    const dbCollection = client.db("content").collection(contentCollection);
-    
-    
-    //Name check------------------
-    // The underscores accessing the object variable is concerning, look into this later...
-    const searchQuery = {"head.keyName": creationObject.head.keyName};
-    const searchOptions = []; 
-    const nameCheck = await dbCollection.findOne(searchQuery, searchOptions);
-    if(nameCheck){
-        return {status: "Name Taken"};
-    }
+  // Checking Creation Object Output
+  console.log("Creation Object:\n", creationObject);
 
+  const client = await clientPromise;
+  const contentCollection = creationObject.head.identity.replace(" ", "");
+  const dbCollection = client.db("content").collection(contentCollection);
 
-    const status = await dbCollection.insertOne(creationObject);
-    //Check if the insertion was successful
-    if(status.acknowledged != true){
-        return {status: "Failed"};
-    }
+  //Name check------------------
+  // The underscores accessing the object variable is concerning, look into this later...
+  const searchQuery = { "head.keyName": creationObject.head.keyName };
+  const searchOptions = [];
+  const nameCheck = await dbCollection.findOne(searchQuery, searchOptions);
+  if (nameCheck) {
+    return { status: "Name Taken" };
+  }
 
-    return {status: "Success"};
-    
+  const status = await dbCollection.insertOne(creationObject);
+  //Check if the insertion was successful
+  if (status.acknowledged != true) {
+    return { status: "Failed" };
+  }
+
+  return { status: "Success" };
 }

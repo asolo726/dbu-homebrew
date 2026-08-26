@@ -1,7 +1,7 @@
 "use client";
 import { useEditMode } from "./EditModeContext";
 import { useEffect, useRef } from "react";
-import {parseAndFormat} from './util/parserFunctions';
+import { parseAndFormat } from "./util/parserFunctions";
 
 export default function EditableText({ path, value, className = "" }) {
   const ctx = useEditMode();
@@ -11,7 +11,8 @@ export default function EditableText({ path, value, className = "" }) {
 
   const { isEditing, isContributing, setChange, pendingChanges } = ctx;
   const canEdit = isEditing || isContributing;
-  const current = (path && path in pendingChanges) ? pendingChanges[path] : (value ?? "");
+  const current =
+    path && path in pendingChanges ? pendingChanges[path] : (value ?? "");
 
   // Sync DOM when `current` changes from outside (e.g. undo/redo).
   // Skip while this element has focus — we must not clobber the cursor.

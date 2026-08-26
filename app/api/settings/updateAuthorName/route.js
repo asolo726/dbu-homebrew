@@ -12,13 +12,15 @@ export async function PATCH(request) {
   if (!oldName || !newName?.trim()) {
     return NextResponse.json(
       { error: "oldName and newName are required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   const client = await clientPromise;
   const db = client.db("content");
-  const collections = await db.listCollections({}, { nameOnly: true }).toArray();
+  const collections = await db
+    .listCollections({}, { nameOnly: true })
+    .toArray();
 
   // Arrays that may contain contributor-tagged items
   const contributorArrays = ["traits", "masteryTrait"];
@@ -29,17 +31,23 @@ export async function PATCH(request) {
       .collection(col.name)
       .updateMany(
         { "head.author": oldName },
-        { $set: { "head.author": newName.trim() } }
+        { $set: { "head.author": newName.trim() } },
       );
     totalUpdated += result.modifiedCount;
 
     // Propagate name change into community contribution attribution
     for (const arrayField of contributorArrays) {
-      await db.collection(col.name).updateMany(
-        { [`${arrayField}.contributor.email`]: session.user.email },
-        { $set: { [`${arrayField}.$[elem].contributor.name`]: newName.trim() } },
-        { arrayFilters: [{ "elem.contributor.email": session.user.email }] }
-      );
+      await db
+        .collection(col.name)
+        .updateMany(
+          { [`${arrayField}.contributor.email`]: session.user.email },
+          {
+            $set: {
+              [`${arrayField}.$[elem].contributor.name`]: newName.trim(),
+            },
+          },
+          { arrayFilters: [{ "elem.contributor.email": session.user.email }] },
+        );
     }
   }
 

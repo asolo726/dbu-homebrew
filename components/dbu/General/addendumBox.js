@@ -24,7 +24,7 @@ export default function AddendumBox({
   const contributorName = ctx?.contributorName ?? null;
 
   const btnPlusYellow =
-  "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-dbu-header/50 text-dbu-header bg-dbu-header/10 hover:bg-dbu-header/20 transition-colors";
+    "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-dbu-header/50 text-dbu-header bg-dbu-header/10 hover:bg-dbu-header/20 transition-colors";
 
   // Resolve current traits array from pendingChanges, falling back to prop
   const traitsKey = path ? `${path}.traits` : null;
@@ -38,14 +38,23 @@ export default function AddendumBox({
   // There are special kinds of boxes that should always be open. Such
   // as Signature Techniques, Unique Abilities, etc. A way we can account
   // for this is to check if there's a boxTitle or not.
-  const isOpenBox = boxTitle === '';
+  const isOpenBox = boxTitle === "";
 
   // Read current single-trait values (merging any scalar edits) for conversion
   function resolveCurrentSingleTrait() {
     return {
-      title: path && `${path}.title` in pendingChanges ? pendingChanges[`${path}.title`] : title,
-      desc: path && `${path}.desc` in pendingChanges ? pendingChanges[`${path}.desc`] : desc,
-      abilities: path && `${path}.abilities` in pendingChanges ? pendingChanges[`${path}.abilities`] : (abilities ?? []),
+      title:
+        path && `${path}.title` in pendingChanges
+          ? pendingChanges[`${path}.title`]
+          : title,
+      desc:
+        path && `${path}.desc` in pendingChanges
+          ? pendingChanges[`${path}.desc`]
+          : desc,
+      abilities:
+        path && `${path}.abilities` in pendingChanges
+          ? pendingChanges[`${path}.abilities`]
+          : (abilities ?? []),
     };
   }
 
@@ -62,7 +71,10 @@ export default function AddendumBox({
 
   function withContributor(base) {
     return isCommunity && contributorEmail
-      ? { ...base, contributor: { email: contributorEmail, name: contributorName } }
+      ? {
+          ...base,
+          contributor: { email: contributorEmail, name: contributorName },
+        }
       : base;
   }
 
@@ -79,15 +91,22 @@ export default function AddendumBox({
 
   function handleRemoveTrait(i) {
     if (!path || !setArrayChange || !currentTraits) return;
-    setArrayChange(traitsKey, currentTraits.filter((_, j) => j !== i));
+    setArrayChange(
+      traitsKey,
+      currentTraits.filter((_, j) => j !== i),
+    );
   }
 
   const chevron = (
     <RxChevronRight
       className={"stroke-1 shrink-0 transition-transform ".concat(
         menuState
-          ? isHovering ? "rotate-45" : "rotate-90"
-          : isHovering ? "rotate-45" : "rotate-0",
+          ? isHovering
+            ? "rotate-45"
+            : "rotate-90"
+          : isHovering
+            ? "rotate-45"
+            : "rotate-0",
       )}
     />
   );
@@ -98,28 +117,31 @@ export default function AddendumBox({
     if (isEditing || isOpenBox) {
       setMenuState(true);
     }
-    
-  }, [isEditing])
+  }, [isEditing]);
 
   return (
     <div className="border border-dbu-header">
-      {(isEditing || isContributing) ? (
+      {isEditing || isContributing ? (
         <div
           className="flex items-center gap-2 w-full px-3 py-3"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
-          <button onClick={() => setMenuState(!menuState)} className="cursor-pointer shrink-0">
+          <button
+            onClick={() => setMenuState(!menuState)}
+            className="cursor-pointer shrink-0"
+          >
             {chevron}
           </button>
           <p className="text-md md:text-lg flex-1">
-            <EditableText path={path ? `${path}.boxTitle` : undefined} value={boxTitle} />
+            <EditableText
+              path={path ? `${path}.boxTitle` : undefined}
+              value={boxTitle}
+            />
           </p>
         </div>
       ) : isOpenBox ? (
-        <button
-          className="flex items-center gap-2 w-full text-left px-3 py-3 font-sans"
-        />
+        <button className="flex items-center gap-2 w-full text-left px-3 py-3 font-sans" />
       ) : (
         <button
           className="flex items-center gap-2 w-full text-left px-3 py-3 cursor-pointer font-sans"
@@ -135,56 +157,74 @@ export default function AddendumBox({
       <div className={menuState ? "block px-3 pb-3" : "hidden"}>
         {isMultiTrait ? (
           currentTraits.map((trait, i) => {
-             if ("sectional" in trait) {
-                      const titlePath = path ? `${path}.traits.${i}.sectional.title` : null;
-                      return (
-                        <div key={i} className="mt-10">
-                          <p className="text-dbu-header text-center text-xl md:text-2xl my-3 font-bold tracking-widest">
-                            {titlePath ? (
-                              <EditableText path={titlePath} value={trait.sectional.title} className="text-center" />
-                            ) : (
-                              trait.sectional.title
-                            )}
-                          </p>
-                          {trait.contributor && (
-                            <p className="text-xs text-white italic text-center mt-1 opacity-60">
-                              (Added by {trait.contributor.name})
-                            </p>
-                          )}
-                          {(isEditing || isContributing) && path && (
-                            <div className="flex justify-between items-center mt-2">
-                              <button onClick={() => handleRemoveTrait(i)} title="Delete section" className={"flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-red-500/50 text-red-400 bg-red-900/20 hover:bg-red-900/40 transition-colors"}>
-                                <RiSubtractFill size={16} />
-                              </button>
-                                <button onClick={() => handleAddTraitAfter(i)} title="Add trait below section" className={"flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-white/30 text-white bg-white/10 hover:bg-white/20 transition-colors"}>
-                                  <RiAddFill size={16} />
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    }
-            return (
-            
-            <div key={i}>
-              <Trait
-                title={trait.title}
-                desc={trait.desc}
-                abilities={trait.abilities}
-                path={path ? `${path}.traits.${i}` : undefined}
-              />
-              {(isEditing || isContributing) && path && (
-                <div className="flex justify-start mt-1 mb-2">
-                  <button
-                    onClick={() => handleRemoveTrait(i)}
-                    title="Delete trait"
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-red-500/50 text-red-400 bg-red-900/20 hover:bg-red-900/40 transition-colors"
-                  >
-                    <RiDeleteBinLine size={16} />
-                  </button>
+            if ("sectional" in trait) {
+              const titlePath = path
+                ? `${path}.traits.${i}.sectional.title`
+                : null;
+              return (
+                <div key={i} className="mt-10">
+                  <p className="text-dbu-header text-center text-xl md:text-2xl my-3 font-bold tracking-widest">
+                    {titlePath ? (
+                      <EditableText
+                        path={titlePath}
+                        value={trait.sectional.title}
+                        className="text-center"
+                      />
+                    ) : (
+                      trait.sectional.title
+                    )}
+                  </p>
+                  {trait.contributor && (
+                    <p className="text-xs text-white italic text-center mt-1 opacity-60">
+                      (Added by {trait.contributor.name})
+                    </p>
+                  )}
+                  {(isEditing || isContributing) && path && (
+                    <div className="flex justify-between items-center mt-2">
+                      <button
+                        onClick={() => handleRemoveTrait(i)}
+                        title="Delete section"
+                        className={
+                          "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-red-500/50 text-red-400 bg-red-900/20 hover:bg-red-900/40 transition-colors"
+                        }
+                      >
+                        <RiSubtractFill size={16} />
+                      </button>
+                      <button
+                        onClick={() => handleAddTraitAfter(i)}
+                        title="Add trait below section"
+                        className={
+                          "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-white/30 text-white bg-white/10 hover:bg-white/20 transition-colors"
+                        }
+                      >
+                        <RiAddFill size={16} />
+                      </button>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>);
+              );
+            }
+            return (
+              <div key={i}>
+                <Trait
+                  title={trait.title}
+                  desc={trait.desc}
+                  abilities={trait.abilities}
+                  path={path ? `${path}.traits.${i}` : undefined}
+                />
+                {(isEditing || isContributing) && path && (
+                  <div className="flex justify-start mt-1 mb-2">
+                    <button
+                      onClick={() => handleRemoveTrait(i)}
+                      title="Delete trait"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-red-500/50 text-red-400 bg-red-900/20 hover:bg-red-900/40 transition-colors"
+                    >
+                      <RiDeleteBinLine size={16} />
+                    </button>
+                  </div>
+                )}
+              </div>
+            );
           })
         ) : (
           <Trait title={title} desc={desc} abilities={abilities} path={path} />
@@ -200,7 +240,11 @@ export default function AddendumBox({
               <RiAddFill size={16} />
               Add Trait
             </button>
-            <button onClick={handleAddSection} title="Add section header" className={btnPlusYellow}>
+            <button
+              onClick={handleAddSection}
+              title="Add section header"
+              className={btnPlusYellow}
+            >
               <RiAddFill size={16} />
               Add Section
             </button>

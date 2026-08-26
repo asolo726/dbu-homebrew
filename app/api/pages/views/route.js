@@ -9,11 +9,10 @@ export async function POST(request) {
 
   try {
     const client = await clientPromise;
-    await client.db("Main").collection("statistics").updateOne(
-      { keyName },
-      { $inc: { views: 1 } },
-      { upsert: true }
-    );
+    await client
+      .db("Main")
+      .collection("statistics")
+      .updateOne({ keyName }, { $inc: { views: 1 } }, { upsert: true });
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("POST /api/pages/views error:", error);

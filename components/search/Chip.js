@@ -1,4 +1,10 @@
-export default function Chip({ label, active, onClick, onMouseDown, className = "" }) {
+export default function Chip({
+  label,
+  active,
+  onClick,
+  onMouseDown,
+  className = "",
+}) {
   return (
     <button
       onClick={onClick}

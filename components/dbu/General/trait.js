@@ -6,7 +6,14 @@ import { useEditMode } from "../../edit/EditModeContext";
 import AddAbilityModal from "../../edit/AddAbilityModal";
 import { RiAddFill, RiSubtractFill } from "react-icons/ri";
 
-export default function Trait({ title = "", desc = "", abilities, path, disableEditActions = false, contributor = null }) {
+export default function Trait({
+  title = "",
+  desc = "",
+  abilities,
+  path,
+  disableEditActions = false,
+  contributor = null,
+}) {
   const ctx = useEditMode();
   const isEditing = ctx?.isEditing ?? false;
   const isContributing = ctx?.isContributing ?? false;
@@ -35,12 +42,15 @@ export default function Trait({ title = "", desc = "", abilities, path, disableE
   // Merge scalar edits (e.g. individual bullet text changes) into the base array
   // before any structural operation so we don't lose in-progress text edits.
   function resolveCurrentAbilities() {
-    const base = abilitiesKey && abilitiesKey in pendingChanges
-      ? pendingChanges[abilitiesKey]
-      : (abilities ?? []);
+    const base =
+      abilitiesKey && abilitiesKey in pendingChanges
+        ? pendingChanges[abilitiesKey]
+        : (abilities ?? []);
     if (!abilitiesKey) return base;
     const prefix = abilitiesKey + ".";
-    const scalarKeys = Object.keys(pendingChanges).filter((k) => k.startsWith(prefix));
+    const scalarKeys = Object.keys(pendingChanges).filter((k) =>
+      k.startsWith(prefix),
+    );
     if (scalarKeys.length === 0) return base;
     const arr = JSON.parse(JSON.stringify(base));
     for (const key of scalarKeys) {
@@ -50,7 +60,10 @@ export default function Trait({ title = "", desc = "", abilities, path, disableE
       for (let j = 0; j < parts.length - 1; j++) {
         const seg = parts[j];
         const next = obj[isNaN(seg) ? seg : Number(seg)];
-        if (next == null) { valid = false; break; }
+        if (next == null) {
+          valid = false;
+          break;
+        }
         obj = next;
       }
       if (valid) {
@@ -77,7 +90,9 @@ export default function Trait({ title = "", desc = "", abilities, path, disableE
 
   function handleRemove() {
     if (!path || !setArrayChange || selectedIndices.size === 0) return;
-    const filtered = resolveCurrentAbilities().filter((_, i) => !selectedIndices.has(i));
+    const filtered = resolveCurrentAbilities().filter(
+      (_, i) => !selectedIndices.has(i),
+    );
     setArrayChange(abilitiesKey, filtered);
     setSelectedIndices(new Set());
   }
@@ -112,10 +127,19 @@ export default function Trait({ title = "", desc = "", abilities, path, disableE
         return { ...item, list: item.list.filter((_, j) => j !== op.index) };
       }
       if (op.type === "miniTraitList:add") {
-        return { ...item, miniTraitList: [...(item.miniTraitList ?? []), { title: "", desc: "" }] };
+        return {
+          ...item,
+          miniTraitList: [
+            ...(item.miniTraitList ?? []),
+            { title: "", desc: "" },
+          ],
+        };
       }
       if (op.type === "miniTraitList:remove") {
-        return { ...item, miniTraitList: item.miniTraitList.filter((_, j) => j !== op.index) };
+        return {
+          ...item,
+          miniTraitList: item.miniTraitList.filter((_, j) => j !== op.index),
+        };
       }
       return item;
     });
@@ -124,14 +148,14 @@ export default function Trait({ title = "", desc = "", abilities, path, disableE
 
   return (
     <div className="flex-grow-1 mt-4">
-      {(canEditContent && path) ? (
+      {canEditContent && path ? (
         <p className="text-dbu-text text-md md:text-lg text-left">
           <span className="font-bold text-dbu-header">
             <EditableText path={`${path}.title`} value={title} />:{" "}
           </span>
           <EditableText path={`${path}.desc`} value={desc} />
         </p>
-      ) : (title !== "" || desc !== "") ? (
+      ) : title !== "" || desc !== "" ? (
         <p className="text-dbu-text text-md md:text-lg text-left">
           {title !== "" && (
             <span className="font-bold text-dbu-header">
@@ -181,7 +205,10 @@ export default function Trait({ title = "", desc = "", abilities, path, disableE
       )}
 
       {canEditContent && showAddModal && (
-        <AddAbilityModal onSave={handleAdd} onClose={() => setShowAddModal(false)} />
+        <AddAbilityModal
+          onSave={handleAdd}
+          onClose={() => setShowAddModal(false)}
+        />
       )}
 
       {contributor && (

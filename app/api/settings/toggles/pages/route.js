@@ -24,16 +24,22 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const toggleName = searchParams.get("toggle");
   if (!toggleName) {
-    return NextResponse.json({ error: "toggle param required" }, { status: 400 });
+    return NextResponse.json(
+      { error: "toggle param required" },
+      { status: 400 },
+    );
   }
 
   try {
     const client = await clientPromise;
     const viewerName = await getViewerName(client, session);
-    if (!viewerName) return NextResponse.json({ error: "User not found" }, { status: 404 });
+    if (!viewerName)
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
 
     const contentDb = client.db("content");
-    const collections = await contentDb.listCollections({}, { nameOnly: true }).toArray();
+    const collections = await contentDb
+      .listCollections({}, { nameOnly: true })
+      .toArray();
 
     const withToggle = [];
     const withoutToggle = [];
@@ -43,12 +49,23 @@ export async function GET(request) {
         .collection(col.name)
         .find(
           { "head.author": viewerName },
-          { projection: { "head.keyName": 1, "head.title": 1, "head.toggle": 1, _id: 0 } }
+          {
+            projection: {
+              "head.keyName": 1,
+              "head.title": 1,
+              "head.toggle": 1,
+              _id: 0,
+            },
+          },
         )
         .toArray();
 
       for (const p of pages) {
-        const info = { keyName: p.head.keyName, title: p.head.title, collection: col.name };
+        const info = {
+          keyName: p.head.keyName,
+          title: p.head.title,
+          collection: col.name,
+        };
         if (p.head.toggle === toggleName) {
           withToggle.push(info);
         } else {
@@ -74,14 +91,22 @@ export async function PATCH(request) {
   }
 
   try {
-    const { toggleName, addPages = [], removePages = [] } = await request.json();
+    const {
+      toggleName,
+      addPages = [],
+      removePages = [],
+    } = await request.json();
     if (!toggleName) {
-      return NextResponse.json({ error: "toggleName required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "toggleName required" },
+        { status: 400 },
+      );
     }
 
     const client = await clientPromise;
     const viewerName = await getViewerName(client, session);
-    if (!viewerName) return NextResponse.json({ error: "User not found" }, { status: 404 });
+    if (!viewerName)
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
 
     const contentDb = client.db("content");
 
@@ -91,16 +116,16 @@ export async function PATCH(request) {
           .collection(p.collection)
           .updateOne(
             { "head.keyName": p.keyName, "head.author": viewerName },
-            { $set: { "head.toggle": toggleName } }
-          )
+            { $set: { "head.toggle": toggleName } },
+          ),
       ),
       ...removePages.map((p) =>
         contentDb
           .collection(p.collection)
           .updateOne(
             { "head.keyName": p.keyName, "head.author": viewerName },
-            { $unset: { "head.toggle": "" } }
-          )
+            { $unset: { "head.toggle": "" } },
+          ),
       ),
     ];
 

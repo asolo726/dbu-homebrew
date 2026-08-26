@@ -20,8 +20,15 @@ async function getViewerInfo() {
   const user = await client
     .db()
     .collection("users")
-    .findOne({ email: session.user.email }, { projection: { name: 1, type: 1 } });
-  return { name: user?.name ?? null, email: session.user.email, isAdmin: user?.type === "admin" };
+    .findOne(
+      { email: session.user.email },
+      { projection: { name: 1, type: 1 } },
+    );
+  return {
+    name: user?.name ?? null,
+    email: session.user.email,
+    isAdmin: user?.type === "admin",
+  };
 }
 
 //This Regex pattern checks that a url search only contains alphanumerical characters and a -
@@ -32,10 +39,10 @@ export const pattern = /^(\w+[-]?)+$/;
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const fail_return = {
-      title: "Content Not Found",
-      description:
-        "The content you are looking for does not exist or has not been published yet.",
-    };
+    title: "Content Not Found",
+    description:
+      "The content you are looking for does not exist or has not been published yet.",
+  };
 
   if (!SLUG_PATTERN.test(slug)) {
     return { title: "Invalid URL" };
@@ -60,7 +67,11 @@ export async function generateMetadata({ params }) {
   try {
     const toggleStatus = await checkToggle(toggle, result.head.author);
     if (!toggleStatus) {
-      const { name: viewerName, email: viewerEmail, isAdmin } = await getViewerInfo();
+      const {
+        name: viewerName,
+        email: viewerEmail,
+        isAdmin,
+      } = await getViewerInfo();
       if (viewerName !== result.head.author && !isAdmin) return fail_return;
     }
   } catch (error) {
@@ -121,22 +132,28 @@ export default async function Page({ params }) {
         </button>
       </div>
     );
-  } 
+  }
   const searchResult = await searchContent(slug);
   let toggle;
   let pageAuthor;
   let toggleStatus;
   // Try Block to catch if the search fails
-  try{
+  try {
     toggle = searchResult.content[0].head.toggle;
     pageAuthor = searchResult.content[0].head.author;
     toggleStatus = await checkToggle(toggle, pageAuthor);
-  } catch (error) {
-  }
-  const { name: viewerName, email: viewerEmail, isAdmin } = await getViewerInfo();
+  } catch (error) {}
+  const {
+    name: viewerName,
+    email: viewerEmail,
+    isAdmin,
+  } = await getViewerInfo();
 
   // If search fails or toggle is off (and viewer is not the author or an admin), show not found.
-  if (searchResult.status === "failed" || (toggle && !toggleStatus && viewerName !== pageAuthor && !isAdmin)) {
+  if (
+    searchResult.status === "failed" ||
+    (toggle && !toggleStatus && viewerName !== pageAuthor && !isAdmin)
+  ) {
     return (
       <div className="flex flex-col justify-center">
         <h1>
@@ -165,11 +182,19 @@ export default async function Page({ params }) {
           href={oEmbedUrl}
           title={content.head.title}
         />
-        <ViewTracker keyName={content.head.keyName} title={content.head.title} isAuthor={viewerName === pageAuthor} />
+        <ViewTracker
+          keyName={content.head.keyName}
+          title={content.head.title}
+          isAuthor={viewerName === pageAuthor}
+        />
         {(() => {
           const canEdit = viewerName === pageAuthor || isAdmin;
           const allowlist = content.head.communityAllowlist ?? [];
-          const canContribute = !canEdit && !!content.head.isCommunity && !!viewerEmail && allowlist.includes(viewerEmail);
+          const canContribute =
+            !canEdit &&
+            !!content.head.isCommunity &&
+            !!viewerEmail &&
+            allowlist.includes(viewerEmail);
           return (
             <EditModeWrapper
               canEdit={canEdit}

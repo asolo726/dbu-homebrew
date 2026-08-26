@@ -10,11 +10,14 @@ export default function EnhancementRenderPage({ content }) {
       <TraitsSection traits={content.traits} basePath="traits" />
       {content.BurstLimit ? (
         <BurstLimit burstLimit={content.burstLimit} path="burstLimit" />
-        ) : (
+      ) : (
         <></>
-        )}
+      )}
       {content.masteryTrait ? (
-        <MasteryTrait masteryTraitList={content.masteryTrait} path="masteryTrait" />
+        <MasteryTrait
+          masteryTraitList={content.masteryTrait}
+          path="masteryTrait"
+        />
       ) : (
         <></>
       )}

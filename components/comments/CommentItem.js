@@ -101,10 +101,18 @@ function VoteButtons({ myVote, upvotes, downvotes, onVote, small = false }) {
 
   return (
     <>
-      <button onClick={() => onVote("up")} className={upCls} disabled={upDisabled}>
+      <button
+        onClick={() => onVote("up")}
+        className={upCls}
+        disabled={upDisabled}
+      >
         ▲ {upvotes}
       </button>
-      <button onClick={() => onVote("down")} className={downCls} disabled={downDisabled}>
+      <button
+        onClick={() => onVote("down")}
+        className={downCls}
+        disabled={downDisabled}
+      >
         ▼ {downvotes}
       </button>
     </>
@@ -123,7 +131,9 @@ function formatTimestamp(ts) {
 }
 
 function Avatar({ image, name, size, isAuthor = false }) {
-  const strokeCls = isAuthor ? "ring-2 ring-white ring-offset-1 ring-offset-gray-950" : "";
+  const strokeCls = isAuthor
+    ? "ring-2 ring-white ring-offset-1 ring-offset-gray-950"
+    : "";
   if (image) {
     return (
       <img
@@ -224,7 +234,9 @@ function ReplyItem({ reply, commentId, parentReplyId = null, depth = 0 }) {
         <Avatar image={reply.userImage} name={reply.userName} size={32} />
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2 flex-wrap">
-            <span className="text-gray-300 text-sm font-medium">{reply.userName}</span>
+            <span className="text-gray-300 text-sm font-medium">
+              {reply.userName}
+            </span>
             <span className="text-amber-500 text-xs whitespace-nowrap">
               {formatTimestamp(reply.timestamp)}
             </span>
@@ -286,7 +298,8 @@ function ReplyItem({ reply, commentId, parentReplyId = null, depth = 0 }) {
                   onClick={() => setVisibleSubReplies((v) => v + 5)}
                   className="text-amber-500 hover:text-amber-400 text-xs mt-2 transition-colors cursor-pointer"
                 >
-                  Load more replies ({subReplies.length - visibleSubReplies} remaining)
+                  Load more replies ({subReplies.length - visibleSubReplies}{" "}
+                  remaining)
                 </button>
               )}
             </div>
@@ -299,7 +312,12 @@ function ReplyItem({ reply, commentId, parentReplyId = null, depth = 0 }) {
 
 // ── CommentItem ───────────────────────────────────────────────────────────────
 
-export default function CommentItem({ comment, pageAuthor, viewerIsAdmin = false, onDelete }) {
+export default function CommentItem({
+  comment,
+  pageAuthor,
+  viewerIsAdmin = false,
+  onDelete,
+}) {
   const { myVote, castVote } = useVote(`c:${comment._id}`, {
     commentId: comment._id,
   });
@@ -344,7 +362,12 @@ export default function CommentItem({ comment, pageAuthor, viewerIsAdmin = false
     <div className="border-t border-gray-800 py-5">
       <div className="flex gap-4">
         <div className="flex flex-col items-center gap-1 shrink-0">
-          <Avatar image={comment.userImage} name={comment.userName} size={48} isAuthor={isAuthor} />
+          <Avatar
+            image={comment.userImage}
+            name={comment.userName}
+            size={48}
+            isAuthor={isAuthor}
+          />
           <span className="text-gray-400 text-xs text-center max-w-15 wrap-break-word leading-tight">
             {comment.userName}
           </span>
@@ -427,7 +450,8 @@ export default function CommentItem({ comment, pageAuthor, viewerIsAdmin = false
                   onClick={() => setVisibleReplies((v) => v + 5)}
                   className="text-amber-500 hover:text-amber-400 text-sm mt-3 transition-colors cursor-pointer"
                 >
-                  Load more replies ({replies.length - visibleReplies} remaining)
+                  Load more replies ({replies.length - visibleReplies}{" "}
+                  remaining)
                 </button>
               )}
             </div>

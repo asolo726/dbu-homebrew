@@ -18,7 +18,10 @@ export async function GET() {
     const viewerName = await getViewerName(client, session);
 
     // Fetch all toggle statuses in one query
-    const togglesDoc = await client.db("Main").collection("toggles").findOne({});
+    const togglesDoc = await client
+      .db("Main")
+      .collection("toggles")
+      .findOne({});
     const toggleMap = togglesDoc?.toggles ?? {};
     const isToggleEnabled = (toggleId, author) => {
       if (!toggleId || !author) return true;
@@ -26,20 +29,35 @@ export async function GET() {
     };
 
     const contentDb = client.db("content");
-    const collections = await contentDb.listCollections({}, { nameOnly: true }).toArray();
+    const collections = await contentDb
+      .listCollections({}, { nameOnly: true })
+      .toArray();
 
     const titles = [];
     for (const col of collections) {
       const pages = await contentDb
         .collection(col.name)
-        .find({}, { projection: { "head.title": 1, "head.keyName": 1, "head.author": 1, "head.toggle": 1, _id: 0 } })
+        .find(
+          {},
+          {
+            projection: {
+              "head.title": 1,
+              "head.keyName": 1,
+              "head.author": 1,
+              "head.toggle": 1,
+              _id: 0,
+            },
+          },
+        )
         .toArray();
 
       for (const p of pages) {
         if (!p.head?.title || !p.head?.keyName) continue;
         const visible =
-          isToggleEnabled(p.head.toggle, p.head.author) || (viewerName && p.head.author === viewerName);
-        if (visible) titles.push({ title: p.head.title, keyName: p.head.keyName });
+          isToggleEnabled(p.head.toggle, p.head.author) ||
+          (viewerName && p.head.author === viewerName);
+        if (visible)
+          titles.push({ title: p.head.title, keyName: p.head.keyName });
       }
     }
 

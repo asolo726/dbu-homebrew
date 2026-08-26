@@ -41,7 +41,7 @@ export default function SearchClient({ pageData }) {
 
   const handleSearchEnter = () => {
     const matches = entries.filter(
-      (e) => normalizeForMatch(e.head.title) === normalizeForMatch(query)
+      (e) => normalizeForMatch(e.head.title) === normalizeForMatch(query),
     );
     if (matches.length === 1) router.push(`/${matches[0].head.keyName}`);
   };
@@ -113,7 +113,7 @@ export default function SearchClient({ pageData }) {
 
   const clearAll = () => {
     setQuery("");
-    setSortOrder(null);
+    setSortOrder("null");
     setFilters({
       authors: [],
       aspects: [],
@@ -122,6 +122,8 @@ export default function SearchClient({ pageData }) {
       tags: [],
     });
   };
+
+  const [openFiltersDrawer, setOpenFiltersDrawer] = useState(false);
 
   return (
     <>
@@ -140,6 +142,14 @@ export default function SearchClient({ pageData }) {
         >
           Clear
         </button>
+        <button
+          onClick={() => setOpenFiltersDrawer(!openFiltersDrawer)}
+          data-tooltip-id="filter-tooltip"
+          data-tooltip-content="Open the Filters Drawer"
+          className="shrink-0 px-3 py-1 rounded-md text-xs border border-dbu-line bg-dbu-bg2 text-dbu-text hover:border-dbu-header transition-all active:scale-90 active:bg-dbu-bg3 cursor-pointer"
+        >
+          Filters
+        </button>
         <select
           value={sortOrder ?? "null"}
           onChange={(e) =>
@@ -151,11 +161,17 @@ export default function SearchClient({ pageData }) {
           <option value="desc">Z→A</option>
         </select>
       </div>
-      <FilterChips
-        filters={filters}
-        setFilters={setFilters}
-        entries={entries}
-      />
+      <div
+        className={`w-full p-2 bg-dbu-bg2 border border-dbu-line text-dbu-text ${openFiltersDrawer ? "block px-3 pb-3" : "hidden"}`}
+      >
+        {
+          <FilterChips
+            filters={filters}
+            setFilters={setFilters}
+            entries={entries}
+          />
+        }
+      </div>
       <CardGenerator entries={sorted} />
       <Tooltip id="clear-tooltip" className="tooltip" />
     </>

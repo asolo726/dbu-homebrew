@@ -32,13 +32,15 @@ export async function PATCH(request) {
     email: { $ne: session.user.email },
   });
   if (taken) {
-    return NextResponse.json({ error: "That name is already taken" }, { status: 409 });
+    return NextResponse.json(
+      { error: "That name is already taken" },
+      { status: 409 },
+    );
   }
 
-  const result = await db.collection("users").updateOne(
-    filter,
-    { $set: { name: trimmed } }
-  );
+  const result = await db
+    .collection("users")
+    .updateOne(filter, { $set: { name: trimmed } });
 
   if (result.matchedCount === 0) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
