@@ -3,7 +3,7 @@ import {
   getAspectTooltip,
   prettifyAspects,
 } from "@/components/dbu/General/util/headUtil";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AspectsModal from "@/components/edit/AspectModal";
 export interface Aspect {
   name: string;
@@ -42,7 +42,13 @@ export default function Aspects({
   const toggleAspectWindowState = () => {
     setAspectWindowOpen(!aspectWindowOpen);
   };
-  const [sortedAspects, setSortedAspects] = useState(prettifyAspects(aspects));
+  const [sortedAspects, setSortedAspects] = useState<Aspect[]>([]);
+
+  useEffect(() => {
+    if (aspects) {
+        setSortedAspects(prettifyAspects(aspects))
+    }
+    }, [aspects]);
 
   if (sortedAspects) {
     // Normal Render
