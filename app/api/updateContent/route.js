@@ -68,10 +68,10 @@ export async function POST(request) {
     const doc = await db
       .collection(col.name)
       .findOne(
-        { "head.keyName": keyName },
+        { "data.keyName": keyName },
         {
           projection: {
-            "head.author": 1,
+            "data.author": 1,
             "head.isCommunity": 1,
             "head.communityAllowlist": 1,
           },
@@ -79,7 +79,7 @@ export async function POST(request) {
       );
     if (!doc) continue;
 
-    const isAuthor = doc.head.author === userName;
+    const isAuthor = doc.data.author === userName;
     const inAllowlist =
       doc.head.isCommunity &&
       (doc.head.communityAllowlist ?? []).includes(session.user.email);
@@ -90,7 +90,7 @@ export async function POST(request) {
 
     const result = await db
       .collection(col.name)
-      .updateOne({ "head.keyName": keyName }, { $set: safeChanges });
+      .updateOne({ "data.keyName": keyName }, { $set: safeChanges });
     return Response.json({ success: true, modified: result.modifiedCount });
   }
 

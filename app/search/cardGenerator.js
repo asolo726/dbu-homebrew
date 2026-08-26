@@ -8,19 +8,19 @@ export default function CardGenerator({ entries }) {
     >
       {entries.map((entry, i) => (
         <Card
-          key={entry.head.keyName}
-          link={`/${entry.head.keyName}`}
+          key={entry.data.keyName}
+          link={`/${entry.data.keyName}`}
           imageUrl={entry.head.banner}
           pageName={entry.head.title}
-          pageType={entry.head.identity}
+          pageType={entry.data.identity}
           raceRestriction={entry.head.raceReq}
           tierOfPower={entry.head.tier}
-          author={entry.head.author}
-          enhancementType={entry.head.enhancementType}
-          awakeningType={entry.head.awakeningType}
-          awakeningOrigin={entry.head.awakeningOrigin}
-          tag={entry.head.tag}
-          keyName={entry.head.keyName}
+          author={entry.data.author}
+          enhancementType={entry.head.details.enhancementType}
+          awakeningType={entry.head.details.awakeningType}
+          awakeningOrigin={entry.head.details.awakeningOrigin}
+          tag={entry.data.tag}
+          keyName={entry.data.keyName}
           upvotes={entry.head.upvotes ?? 0}
           views={entry.head.views ?? 0}
         />

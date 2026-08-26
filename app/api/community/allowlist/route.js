@@ -10,8 +10,8 @@ async function findPage(db, keyName) {
     const doc = await db
       .collection(col.name)
       .findOne(
-        { "head.keyName": keyName },
-        { projection: { "head.author": 1, "head.communityAllowlist": 1 } },
+        { "data.keyName": keyName },
+        { projection: { "data.author": 1, "head.communityAllowlist": 1 } },
       );
     if (doc) return { doc, colName: col.name };
   }
@@ -69,7 +69,7 @@ export async function GET(request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const isAuthorOrAdmin =
-    requester.isAdmin || found.doc.head.author === requester.name;
+    requester.isAdmin || found.doc.data.author === requester.name;
   if (!isAuthorOrAdmin)
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
@@ -107,7 +107,7 @@ export async function POST(request) {
     return NextResponse.json({ error: "Page not found" }, { status: 404 });
 
   const isAuthorOrAdmin =
-    requester.isAdmin || found.doc.head.author === requester.name;
+    requester.isAdmin || found.doc.data.author === requester.name;
   if (!isAuthorOrAdmin)
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
@@ -130,7 +130,7 @@ export async function POST(request) {
   await contentDb
     .collection(found.colName)
     .updateOne(
-      { "head.keyName": keyName },
+      { "data.author": keyName },
       { $set: { "head.communityAllowlist": updatedList } },
     );
 
@@ -165,7 +165,7 @@ export async function DELETE(request) {
     return NextResponse.json({ error: "Page not found" }, { status: 404 });
 
   const isAuthorOrAdmin =
-    requester.isAdmin || found.doc.head.author === requester.name;
+    requester.isAdmin || found.doc.data.author === requester.name;
   if (!isAuthorOrAdmin)
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
@@ -175,7 +175,7 @@ export async function DELETE(request) {
   await contentDb
     .collection(found.colName)
     .updateOne(
-      { "head.keyName": keyName },
+      { "data.author": keyName },
       { $set: { "head.communityAllowlist": updatedList } },
     );
 

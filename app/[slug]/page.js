@@ -59,20 +59,20 @@ export async function generateMetadata({ params }) {
   const title = result.head.title;
   const description = result.head.desc;
   const image = result.head.banner || `${SITE_URL}/whosthatzfighter.webp`;
-  const url = `${SITE_URL}/${result.head.keyName}`;
-  const identity = (result.head.identity || "").toLowerCase();
+  const url = `${SITE_URL}/${result.data.keyName}`;
+  const identity = (result.data.identity || "").toLowerCase();
   const themeColor = pageTypeColors[identity] || "#7c3aed";
-  const toggle = result.head.toggle;
+  const toggle = result.data.management.toggle;
 
   try {
-    const toggleStatus = await checkToggle(toggle, result.head.author);
+    const toggleStatus = await checkToggle(toggle, result.data.author);
     if (!toggleStatus) {
       const {
         name: viewerName,
         email: viewerEmail,
         isAdmin,
       } = await getViewerInfo();
-      if (viewerName !== result.head.author && !isAdmin) return fail_return;
+      if (viewerName !== result.data.author && !isAdmin) return fail_return;
     }
   } catch (error) {
     console.error("Error checking toggle:", error);
@@ -139,8 +139,8 @@ export default async function Page({ params }) {
   let toggleStatus;
   // Try Block to catch if the search fails
   try {
-    toggle = searchResult.content[0].head.toggle;
-    pageAuthor = searchResult.content[0].head.author;
+    toggle = searchResult.content[0].data.management.toggle;
+    pageAuthor = searchResult.content[0].data.author;
     toggleStatus = await checkToggle(toggle, pageAuthor);
   } catch (error) {}
   const {
@@ -183,7 +183,7 @@ export default async function Page({ params }) {
           title={content.head.title}
         />
         <ViewTracker
-          keyName={content.head.keyName}
+          keyName={content.data.keyName}
           title={content.head.title}
           isAuthor={viewerName === pageAuthor}
         />
@@ -192,14 +192,14 @@ export default async function Page({ params }) {
           const allowlist = content.head.communityAllowlist ?? [];
           const canContribute =
             !canEdit &&
-            !!content.head.isCommunity &&
+            !!content.data.management.isCommunity &&
             !!viewerEmail &&
             allowlist.includes(viewerEmail);
           return (
             <EditModeWrapper
               canEdit={canEdit}
               canContribute={canContribute}
-              keyName={content.head.keyName}
+              keyName={content.data.keyName}
               toggleStatus={toggleStatus}
               contributorEmail={viewerEmail}
               contributorName={viewerName}

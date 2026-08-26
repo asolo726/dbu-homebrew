@@ -42,9 +42,9 @@ export async function GET() {
           {
             projection: {
               "head.title": 1,
-              "head.keyName": 1,
-              "head.author": 1,
-              "head.toggle": 1,
+              "data.keyName": 1,
+              "data.author": 1,
+              "data.management.toggle": 1,
               _id: 0,
             },
           },
@@ -52,12 +52,12 @@ export async function GET() {
         .toArray();
 
       for (const p of pages) {
-        if (!p.head?.title || !p.head?.keyName) continue;
+        if (!p.head?.title || !p.data?.keyName) continue;
         const visible =
-          isToggleEnabled(p.head.toggle, p.head.author) ||
-          (viewerName && p.head.author === viewerName);
+          isToggleEnabled(p.head.toggle, p.data.author) ||
+          (viewerName && p.data.author === viewerName);
         if (visible)
-          titles.push({ title: p.head.title, keyName: p.head.keyName });
+          titles.push({ title: p.head.title, keyName: p.data.keyName });
       }
     }
 

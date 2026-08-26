@@ -6,7 +6,7 @@ import { Tooltip } from "../../../lib/reactTooltip";
 import PageVoteButtons from "../../pages/PageVoteButtons";
 import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
-import { loadAspects, getCustomAspectNames } from "./util/headUtil";
+import { loadAspects, getCustomAspectNames, formatTransformationType } from "./util/headUtil";
 import { ScrollToTop } from "../../navigation/ScrollBackToTopButton";
 import BasicStat from "./headHelpers/BasicStats";
 import AttributeModsTable from "./headHelpers/AttributeTable";
@@ -22,8 +22,8 @@ export default function Head({ Form }) {
   const [toggling, setToggling] = useState(false);
   const [localPublic, setLocalPublic] = useState(null);
   const router = useRouter();
-  const toggle = Form.head.toggle;
-  const author = Form.head.author;
+  const toggle = Form.data.management.toggle;
+  const author = Form.data.author;
   const [aspectsReady, setAspectsReady] = useState(false);
 
   const isPublic =
@@ -77,9 +77,9 @@ export default function Head({ Form }) {
   // It uses sessionStorage to track whether the user has visited the page, and if not, it scrolls to the top instantly and sets a flag in sessionStorage to prevent future automatic scrolling during the same session.
   useEffect(() => {
     const hasVisited = sessionStorage.getItem("hasVisitedPage");
-    if (hasVisited !== Form.head.keyName) {
+    if (hasVisited !== Form.data.keyName) {
       ScrollToTop("instant");
-      sessionStorage.setItem("hasVisitedPage", Form.head.keyName);
+      sessionStorage.setItem("hasVisitedPage", Form.data.keyName);
     }
   }, []);
 
@@ -103,7 +103,7 @@ export default function Head({ Form }) {
     "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp";
 
   // Get current (possibly pending) value of tier for formatting
-  const currentTier = pendingChanges?.["head.tier"] ?? Form.head.tier;
+  const currentTier = pendingChanges?.["head.details.tier"] ?? Form.head.details.tier;
 
   const currentIsCommunity =
     pendingChanges?.["head.isCommunity"] ?? Form.head.isCommunity ?? false;
@@ -111,8 +111,8 @@ export default function Head({ Form }) {
   // Community pages always hide the author credit
   const currentDontShowAuthor =
     currentIsCommunity ||
-    (pendingChanges?.["head.dontShowAuthor"] ??
-      Form.head.dontShowAuthor ??
+    (pendingChanges?.["data.management.dontShowAuthor"] ??
+      Form.data.management.dontShowAuthor ??
       false);
 
   return (
@@ -168,13 +168,13 @@ export default function Head({ Form }) {
                 : ""
             }`}
           >
-            by {Form.head.author}
+            by {Form.data.author}
           </h3>
           {isEditing && !currentIsCommunity && (
             <button
               type="button"
               onClick={() =>
-                setChange?.("head.dontShowAuthor", !currentDontShowAuthor)
+                setChange?.("data.management.dontShowAuthor", !currentDontShowAuthor)
               }
               title={
                 currentDontShowAuthor
@@ -201,9 +201,9 @@ export default function Head({ Form }) {
           data-tooltip-id="art-credit-tooltip"
           data-tooltip-content={
             !isEditing &&
-            Form.head.bannerAuthor &&
-            Form.head.bannerAuthor !== ""
-              ? `Art Credit: ${Form.head.bannerAuthor}`
+            Form.data.credits.bannerAuthor &&
+            Form.data.credits.bannerAuthor !== ""
+              ? `Art Credit: ${Form.data.credits.bannerAuthor}`
               : undefined
           }
         >
@@ -240,8 +240,8 @@ export default function Head({ Form }) {
         <p className="text-xs text-center text-dbu-text/50 mb-2">
           Art Credit:{" "}
           <EditableText
-            path="head.bannerAuthor"
-            value={Form.head.bannerAuthor || ""}
+            path="data.credits.bannerAuthor"
+            value={Form.data.credits.bannerAuthor || ""}
             className="text-xs"
           />
         </p>
@@ -249,7 +249,7 @@ export default function Head({ Form }) {
 
       <div className="flex flex-col items-center justify-center mr-5 mb-3">
         <PageVoteButtons
-          keyName={Form.head.keyName}
+          keyName={Form.data.keyName}
           initialUpvotes={Form.head.upvotes ?? 0}
         />
         <p className="italic text-sm text-gray-500">
@@ -269,49 +269,49 @@ export default function Head({ Form }) {
       <ul className="list-disc ml-10 mt-3 text-md md:text-lg">
         <BasicStat
           statName={"raceReq"}
-          statValue={Form.head.raceReq}
+          statValue={Form.head.details.raceReq}
           isEditing={isEditing}
           spanStyle={requirementNameStyle}
           spanText="Racial Requirement: "
         />
         <BasicStat
           statName={"evolvedStageType"}
-          statValue={Form.head.evolvedStageType}
+          statValue={Form.head.details.evolvedStageType}
           isEditing={isEditing}
           spanStyle={requirementNameStyle}
           spanText="Evolved Stage Type: "
         />
         <BasicStat
-          statName={"transformationType"}
-          statValue={Form.head.transformationType}
+          statName={"identity"}
+          statValue={formatTransformationType(Form.data.identity)}
           isEditing={isEditing}
           spanStyle={requirementNameStyle}
           spanText="Transformation Type: "
         />
         <BasicStat
           statName={"formType"}
-          statValue={Form.head.formType}
+          statValue={Form.head.details.formType}
           isEditing={isEditing}
           spanStyle={requirementNameStyle}
           spanText="Form Type: "
         />
         <BasicStat
           statName={"enhancementType"}
-          statValue={Form.head.enhancementType}
+          statValue={Form.head.details.enhancementType}
           isEditing={isEditing}
           spanStyle={requirementNameStyle}
           spanText="Enhancement Type: "
         />
-        {Form.head.initialEnhancement ? (
+        {Form.head.details.initialEnhancement ? (
           <li>
             <p>
               <span className={requirementNameStyle}>Initial Enhancement:</span>{" "}
               <a
-                href={Form.head.initialEnhancement[1]}
+                href={Form.head.details.initialEnhancement.url}
                 target="_blank"
                 className="text-dbu-link hover:underline"
               >
-                {Form.head.initialEnhancement[0]}
+                {Form.head.details.initialEnhancement.name}
               </a>
             </p>
           </li>
@@ -320,49 +320,49 @@ export default function Head({ Form }) {
         )}
         <BasicStat
           statName="awakeningType"
-          statValue={Form.head.awakeningType}
+          statValue={Form.head.details.awakeningType}
           isEditing={isEditing}
           spanStyle={requirementNameStyle}
           spanText="Awakening Type: "
         />
         <BasicStat
           statName="awakeningOrigin"
-          statValue={Form.head.awakeningOrigin}
+          statValue={Form.head.details.awakeningOrigin}
           isEditing={isEditing}
           spanStyle={requirementNameStyle}
           spanText="Awakening Origin: "
         />
         <BasicStat
           statName="maxFactor"
-          statValue={Form.head.maxFactor}
+          statValue={Form.head.details.maxFactor}
           isEditing={isEditing}
           spanStyle={requirementNameStyle}
           spanText="Maximum Factor: "
         />
         <BasicStat
           statName="preReq"
-          statValue={Form.head.preReq}
+          statValue={Form.head.details.preReq}
           isEditing={isEditing}
           spanStyle={requirementNameStyle}
           spanText="Prerequisite(s): "
         />
         <BasicStat
           statName="transLine"
-          statValue={Form.head.transLine}
+          statValue={Form.head.details.transLine}
           isEditing={isEditing}
           spanStyle={requirementNameStyle}
           spanText="Transformation Line: "
         />
         <BasicStat
           statName="transStage"
-          statValue={Form.head.transStage}
+          statValue={Form.head.details.transStage}
           isEditing={isEditing}
           spanStyle={requirementNameStyle}
           spanText="Transformation Stage: "
         />
         <BasicStat
           statName="stress"
-          statValue={Form.head.stress}
+          statValue={Form.head.details.stress}
           isEditing={isEditing}
           spanStyle={requirementNameStyle}
           spanText="Stress Test Requirement: "
@@ -370,8 +370,8 @@ export default function Head({ Form }) {
         <BasicStat
           statName="maxStacks"
           statValue={
-            (Object.hasOwn(Form.head, "maxStacks") &&
-              Form.head.maxStacks.toString()) ||
+            (Object.hasOwn(Form.head.details, "maxStacks") &&
+              Form.head.details.maxStacks.toString()) ||
             undefined
           }
           isEditing={isEditing}
@@ -380,7 +380,7 @@ export default function Head({ Form }) {
         />
 
         {Object.hasOwn(Form.head, "tier") ? (
-          (Form.head.tier.length > 0 || isEditing) && (
+          (Form.head.details.tier.length > 0 || isEditing) && (
             <li>
               <p>
                 <span className={requirementNameStyle}>
@@ -388,8 +388,8 @@ export default function Head({ Form }) {
                 </span>{" "}
                 {isEditing ? (
                   <EditableText
-                    path="head.tier"
-                    value={String(Form.head.tier)}
+                    path="head.details.tier"
+                    value={String(Form.head.details.tier)}
                   />
                 ) : (
                   currentTier + (!Number.isNaN(Number(currentTier)) ? "+" : "")
@@ -401,7 +401,7 @@ export default function Head({ Form }) {
           <></>
         )}
         <Aspects
-          aspects={Form.head.aspects}
+          aspects={Form.head.details.aspects}
           customAspectNames={customAspectNames}
           isEditing={isEditing}
           spanStyle={requirementNameStyle}
@@ -411,7 +411,7 @@ export default function Head({ Form }) {
         />
       </ul>
       <AttributeModsTable
-        attrTable={Form.head.attributeModifiers}
+        attrTable={Form.head.details.attributeModifiers}
         isEditing={isEditing}
         pendingChanges={pendingChanges}
       />

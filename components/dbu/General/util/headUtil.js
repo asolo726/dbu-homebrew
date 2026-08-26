@@ -64,3 +64,20 @@ export const prettifyAspects = (aspects) => {
   );
   return [...sortedPositiveAspects, ...sortedNegativeAspects];
 };
+
+// This returns the value for the
+// • Transformation Type: <value>
+// listing on the header. We use the identity value to determine this.
+
+export const formatTransformationType = (identity) => {
+  switch (identity) {
+    case "Enhancement":
+      return "Enhancement Power";
+    case "Alternate":
+      return "Alternate Form";
+    case "Legendary":
+      return "Legendary Form";
+    default:
+      return identity;
+  }
+}

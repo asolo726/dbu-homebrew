@@ -58,11 +58,11 @@ export default function AttributeModsTable({
             <tr>
               {attrTable.map((modifier, id) => {
                 const currentBonus =
-                  pendingChanges?.[`head.attributeModifiers.${id}.Bonus`] ??
+                  pendingChanges?.[`head.details.attributeModifiers.${id}.Bonus`] ??
                   modifier.Bonus;
                 const currentMultiplier =
                   pendingChanges?.[
-                    `head.attributeModifiers.${id}.Multiplier`
+                    `head.details.attributeModifiers.${id}.Multiplier`
                   ] ?? modifier.Multiplier;
                 return (
                   <td
@@ -74,13 +74,13 @@ export default function AttributeModsTable({
                         <div className="flex items-center gap-0.5">
                           +
                           <EditableText
-                            path={`head.attributeModifiers.${id}.Bonus`}
+                            path={`head.details.attributeModifiers.${id}.Bonus`}
                             value={String(modifier.Bonus)}
                             className="w-10 text-center"
                           />
                         </div>
                         <EditableText
-                          path={`head.attributeModifiers.${id}.Multiplier`}
+                          path={`head.details.attributeModifiers.${id}.Multiplier`}
                           value={modifier.Multiplier}
                           className="w-full text-center text-md"
                         />
