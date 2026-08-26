@@ -113,7 +113,7 @@ export default function SearchClient({ pageData }) {
 
   const clearAll = () => {
     setQuery("");
-    setSortOrder(null);
+    setSortOrder("null");
     setFilters({
       authors: [],
       aspects: [],
@@ -169,7 +169,7 @@ export default function SearchClient({ pageData }) {
               entries={entries}
             />
           }
-          </div>
+        </div>
       <CardGenerator entries={sorted} />
       <Tooltip id="clear-tooltip" className="tooltip" />
     </>

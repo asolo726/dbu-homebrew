@@ -1,5 +1,5 @@
 import EditableText from "@/components/edit/EditableText";
-import { getAspectTooltip } from "@/components/dbu/General/util/headUtil";
+import { getAspectTooltip, prettifyAspects } from "@/components/dbu/General/util/headUtil";
 import { useState } from "react";
 import AspectsModal from "@/components/edit/AspectModal";
 export interface Aspect {
@@ -36,16 +36,17 @@ export default function Aspects({
     const toggleAspectWindowState = () => {
         setAspectWindowOpen(!aspectWindowOpen);
     };
+    const [sortedAspects, setSortedAspects] = useState(prettifyAspects(aspects));
 
-    if (aspects) {
+    if (sortedAspects) {
         // Normal Render
         if (!isEditing) {
             return (
                 <li>
                     <p>
                         <span className={spanStyle}>Aspects: </span>{" "}
-                        {aspects.map((aspect, id) => {
-                            const lastAspect = id === aspects.length - 1;
+                        {sortedAspects.map((aspect, id) => {
+                            const lastAspect = id === sortedAspects.length - 1;
                             const tooltipHtml = aspectsReady
                                 ? getAspectTooltip(aspect.name)
                                 : "";
@@ -107,7 +108,7 @@ export default function Aspects({
                         aspectWindowOpen && (
                             <div className="fixed inset-0 z-50 flex items-center justify-center">
                                 <AspectsModal
-                                    currentAspects={aspects}
+                                    currentAspects={sortedAspects}
                                     onSave={(newAspect : Aspect) => {}}
                                     onClose={() => setAspectWindowOpen(false)}
                                 />

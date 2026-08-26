@@ -5,8 +5,12 @@ import {
 } from "../../components/dbu/General/util/headUtil.js";
 import { Tooltip } from "../../lib/reactTooltip.js";
 import { useState, useEffect } from "react";
+import { RxArrowUp, RxInfoCircled} from "react-icons/rx";
+import { prettifyAspects } from "../../components/dbu/General/util/headUtil.js";
 
 export default function AspectsModal({ currentAspects, onSave, onClose }) {
+    const [editedAspects, setEditedAspects] = useState(currentAspects); // A copy of the current aspects, to be edited by the user.
+
     const [positiveAspectOptions, setPositiveAspectOptions] = useState([]);
     const [negativeAspectOptions, setNegativeAspectOptions] = useState([]);
 
@@ -17,16 +21,27 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
     // Can reuse the code for the Toggle Select in SettingsClient, but this is simpler since we don't need to worry about the "selected" state of the aspects, just the options available to select from
 
     useEffect(() => {
-        const currentNames = new Set(currentAspects.map((a) => a.name));
+        const currentNames = new Set(editedAspects.map((a) => a.name));
         setPositiveAspectOptions(
             aspects.filter((a) => a.isPositive && !currentNames.has(a.name)),
         );
         setNegativeAspectOptions(
             aspects.filter((a) => !a.isPositive && !currentNames.has(a.name)),
         );
-    }, [currentAspects]);
+    }, [editedAspects]);
 
-    const handleSelectChange = (e, setter) => {
+    const removeAspect = (aspectName) => {
+        const newEditedAspects = editedAspects.filter(aspect => aspect.name !== aspectName);
+        console.log(newEditedAspects);
+        setEditedAspects(newEditedAspects);
+    }
+
+    const addAspect = (aspect) => {
+        const newEditedAspects = [...editedAspects, aspect];
+        setEditedAspects(prettifyAspects(newEditedAspects));
+    }
+
+    const handleSelectChange = (aspect, setter) => {
         const vals = Array.from(e.target.options)
             .filter((o) => o.selected)
             .map((o) => o.value);
@@ -60,33 +75,30 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
                 {/* Body [Aspects display] */}
                 <div className="px-6 py-4 max-h-[70vh] overflow-y-auto bg-white/5">
                     <div className="flex flex-wrap justify-center gap-3 max-w-full">
-                        {currentAspects.map((aspect, id) => {
-                            return (
+                        {editedAspects.map((a, id) => (
                                 <div
                                     key={id}
-                                    className="inline-flex items-center justify-center rounded-full border border-dbu-line bg-dbu-bg3 px-3 py-1 text-dbu-text text-sm text-center min-w-[10rem] max-w-[16rem] break-words"
+                                    className="inline-flex justify-between rounded-full border border-dbu-line bg-dbu-bg3 px-3 py-1 text-dbu-text text-sm text-center min-w-[10rem] max-w-[16rem] break-words"
                                 >
                                     <a
                                         data-tooltip-id="my-tooltip-2"
                                         data-tooltip-html={getAspectTooltip(
-                                            aspect.name,
+                                            a.name,
                                         )}
-                                        className="cursor-help"
+                                        className="flex w-full cursor-help justify-center"
                                     >
-                                        {aspect.name}
+                                        {a.name}
                                     </a>
-                                    <div>
-                                        {aspect.maxLevel ? (
-                                            <span className="ml-2 text-xs text-dbu-text/70">
-                                                0
-                                            </span>
-                                        ) : (
-                                            <></>
-                                        )}
-                                    </div>
-                                </div>
-                            );
-                        })}
+                                    <button
+                                        onClick={() => removeAspect(a.name)}
+                                        className="ml-2 text-red-400/40 hover:text-red-400 text-sm leading-none cursor-pointer"
+                                        title="Remove Aspect"
+                                    >
+                                        ×
+                                    </button>
+                            </div>
+
+                        ))}
                     </div>
                 </div>
 
@@ -96,21 +108,21 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
                         <label className="text-dbu-header font-semibold mb-2 flex justify-center">
                             Positive Aspects
                         </label>
-                        <select
-                            multiple
-                            size={8}
-                            value={selectedPos}
-                            onChange={(e) =>
-                                handleSelectChange(e, setSelectedPos)
-                            }
-                            className="w-full h-60vh border border-dbu-line rounded p-2 bg-dbu-bg3 text-dbu-text"
-                        >
+                        <div className="w-full h-[60vh] border space-y-1 border-dbu-line rounded overflow-y-auto p-2 bg-dbu-bg3 text-dbu-text">
                             {positiveAspectOptions.map((a) => (
-                                <option key={a.name} value={a.name}>
-                                    {a.name}
-                                </option>
+                                <button
+                                    key={a.name}
+                                    value={a.name}
+                                    onClick={() => addAspect(a)}
+                                    className="flex items-center justify-between w-full px-3 py-2 text-sm text-dbu-text hover:bg-dbu-line rounded transition-colors cursor-pointer gap-2"
+                                >
+                                    <span className="truncate min-w-0">
+                                        {a.name}
+                                    </span>
+                                    <RxArrowUp className="flex justify-between shrink-0" />
+                                </button>
                             ))}
-                        </select>
+                        </div>
                     </div>
                     <div className="flex-1">
                         <label className="text-dbu-header font-semibold mb-2 flex justify-center">

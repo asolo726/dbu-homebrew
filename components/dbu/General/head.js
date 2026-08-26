@@ -6,7 +6,7 @@ import { Tooltip } from "../../../lib/reactTooltip";
 import PageVoteButtons from "../../pages/PageVoteButtons";
 import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
-import { loadAspects, getCustomAspectNames } from "./util/headUtil";
+import { loadAspects, getCustomAspectNames} from "./util/headUtil";
 import { ScrollToTop } from "../../navigation/ScrollBackToTopButton";
 import BasicStat from "./headHelpers/BasicStats";
 import AttributeModsTable from "./headHelpers/AttributeTable";
@@ -348,7 +348,7 @@ export default function Head({ Form }) {
                 />
                 <BasicStat
                     statName="transLine"
-                    statValue={Form.head.transLine} 
+                    statValue={Form.head.transLine}
                     isEditing={isEditing}
                     spanStyle={requirementNameStyle}
                     spanText="Transformation Line: "
@@ -374,7 +374,7 @@ export default function Head({ Form }) {
                     spanStyle={requirementNameStyle}
                     spanText="Maximum No of Stacks: "
                 />
-                
+
                 {Object.hasOwn(Form.head, "tier") ? (Form.head.tier.length > 0 || isEditing) && (
                     <li>
                         <p>

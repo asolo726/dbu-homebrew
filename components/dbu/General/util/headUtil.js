@@ -53,3 +53,13 @@ export const getAspectTooltip = (aspectName) => {
     console.log("error loading aspect tooltip for: ", cleanName);
   }
 };
+
+// Returns a sorted array of aspects.
+// Positive Aspects are returned first, in alphabetical order, followed by negative aspects, also in alphabetical order.
+export const prettifyAspects = (aspects) => {
+  const positiveAspects = aspects.filter((a) => a.isPositive);
+  const negativeAspects = aspects.filter((a) => !a.isPositive);
+  const sortedPositiveAspects = positiveAspects.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+  const sortedNegativeAspects = negativeAspects.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+  return [...sortedPositiveAspects, ...sortedNegativeAspects];
+}
