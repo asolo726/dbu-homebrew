@@ -20,6 +20,11 @@ export default function AttributeModsTable({
   ) => {
     // For some reason, when the multiplier is empty, it's a \n value ???
     if (currentBonus && currentBonus !== "") {
+      // So, you may wonder why this is here. Well, currently, when a user puts in nothing for an
+      // attribute bonus, a "0" is put into the currentBonus field.
+      if (Number(currentBonus) === 0) {
+        return "-";
+      }
       if (currentMultiplier === "\n" || currentMultiplier === "") {
         return `+${currentBonus}`;
       } else {
