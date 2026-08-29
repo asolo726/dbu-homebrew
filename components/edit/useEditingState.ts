@@ -8,6 +8,9 @@ export function useEditingState(): Partial<EditModeContextType> {
     return {
         isEditing: ctx?.isEditing ?? false,
         isContributing: ctx?.isContributing ?? false,
+        contributorEmail: ctx?.contributorEmail ?? null,
+        contributorName: ctx?.contributorName ?? null,
+        isCommunity: ctx?.isCommunity ?? false,
         pendingChanges: ctx?.pendingChanges ?? {},
         setChange: ctx?.setChange,
         setArrayChange: ctx?.setArrayChange,

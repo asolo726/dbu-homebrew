@@ -1,9 +1,8 @@
 "use client";
 import TraitsSection from "./TraitsSection";
-import EditableText from "../../edit/EditableText";
-import { useEditMode } from "../../edit/EditModeContext";
-import { RiAddFill, RiSubtractFill, RiDeleteBinLine } from "react-icons/ri";
+import { RiAddFill } from "react-icons/ri";
 import { EditingButton } from "./util/EditingButton";
+import { useEditingState } from "@/components/edit/useEditingState";
 
 
 type HeaderSize = "h2" | "h3" | "h4";
@@ -20,9 +19,8 @@ interface SectionProps {
 }
 
 export default function Section({ body, basePath }: Readonly<SectionProps>) {
-    const ctx = useEditMode();
-    const {isEditing, pendingChanges, isContributing, setChange, isAdmin} = ctx || {};
-    const currentBody = basePath && basePath in pendingChanges ? pendingChanges[basePath] : body;
+    const { isEditing, isContributing, contributorEmail, contributorName, isCommunity, pendingChanges, setArrayChange } = useEditingState();
+    const currentBody = basePath && pendingChanges && basePath in pendingChanges ? pendingChanges[basePath] : body;
     const isActive = isEditing || isContributing;
 
     const DEFAULT_HEADER_SIZE: HeaderSize = "h2";
@@ -31,29 +29,30 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
         h3: "text-dbu-header text-center text-lg md:text-xl my-2 font-bold tracking-wider",
         h4: "text-dbu-header text-center text-base md:text-lg my-1 font-semibold",
     };
+    console.log("basePath", basePath, " / isActive", isActive);
 
-    function canEditItem(item) {
+    function canEditItem(item: any) {
     if (isEditing) return true;
     if (isContributing) return item.contributor?.email === contributorEmail;
     return false;
-  }
+}
 
-  function addAt(index, item) {
+  function addAt(index: number, item: any) {
     if (!basePath || !setArrayChange) return;
-    const arr = [...currentTraits];
+    const arr = [...currentBody];
     arr.splice(index, 0, item);
     setArrayChange(basePath, arr);
   }
 
-  function removeAt(index) {
+  function removeAt(index: number) {
     if (!basePath || !setArrayChange) return;
     setArrayChange(
       basePath,
-      currentTraits.filter((_, i) => i !== index),
+      currentBody.filter((_: any, i: number) => i !== index),
     );
   }
 
-  function withContributor(base) {
+  function withContributor(base: any) {
     return isCommunity && contributorEmail
       ? {
           ...base,
@@ -75,53 +74,50 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
   }
 
   function handleAddTrait() {
-    addAt(currentTraits.length, newTrait());
+    addAt(currentBody.length, newTrait());
   }
 
   function handleAddSection() {
-    addAt(currentTraits.length, newSection());
+    addAt(currentBody.length, newSection());
   }
 
 
     return (
         <>
-            {body.map((section, index) => {
-                const editable = canEditItem(section);
-                return (
-                    <div key={index}>
-                        {section.header && section.header !== "" && (
-                            <div className="mt-10">
-                                <p className={headerStyle[section.headerSize ?? DEFAULT_HEADER_SIZE]}>
-                                    {section.header}
-                                </p>
-                            </div>
-                        )}
-                        {section.traits && (
-                            <TraitsSection traits={section.traits as never[]} basePath={"traits"} />
-                        )}
-                    </div>
-                )
-            })}
-            {isActive && basePath && (
-                <div className="flex gap-2 mt-4">
-                    <EditingButton
-                        variant="add"
-                        icon={RiAddFill}
-                        title="Add trait"
-                        onClick={handleAddTrait}
-                    >
-                        Add Trait
-                    </EditingButton>
-                    <EditingButton
-                        variant="section"
-                        icon={RiAddFill}
-                        title="Add section header"
-                        onClick={handleAddSection}
-                    >
-                        Add Section
-                    </EditingButton>
+            {body.map((section, index) => (
+                <div key={index}>
+                    {section.header && section.header !== "" && (
+                        <div className="mt-10">
+                            <p className={headerStyle[section.headerSize ?? DEFAULT_HEADER_SIZE]}>
+                                {section.header}
+                            </p>
+                        </div>
+                    )}
+                    {section.traits && (
+                        <TraitsSection traits={section.traits as never[]} basePath={"traits"} />
+                    )}
+                    {isActive && basePath && (
+                        <div className="flex gap-2 mt-4">
+                            <EditingButton
+                                variant="add"
+                                icon={RiAddFill}
+                                title="Add trait"
+                                onClick={handleAddTrait}
+                            >
+                                Add Trait
+                            </EditingButton>
+                            <EditingButton
+                                variant="section"
+                                icon={RiAddFill}
+                                title="Add section header"
+                                onClick={handleAddSection}
+                            >
+                                Add Section
+                            </EditingButton>
+                        </div>
+                    )}
                 </div>
-            )}
+            ))}
         </>
     )
 }

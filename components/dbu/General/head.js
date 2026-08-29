@@ -11,11 +11,11 @@ import { ScrollToTop } from "../../navigation/ScrollBackToTopButton";
 import BasicStat from "./headHelpers/BasicStats";
 import AttributeModsTable from "./headHelpers/AttributeTable";
 import Aspects from "./headHelpers/Aspects";
+import { useEditingState } from "@/components/edit/useEditingState";
 
 export default function Head({ Form }) {
   const editMode = useEditMode();
-  const { isEditing, pendingChanges, setChange, toggleStatus, isAdmin } =
-    editMode || {};
+  const { isEditing, pendingChanges, setChange, setArrayChange, hasChanges } = useEditingState();
   const isAuthor = editMode !== null;
   const requirementNameStyle = "font-bold text-dbu-header";
   const [uploading, setUploading] = useState(false);

@@ -6,6 +6,7 @@ import { useEditMode } from "../../edit/EditModeContext";
 import AddAbilityModal from "../../edit/AddAbilityModal";
 import { RiAddFill, RiSubtractFill } from "react-icons/ri";
 import { EditingButton } from "./util/EditingButton";
+import { useEditingState } from "@/components/edit/useEditingState";
 
 export default function Trait({
   title = "",
@@ -15,11 +16,7 @@ export default function Trait({
   disableEditActions = false,
   contributor = null,
 }) {
-  const ctx = useEditMode();
-  const isEditing = ctx?.isEditing ?? false;
-  const isContributing = ctx?.isContributing ?? false;
-  const pendingChanges = ctx?.pendingChanges ?? {};
-  const setArrayChange = ctx?.setArrayChange;
+  const { isEditing, isContributing, pendingChanges, setArrayChange } = useEditingState();
   const canEditContent = (isEditing || isContributing) && path;
 
   const [selectedIndices, setSelectedIndices] = useState(new Set());
