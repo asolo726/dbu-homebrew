@@ -1,6 +1,6 @@
 "use client";
 import TraitsSection from "./TraitsSection";
-import { RiAddFill } from "react-icons/ri";
+import { RiAddFill, RiDeleteBinLine } from "react-icons/ri";
 import { useEditingState } from "@/components/edit/useEditingState";
 import EditableText from "@/components/edit/EditableText";
 import { EditingButton } from "./util/EditingButton";
@@ -92,6 +92,14 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
     addAt(index+1, "section");
   }
 
+  function removeSection(index: number) {
+    if (!basePath || !setArrayChange) return;
+    setArrayChange(
+        basePath,
+        currentBody.filter((_: any, i: number ) => i !== index )
+    )
+  }
+
   /**
    * Sorts all traits below a specific sectional in alphabetical order.
    * NO AI USED
@@ -132,7 +140,13 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
                         </div>
                     )}
                     {isActive && basePath && (
-                        <div className="flex justify-center items-center mt-2">
+                        <div className="flex justify-between items-center mt-2">
+                            <EditingButton
+                                onClick={() => removeSection(index)}
+                                title="Delete section"
+                                icon={RiDeleteBinLine}
+                                variant="delete"
+                            />
                             <EditingButton
                                 onClick={() => sortTraitsBelow(index, traits)}
                                 title="Alphabetize Traits"
