@@ -214,13 +214,13 @@ export default function HeadEdit({ Form }) {
         ) : (
           <></>
         )}
-        {Form.head.details.stress ? (
+        {Form.head.details.stressTest ? (
           <li>
             <p>
               <span className={requirementNameStyle}>
                 Stress Test Requirement:{" "}
               </span>
-              {Form.head.details.stress}
+              {Form.head.details.stressTest}
             </p>
           </li>
         ) : (

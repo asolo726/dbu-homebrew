@@ -3,6 +3,7 @@ import Trait from "./trait";
 import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
 import { RiAddFill, RiSubtractFill, RiDeleteBinLine } from "react-icons/ri";
+import { EditingButton } from "./util/EditingButton";
 
 export default function TraitsSection({ traits = [], basePath }) {
   const ctx = useEditMode();

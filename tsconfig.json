@@ -33,6 +33,6 @@
     "auth.js",
     ".next/dev/types/**/*.ts",
     ".next/dev/dev/types/**/*.ts"
-, "components/dbu/General/head.js"  ],
+, "components/dbu/General/head.js", "components/dbu/General/TraitsSection.js"  ],
   "exclude": ["node_modules"]
 }

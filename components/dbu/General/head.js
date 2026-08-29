@@ -365,8 +365,8 @@ export default function Head({ Form }) {
           spanText="Transformation Stage: "
         />
         <BasicStat
-          statName="stress"
-          statValue={Form.head.details.stress}
+          statName="stressTest"
+          statValue={Form.head.details.stressTest}
           isEditing={isEditing}
           spanStyle={requirementNameStyle}
           spanText="Stress Test Requirement: "
