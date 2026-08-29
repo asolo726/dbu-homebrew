@@ -9,7 +9,7 @@ export type ButtonVariant =
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	variant: ButtonVariant;
-	children: React.ReactNode;
+	children?: React.ReactNode;
 	icon?: React.ComponentType<{ size?: number }>;
 }
 

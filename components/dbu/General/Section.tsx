@@ -1,5 +1,5 @@
 "use client";
-import TraitsSection from "./TraitsSection";
+import TraitsSection from "./SectionTraits";
 import { RiAddFill, RiDeleteBinLine } from "react-icons/ri";
 import { useEditingState } from "@/components/edit/useEditingState";
 import EditableText from "@/components/edit/EditableText";
@@ -11,6 +11,10 @@ export interface Trait {
 	title: string;
 	desc: string;
 	abilities: any[];
+	contributor?: {
+		email?: string;
+		name?: string;
+	};
 }
 
 export interface Section {
@@ -116,8 +120,8 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
 	 * Sorts all traits below a specific sectional in alphabetical order.
 	 * NO AI USED
 	 */
-	function sortTraitsBelow(index: number, traits: Trait[]) {
-		if (!basePath || !setArrayChange) return;
+	function sortTraitsBelow(index: number, traits: Trait[] | null) {
+		if (!basePath || !setArrayChange || !traits) return;
 		const sortedTraits = traits.toSorted((a, b) =>
 			a.title.localeCompare(b.title, undefined, { sensitivity: "base" }),
 		);
@@ -128,7 +132,7 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
 
 	return (
 		<>
-			{currentBody.map((section: Section, index) => {
+			{currentBody.map((section: Section, index: number) => {
 				const hasValidHeader = section.header && section.header !== "";
 				const shouldShowHeader = hasValidHeader || currentlyEditing;
 				const headerPath = shouldShowHeader
@@ -183,8 +187,12 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
 						)}
 						{traits && (
 							<TraitsSection
-								traits={traits as never[]}
-								basePath={"traits"}
+								traits={traits as Trait[]}
+								basePath={
+									basePath
+										? `${basePath}.${index}.traits`
+										: "traits"
+								}
 							/>
 						)}
 						{currentlyEditing && (

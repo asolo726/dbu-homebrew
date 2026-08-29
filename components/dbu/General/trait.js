@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import Ability from "./ability";
 import EditableText from "../../edit/EditableText";
-import { useEditMode } from "../../edit/EditModeContext";
 import AddAbilityModal from "../../edit/AddAbilityModal";
 import { RiAddFill, RiSubtractFill } from "react-icons/ri";
 import { EditingButton } from "./util/EditingButton";
