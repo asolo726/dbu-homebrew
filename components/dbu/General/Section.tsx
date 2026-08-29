@@ -29,6 +29,7 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
     const { isEditing, isContributing, contributorEmail, contributorName, isCommunity, pendingChanges, setArrayChange } = useEditingState();
     const currentBody = basePath && pendingChanges && basePath in pendingChanges ? pendingChanges[basePath] : body;
     const isActive = isEditing || isContributing;
+    const currentlyEditing = isActive && basePath;
 
     const DEFAULT_HEADER_SIZE: HeaderSize = "h2";
     const headerStyle: Record<HeaderSize, string> = {
@@ -119,12 +120,13 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
         <>
             {body.map((section: Section, index) => {
                 const hasValidHeader = section.header && section.header !== "";
-                const headerPath = hasValidHeader ? basePath ? `${basePath}.${index}.header` : null : null;
+                const shouldShowHeader = hasValidHeader || currentlyEditing;
+                const headerPath = shouldShowHeader ? basePath ? `${basePath}.${index}.header` : null : null;
                 const traits = section.traits ?? null;
 
                 return (
                 <div key={index}>
-                    {hasValidHeader && (
+                    {shouldShowHeader && (
                         <div className="mt-10">
                             <p className={headerStyle[section.headerSize ?? DEFAULT_HEADER_SIZE]}>
                                 {headerPath ? (
@@ -139,13 +141,13 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
                             </p>
                         </div>
                     )}
-                    {isActive && basePath && (
+                    {currentlyEditing && (
                         <div className="flex justify-between items-center mt-2">
                             <EditingButton
                                 onClick={() => removeSection(index)}
                                 title="Delete section"
                                 icon={RiDeleteBinLine}
-                                variant="delete"
+                                variant="section"
                             />
                             <EditingButton
                                 onClick={() => sortTraitsBelow(index, traits)}
@@ -159,7 +161,7 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
                     {traits && (
                         <TraitsSection traits={traits as never[]} basePath={"traits"} />
                     )}
-                    {isActive && basePath && (
+                    {currentlyEditing && (
                         <div className="flex gap-2 mt-4">
                             <EditingButton
                                 variant="add"
