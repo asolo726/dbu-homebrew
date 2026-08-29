@@ -109,7 +109,7 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
 
     return (
         <>
-            {body.map((section, index) => {
+            {body.map((section: Section, index) => {
                 const hasValidHeader = section.header && section.header !== "";
                 const headerPath = hasValidHeader ? basePath ? `${basePath}.${index}.header` : null : null;
                 const traits = section.traits ?? null;
@@ -132,7 +132,7 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
                         </div>
                     )}
                     {isActive && basePath && (
-                        <div className="flex justify-between items-center mt-2">
+                        <div className="flex justify-center items-center mt-2">
                             <EditingButton
                                 onClick={() => sortTraitsBelow(index, traits)}
                                 title="Alphabetize Traits"
@@ -170,102 +170,3 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
         </>
     )
 }
-
-/**
- *   function handleAddTraitAfter(index) {
-    addAt(index + 1, newTrait());
-  }
- */
-
-
-/**
-   * Finds the index of next sectional in currentTraits. If there is no other sectional, it returns the length of the array.
-   * @param {number} index
-   */
-  /**
-   * function findNextSectionalIndex(index) {
-    const traitsToSearch = currentTraits.slice(index + 1, currentTraits.length);
-    let nextSectionalIndex = [];
-    traitsToSearch.forEach((item, i) => {
-      if ("sectional" in item) {
-        nextSectionalIndex.push(i);
-      }
-    });
-    return nextSectionalIndex[0] ?? currentTraits.length;
-  }
-*/
-
-  /**
-   * Sorts all traits below a specific sectional in alphabetical order.
-   * NO AI USED
-   */
-  /**function sortTraitsBelow(index) {
-    const startingIndex = 1 + index; // Excludes the sectional.
-    const currentTraitsCopy = [...currentTraits];
-    const traitsToSort = currentTraitsCopy.slice(
-      startingIndex,
-      startingIndex + findNextSectionalIndex(index),
-    );
-    const numberOfSortedTraits = traitsToSort.length;
-    traitsToSort.sort((a, b) =>
-      a.title.localeCompare(b.title, undefined, { sensitivity: "base" }),
-    );
-    for (let i = 0; i !== numberOfSortedTraits; i++) {
-      currentTraitsCopy[startingIndex + i] = traitsToSort[i];
-      console.log(`traitsToSort [${i}]`, traitsToSort[i]);
-    }
-    setArrayChange(basePath, currentTraitsCopy);
-  }
-*/
-
-/**
- *         if ("sectional" in item) {
-          const titlePath =
-            basePath && editable
-              ? `${basePath}.${index}.sectional.title`
-              : null;
-          return (
-            <div key={index} className="mt-10">
-              <p className="text-dbu-header text-center text-xl md:text-2xl my-3 font-bold tracking-widest">
-                {titlePath ? (
-                  <EditableText
-                    path={titlePath}
-                    value={item.sectional.title}
-                    className="text-center"
-                  />
-                ) : (
-                  item.sectional.title
-                )}
-              </p>
-              {item.contributor && (
-                <p className="text-xs text-white italic text-center mt-1 opacity-60">
-                  (Added by {item.contributor.name})
-                </p>
-              )}
-              {isActive && basePath && (
-                <div className="flex justify-between items-center mt-2">
-                  <EditingButton
-                    onClick={() => removeAt(index)}
-                    title="Delete section"
-                    icon={RiSubtractFill}
-                    variant="delete"
-                  />
-                  <EditingButton
-                    onClick={() => sortTraitsBelow(index)}
-                    title="Alphabetize Traits"
-                    variant="sort"
-                  >
-                    Alphabetize Traits?
-                  </EditingButton>
-                  <EditingButton
-                    onClick={() => handleAddTraitAfter(index)}
-                    title="Add trait below section"
-                    icon={RiAddFill}
-                    variant="add"
-                  />
-                </div>
-              )}
-            </div>
-          );
-        }
- */
