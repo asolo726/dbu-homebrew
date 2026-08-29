@@ -1,8 +1,8 @@
 import EditableText from "@/components/edit/EditableText";
 interface AttributeItem {
   attribute: string;
-  Bonus: string;
-  Multiplier: string;
+  bonus: string;
+  multiplier: string;
 }
 interface AttributeModsTableProps {
   attrTable: Readonly<AttributeItem>[];
@@ -64,11 +64,11 @@ export default function AttributeModsTable({
               {attrTable.map((modifier, id) => {
                 const currentBonus =
                   pendingChanges?.[`head.attributeModifiers.${id}.Bonus`] ??
-                  modifier.Bonus;
+                  modifier.bonus;
                 const currentMultiplier =
                   pendingChanges?.[
                     `head.attributeModifiers.${id}.Multiplier`
-                  ] ?? modifier.Multiplier;
+                  ] ?? modifier.multiplier;
                 return (
                   <td
                     className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
@@ -80,13 +80,13 @@ export default function AttributeModsTable({
                           +
                           <EditableText
                             path={`head.attributeModifiers.${id}.Bonus`}
-                            value={String(modifier.Bonus)}
+                            value={String(modifier.bonus)}
                             className="w-10 text-center"
                           />
                         </div>
                         <EditableText
                           path={`head.attributeModifiers.${id}.Multiplier`}
-                          value={modifier.Multiplier}
+                          value={modifier.multiplier}
                           className="w-full text-center text-md"
                         />
                       </div>

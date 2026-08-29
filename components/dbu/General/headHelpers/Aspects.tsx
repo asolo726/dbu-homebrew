@@ -2,7 +2,7 @@ import EditableText from "@/components/edit/EditableText";
 import {
   getAspectTooltip,
   prettifyAspects,
-} from "@/components/dbu/General/util/headUtil";
+} from "@/components/dbu/general/util/headUtil";
 import { useState, useEffect } from "react";
 import AspectsModal from "@/components/edit/AspectModal";
 export interface Aspect {

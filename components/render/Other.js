@@ -1,5 +1,5 @@
-import Head from "../dbu/General/head";
-import TraitsSection from "../dbu/General/TraitsSection";
+import Head from "../dbu/general/head";
+import TraitsSection from "../dbu/general/TraitsSection";
 
 export default function OtherRenderPage({ content }) {
   return (

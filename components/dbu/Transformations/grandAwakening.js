@@ -1,4 +1,4 @@
-import Ability from "../General/ability";
+import Ability from "../general/ability";
 export default function GrandAwakening({
   title = "",
   desc = "",

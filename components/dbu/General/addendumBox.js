@@ -5,6 +5,7 @@ import { useEditMode } from "../../edit/EditModeContext";
 import { useState, useEffect } from "react";
 import { RxChevronRight } from "react-icons/rx";
 import { RiAddFill, RiSubtractFill, RiDeleteBinLine } from "react-icons/ri";
+import { EditingButton } from "./util/EditingButton";
 
 export default function AddendumBox({
   boxTitle,
@@ -22,9 +23,6 @@ export default function AddendumBox({
   const isCommunity = ctx?.isCommunity ?? false;
   const contributorEmail = ctx?.contributorEmail ?? null;
   const contributorName = ctx?.contributorName ?? null;
-
-  const btnPlusYellow =
-    "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-dbu-header/50 text-dbu-header bg-dbu-header/10 hover:bg-dbu-header/20 transition-colors";
 
   // Resolve current traits array from pendingChanges, falling back to prop
   const traitsKey = path ? `${path}.traits` : null;
@@ -181,15 +179,12 @@ export default function AddendumBox({
                   )}
                   {(isEditing || isContributing) && path && (
                     <div className="flex justify-between items-center mt-2">
-                      <button
+                      <EditingButton
                         onClick={() => handleRemoveTrait(i)}
+                        variant="delete"
+                        icon={RiSubtractFill}
                         title="Delete section"
-                        className={
-                          "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-red-500/50 text-red-400 bg-red-900/20 hover:bg-red-900/40 transition-colors"
-                        }
-                      >
-                        <RiSubtractFill size={16} />
-                      </button>
+                      />
                       <button
                         onClick={() => handleAddTraitAfter(i)}
                         title="Add trait below section"

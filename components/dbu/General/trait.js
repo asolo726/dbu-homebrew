@@ -18,7 +18,6 @@ export default function Trait({
   const isEditing = ctx?.isEditing ?? false;
   const isContributing = ctx?.isContributing ?? false;
   const pendingChanges = ctx?.pendingChanges ?? {};
-  const setChange = ctx?.setChange;
   const setArrayChange = ctx?.setArrayChange;
   const canEditContent = (isEditing || isContributing) && path;
 

@@ -3,15 +3,7 @@ import Trait from "./trait";
 import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
 import { RiAddFill, RiSubtractFill, RiDeleteBinLine } from "react-icons/ri";
-
-const btnMinus =
-  "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-red-500/50 text-red-400 bg-red-900/20 hover:bg-red-900/40 transition-colors";
-const btnPlus =
-  "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-white/30 text-white bg-white/10 hover:bg-white/20 transition-colors";
-const sortBtn =
-  "flex items-center gap-1.5 px-6 py-1.5 rounded-md text-sm border border-dbu-header/50 text-dbu-header bg-dbu-header/10 hover:bg-dbu-header/20 transition-colors";
-const btnPlusYellow =
-  "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-dbu-header/50 text-dbu-header bg-dbu-header/10 hover:bg-dbu-header/20 transition-colors";
+import { btnMinus, btnPlus, btnSort } from "./util/EditingButton";
 
 export default function TraitsSection({ traits = [], basePath }) {
   const ctx = useEditMode();
@@ -162,7 +154,7 @@ export default function TraitsSection({ traits = [], basePath }) {
                     type="button"
                     onClick={() => sortTraitsBelow(index)}
                     title="alphabetize traits"
-                    className={sortBtn}
+                    className={btnSort}
                   >
                     Alphabetize Traits?
                   </button>
