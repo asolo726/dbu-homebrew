@@ -383,7 +383,7 @@ export default function Head({ Form }) {
           spanText="Maximum No of Stacks: "
         />
 
-        {Object.hasOwn(Form.head, "tier") ? (
+        {Object.hasOwn(Form.head.details, "tier") ? (
           (Form.head.details.tier.length > 0 || isEditing) && (
             <li>
               <p>

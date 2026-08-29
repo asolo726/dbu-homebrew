@@ -185,15 +185,12 @@ export default function AddendumBox({
                         icon={RiSubtractFill}
                         title="Delete section"
                       />
-                      <button
+                      <EditingButton
                         onClick={() => handleAddTraitAfter(i)}
+                        variant="add"
+                        icon={RiAddFill}
                         title="Add trait below section"
-                        className={
-                          "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-white/30 text-white bg-white/10 hover:bg-white/20 transition-colors"
-                        }
-                      >
-                        <RiAddFill size={16} />
-                      </button>
+                      />
                     </div>
                   )}
                 </div>
@@ -209,13 +206,12 @@ export default function AddendumBox({
                 />
                 {(isEditing || isContributing) && path && (
                   <div className="flex justify-start mt-1 mb-2">
-                    <button
+                    <EditingButton
                       onClick={() => handleRemoveTrait(i)}
+                      variant="delete"
+                      icon={RiDeleteBinLine}
                       title="Delete trait"
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-red-500/50 text-red-400 bg-red-900/20 hover:bg-red-900/40 transition-colors"
-                    >
-                      <RiDeleteBinLine size={16} />
-                    </button>
+                    />
                   </div>
                 )}
               </div>
@@ -227,22 +223,22 @@ export default function AddendumBox({
 
         {(isEditing || isContributing) && path && (
           <div className="mt-3 flex gap-2">
-            <button
-              onClick={handleAddTrait}
+            <EditingButton
+              onClick={() => handleAddTrait}
+              variant="add"
+              icon={RiAddFill}
               title="Add trait"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-white/30 text-white bg-white/10 hover:bg-white/20 transition-colors"
             >
-              <RiAddFill size={16} />
               Add Trait
-            </button>
-            <button
-              onClick={handleAddSection}
+            </EditingButton>
+            <EditingButton
+              onClick={() => handleAddSection}
+              variant="section"
+              icon={RiAddFill}
               title="Add section header"
-              className={btnPlusYellow}
             >
-              <RiAddFill size={16} />
               Add Section
-            </button>
+            </EditingButton>
           </div>
         )}
       </div>

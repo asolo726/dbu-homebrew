@@ -5,6 +5,7 @@ import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
 import AddAbilityModal from "../../edit/AddAbilityModal";
 import { RiAddFill, RiSubtractFill } from "react-icons/ri";
+import { EditingButton } from "./util/EditingButton";
 
 export default function Trait({
   title = "",
@@ -178,28 +179,24 @@ export default function Trait({
       {canEditContent && (
         <div className="flex justify-between items-center mt-3">
           {/* Remove selected — bottom left, red */}
-          <button
-            type="button"
+          <EditingButton
+            title="Remove selected abilities"
             onClick={handleRemove}
             disabled={selectedIndices.size === 0}
-            title="Remove selected abilities"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-red-500/50 text-red-400 bg-red-900/20 hover:bg-red-900/40 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            variant="remove"
           >
-            <RiSubtractFill size={16} />
             {selectedIndices.size > 0 && (
               <span className="text-xs">{selectedIndices.size}</span>
             )}
-          </button>
+          </EditingButton>
 
           {/* Add ability — bottom right, white */}
-          <button
-            type="button"
+          <EditingButton
             onClick={() => setShowAddModal(true)}
             title="Add ability"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-white/30 text-white bg-white/10 hover:bg-white/20 transition-colors"
-          >
-            <RiAddFill size={16} />
-          </button>
+            icon={RiAddFill}
+            variant="add"
+          />
         </div>
       )}
 
