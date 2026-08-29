@@ -7,28 +7,29 @@ import { auth } from "../../auth";
 import clientPromise from "../../lib/mongoDBClient";
 
 const SITE_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : "https://dbu-rpg-northgalaxy.vercel.app";
+	? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+	: "https://dbu-rpg-northgalaxy.vercel.app";
 const SLUG_PATTERN = /^(\w+[-]?)+$/;
 
 import pageTypeColors from "../../lib/pageTypeColors";
 
 async function getViewerInfo() {
-  const session = await auth();
-  if (!session?.user?.email) return { name: null, email: null, isAdmin: false };
-  const client = await clientPromise;
-  const user = await client
-    .db()
-    .collection("users")
-    .findOne(
-      { email: session.user.email },
-      { projection: { name: 1, type: 1 } },
-    );
-  return {
-    name: user?.name ?? null,
-    email: session.user.email,
-    isAdmin: user?.type === "admin",
-  };
+	const session = await auth();
+	if (!session?.user?.email)
+		return { name: null, email: null, isAdmin: false };
+	const client = await clientPromise;
+	const user = await client
+		.db()
+		.collection("users")
+		.findOne(
+			{ email: session.user.email },
+			{ projection: { name: 1, type: 1 } },
+		);
+	return {
+		name: user?.name ?? null,
+		email: session.user.email,
+		isAdmin: user?.type === "admin",
+	};
 }
 
 //This Regex pattern checks that a url search only contains alphanumerical characters and a -
@@ -37,70 +38,71 @@ async function getViewerInfo() {
 export const pattern = /^(\w+[-]?)+$/;
 
 export async function generateMetadata({ params }) {
-  const { slug } = await params;
-  const fail_return = {
-    title: "Content Not Found",
-    description:
-      "The content you are looking for does not exist or has not been published yet.",
-  };
+	const { slug } = await params;
+	const fail_return = {
+		title: "Content Not Found",
+		description:
+			"The content you are looking for does not exist or has not been published yet.",
+	};
 
-  if (!SLUG_PATTERN.test(slug)) {
-    return { title: "Invalid URL" };
-  }
+	if (!SLUG_PATTERN.test(slug)) {
+		return { title: "Invalid URL" };
+	}
 
-  const searchResult = await searchContent(slug);
+	const searchResult = await searchContent(slug);
 
-  if (searchResult.status === "failed") {
-    return fail_return;
-  }
+	if (searchResult.status === "failed") {
+		return fail_return;
+	}
 
-  const siteName = "DBU: The Homebrew Galaxy";
-  const result = searchResult.content[0];
-  const title = result.head.title;
-  const description = result.head.desc;
-  const image = result.head.banner || `${SITE_URL}/whosthatzfighter.webp`;
-  const url = `${SITE_URL}/${result.data.keyName}`;
-  const identity = (result.data.identity || "").toLowerCase();
-  const themeColor = pageTypeColors[identity] || "#7c3aed";
-  const toggle = result.data.management.toggle;
+	const siteName = "DBU: The Homebrew Galaxy";
+	const result = searchResult.content[0];
+	const title = result.head.title;
+	const description = result.head.desc;
+	const image = result.head.banner || `${SITE_URL}/whosthatzfighter.webp`;
+	const url = `${SITE_URL}/${result.data.keyName}`;
+	const identity = (result.data.identity || "").toLowerCase();
+	const themeColor = pageTypeColors[identity] || "#7c3aed";
+	const toggle = result.data.management.toggle;
 
-  try {
-    const toggleStatus = await checkToggle(toggle, result.data.author);
-    if (!toggleStatus) {
-      const {
-        name: viewerName,
-        email: viewerEmail,
-        isAdmin,
-      } = await getViewerInfo();
-      if (viewerName !== result.data.author && !isAdmin) return fail_return;
-    }
-  } catch (error) {
-    console.error("Error checking toggle:", error);
-    return fail_return;
-  }
+	try {
+		const toggleStatus = await checkToggle(toggle, result.data.author);
+		if (!toggleStatus) {
+			const {
+				name: viewerName,
+				email: viewerEmail,
+				isAdmin,
+			} = await getViewerInfo();
+			if (viewerName !== result.data.author && !isAdmin)
+				return fail_return;
+		}
+	} catch (error) {
+		console.error("Error checking toggle:", error);
+		return fail_return;
+	}
 
-  return {
-    title,
-    description,
-    alternates: { canonical: url },
-    openGraph: {
-      title,
-      description,
-      url,
-      type: "website",
-      images: [{ url: image, width: 1200, height: 630, alt: title }],
-      siteName,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [image],
-    },
-    other: {
-      "theme-color": themeColor,
-    },
-  };
+	return {
+		title,
+		description,
+		alternates: { canonical: url },
+		openGraph: {
+			title,
+			description,
+			url,
+			type: "website",
+			images: [{ url: image, width: 1200, height: 630, alt: title }],
+			siteName,
+		},
+		twitter: {
+			card: "summary_large_image",
+			title,
+			description,
+			images: [image],
+		},
+		other: {
+			"theme-color": themeColor,
+		},
+	};
 }
 
 /**
@@ -112,105 +114,108 @@ export async function generateMetadata({ params }) {
  *  */
 
 export default async function Page({ params }) {
-  const { slug } = await params;
+	const { slug } = await params;
 
-  if (pattern.test(slug) === false) {
-    return (
-      <div className="flex flex-col justify-center">
-        <h1>
-          Whatever the hell you just typed in was invalid. Only letters,
-          numbers, and - is acceptable.
-        </h1>
-        <h1>Anything else makes you look fishy. And I DON'T. LIKE. FISHES.</h1>
-        <button type="button" className="mt-10">
-          <a
-            className="p-5 rounded-xl bg-dbu-link text-white font-bold "
-            href="/"
-          >
-            Home
-          </a>
-        </button>
-      </div>
-    );
-  }
-  const searchResult = await searchContent(slug);
-  let toggle;
-  let pageAuthor;
-  let toggleStatus;
-  // Try Block to catch if the search fails
-  try {
-    toggle = searchResult.content[0].data.management.toggle;
-    pageAuthor = searchResult.content[0].data.author;
-    toggleStatus = await checkToggle(toggle, pageAuthor);
-  } catch (error) {}
-  const {
-    name: viewerName,
-    email: viewerEmail,
-    isAdmin,
-  } = await getViewerInfo();
+	if (pattern.test(slug) === false) {
+		return (
+			<div className="flex flex-col justify-center">
+				<h1>
+					Whatever the hell you just typed in was invalid. Only
+					letters, numbers, and - is acceptable.
+				</h1>
+				<h1>
+					Anything else makes you look fishy. And I DON'T. LIKE.
+					FISHES.
+				</h1>
+				<button type="button" className="mt-10">
+					<a
+						className="p-5 rounded-xl bg-dbu-link text-white font-bold "
+						href="/"
+					>
+						Home
+					</a>
+				</button>
+			</div>
+		);
+	}
+	const searchResult = await searchContent(slug);
+	let toggle;
+	let pageAuthor;
+	let toggleStatus;
+	// Try Block to catch if the search fails
+	try {
+		toggle = searchResult.content[0].data.management.toggle;
+		pageAuthor = searchResult.content[0].data.author;
+		toggleStatus = await checkToggle(toggle, pageAuthor);
+	} catch (error) {}
+	const {
+		name: viewerName,
+		email: viewerEmail,
+		isAdmin,
+	} = await getViewerInfo();
 
-  // If search fails or toggle is off (and viewer is not the author or an admin), show not found.
-  if (
-    searchResult.status === "failed" ||
-    (toggle && !toggleStatus && viewerName !== pageAuthor && !isAdmin)
-  ) {
-    return (
-      <div className="flex flex-col justify-center">
-        <h1>
-          Hmmm, looks like that doesn't exist. That page probably doesn't exist
-          or hasn't been published yet.
-        </h1>
-        <button type="button" className="mt-10">
-          <a
-            className="p-5 rounded-xl bg-dbu-link text-white font-bold "
-            href="/"
-          >
-            Home
-          </a>
-        </button>
-      </div>
-    );
-  }
-  if (searchResult.content.length === 1) {
-    const content = JSON.parse(JSON.stringify(searchResult.content[0]));
-    const oEmbedUrl = `${SITE_URL}/api/oembed?url=${encodeURIComponent(`${SITE_URL}/${slug}`)}&title=${encodeURIComponent(content.head.title)}&author=${encodeURIComponent(content.head.author || "")}`;
-    return (
-      <>
-        <link
-          rel="alternate"
-          type="application/json+oembed"
-          href={oEmbedUrl}
-          title={content.head.title}
-        />
-        <ViewTracker
-          keyName={content.data.keyName}
-          title={content.head.title}
-          isAuthor={viewerName === pageAuthor}
-        />
-        {(() => {
-          const canEdit = viewerName === pageAuthor || isAdmin;
-          const allowlist = content.head.communityAllowlist ?? [];
-          const canContribute =
-            !canEdit &&
-            !!content.data.management.isCommunity &&
-            !!viewerEmail &&
-            allowlist.includes(viewerEmail);
-          return (
-            <EditModeWrapper
-              canEdit={canEdit}
-              canContribute={canContribute}
-              keyName={content.data.keyName}
-              toggleStatus={toggleStatus}
-              contributorEmail={viewerEmail}
-              contributorName={viewerName}
-              isAdmin={isAdmin}
-              isCommunity={!!content.head.isCommunity}
-            >
-              <SinglePageGenerator content={content} />
-            </EditModeWrapper>
-          );
-        })()}
-      </>
-    );
-  }
+	// If search fails or toggle is off (and viewer is not the author or an admin), show not found.
+	if (
+		searchResult.status === "failed" ||
+		(toggle && !toggleStatus && viewerName !== pageAuthor && !isAdmin)
+	) {
+		return (
+			<div className="flex flex-col justify-center">
+				<h1>
+					Hmmm, looks like that doesn't exist. That page probably
+					doesn't exist or hasn't been published yet.
+				</h1>
+				<button type="button" className="mt-10">
+					<a
+						className="p-5 rounded-xl bg-dbu-link text-white font-bold "
+						href="/"
+					>
+						Home
+					</a>
+				</button>
+			</div>
+		);
+	}
+	if (searchResult.content.length === 1) {
+		const content = JSON.parse(JSON.stringify(searchResult.content[0]));
+		const oEmbedUrl = `${SITE_URL}/api/oembed?url=${encodeURIComponent(`${SITE_URL}/${slug}`)}&title=${encodeURIComponent(content.head.title)}&author=${encodeURIComponent(content.head.author || "")}`;
+		return (
+			<>
+				<link
+					rel="alternate"
+					type="application/json+oembed"
+					href={oEmbedUrl}
+					title={content.head.title}
+				/>
+				<ViewTracker
+					keyName={content.data.keyName}
+					title={content.head.title}
+					isAuthor={viewerName === pageAuthor}
+				/>
+				{(() => {
+					const canEdit = viewerName === pageAuthor || isAdmin;
+					const allowlist = content.head.communityAllowlist ?? [];
+					const canContribute =
+						!canEdit &&
+						!!content.data.management.isCommunity &&
+						!!viewerEmail &&
+						allowlist.includes(viewerEmail);
+					return (
+						<EditModeWrapper
+							canEdit={canEdit}
+							canContribute={canContribute}
+							keyName={content.data.keyName}
+							toggleStatus={toggleStatus}
+							contributorEmail={viewerEmail}
+							contributorName={viewerName}
+							isAdmin={isAdmin}
+							isCommunity={!!content.head.isCommunity}
+						>
+							<SinglePageGenerator content={content} />
+						</EditModeWrapper>
+					);
+				})()}
+			</>
+		);
+	}
 }
