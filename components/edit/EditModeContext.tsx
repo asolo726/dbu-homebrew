@@ -1,10 +1,42 @@
 "use client";
-import { createContext, useContext, useState, useRef } from "react";
+import { createContext, useContext, useState, useRef, ReactNode } from "react";
 
-const EditModeContext = createContext(null);
+export interface EditModeContextType {
+  isEditing: boolean;
+  setIsEditing: (value: boolean) => void;
+  isContributing: boolean;
+  setIsContributing: (value: boolean) => void;
+  contributorEmail: string | null;
+  contributorName: string | null;
+  isAdmin: boolean;
+  isCommunity: boolean;
+  pendingChanges: Record<string, any>;
+  setChange: (path: string, value: any) => void;
+  setArrayChange: (arrayPath: string, value: any[]) => void;
+  clearChanges: () => void;
+  hasChanges: boolean;
+  undo: () => void;
+  redo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
+  keyName: string;
+  toggleStatus: boolean | null;
+}
 
-export function useEditMode() {
+const EditModeContext = createContext<EditModeContextType | null>(null);
+
+export function useEditMode(): EditModeContextType | null {
   return useContext(EditModeContext);
+}
+
+interface EditModeProviderProps {
+  children: ReactNode;
+  keyName: string;
+  toggleStatus: boolean | null;
+  contributorEmail?: string | null;
+  contributorName?: string | null;
+  isAdmin?: boolean;
+  isCommunity?: boolean;
 }
 
 export function EditModeProvider({
@@ -15,29 +47,25 @@ export function EditModeProvider({
   contributorName = null,
   isAdmin = false,
   isCommunity = false,
-}) {
+}: EditModeProviderProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isContributing, setIsContributing] = useState(false);
-  const [pendingChanges, _setPendingChanges] = useState({});
-  // [length, index] as state so canUndo/canRedo are reactive
+  const [pendingChanges, _setPendingChanges] = useState<Record<string, any>>({});
   const [historyMeta, setHistoryMeta] = useState({ len: 1, idx: 0 });
 
-  // Refs so callbacks always see fresh values without stale closures
-  const pendingRef = useRef({});
-  const historyRef = useRef([{}]); // history[0] = baseline (empty)
+  const pendingRef = useRef<Record<string, any>>({});
+  const historyRef = useRef<Record<string, any>[]>([{}]);
   const historyIdxRef = useRef(0);
   const lastSnapshotTimeRef = useRef(0);
 
-  function _apply(changes) {
+  function _apply(changes: Record<string, any>) {
     pendingRef.current = changes;
     _setPendingChanges(changes);
   }
 
-  function _pushSnapshot(snapshot) {
-    // Discard any redo history beyond current index
+  function _pushSnapshot(snapshot: Record<string, any>) {
     historyRef.current = historyRef.current.slice(0, historyIdxRef.current + 1);
     historyRef.current.push({ ...snapshot });
-    // Cap at 50 entries
     if (historyRef.current.length > 51) historyRef.current.shift();
     else historyIdxRef.current++;
     setHistoryMeta({
@@ -46,8 +74,7 @@ export function EditModeProvider({
     });
   }
 
-  function setChange(path, value) {
-    // Debounce snapshots for text edits (one checkpoint per 600ms of inactivity)
+  function setChange(path: string, value: any) {
     const now = Date.now();
     if (now - lastSnapshotTimeRef.current > 600) {
       _pushSnapshot(pendingRef.current);
@@ -56,14 +83,12 @@ export function EditModeProvider({
     _apply({ ...pendingRef.current, [path]: value });
   }
 
-  // Stores a full array and removes child-path keys that would conflict in MongoDB $set
-  function setArrayChange(arrayPath, value) {
-    // Structural changes always get an immediate snapshot
+  function setArrayChange(arrayPath: string, value: any[]) {
     _pushSnapshot(pendingRef.current);
     lastSnapshotTimeRef.current = Date.now();
 
     const prefix = arrayPath + ".";
-    const next = {};
+    const next: Record<string, any> = {};
     for (const key of Object.keys(pendingRef.current)) {
       if (!key.startsWith(prefix)) next[key] = pendingRef.current[key];
     }
@@ -105,30 +130,30 @@ export function EditModeProvider({
   const canUndo = historyMeta.idx > 0;
   const canRedo = historyMeta.idx < historyMeta.len - 1;
 
+  const value: EditModeContextType = {
+    isEditing,
+    setIsEditing,
+    isContributing,
+    setIsContributing,
+    contributorEmail,
+    contributorName,
+    isAdmin,
+    isCommunity,
+    pendingChanges,
+    setChange,
+    setArrayChange,
+    clearChanges,
+    hasChanges,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
+    keyName,
+    toggleStatus,
+  };
+
   return (
-    <EditModeContext.Provider
-      value={{
-        isEditing,
-        setIsEditing,
-        isContributing,
-        setIsContributing,
-        contributorEmail,
-        contributorName,
-        isAdmin,
-        isCommunity,
-        pendingChanges,
-        setChange,
-        setArrayChange,
-        clearChanges,
-        hasChanges,
-        undo,
-        redo,
-        canUndo,
-        canRedo,
-        keyName,
-        toggleStatus,
-      }}
-    >
+    <EditModeContext.Provider value={value}>
       {children}
     </EditModeContext.Provider>
   );

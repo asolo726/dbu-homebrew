@@ -24,7 +24,7 @@ export default function TraitsSection({ traits = [], basePath }) {
   function canEditItem(item) {
     if (isEditing) return true;
     if (isContributing) return item.contributor?.email === contributorEmail;
-    return false;
+    return false;``
   }
 
   function addAt(index, item) {
@@ -67,105 +67,14 @@ export default function TraitsSection({ traits = [], basePath }) {
     addAt(currentTraits.length, newTrait());
   }
 
-  function handleAddTraitAfter(index) {
-    addAt(index + 1, newTrait());
-  }
-
   function handleAddSection() {
     addAt(currentTraits.length, newSection());
-  }
-
-  /**
-   * Finds the index of next sectional in currentTraits. If there is no other sectional, it returns the length of the array.
-   * @param {number} index
-   */
-  function findNextSectionalIndex(index) {
-    const traitsToSearch = currentTraits.slice(index + 1, currentTraits.length);
-    let nextSectionalIndex = [];
-    traitsToSearch.forEach((item, i) => {
-      if ("sectional" in item) {
-        nextSectionalIndex.push(i);
-      }
-    });
-    return nextSectionalIndex[0] ?? currentTraits.length;
-  }
-
-  /**
-   * Sorts all traits below a specific sectional in alphabetical order.
-   * NO AI USED
-   */
-  function sortTraitsBelow(index) {
-    const startingIndex = 1 + index; // Excludes the sectional.
-    const currentTraitsCopy = [...currentTraits];
-    const traitsToSort = currentTraitsCopy.slice(
-      startingIndex,
-      startingIndex + findNextSectionalIndex(index),
-    );
-    const numberOfSortedTraits = traitsToSort.length;
-    traitsToSort.sort((a, b) =>
-      a.title.localeCompare(b.title, undefined, { sensitivity: "base" }),
-    );
-    for (let i = 0; i !== numberOfSortedTraits; i++) {
-      currentTraitsCopy[startingIndex + i] = traitsToSort[i];
-      console.log(`traitsToSort [${i}]`, traitsToSort[i]);
-    }
-    setArrayChange(basePath, currentTraitsCopy);
   }
 
   return (
     <>
       {currentTraits.map((item, index) => {
         const editable = canEditItem(item);
-
-        if ("sectional" in item) {
-          const titlePath =
-            basePath && editable
-              ? `${basePath}.${index}.sectional.title`
-              : null;
-          return (
-            <div key={index} className="mt-10">
-              <p className="text-dbu-header text-center text-xl md:text-2xl my-3 font-bold tracking-widest">
-                {titlePath ? (
-                  <EditableText
-                    path={titlePath}
-                    value={item.sectional.title}
-                    className="text-center"
-                  />
-                ) : (
-                  item.sectional.title
-                )}
-              </p>
-              {item.contributor && (
-                <p className="text-xs text-white italic text-center mt-1 opacity-60">
-                  (Added by {item.contributor.name})
-                </p>
-              )}
-              {isActive && basePath && (
-                <div className="flex justify-between items-center mt-2">
-                  <EditingButton
-                    onClick={() => removeAt(index)}
-                    title="Delete section"
-                    icon={RiSubtractFill}
-                    variant="delete"
-                  />
-                  <EditingButton
-                    onClick={() => sortTraitsBelow(index)}
-                    title="Alphabetize Traits"
-                    variant="sort"
-                  >
-                    Alphabetize Traits?
-                  </EditingButton>
-                  <EditingButton
-                    onClick={() => handleAddTraitAfter(index)}
-                    title="Add trait below section"
-                    icon={RiAddFill}
-                    variant="add"
-                  />
-                </div>
-              )}
-            </div>
-          );
-        }
 
         return (
           <div key={index}>
@@ -190,27 +99,6 @@ export default function TraitsSection({ traits = [], basePath }) {
           </div>
         );
       })}
-
-      {isActive && basePath && (
-        <div className="flex gap-2 mt-4">
-          <EditingButton
-            variant="add"
-            icon={RiAddFill}
-            title="Add trait"
-            onClick={handleAddTrait}
-          >
-            Add Trait
-          </EditingButton>
-          <EditingButton
-            variant="section"
-            icon={RiAddFill}
-            title="Add section header"
-            onClick={handleAddSection}
-          >
-            Add Section
-          </EditingButton>
-        </div>
-      )}
     </>
   );
 }
