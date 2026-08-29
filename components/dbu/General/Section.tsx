@@ -3,6 +3,7 @@ import TraitsSection from "./TraitsSection";
 import { RiAddFill } from "react-icons/ri";
 import { EditingButton } from "./util/EditingButton";
 import { useEditingState } from "@/components/edit/useEditingState";
+import EditableText from "@/components/edit/EditableText";
 
 
 type HeaderSize = "h2" | "h3" | "h4";
@@ -84,12 +85,24 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
 
     return (
         <>
-            {body.map((section, index) => (
+            {body.map((section, index) => {
+                const hasValidHeader = section.header && section.header !== "";
+                const headerPath = hasValidHeader ? basePath ? `${basePath}.${index}.header` : null : null;
+
+                return (
                 <div key={index}>
-                    {section.header && section.header !== "" && (
+                    {hasValidHeader && (
                         <div className="mt-10">
                             <p className={headerStyle[section.headerSize ?? DEFAULT_HEADER_SIZE]}>
-                                {section.header}
+                                {headerPath ? (
+                                    <EditableText 
+                                        path={headerPath}
+                                        value={section.header}
+                                        className="text-center"
+                                    />
+                                ) : (
+                                    section.header
+                                )}
                             </p>
                         </div>
                     )}
@@ -117,7 +130,7 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
                         </div>
                     )}
                 </div>
-            ))}
+            )})}
         </>
     )
 }
