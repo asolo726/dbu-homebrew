@@ -1,17 +1,23 @@
 "use client";
 import TraitsSection from "./TraitsSection";
 import { RiAddFill } from "react-icons/ri";
-import { EditingButton } from "./util/EditingButton";
 import { useEditingState } from "@/components/edit/useEditingState";
 import EditableText from "@/components/edit/EditableText";
+import { EditingButton } from "./util/EditingButton";
 
 
 type HeaderSize = "h2" | "h3" | "h4";
 
+export interface Trait {
+    title: string,
+    desc: string,
+    abilities: any[]
+}
+
 export interface Section {
     header?: string, // Ex. MASTERY TRAIT
     headerSize?: HeaderSize // Ex. h2
-    traits?: any[] // Traits
+    traits?: Trait[] // Traits
 }
 
 interface SectionProps {
@@ -30,7 +36,6 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
         h3: "text-dbu-header text-center text-lg md:text-xl my-2 font-bold tracking-wider",
         h4: "text-dbu-header text-center text-base md:text-lg my-1 font-semibold",
     };
-    console.log("basePath", basePath, " / isActive", isActive);
 
     function canEditItem(item: any) {
     if (isEditing) return true;
@@ -38,19 +43,36 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
     return false;
 }
 
-  function addAt(index: number, item: any) {
-    if (!basePath || !setArrayChange) return;
-    const arr = [...currentBody];
-    arr.splice(index, 0, item);
-    setArrayChange(basePath, arr);
+  function newTrait() {
+    return withContributor({
+      title: "New Trait",
+      desc: "Description",
+      abilities: [],
+    });
   }
 
-  function removeAt(index: number) {
+  function newSection() {
+    return ({ header: "New Header", headerSize: "h2", traits: [] })
+  }
+
+  function addAt(index: number, item: any) {
     if (!basePath || !setArrayChange) return;
-    setArrayChange(
-      basePath,
-      currentBody.filter((_: any, i: number) => i !== index),
-    );
+    // If adding a new trait, add a new trait within the same section.
+    // If adding a new section, add a new section (with header) below where the button is used.
+    console.log(index);
+    if (item === "trait") {
+        const section = currentBody[index];
+        const sectionPath = `${basePath}.${index}`;
+        const traitsArr = [...(section.traits || [])];
+        // Add the new trait below all other traits.
+        traitsArr.splice(traitsArr.length, 0, newTrait());
+        setArrayChange(sectionPath, {...section, traits: traitsArr});
+    } else {
+        const arr = [...currentBody];
+        arr.splice(index, 0, newSection());
+        setArrayChange(basePath, arr);
+        console.log(arr);
+    }
   }
 
   function withContributor(base: any) {
@@ -62,24 +84,26 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
       : base;
   }
 
-  function newTrait() {
-    return withContributor({
-      title: "New Trait",
-      desc: "Description",
-      abilities: [],
-    });
+  function handleAddTrait(index: number) {
+    addAt(index, "trait");
   }
 
-  function newSection() {
-    return withContributor({ sectional: { title: "New Section" } });
+  function handleAddSection(index: number) {
+    addAt(index+1, "section");
   }
 
-  function handleAddTrait() {
-    addAt(currentBody.length, newTrait());
-  }
-
-  function handleAddSection() {
-    addAt(currentBody.length, newSection());
+  /**
+   * Sorts all traits below a specific sectional in alphabetical order.
+   * NO AI USED
+   */
+  function sortTraitsBelow(index: number, traits: Trait[]) {
+    if (!basePath || !setArrayChange) return;
+    const sortedTraits = traits.toSorted((a, b) =>
+      a.title.localeCompare(b.title, undefined, { sensitivity: "base" }),
+    );
+    const section = currentBody[index];
+    const sectionPath = `${basePath}.${index}`;
+    setArrayChange(sectionPath, {...section, traits: sortedTraits});
   }
 
 
@@ -88,6 +112,7 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
             {body.map((section, index) => {
                 const hasValidHeader = section.header && section.header !== "";
                 const headerPath = hasValidHeader ? basePath ? `${basePath}.${index}.header` : null : null;
+                const traits = section.traits ?? null;
 
                 return (
                 <div key={index}>
@@ -106,8 +131,19 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
                             </p>
                         </div>
                     )}
-                    {section.traits && (
-                        <TraitsSection traits={section.traits as never[]} basePath={"traits"} />
+                    {isActive && basePath && (
+                        <div className="flex justify-between items-center mt-2">
+                            <EditingButton
+                                onClick={() => sortTraitsBelow(index, traits)}
+                                title="Alphabetize Traits"
+                                variant="sort"
+                            >
+                                Alphabetize Traits?
+                            </EditingButton>
+                        </div>
+                    )}
+                    {traits && (
+                        <TraitsSection traits={traits as never[]} basePath={"traits"} />
                     )}
                     {isActive && basePath && (
                         <div className="flex gap-2 mt-4">
@@ -115,7 +151,7 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
                                 variant="add"
                                 icon={RiAddFill}
                                 title="Add trait"
-                                onClick={handleAddTrait}
+                                onClick={() => handleAddTrait(index)}
                             >
                                 Add Trait
                             </EditingButton>
@@ -123,7 +159,7 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
                                 variant="section"
                                 icon={RiAddFill}
                                 title="Add section header"
-                                onClick={handleAddSection}
+                                onClick={() => handleAddSection(index)}
                             >
                                 Add Section
                             </EditingButton>
