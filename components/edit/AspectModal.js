@@ -2,11 +2,11 @@
 import {
   aspects,
   getAspectTooltip,
-} from "../../components/dbu/General/util/headUtil.js";
+} from "../dbu/general/util/headUtil.js";
 import { Tooltip } from "../../lib/reactTooltip.js";
 import { useState, useEffect } from "react";
 import { RxArrowUp, RxInfoCircled } from "react-icons/rx";
-import { prettifyAspects } from "../../components/dbu/General/util/headUtil.js";
+import { prettifyAspects } from "../dbu/general/util/headUtil.js";
 
 
 export default function AspectsModal({ currentAspects, onSave, onClose }) {

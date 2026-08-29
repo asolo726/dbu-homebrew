@@ -1,4 +1,4 @@
-import Trait from "../General/trait";
+import Trait from "../general/trait";
 
 export default function LegendaryTrait({ legendaryTraitList = [], path }) {
   return (

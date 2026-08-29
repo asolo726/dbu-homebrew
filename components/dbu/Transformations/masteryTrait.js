@@ -1,6 +1,6 @@
 "use client";
-import Trait from "../General/trait";
-import Table from "../General/table";
+import Trait from "../general/trait";
+import Table from "../general/table";
 import { useEditMode } from "../../edit/EditModeContext";
 import { RiAddFill, RiSubtractFill, RiDeleteBinLine } from "react-icons/ri";
 

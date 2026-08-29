@@ -7,7 +7,7 @@ import FactorRenderPage from "./Factor";
 import RaceRenderPage from "./Race";
 import OtherRenderPage from "./Other";
 import CommentSection from "../comments/CommentSection";
-import CommunitySettings from "../dbu/General/CommunitySettings";
+import CommunitySettings from "../dbu/general/CommunitySettings";
 import { auth } from "../../auth";
 import { getIsAdmin } from "../../lib/getIsAdmin";
 
