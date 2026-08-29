@@ -7,42 +7,44 @@ import FactorRenderPage from "./Factor";
 import RaceRenderPage from "./Race";
 import OtherRenderPage from "./Other";
 import CommentSection from "../comments/CommentSection";
-import CommunitySettings from "../dbu/general/CommunitySettings";
+import CommunitySettings from "../dbu/General/CommunitySettings";
 import { auth } from "../../auth";
 import { getIsAdmin } from "../../lib/getIsAdmin";
+import { normalizePageContent } from "../../lib/normalizePageContent";
 
 export default async function SinglePageGenerator({ content }) {
   const session = await auth();
   const isAdmin = await getIsAdmin(session?.user?.email);
+  const normalizedContent = normalizePageContent(content);
 
   const pageRenderStyle =
     "flex flex-col flex-col-1 w-full max-w-5xl justify-center content-center";
 
   let pageContent;
-  switch (content.data.identity) {
+  switch (normalizedContent.data.identity) {
     case "Awakening":
-      pageContent = <AwakeningRenderPage content={content} />;
+      pageContent = <AwakeningRenderPage content={normalizedContent} />;
       break;
     case "Alternate":
-      pageContent = <AlternateRenderPage content={content} />;
+      pageContent = <AlternateRenderPage content={normalizedContent} />;
       break;
     case "Legendary":
-      pageContent = <LegendaryRenderPage content={content} />;
+      pageContent = <LegendaryRenderPage content={normalizedContent} />;
       break;
     case "Evolved Stage":
-      pageContent = <EvolvedStageRenderPage content={content} />;
+      pageContent = <EvolvedStageRenderPage content={normalizedContent} />;
       break;
     case "Enhancement":
-      pageContent = <EnhancementRenderPage content={content} />;
+      pageContent = <EnhancementRenderPage content={normalizedContent} />;
       break;
     case "Factor":
-      pageContent = <FactorRenderPage content={content} />;
+      pageContent = <FactorRenderPage content={normalizedContent} />;
       break;
     case "Race":
-      pageContent = <RaceRenderPage content={content} />;
+      pageContent = <RaceRenderPage content={normalizedContent} />;
       break;
     case "Other":
-      pageContent = <OtherRenderPage content={content} />;
+      pageContent = <OtherRenderPage content={normalizedContent} />;
       break;
     case "Temp":
       return <></>;
@@ -55,15 +57,15 @@ export default async function SinglePageGenerator({ content }) {
       {pageContent}
       <div className="px-4 pb-4">
         <CommunitySettings
-          keyName={content.data.keyName}
-          isCommunity={content.head.isCommunity ?? false}
+          keyName={normalizedContent.data.keyName}
+          isCommunity={normalizedContent.head.isCommunity ?? false}
         />
       </div>
       <div className="px-4 pb-16">
         <CommentSection
-          pageKey={content.data.keyName}
+          pageKey={normalizedContent.data.keyName}
           session={session}
-          pageAuthor={content.data.author}
+          pageAuthor={normalizedContent.data.author}
           viewerIsAdmin={isAdmin}
         />
       </div>

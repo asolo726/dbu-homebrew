@@ -3,7 +3,6 @@ import Trait from "./trait";
 import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
 import { RiAddFill, RiSubtractFill, RiDeleteBinLine } from "react-icons/ri";
-import { btnMinus, btnPlus, btnSort } from "./util/EditingButton";
 
 export default function TraitsSection({ traits = [], basePath }) {
   const ctx = useEditMode();
@@ -142,30 +141,25 @@ export default function TraitsSection({ traits = [], basePath }) {
               )}
               {isActive && basePath && (
                 <div className="flex justify-between items-center mt-2">
-                  <button
-                    type="button"
+                  <EditingButton
                     onClick={() => removeAt(index)}
                     title="Delete section"
-                    className={btnMinus}
-                  >
-                    <RiSubtractFill size={16} /> Delete Section
-                  </button>
-                  <button
-                    type="button"
+                    icon={RiSubtractFill}
+                    variant="delete"
+                  />
+                  <EditingButton
                     onClick={() => sortTraitsBelow(index)}
-                    title="alphabetize traits"
-                    className={btnSort}
+                    title="Alphabetize Traits"
+                    variant="sort"
                   >
                     Alphabetize Traits?
-                  </button>
-                  <button
-                    type="button"
+                  </EditingButton>
+                  <EditingButton
                     onClick={() => handleAddTraitAfter(index)}
                     title="Add trait below section"
-                    className={btnPlus}
-                  >
-                    <RiAddFill size={16} /> Add Trait
-                  </button>
+                    icon={RiAddFill}
+                    variant="add"
+                  />
                 </div>
               )}
             </div>
@@ -184,14 +178,12 @@ export default function TraitsSection({ traits = [], basePath }) {
             />
             {isActive && basePath && editable && (
               <div className="flex justify-start mt-1 mb-2">
-                <button
-                  type="button"
+                <EditingButton
                   onClick={() => removeAt(index)}
                   title="Delete trait"
-                  className={btnMinus}
-                >
-                  <RiDeleteBinLine size={16} />
-                </button>
+                  icon={RiDeleteBinLine}
+                  variant="delete"
+                />
               </div>
             )}
           </div>
@@ -200,24 +192,22 @@ export default function TraitsSection({ traits = [], basePath }) {
 
       {isActive && basePath && (
         <div className="flex gap-2 mt-4">
-          <button
-            type="button"
-            onClick={handleAddTrait}
+          <EditingButton
+            variant="add"
+            icon={RiAddFill}
             title="Add trait"
-            className={btnPlus}
+            onClick={handleAddTrait}
           >
-            <RiAddFill size={16} />
             Add Trait
-          </button>
-          <button
-            type="button"
-            onClick={handleAddSection}
+          </EditingButton>
+          <EditingButton
+            variant="section"
+            icon={RiAddFill}
             title="Add section header"
-            className={btnPlusYellow}
+            onClick={handleAddSection}
           >
-            <RiAddFill size={16} />
             Add Section
-          </button>
+          </EditingButton>
         </div>
       )}
     </>

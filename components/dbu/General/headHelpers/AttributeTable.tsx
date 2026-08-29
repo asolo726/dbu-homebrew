@@ -1,8 +1,10 @@
 import EditableText from "@/components/edit/EditableText";
 interface AttributeItem {
   attribute: string;
-  bonus: string;
-  multiplier: string;
+  bonus?: string | number;
+  multiplier?: string;
+  Bonus?: string | number;
+  Multiplier?: string;
 }
 interface AttributeModsTableProps {
   attrTable: Readonly<AttributeItem>[];
@@ -62,13 +64,20 @@ export default function AttributeModsTable({
           <tbody>
             <tr>
               {attrTable.map((modifier, id) => {
+                const bonusValue = modifier.bonus ?? modifier.Bonus ?? 0;
+                const multiplierValue = modifier.multiplier ?? modifier.Multiplier ?? "";
                 const currentBonus =
                   pendingChanges?.[`head.details.attributeModifiers.${id}.Bonus`] ??
-                  modifier.Bonus;
+                  pendingChanges?.[`head.details.attributeModifiers.${id}.bonus`] ??
+                  bonusValue;
                 const currentMultiplier =
                   pendingChanges?.[
                     `head.details.attributeModifiers.${id}.Multiplier`
-                  ] ?? modifier.Multiplier;
+                  ] ??
+                  pendingChanges?.[
+                    `head.details.attributeModifiers.${id}.multiplier`
+                  ] ??
+                  multiplierValue;
                 return (
                   <td
                     className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
@@ -80,18 +89,18 @@ export default function AttributeModsTable({
                           +
                           <EditableText
                             path={`head.details.attributeModifiers.${id}.Bonus`}
-                            value={String(modifier.Bonus)}
+                            value={String(bonusValue)}
                             className="w-10 text-center"
                           />
                         </div>
                         <EditableText
                           path={`head.details.attributeModifiers.${id}.Multiplier`}
-                          value={modifier.Multiplier}
+                          value={multiplierValue}
                           className="w-full text-center text-md"
                         />
                       </div>
                     ) : (
-                      multiplierDisplay(currentBonus, currentMultiplier)
+                      multiplierDisplay(String(currentBonus), String(currentMultiplier))
                     )}
                   </td>
                 );

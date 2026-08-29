@@ -1,5 +1,5 @@
-import Head from "../dbu/general/head";
-import TraitsSection from "../dbu/general/TraitsSection";
+import Head from "../dbu/General/head";
+import TraitsSection from "../dbu/General/TraitsSection";
 
 export default function FactorRenderPage({ content }) {
   const hasMultipleFactorTraits = content.traits.length > 1;

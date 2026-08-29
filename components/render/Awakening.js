@@ -1,5 +1,5 @@
-import Head from "../dbu/general/head";
-import TraitsSection from "../dbu/general/TraitsSection";
+import Head from "../dbu/General/head";
+import TraitsSection from "../dbu/General/TraitsSection";
 import GrandAwakening from "../dbu/Transformations/grandAwakening";
 
 export default function AwakeningRenderPage({ content }) {

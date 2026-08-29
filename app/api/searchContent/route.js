@@ -13,7 +13,7 @@ export async function findContent(searchParam) {
 
   for await (const collection of collections) {
     const searchResult = await db.collection(collection.name).findOne({
-      "head.keyName": searchParam,
+      $or: [{ "head.keyName": searchParam }, { "data.keyName": searchParam }],
     });
     if (searchResult) {
       resultArr.push(searchResult);

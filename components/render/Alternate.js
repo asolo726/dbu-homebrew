@@ -1,5 +1,5 @@
-import Head from "../dbu/general/head";
-import TraitsSection from "../dbu/general/TraitsSection";
+import Head from "../dbu/General/head";
+import TraitsSection from "../dbu/General/TraitsSection";
 import MasteryTrait from "../dbu/Transformations/masteryTrait";
 import LegendaryTrait from "../dbu/Transformations/legendaryTrait";
 
