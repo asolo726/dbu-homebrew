@@ -13,7 +13,7 @@ async function getViewerName(client, session) {
 
 // GET /api/settings/toggles/pages?toggle=<toggleName>
 // Returns all pages authored by the current user, split into:
-//   withToggle    – pages where head.toggle === toggleName
+//   withToggle    – pages where data.management.toggle === toggleName
 //   withoutToggle – all other authored pages
 export async function GET(request) {
   const session = await auth();
@@ -48,12 +48,12 @@ export async function GET(request) {
       const pages = await contentDb
         .collection(col.name)
         .find(
-          { "head.author": viewerName },
+          { "data.author": viewerName },
           {
             projection: {
-              "head.keyName": 1,
+              "data.keyName": 1,
               "head.title": 1,
-              "head.toggle": 1,
+              "data.management.toggle": 1,
               _id: 0,
             },
           },
@@ -62,11 +62,11 @@ export async function GET(request) {
 
       for (const p of pages) {
         const info = {
-          keyName: p.head.keyName,
+          keyName: p.data.keyName,
           title: p.head.title,
           collection: col.name,
         };
-        if (p.head.toggle === toggleName) {
+        if (p.data.management.toggle === toggleName) {
           withToggle.push(info);
         } else {
           withoutToggle.push(info);
@@ -115,16 +115,16 @@ export async function PATCH(request) {
         contentDb
           .collection(p.collection)
           .updateOne(
-            { "head.keyName": p.keyName, "head.author": viewerName },
-            { $set: { "head.toggle": toggleName } },
+            { "data.keyName": p.keyName, "data.author": viewerName },
+            { $set: { "data.management.toggle": toggleName } },
           ),
       ),
       ...removePages.map((p) =>
         contentDb
           .collection(p.collection)
           .updateOne(
-            { "head.keyName": p.keyName, "head.author": viewerName },
-            { $unset: { "head.toggle": "" } },
+            { "data.keyName": p.keyName, "data.author": viewerName },
+            { $unset: { "data.management.toggle": "" } },
           ),
       ),
     ];

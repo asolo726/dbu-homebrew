@@ -50,9 +50,9 @@ export async function GET(request) {
           {
             projection: {
               "head.title": 1,
-              "head.keyName": 1,
-              "head.author": 1,
-              "head.toggle": 1,
+              "data.keyName": 1,
+              "data.author": 1,
+              "data.toggle": 1,
               _id: 0,
             },
           },
@@ -63,9 +63,9 @@ export async function GET(request) {
         if (normalizeForMatch(p.head.title) !== normalized) continue;
         // Visible if: no toggle, toggle enabled, or viewer is the author
         const visible =
-          isToggleEnabled(p.head.toggle, p.head.author) ||
-          (viewerName && p.head.author === viewerName);
-        if (visible) matches.push(p.head.keyName);
+          isToggleEnabled(p.data.management.toggle, p.data.author) ||
+          (viewerName && p.data.author === viewerName);
+        if (visible) matches.push(p.data.keyName);
       }
     }
 

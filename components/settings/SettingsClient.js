@@ -154,7 +154,7 @@ export default function SettingsClient({ user, pageData }) {
   // ── Authored pages helpers ─────────────────────────────────────────────────
   const allEntries = Object.values(pageData.Response).flat();
   const normalize = (s) => s.toLowerCase().replace(/\s+/g, "");
-  const authoredEntries = allEntries.filter((e) => e.head.author === username);
+  const authoredEntries = allEntries.filter((e) => e.data.author === username);
   const filteredEntries = authoredEntries.filter(
     (e) =>
       !authoredQuery.trim() ||
@@ -170,7 +170,7 @@ export default function SettingsClient({ user, pageData }) {
       setEditValue(username);
       return;
     }
-    const hasPages = allEntries.some((e) => e.head.author === username);
+    const hasPages = allEntries.some((e) => e.data.author === username);
     if (hasPages) {
       setPendingNewName(trimmed);
       setShowModal(true);
@@ -356,19 +356,19 @@ export default function SettingsClient({ user, pageData }) {
               >
                 {filteredEntries.map((entry) => (
                   <Card
-                    key={entry.head.keyName}
-                    link={`/${entry.head.keyName}`}
+                    key={entry.data.keyName}
+                    link={`/${entry.data.keyName}`}
                     imageUrl={entry.head.banner}
                     pageName={entry.head.title}
-                    pageType={entry.head.identity}
-                    raceRestriction={entry.head.raceReq}
-                    tierOfPower={entry.head.tier}
-                    author={entry.head.author}
+                    pageType={entry.data.identity}
+                    raceRestriction={entry.head.details.raceReq}
+                    tierOfPower={entry.head.details.tier}
+                    author={entry.data.author}
                     enhancementType={entry.head.enhancementType}
                     awakeningType={entry.head.awakeningType}
                     awakeningOrigin={entry.head.awakeningOrigin}
-                    tag={entry.head.tag}
-                    keyName={entry.head.keyName}
+                    tag={entry.data.management.tag}
+                    keyName={entry.data.keyName}
                     upvotes={entry.head.upvotes ?? 0}
                     views={entry.head.views ?? 0}
                   />

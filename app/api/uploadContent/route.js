@@ -14,12 +14,12 @@ export default async function uploadNewCreatedContent(creationObject) {
   console.log("Creation Object:\n", creationObject);
 
   const client = await clientPromise;
-  const contentCollection = creationObject.head.identity.replace(" ", "");
+  const contentCollection = creationObject.data.identity.replace(" ", "");
   const dbCollection = client.db("content").collection(contentCollection);
 
   //Name check------------------
   // The underscores accessing the object variable is concerning, look into this later...
-  const searchQuery = { "head.keyName": creationObject.head.keyName };
+  const searchQuery = { "data.keyName": creationObject.data.keyName };
   const searchOptions = [];
   const nameCheck = await dbCollection.findOne(searchQuery, searchOptions);
   if (nameCheck) {

@@ -31,12 +31,12 @@ function FilterGroup({
 
 export default function FilterChips({ filters, setFilters, entries }) {
   const authors = [
-    ...new Set(entries.map((e) => e.head.author).filter(Boolean)),
+    ...new Set(entries.map((e) => e.data.author).filter(Boolean)),
   ].sort();
 
   const aspectSet = new Set();
   entries.forEach((e) => {
-    e.head.aspects?.forEach((a) =>
+    e.head.details.aspects?.forEach((a) =>
       aspectSet.add(a.name.replace(/\s*\(.*?\)$/, "")),
     );
   });
@@ -45,11 +45,11 @@ export default function FilterChips({ filters, setFilters, entries }) {
   const dynamicRaces = [];
   entries.forEach((e) => {
     // Add Race-type entries by title (e.g. Basakejin, Namekian)
-    if (e.head.identity === "Race") {
+    if (e.data.identity === "Race") {
       dynamicRaces.push(e.head.title);
       return;
     }
-    const req = e.head.raceReq;
+    const req = e.head.details.raceReq;
     if (!req || req === "Any" || req === "Any Race") return;
     if (/any race/i.test(req)) return; // skip "Any Race (except X)" variants
     // Split comma-separated values and check each part
@@ -67,7 +67,7 @@ export default function FilterChips({ filters, setFilters, entries }) {
     ...[...new Set([...BASE_RACES, ...dynamicRaces])].sort(),
   ];
 
-  const tags = [...new Set(entries.flatMap((e) => e.head.tag ?? []))].sort();
+  const tags = [...new Set(entries.flatMap((e) => e.data.tag ?? []))].sort();
 
   const toggle = (category, value) => {
     setFilters((prev) => {

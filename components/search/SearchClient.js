@@ -43,7 +43,7 @@ export default function SearchClient({ pageData }) {
     const matches = entries.filter(
       (e) => normalizeForMatch(e.head.title) === normalizeForMatch(query),
     );
-    if (matches.length === 1) router.push(`/${matches[0].head.keyName}`);
+    if (matches.length === 1) router.push(`/${matches[0].data.keyName}`);
   };
 
   const filtered = entries.filter((entry) => {
@@ -52,14 +52,14 @@ export default function SearchClient({ pageData }) {
 
     const authorMatch =
       filters.authors.length === 0 ||
-      filters.authors.includes(entry.head.author);
+      filters.authors.includes(entry.data.author);
 
     const pageTypeMatch =
       filters.pageTypes.length === 0 ||
-      filters.pageTypes.includes(entry.head.identity);
+      filters.pageTypes.includes(entry.data.identity);
 
-    const entryAspects = entry.head.aspects
-      ? entry.head.aspects.map((a) => a.name.replace(/\s*\(.*?\)$/, ""))
+    const entryAspects = entry.data.details.aspects
+      ? entry.data.details.aspects.map((a) => a.name.replace(/\s*\(.*?\)$/, ""))
       : [];
     const aspectMatch =
       filters.aspects.length === 0 ||
@@ -69,18 +69,18 @@ export default function SearchClient({ pageData }) {
     const raceMatch =
       filters.races.length === 0 ||
       filters.races.some((r) => {
-        const req = entry.head.raceReq;
+        const req = entry.head.details.raceReq;
         if (r === "Any Race") {
           // Match null, "Any", "Any Race", or any "Any Race (except X)" variant
           return (
             !req ||
             req === "Any" ||
             /any race/i.test(req) ||
-            entry.head.identity === "Race"
+            entry.data.identity === "Race"
           );
         }
         // Match Race-type entries by their title
-        if (entry.head.identity === "Race") {
+        if (entry.data.identity === "Race") {
           return normalizeRace(entry.head.title) === normalizeRace(r);
         }
         // Split comma-separated raceReq and check each part
@@ -92,7 +92,7 @@ export default function SearchClient({ pageData }) {
 
     const tagMatch =
       filters.tags.length === 0 ||
-      filters.tags.some((t) => entry.head.tag?.includes(t));
+      filters.tags.some((t) => entry.data.tag?.includes(t));
 
     return (
       nameMatch &&

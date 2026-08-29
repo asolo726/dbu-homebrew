@@ -19,7 +19,7 @@ export default async function SinglePageGenerator({ content }) {
     "flex flex-col flex-col-1 w-full max-w-5xl justify-center content-center";
 
   let pageContent;
-  switch (content.head.identity) {
+  switch (content.data.identity) {
     case "Awakening":
       pageContent = <AwakeningRenderPage content={content} />;
       break;
@@ -55,15 +55,15 @@ export default async function SinglePageGenerator({ content }) {
       {pageContent}
       <div className="px-4 pb-4">
         <CommunitySettings
-          keyName={content.head.keyName}
+          keyName={content.data.keyName}
           isCommunity={content.head.isCommunity ?? false}
         />
       </div>
       <div className="px-4 pb-16">
         <CommentSection
-          pageKey={content.head.keyName}
+          pageKey={content.data.keyName}
           session={session}
-          pageAuthor={content.head.author}
+          pageAuthor={content.data.author}
           viewerIsAdmin={isAdmin}
         />
       </div>

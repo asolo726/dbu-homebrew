@@ -63,12 +63,12 @@ export default function AttributeModsTable({
             <tr>
               {attrTable.map((modifier, id) => {
                 const currentBonus =
-                  pendingChanges?.[`head.attributeModifiers.${id}.Bonus`] ??
-                  modifier.bonus;
+                  pendingChanges?.[`head.details.attributeModifiers.${id}.Bonus`] ??
+                  modifier.Bonus;
                 const currentMultiplier =
                   pendingChanges?.[
-                    `head.attributeModifiers.${id}.Multiplier`
-                  ] ?? modifier.multiplier;
+                    `head.details.attributeModifiers.${id}.Multiplier`
+                  ] ?? modifier.Multiplier;
                 return (
                   <td
                     className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
@@ -79,14 +79,14 @@ export default function AttributeModsTable({
                         <div className="flex items-center gap-0.5">
                           +
                           <EditableText
-                            path={`head.attributeModifiers.${id}.Bonus`}
-                            value={String(modifier.bonus)}
+                            path={`head.details.attributeModifiers.${id}.Bonus`}
+                            value={String(modifier.Bonus)}
                             className="w-10 text-center"
                           />
                         </div>
                         <EditableText
-                          path={`head.attributeModifiers.${id}.Multiplier`}
-                          value={modifier.multiplier}
+                          path={`head.details.attributeModifiers.${id}.Multiplier`}
+                          value={modifier.Multiplier}
                           className="w-full text-center text-md"
                         />
                       </div>

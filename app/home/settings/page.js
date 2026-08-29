@@ -37,7 +37,7 @@ export default async function SettingsPage() {
 
   for (const col of Object.keys(pageResponse)) {
     pageResponse[col] = pageResponse[col].map((entry) => {
-      const stats = statsMap[entry.head?.keyName];
+      const stats = statsMap[entry.data?.keyName];
       entry.head.upvotes = stats?.upvotes ?? 0;
       entry.head.downvotes = stats?.downvotes ?? 0;
       entry.head.views = stats?.views ?? 0;

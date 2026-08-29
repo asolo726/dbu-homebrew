@@ -35,7 +35,7 @@ export default function HeadEdit({ Form }) {
   const areAuthorAndBannerAuthorDifferent = () => {
     try {
       return !(
-        Form.head.bannerAuthor.toLowerCase() === Form.head.author.toLowerCase()
+        Form.data.credits.bannerAuthor.toLowerCase() === Form.data.author.toLowerCase()
       );
     } catch (e) {
       // This is an easy way for accounting for cases where either bannerAuthor or author aren't present.
@@ -49,11 +49,11 @@ export default function HeadEdit({ Form }) {
   return (
     <div className="grow">
       <h1 className="text-dbu-header text-[2em] sm:text-[3em] font-bold text-center mb-4 tracking-wide">
-        {Form.head.title}
+        {Form.data.title}
       </h1>
-      {!Form.head.dontShowAuthor ? (
+      {!Form.data.management.dontShowAuthor ? (
         <h3 className="text-dbu-header text-[1.5em] sm:text-[1.8em] italic text-center mb-10">
-          by {Form.head.author}
+          by {Form.data.author}
         </h3>
       ) : (
         <></>
@@ -70,11 +70,11 @@ export default function HeadEdit({ Form }) {
         alt=""
         priority={true}
       />
-      {Form.head.bannerAuthor != "" &&
-      Form.head.bannerAuthor &&
+      {Form.data.credits.bannerAuthor != "" &&
+      Form.data.credits.bannerAuthor &&
       areAuthorAndBannerAuthorDifferent ? (
         <p className="text-md md:text-lg text-center mb-3">
-          (Art Credit: {Form.head.bannerAuthor})
+          (Art Credit: {Form.data.credits.bannerAuthor})
         </p>
       ) : (
         <></>
@@ -83,179 +83,180 @@ export default function HeadEdit({ Form }) {
         {Form.head.desc}
       </p>
       <ul className="list-disc ml-10 mt-3 text-md md:text-lg">
-        {Form.head.raceReq ? (
+        {Form.head.details.raceReq ? (
           <li>
             <p>
               <span className={requirementNameStyle}>Racial Requirement:</span>{" "}
-              {Form.head.raceReq}
+              {Form.head.details.raceReq}
             </p>
           </li>
         ) : (
           <></>
         )}
-        {Form.head.evolvedStageType ? (
+        {Form.head.details.evolvedStageType ? (
           <li>
             <p>
               <span className={requirementNameStyle}>Evolved Stage Type:</span>{" "}
-              {Form.head.evolvedStageType}
+              {Form.head.details.evolvedStageType}
             </p>
           </li>
         ) : (
           <></>
         )}
-        {Form.head.transformationType ? (
+        {/** Need to change this */}
+        {Form.head.details.transformationType ? (
           <li>
             <p>
               <span className={requirementNameStyle}>Transformation Type:</span>{" "}
-              {Form.head.transformationType}
+              {Form.head.details.transformationType}
             </p>
           </li>
         ) : (
           <></>
         )}
-        {Form.head.formType ? (
+        {Form.head.details.formType ? (
           <li>
             <p>
               <span className={requirementNameStyle}>Form Type:</span>{" "}
-              {Form.head.formType}
+              {Form.head.details.formType}
             </p>
           </li>
         ) : (
           <></>
         )}
-        {Form.head.enhancementType ? (
+        {Form.head.details.enhancementType ? (
           <li>
             <p>
               <span className={requirementNameStyle}>Enhancement Type:</span>{" "}
-              {Form.head.enhancementType}
+              {Form.head.details.enhancementType}
             </p>
           </li>
         ) : (
           <></>
         )}
-        {Form.head.initialEnhancement ? (
+        {Form.head.details.initialEnhancement ? (
           <li>
             <p>
               <span className={requirementNameStyle}>Initial Enhancement:</span>{" "}
               <a
-                href={Form.head.initialEnhancement[1]}
+                href={Form.head.details.initialEnhancement.url}
                 target="_blank"
                 className="text-dbu-link hover:underline"
               >
-                {Form.head.initialEnhancement[0]}
+                {Form.head.details.initialEnhancement.name}
               </a>
             </p>
           </li>
         ) : (
           <></>
         )}
-        {Form.head.awakeningType ? (
+        {Form.head.details.awakeningType ? (
           <li>
             <p>
               <span className={requirementNameStyle}>Awakening Type:</span>{" "}
-              {Form.head.awakeningType}
+              {Form.head.details.awakeningType}
             </p>
           </li>
         ) : (
           <></>
         )}
-        {Form.head.awakeningOrigin ? (
+        {Form.head.details.awakeningOrigin ? (
           <li>
             <p>
               <span className={requirementNameStyle}>Awakening Origin:</span>{" "}
-              {Form.head.awakeningOrigin}
+              {Form.head.details.awakeningOrigin}
             </p>
           </li>
         ) : (
           <></>
         )}
-        {Form.head.maxFactor ? (
+        {Form.head.details.maxFactor ? (
           <li>
             <p>
               <span className={requirementNameStyle}>Maximum Factor:</span>{" "}
-              {Form.head.maxFactor}
+              {Form.head.details.maxFactor}
             </p>
           </li>
         ) : (
           <></>
         )}
-        {Form.head.preReq ? (
+        {Form.head.details.preReq ? (
           <li>
             <p>
               <span className={requirementNameStyle}>Prerequisite(s): </span>{" "}
-              {Form.head.preReq}
+              {Form.head.details.preReq}
             </p>
           </li>
         ) : (
           <></>
         )}
-        {Form.head.transLine ? (
+        {Form.head.details.transLine ? (
           <li>
             <p>
               <span className={requirementNameStyle}>
                 Transformation Line:{" "}
               </span>{" "}
-              {Form.head.transLine}
+              {Form.head.details.transLine}
             </p>
           </li>
         ) : (
           <></>
         )}
-        {Form.head.transStage ? (
+        {Form.head.details.transStage ? (
           <li>
             <p>
               <span className={requirementNameStyle}>
                 Transformation Stage:{" "}
               </span>{" "}
-              {Form.head.transStage}
+              {Form.head.details.transStage}
             </p>
           </li>
         ) : (
           <></>
         )}
-        {Form.head.stress ? (
+        {Form.head.details.stress ? (
           <li>
             <p>
               <span className={requirementNameStyle}>
                 Stress Test Requirement:{" "}
               </span>
-              {Form.head.stress}
+              {Form.head.details.stress}
             </p>
           </li>
         ) : (
           <></>
         )}
-        {Form.head.maxStacks ? (
+        {Form.head.details.maxStacks ? (
           <li>
             <p>
               <span className={requirementNameStyle}>
                 Maximum No of Stacks:{" "}
               </span>
-              {Form.head.maxStacks}
+              {Form.head.details.maxStacks}
             </p>
           </li>
         ) : (
           <></>
         )}
-        {Form.head.tier ? (
+        {Form.head.details.tier ? (
           <li>
             <p>
               <span className={requirementNameStyle}>
                 Tier of Power Requirement:{" "}
               </span>{" "}
-              {Form.head.tier +
-                (!Number.isNaN(Number(Form.head.tier)) ? "+" : "")}
+              {Form.head.details.tier +
+                (!Number.isNaN(Number(Form.head.details.tier)) ? "+" : "")}
             </p>
           </li>
         ) : (
           <></>
         )}
-        {Form.head.aspects && Form.head.aspects.length > 0 ? (
+        {Form.head.details.aspects && Form.head.details.aspects.length > 0 ? (
           <li>
             <p>
               <span className={requirementNameStyle}>Aspects: </span>{" "}
-              {Form.head.aspects.map((aspect, id) => {
-                const lastAspect = id === Form.head.aspects.length - 1;
+              {Form.head.details.aspects.map((aspect, id) => {
+                const lastAspect = id === Form.head.details.aspects.length - 1;
                 return (
                   <span key={id}>
                     <a
@@ -290,13 +291,13 @@ export default function HeadEdit({ Form }) {
           <></>
         )}
       </ul>
-      {Form.head.attributeModifiers &&
-      Form.head.attributeModifiers.length > 0 ? (
+      {Form.head.details.attributeModifiers &&
+      Form.head.details.attributeModifiers.length > 0 ? (
         <div className="flex justify-center py-5">
           <table className="table-fixed w-full border-collapse text-center text-md md:text-xl font-light ">
             <thead>
               <tr>
-                {Form.head.attributeModifiers.map((modifier, id) => (
+                {Form.head.details.attributeModifiers.map((modifier, id) => (
                   <th
                     key={id}
                     className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
@@ -308,7 +309,7 @@ export default function HeadEdit({ Form }) {
             </thead>
             <tbody>
               <tr>
-                {Form.head.attributeModifiers.map((modifier, id) =>
+                {Form.head.details.attributeModifiers.map((modifier, id) =>
                   modifier.Bonus > 0 ? (
                     <td
                       className="border border-dbu-header min-w-[3em] max-w-[10em] py-2 break-all"
