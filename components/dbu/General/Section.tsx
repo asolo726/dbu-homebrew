@@ -60,16 +60,14 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
     if (!basePath || !setArrayChange) return;
     // If adding a new trait, add a new trait within the same section.
     // If adding a new section, add a new section (with header) below where the button is used.
-    console.log(index);
+    const arr = [...currentBody];
+
     if (item === "trait") {
-        const section = currentBody[index];
-        const sectionPath = `${basePath}.${index}`;
-        const traitsArr = [...(section.traits || [])];
-        // Add the new trait below all other traits.
+        const traitsArr = [...(arr[index].traits || [])];
         traitsArr.splice(traitsArr.length, 0, newTrait());
-        setArrayChange(sectionPath, {...section, traits: traitsArr});
+        arr[index] = {...arr[index], traits: traitsArr};
+        setArrayChange(basePath, arr);
     } else {
-        const arr = [...currentBody];
         arr.splice(index, 0, newSection());
         setArrayChange(basePath, arr);
         console.log(arr);
@@ -118,7 +116,7 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
 
     return (
         <>
-            {body.map((section: Section, index) => {
+            {currentBody.map((section: Section, index) => {
                 const hasValidHeader = section.header && section.header !== "";
                 const shouldShowHeader = hasValidHeader || currentlyEditing;
                 const headerPath = shouldShowHeader ? basePath ? `${basePath}.${index}.header` : null : null;
