@@ -193,6 +193,7 @@ export default function Trait({
 						title="Remove selected abilities"
 						onClick={handleRemove}
 						disabled={selectedIndices.size === 0}
+						icon={RiSubtractFill}
 						variant="remove"
 					>
 						{selectedIndices.size > 0 && (
