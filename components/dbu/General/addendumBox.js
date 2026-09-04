@@ -1,5 +1,5 @@
 "use client";
-import Trait from "./trait";
+import Trait from "./Trait";
 import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
 import { useState, useEffect } from "react";

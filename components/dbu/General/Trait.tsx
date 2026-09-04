@@ -1,11 +1,29 @@
 "use client";
 import { useState, useEffect } from "react";
-import Ability from "./ability";
+import Ability, { type Ability as AbilityType } from "./ability";
 import EditableText from "../../edit/EditableText";
 import AddAbilityModal from "../../edit/AddAbilityModal";
 import { RiAddFill, RiSubtractFill } from "react-icons/ri";
 import { EditingButton } from "./util/EditingButton";
 import { useEditingState } from "@/components/edit/useEditingState";
+
+type AbilityOperation =
+	| { type: "list:add" }
+	| { type: "list:remove"; index: number }
+	| { type: "miniTraitList:add" }
+	| { type: "miniTraitList:remove"; index: number };
+
+export interface Trait {
+	title: string;
+	desc: string;
+	abilities: AbilityType[];
+	path: string | undefined;
+	disableEditActions?: boolean;
+	contributor?: {
+		email?: string;
+		name?: string;
+	};
+}
 
 export default function Trait({
 	title = "",
@@ -13,13 +31,19 @@ export default function Trait({
 	abilities,
 	path,
 	disableEditActions = false,
-	contributor = null,
-}) {
-	const { isEditing, isContributing, pendingChanges, setArrayChange } =
-		useEditingState();
+	contributor,
+}: Readonly<Trait>) {
+	const {
+		isEditing,
+		isContributing,
+		pendingChanges = {},
+		setArrayChange,
+	} = useEditingState();
 	const canEditContent = (isEditing || isContributing) && path;
 
-	const [selectedIndices, setSelectedIndices] = useState(new Set());
+	const [selectedIndices, setSelectedIndices] = useState<Set<number>>(
+		new Set(),
+	);
 	const [showAddModal, setShowAddModal] = useState(false);
 
 	// Reset selection when edit mode exits
@@ -30,11 +54,16 @@ export default function Trait({
 		}
 	}, [isEditing]);
 
-	const abilitiesKey = path ? `${path}.abilities` : null;
+	const abilitiesKey = path ? `${path}.abilities` : "";
 	const currentAbilities =
 		abilitiesKey && abilitiesKey in pendingChanges
 			? pendingChanges[abilitiesKey]
 			: (abilities ?? []);
+
+	function getPathKey(segment: string): string | number {
+		const numericSegment = Number(segment);
+		return Number.isNaN(numericSegment) ? segment : numericSegment;
+	}
 
 	// Merge scalar edits (e.g. individual bullet text changes) into the base array
 	// before any structural operation so we don't lose in-progress text edits.
@@ -56,7 +85,7 @@ export default function Trait({
 			let valid = true;
 			for (let j = 0; j < parts.length - 1; j++) {
 				const seg = parts[j];
-				const next = obj[isNaN(seg) ? seg : Number(seg)];
+				const next = obj[getPathKey(seg)];
 				if (next == null) {
 					valid = false;
 					break;
@@ -65,13 +94,13 @@ export default function Trait({
 			}
 			if (valid) {
 				const last = parts[parts.length - 1];
-				obj[isNaN(last) ? last : Number(last)] = pendingChanges[key];
+				obj[getPathKey(last)] = pendingChanges[key];
 			}
 		}
 		return arr;
 	}
 
-	function toggleSelect(index) {
+	function toggleSelect(index: number) {
 		setSelectedIndices((prev) => {
 			const next = new Set(prev);
 			next.has(index) ? next.delete(index) : next.add(index);
@@ -79,8 +108,9 @@ export default function Trait({
 		});
 	}
 
-	function handleAdd(newAbility) {
+	function handleAdd(newAbility: AbilityType) {
 		if (!path || !setArrayChange) return;
+
 		setArrayChange(abilitiesKey, [
 			...resolveCurrentAbilities(),
 			newAbility,
@@ -91,13 +121,13 @@ export default function Trait({
 	function handleRemove() {
 		if (!path || !setArrayChange || selectedIndices.size === 0) return;
 		const filtered = resolveCurrentAbilities().filter(
-			(_, i) => !selectedIndices.has(i),
+			(_: AbilityType, i: number) => !selectedIndices.has(i),
 		);
 		setArrayChange(abilitiesKey, filtered);
 		setSelectedIndices(new Set());
 	}
 
-	function handleMove(index, direction) {
+	function handleMove(index: number, direction: number) {
 		if (!path || !setArrayChange) return;
 		const resolved = resolveCurrentAbilities();
 		const target = index + direction;
@@ -106,7 +136,7 @@ export default function Trait({
 		[arr[index], arr[target]] = [arr[target], arr[index]];
 		setArrayChange(abilitiesKey, arr);
 		setSelectedIndices((prev) => {
-			const next = new Set();
+			const next = new Set<number>(prev);
 			for (const i of prev) {
 				if (i === index) next.add(target);
 				else if (i === target) next.add(index);
@@ -116,38 +146,44 @@ export default function Trait({
 		});
 	}
 
-	function handleUpdateAbility(abilityIndex, op) {
+	function handleUpdateAbility(abilityIndex: number, op: AbilityOperation) {
 		if (!path || !setArrayChange) return;
-		const arr = resolveCurrentAbilities().map((item, i) => {
-			if (i !== abilityIndex) return item;
-			if (op.type === "list:add") {
-				return { ...item, list: [...(item.list ?? []), ""] };
-			}
-			if (op.type === "list:remove") {
-				return {
-					...item,
-					list: item.list.filter((_, j) => j !== op.index),
-				};
-			}
-			if (op.type === "miniTraitList:add") {
-				return {
-					...item,
-					miniTraitList: [
-						...(item.miniTraitList ?? []),
-						{ title: "", desc: "" },
-					],
-				};
-			}
-			if (op.type === "miniTraitList:remove") {
-				return {
-					...item,
-					miniTraitList: item.miniTraitList.filter(
-						(_, j) => j !== op.index,
-					),
-				};
-			}
-			return item;
-		});
+		const arr = resolveCurrentAbilities().map(
+			(item: AbilityType, i: number) => {
+				const list = item.list ?? []; // Since these are optional types, we need to define them here to avoid a typescript error.
+				const miniTraitList = item.miniTraitList ?? [];
+				if (i !== abilityIndex) return item;
+				if (op.type === "list:add") {
+					return { ...item, list: [...(item.list ?? []), ""] };
+				}
+				if (op.type === "list:remove") {
+					return {
+						...item,
+						list: list.filter(
+							(_: any, j: number) => j !== op.index,
+						),
+					};
+				}
+				if (op.type === "miniTraitList:add") {
+					return {
+						...item,
+						miniTraitList: [
+							...(item.miniTraitList ?? []),
+							{ title: "", desc: "" },
+						],
+					};
+				}
+				if (op.type === "miniTraitList:remove") {
+					return {
+						...item,
+						miniTraitList: miniTraitList.filter(
+							(_: any, j: number) => j !== op.index,
+						),
+					};
+				}
+				return item;
+			},
+		);
 		setArrayChange(abilitiesKey, arr);
 	}
 
@@ -165,10 +201,14 @@ export default function Trait({
 				<p className="text-dbu-text text-md md:text-lg text-left">
 					{title !== "" && (
 						<span className="font-bold text-dbu-header">
-							<EditableText value={title} />:{" "}
+							<EditableText
+								path={`${path}.title`}
+								value={title}
+							/>
+							:{" "}
 						</span>
 					)}
-					<EditableText value={desc} />
+					<EditableText path={`${path}.desc`} value={desc} />
 				</p>
 			) : null}
 

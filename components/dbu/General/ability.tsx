@@ -4,22 +4,52 @@ import Table from "./table";
 import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
 import { RiArrowUpLine, RiArrowDownLine } from "react-icons/ri";
+import type { TableData } from "./table";
+import type { Section } from "./Section";
+
+export interface DBUBox {
+	boxTitle?: string;
+	body: Section[];
+}
+
+export interface MiniTraitList {
+	condition: string;
+	desc: string;
+}
+
+export interface Ability {
+	condition?: string;
+	desc?: string;
+	list?: string[];
+	listIndent?: number; // This is used to determine the level of indentation for a list. Supports up to three levels (with 0 (default), 1, and 2)
+	miniTraitList?: MiniTraitList[];
+	addendumBox?: DBUBox;
+	table?: TableData;
+}
+
+interface AbilityProps {
+	abilityList: Ability[];
+	path: string | undefined;
+	selectedIndices?: Set<number> | undefined;
+	onToggleSelect?: (index: number) => void;
+	onMove?: (index: number, direction: number) => void;
+	onUpdateAbility?: (abilityIndex: number, op: any) => void;
+}
 
 export default function Ability({
 	abilityList = [{}],
-	key,
 	path,
 	selectedIndices,
 	onToggleSelect,
 	onMove,
 	onUpdateAbility,
-}) {
+}: Readonly<AbilityProps>) {
 	const { isEditing, isContributing } = useEditMode() || {};
 	const canEdit = isEditing || isContributing;
 	let conditionAbilityCount = 0;
 
 	return (
-		<div className="mt-2" key={key}>
+		<div className="mt-2" key={itemIndex}>
 			{abilityList.map((item, itemIndex) => {
 				// Build the inner content for this item (no key — key goes on the wrapper)
 				let inner;

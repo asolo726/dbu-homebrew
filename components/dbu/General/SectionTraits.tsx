@@ -1,6 +1,6 @@
 "use client";
-import Trait from "./trait";
-import type { Trait as TraitType } from "./Section";
+import Trait from "./Trait";
+import type { Trait as TraitType } from "./Trait";
 import { useEditingState } from "@/components/edit/useEditingState";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { EditingButton } from "./util/EditingButton";

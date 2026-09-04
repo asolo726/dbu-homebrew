@@ -4,23 +4,14 @@ import { RiAddFill, RiDeleteBinLine } from "react-icons/ri";
 import { useEditingState } from "@/components/edit/useEditingState";
 import EditableText from "@/components/edit/EditableText";
 import { EditingButton } from "./util/EditingButton";
+import type { Trait as TraitType } from "./Trait";
 
 type HeaderSize = "h2" | "h3" | "h4";
-
-export interface Trait {
-	title: string;
-	desc: string;
-	abilities: any[];
-	contributor?: {
-		email?: string;
-		name?: string;
-	};
-}
 
 export interface Section {
 	header?: string; // Ex. MASTERY TRAIT
 	headerSize?: HeaderSize; // Ex. h2
-	traits?: Trait[]; // Traits
+	traits?: TraitType[]; // Traits
 }
 
 interface SectionProps {
@@ -120,7 +111,7 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
 	 * Sorts all traits below a specific sectional in alphabetical order.
 	 * NO AI USED
 	 */
-	function sortTraitsBelow(index: number, traits: Trait[] | null) {
+	function sortTraitsBelow(index: number, traits: TraitType[] | null) {
 		if (!basePath || !setArrayChange || !traits) return;
 		const sortedTraits = traits.toSorted((a, b) =>
 			a.title.localeCompare(b.title, undefined, { sensitivity: "base" }),
@@ -187,7 +178,7 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
 						)}
 						{traits && (
 							<TraitsSection
-								traits={traits as Trait[]}
+								traits={traits as TraitType[]}
 								basePath={
 									basePath
 										? `${basePath}.${index}.traits`

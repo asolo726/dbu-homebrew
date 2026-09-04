@@ -1,9 +1,12 @@
 "use client";
-import { aspects, getAspectTooltip } from "../dbu/General/util/headUtil.js";
+import {
+	aspects,
+	getAspectTooltip,
+	prettifyAspects,
+} from "../dbu/General/util/headUtil";
 import { Tooltip } from "../../lib/reactTooltip.js";
 import { useState, useEffect } from "react";
 import { RxArrowUp, RxInfoCircled } from "react-icons/rx";
-import { prettifyAspects } from "../dbu/General/util/headUtil.js";
 
 export default function AspectsModal({ currentAspects, onSave, onClose }) {
 	const [editedAspects, setEditedAspects] = useState(currentAspects); // A copy of the current aspects, to be edited by the user.
