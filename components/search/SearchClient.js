@@ -135,6 +135,7 @@ export default function SearchClient({ pageData }) {
           suggestions={entries.map((e) => e.head.title)}
         />
         <button
+          type="button"
           onClick={clearAll}
           data-tooltip-id="clear-tooltip"
           data-tooltip-content="Clear all filters and search"
@@ -143,6 +144,7 @@ export default function SearchClient({ pageData }) {
           Clear
         </button>
         <button
+          type="button"
           onClick={() => setOpenFiltersDrawer(!openFiltersDrawer)}
           data-tooltip-id="filter-tooltip"
           data-tooltip-content="Open the Filters Drawer"
@@ -172,7 +174,9 @@ export default function SearchClient({ pageData }) {
           />
         }
       </div>
-      <CardGenerator entries={sorted} />
+      {sorted.length > 0 && (
+        <CardGenerator entries={sorted} />
+      )}
       <Tooltip id="clear-tooltip" className="tooltip" />
     </>
   );
