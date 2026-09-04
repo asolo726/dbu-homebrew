@@ -49,7 +49,7 @@ export default function TraitsSection({
 		<>
 			{Array.isArray(currentTraits) &&
 				currentTraits.map((item: TraitType, index: number) => {
-					const editable = canEditItem(item);
+					const editable = canEditItem(item); // This is bugged
 
 					return (
 						<div key={index}>
@@ -60,7 +60,7 @@ export default function TraitsSection({
 								contributor={(item.contributor as any) ?? null}
 								disableEditActions={!editable}
 								path={
-									basePath && editable
+									basePath
 										? `${basePath}.${index}`
 										: undefined
 								}

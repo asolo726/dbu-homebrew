@@ -241,10 +241,7 @@ export default function Ability({
 						<div style={marginLeft ? { marginLeft } : {}}>
 							<AddendumBox
 								boxTitle={item.addendumBox.boxTitle}
-								title={item.addendumBox.title}
-								desc={item.addendumBox.desc}
-								abilities={item.addendumBox.abilities}
-								traits={item.addendumBox.traits}
+								body={item.addendumBox.body}
 								path={
 									path
 										? `${path}.abilities.${itemIndex}.addendumBox`
