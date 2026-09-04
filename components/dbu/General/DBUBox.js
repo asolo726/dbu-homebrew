@@ -7,6 +7,16 @@ import { RxChevronRight } from "react-icons/rx";
 import { RiAddFill, RiSubtractFill, RiDeleteBinLine } from "react-icons/ri";
 import { EditingButton } from "./util/EditingButton";
 
+/**export interface DBUBox {
+	boxTitle?: string;
+	body: Section[];
+}
+
+export interface DBUBoxProps {
+	dbuBox: DBUBox;
+	path: string;
+}*/
+
 export default function AddendumBox({
 	boxTitle,
 	title = "",

@@ -1,5 +1,5 @@
 "use client";
-import AddendumBox from "./addendumBox";
+import AddendumBox from "./DBUBox";
 import Table from "./table";
 import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
@@ -49,20 +49,17 @@ export default function Ability({
 	let conditionAbilityCount = 0;
 
 	return (
-		<div className="mt-2" key={itemIndex}>
+		<div className="mt-2">
 			{abilityList.map((item, itemIndex) => {
 				// Build the inner content for this item (no key — key goes on the wrapper)
 				let inner;
 
-				if ("condition" in item) {
+				if (typeof item.condition === "string") {
 					const isLabel =
 						item.condition.startsWith("–") ||
 						item.condition.startsWith("-");
 
 					if (isLabel) {
-						const labelText = item.condition
-							.replace(/^[–-]/, "")
-							.trim();
 						inner = (
 							<p className="text-dbu-text text-md md:text-lg text-left my-1">
 								{/* In view mode show – as static prefix; in edit mode it's part of the editable condition string */}
@@ -119,8 +116,8 @@ export default function Ability({
 							</p>
 						);
 					}
-				} else if ("list" in item) {
-					const depth = "sublist" in item ? item.sublist : 0;
+				} else if (Array.isArray(item.list)) {
+					const depth = item.listIndent ?? 0;
 					const marginLeft = `${(depth + 1) * 2.5}rem`;
 					const listStyleType =
 						depth >= 2 ? "square" : depth >= 1 ? "circle" : "disc";
@@ -172,8 +169,8 @@ export default function Ability({
 							)}
 						</div>
 					);
-				} else if ("miniTraitList" in item) {
-					const depth = "sublist" in item ? item.sublist : 0;
+				} else if (Array.isArray(item.miniTraitList)) {
+					const depth = item.listIndent ?? 0;
 					const marginLeft = `${(depth + 1) * 2.5}rem`;
 					const listStyleType =
 						depth >= 2 ? "square" : depth >= 1 ? "circle" : "disc";
@@ -192,7 +189,7 @@ export default function Ability({
 														? `${path}.abilities.${itemIndex}.miniTraitList.${i}.title`
 														: undefined
 												}
-												value={listItem.title}
+												value={listItem.condition}
 											/>
 											:{" "}
 										</span>
@@ -236,8 +233,8 @@ export default function Ability({
 							)}
 						</div>
 					);
-				} else if ("addendumBox" in item) {
-					const depth = "sublist" in item ? item.sublist : -1;
+				} else if (item.addendumBox) {
+					const depth = item.listIndent ?? -1;
 					const marginLeft =
 						depth >= 0 ? `${(depth + 1) * 2.5}rem` : undefined;
 					inner = (
@@ -256,52 +253,12 @@ export default function Ability({
 							/>
 						</div>
 					);
-				} else if ("seeRef" in item) {
-					const nameVal = item.seeRef.name;
-					const urlVal = item.seeRef.url;
-					if (canEdit && path) {
-						inner = (
-							<div className="my-1">
-								<div className="flex items-baseline gap-1 text-dbu-text text-md md:text-lg">
-									{"(See —"}
-									<EditableText
-										path={`${path}.abilities.${itemIndex}.seeRef.name`}
-										value={nameVal}
-									/>
-									{")"}
-								</div>
-								<div className="flex items-center gap-1 text-xs text-dbu-text/50 mt-0.5">
-									<span className="shrink-0">URL:</span>
-									<EditableText
-										path={`${path}.abilities.${itemIndex}.seeRef.url`}
-										value={urlVal}
-										className="text-xs"
-									/>
-								</div>
-							</div>
-						);
-					} else {
-						inner = (
-							<p className="text-dbu-text text-md md:text-lg text-left my-1">
-								{"(See —"}
-								<a
-									href={urlVal}
-									target="_blank"
-									rel="noopener noreferrer"
-									className="text-dbu-link hover:underline"
-								>
-									{nameVal}
-								</a>
-								{")"}
-							</p>
-						);
-					}
-				} else if ("table" in item) {
+				} else if (item.table) {
 					inner = (
 						<ul className="list-disc ml-10">
 							<Table
 								tableData={{
-									headers: item.table.headers,
+									columns: item.table.columns,
 									rows: item.table.rows,
 								}}
 							/>

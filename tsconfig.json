@@ -36,7 +36,8 @@
 		"components/dbu/General/head.js",
 		"components/dbu/General/SectionTraits.tsx",
 		"components/dbu/General/ability.js",
-		"components/dbu/General/util/headUtil.js"
+		"components/dbu/General/util/headUtil.js",
+		"components/dbu/General/DBUBox.js"
 	],
 	"exclude": ["node_modules"]
 }

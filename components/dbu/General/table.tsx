@@ -1,4 +1,4 @@
-interface TableData {
+export interface TableData {
 	columns: string[];
 	rows: string[][];
 }
