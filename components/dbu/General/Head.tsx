@@ -276,9 +276,6 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 					keyName={Form.data.keyName}
 					initialUpvotes={Form.head.upvotes ?? 0}
 				/>
-				<p className="italic text-sm text-gray-500">
-					Like this homebrew? Give it an upvote!
-				</p>
 			</div>
 			<Tooltip id="art-credit-tooltip" />
 			{(isEditing || Form.head.desc) && (
