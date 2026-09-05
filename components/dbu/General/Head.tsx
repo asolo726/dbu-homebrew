@@ -14,18 +14,26 @@ import {
 import { ScrollToTop } from "../../navigation/ScrollBackToTopButton";
 import BasicStat from "./headHelpers/BasicStats";
 import AttributeModsTable from "./headHelpers/AttributeTable";
-import Aspects from "./headHelpers/Aspects";
+import Aspects, { type Aspect } from "./headHelpers/Aspects";
 import { useEditingState } from "@/components/edit/useEditingState";
 
-export default function Head({ Form }) {
+interface HeadProps {
+	Form: any;
+}
+
+export default function Head({ Form }: Readonly<HeadProps>) {
 	const editMode = useEditMode();
-	const { isEditing, pendingChanges, setChange, setArrayChange, hasChanges } =
-		useEditingState();
+	const {
+		isEditing = false,
+		pendingChanges = {},
+		setChange,
+		toggleStatus,
+	} = useEditingState();
 	const isAuthor = editMode !== null;
 	const requirementNameStyle = "font-bold text-dbu-header";
 	const [uploading, setUploading] = useState(false);
 	const [toggling, setToggling] = useState(false);
-	const [localPublic, setLocalPublic] = useState(null);
+	const [localPublic, setLocalPublic] = useState(true);
 	const router = useRouter();
 	const toggle = Form.data.management.toggle;
 	const author = Form.data.author;
@@ -57,12 +65,12 @@ export default function Head({ Form }) {
 	}
 
 	// Saves Aspects when user changes them with modal
-	function handleAspectChange(newAspects) {
-		setChange?.("head.aspects", newAspects);
+	function handleAspectChange(newAspects: Aspect[]) {
+		setChange?.("head.details.aspects", newAspects);
 	}
 
 	// Allows users to upload an image and set the banner URL in the head object.
-	async function handleImageUpload(file) {
+	async function handleImageUpload(file: File) {
 		if (!file || !setChange) return;
 		setUploading(true);
 		try {

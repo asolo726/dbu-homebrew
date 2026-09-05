@@ -3,7 +3,7 @@ import CommunitySettings from "../dbu/General/CommunitySettings";
 import { auth } from "../../auth";
 import { getIsAdmin } from "../../lib/getIsAdmin";
 import { normalizePageContent } from "../../lib/normalizePageContent";
-import Head from "../dbu/General/head";
+import Head from "../dbu/General/Head";
 import Section from "../dbu/General/Section";
 
 export default async function SinglePageGenerator({ content }) {

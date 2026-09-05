@@ -18,7 +18,7 @@ interface AspectsProps {
 	aspectsReady: boolean;
 	isEditing: boolean;
 	pendingChanges: {};
-	handleAspectChange: (value: {}) => void;
+	handleAspectChange: (value: Aspect[]) => void;
 }
 
 export default function Aspects({
