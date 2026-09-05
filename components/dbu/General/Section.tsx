@@ -5,6 +5,7 @@ import { useEditingState } from "@/components/edit/useEditingState";
 import EditableText from "@/components/edit/EditableText";
 import { EditingButton } from "./util/EditingButton";
 import type { Trait as TraitType } from "./Trait";
+import { resolvePendingValue } from "@/components/edit/resolvePendingValue";
 
 type HeaderSize = "h2" | "h3" | "h4";
 
@@ -29,10 +30,11 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
 		pendingChanges,
 		setArrayChange,
 	} = useEditingState();
-	const currentBody =
-		basePath && pendingChanges && basePath in pendingChanges
-			? pendingChanges[basePath]
-			: body;
+	const currentBody = resolvePendingValue(
+		basePath,
+		body,
+		pendingChanges ?? {},
+	);
 	const isActive = isEditing || isContributing;
 	const currentlyEditing = isActive && basePath;
 

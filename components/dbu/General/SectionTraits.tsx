@@ -4,6 +4,7 @@ import type { Trait as TraitType } from "./Trait";
 import { useEditingState } from "@/components/edit/useEditingState";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { EditingButton } from "./util/EditingButton";
+import { resolvePendingValue } from "@/components/edit/resolvePendingValue";
 
 interface TraitsSectionProps {
 	traits?: TraitType[];
@@ -24,10 +25,11 @@ export default function TraitsSection({
 
 	const isActive = isEditing || isContributing;
 
-	const currentTraits =
-		basePath && basePath in pendingChanges
-			? pendingChanges[basePath]
-			: (traits ?? []);
+	const currentTraits = resolvePendingValue(
+		basePath ?? "",
+		traits ?? [],
+		pendingChanges,
+	);
 
 	// In contribute mode, users can only edit items they contributed themselves
 	function canEditItem(item: any) {
