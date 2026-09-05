@@ -23,15 +23,15 @@ export default function AddendumBox({
 }: Readonly<DBUBoxProps>) {
 	const {
 		isEditing,
-		isCommunity,
 		isContributing,
-		contributorEmail,
-		contributorName,
 		pendingChanges = {},
-		setArrayChange,
 	} = useEditingState();
 	const [menuState, setMenuState] = useState(false);
 	const [isHovering, setIsHovering] = useState(false);
+	// There are special kinds of boxes that should always be open. Such
+	// as Signature Techniques, Unique Abilities, etc. A way we can account
+	// for this is to check if there's a boxTitle or not.
+	const isOpenBox = boxTitle === "";
 
 	// Resolve current traits array from pendingChanges, falling back to prop
 	const traitsKey = path ? `${path}.body` : "";
@@ -39,76 +39,6 @@ export default function AddendumBox({
 		traitsKey && traitsKey in pendingChanges
 			? pendingChanges[traitsKey]
 			: body;
-
-	// There are special kinds of boxes that should always be open. Such
-	// as Signature Techniques, Unique Abilities, etc. A way we can account
-	// for this is to check if there's a boxTitle or not.
-	const isOpenBox = boxTitle === "";
-
-	// Read current single-trait values (merging any scalar edits) for conversion
-	function resolveCurrentSingleTrait() {
-		return {
-			title:
-				path && `${path}.title` in pendingChanges
-					? pendingChanges[`${path}.title`]
-					: title,
-			desc:
-				path && `${path}.desc` in pendingChanges
-					? pendingChanges[`${path}.desc`]
-					: desc,
-			abilities:
-				path && `${path}.abilities` in pendingChanges
-					? pendingChanges[`${path}.abilities`]
-					: (abilities ?? []),
-		};
-	}
-
-	function handleAddTrait() {
-		if (!path || !setArrayChange) return;
-		const newTrait = { title: "", desc: "", abilities: [] };
-		if (isMultiTrait) {
-			setArrayChange(traitsKey, [...currentBody, newTrait]);
-		} else {
-			// Convert single-trait to multi-trait, preserving any pending edits
-			setArrayChange(traitsKey, [resolveCurrentSingleTrait(), newTrait]);
-		}
-	}
-
-	function withContributor(base) {
-		return isCommunity && contributorEmail
-			? {
-					...base,
-					contributor: {
-						email: contributorEmail,
-						name: contributorName,
-					},
-				}
-			: base;
-	}
-
-	function handleAddSection() {
-		if (!path || !setArrayChange) return;
-		const newSection = withContributor({
-			sectional: { title: "New Section" },
-		});
-		if (isMultiTrait) {
-			setArrayChange(traitsKey, [...currentBody, newSection]);
-		} else {
-			// Convert single-trait to multi-trait, preserving any pending edits
-			setArrayChange(traitsKey, [
-				resolveCurrentSingleTrait(),
-				newSection,
-			]);
-		}
-	}
-
-	function handleRemoveTrait(i) {
-		if (!path || !setArrayChange || !currentBody) return;
-		setArrayChange(
-			traitsKey,
-			currentBody.filter((_, j) => j !== i),
-		);
-	}
 
 	const chevron = (
 		<RxChevronRight
@@ -174,27 +104,6 @@ export default function AddendumBox({
 					<Section body={currentBody} basePath={`${traitsKey}`} />
 				) : (
 					<></>
-				)}
-
-				{(isEditing || isContributing) && path && (
-					<div className="mt-3 flex gap-2">
-						<EditingButton
-							onClick={() => handleAddTrait}
-							variant="add"
-							icon={RiAddFill}
-							title="Add trait"
-						>
-							Add Trait
-						</EditingButton>
-						<EditingButton
-							onClick={() => handleAddSection}
-							variant="section"
-							icon={RiAddFill}
-							title="Add section header"
-						>
-							Add Section
-						</EditingButton>
-					</div>
 				)}
 			</div>
 		</div>
