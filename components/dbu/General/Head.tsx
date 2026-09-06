@@ -47,8 +47,8 @@ interface Head {
 		transLine?: string;
 		attributeModifiers?: any[];
 		aspects?: Aspect[];
-		maxFactor?: number; // Only used by Factors
-		maxStacks?: number; // Only used by Awakenings
+		maxFactor?: string; // Only used by Factors
+		maxStacks?: string; // Only used by Awakenings
 		enhancementType?: string; // Standard or Special
 		initialEnhancement?: string; // Only for Special Enhancements. Specials usually have a hyperlink to the form they apply to. The user can add this manually.
 		awakeningType?: string; // Lesser, Greater, Super
@@ -175,13 +175,6 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 		Form.data.management.isCommunity ??
 		false;
 
-	// Community pages always hide the author credit
-	const currentDontShowAuthor =
-		currentIsCommunity ||
-		(pendingChanges?.["data.management.dontShowAuthor"] ??
-			Form.data.management.dontShowAuthor ??
-			false);
-
 	return (
 		<div className="grow">
 			<div className="flex items-center justify-center gap-2 mb-4">
@@ -231,40 +224,6 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 						</span>
 					))}
 			</div>
-
-			{/* Author line — always visible in edit mode so the toggle is accessible */}
-			{(isEditing || !currentDontShowAuthor) && (
-				<div className="flex items-center justify-center gap-2 mb-10">
-					<h3
-						className={`text-dbu-header text-[1.5em] sm:text-[1.8em] italic text-center transition-opacity ${
-							isEditing && currentDontShowAuthor
-								? "line-through opacity-40"
-								: ""
-						}`}
-					>
-						by {Form.data.author}
-					</h3>
-					{isEditing && !currentIsCommunity && (
-						<button
-							type="button"
-							onClick={() =>
-								setChange?.(
-									"data.management.dontShowAuthor",
-									!currentDontShowAuthor,
-								)
-							}
-							title={
-								currentDontShowAuthor
-									? "Show author credit"
-									: "Hide author credit"
-							}
-							className="text-xs px-2 py-1 rounded border border-dbu-line text-dbu-text/60 hover:text-dbu-header hover:border-dbu-header transition-colors shrink-0"
-						>
-							{currentDontShowAuthor ? "Show" : "Hide"}
-						</button>
-					)}
-				</div>
-			)}
 
 			{/* Image with upload overlay in edit mode */}
 			<a
@@ -331,7 +290,7 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 			>
 				<PageVoteButtons
 					keyName={Form.data.keyName}
-					initialUpvotes={Form.head.upvotes ?? 0}
+					initialUpvotes={0}
 				/>
 			</div>
 			<Tooltip id="art-credit-tooltip" />

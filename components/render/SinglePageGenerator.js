@@ -20,19 +20,23 @@ export default async function SinglePageGenerator({ content }) {
 			{normalizedContent ? (
 				<>
 					<div className="px-4 pb-4">
-						<CommunitySettings
-							keyName={normalizedContent.data.keyName}
-							isCommunity={
-								normalizedContent.head.isCommunity ?? false
-							}
-						/>
 						<div className="flex flex-col flex-col-1 w-full max-w-5xl mx-auto px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
+							<CommunitySettings
+								keyName={normalizedContent.data.keyName}
+								isCommunity={
+									normalizedContent.data.management
+										.isCommunity ?? false
+								}
+							/>
 							<Head Form={normalizedContent} />
 							<Section
 								body={normalizedContent.body}
 								basePath="body"
 							/>
-							<Credits Data={normalizedContent.data} />
+							{/** Don't show this on Community pages. */}
+							{!normalizedContent.data.management.isCommunity && (
+								<Credits Data={normalizedContent.data} />
+							)}
 						</div>
 					</div>
 					<div className="px-4 pb-16">

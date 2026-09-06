@@ -48,15 +48,15 @@ export default function Credits({ Data }: Readonly<{ Data: Data }>) {
 	return (
 		<>
 			<div className="w-full mt-12 border-t border-gray-700 pt-8" />
-			<div className="bg-dbu-bg2 text-xl italic">
-				<h2 className="text-2xl font-bold text-gray-200 mb-6">
+			<div className="bg-dbu-bg2 text-xl italic border">
+				<h2 className="m-1 text-2xl font-bold text-gray-200 mb-6">
 					Credits
 				</h2>
-				<p>
+				<p className="m-1">
 					<span className="font-bold text-dbu-header">Author: </span>
 					<EditableText path={`data.author`} value={Data.author} />
 				</p>
-				<p>
+				<p className="m-1">
 					<span className="font-bold text-dbu-header">
 						Art Credit:{" "}
 					</span>
@@ -67,7 +67,7 @@ export default function Credits({ Data }: Readonly<{ Data: Data }>) {
 				</p>
 				{/** We want this visible if the user is editing or if there are collaborators */}
 				{(isEditing || Data.credits.collabs !== "") && (
-					<p>
+					<p className="m-1">
 						<span className="font-bold text-dbu-header">
 							Collaborators:{" "}
 						</span>
@@ -78,7 +78,7 @@ export default function Credits({ Data }: Readonly<{ Data: Data }>) {
 					</p>
 				)}
 				{(isEditing || Data.tag !== "") && (
-					<p>
+					<p className="m-1">
 						<span className="font-bold text-dbu-header">Tag: </span>
 						<EditableText path={`data.tag`} value={Data.tag} />
 					</p>
