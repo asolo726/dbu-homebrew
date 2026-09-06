@@ -1,6 +1,7 @@
 import Card from "./card";
 
 export default function CardGenerator({ entries }) {
+  
   return (
     <div
       className="grid gap-6 mt-6 mb-4 ml-2 p-6"

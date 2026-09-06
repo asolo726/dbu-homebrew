@@ -30,7 +30,7 @@ export default function Card({
   };
   const ToPIsString = typeof tierOfPower === "string";
   const ToP = ToPIsString
-    ? tierOfPower.match(/\d+\.?\d*/g).map(Number)
+    ? tierOfPower.match(/\d+\.?\d*/g)
     : tierOfPower;
   const cardAttributes = [
     raceRestriction,
