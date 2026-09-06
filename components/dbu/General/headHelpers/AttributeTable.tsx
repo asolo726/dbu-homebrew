@@ -7,7 +7,7 @@ interface AttributeItem {
 	Multiplier?: string;
 }
 interface AttributeModsTableProps {
-	attrTable: Readonly<AttributeItem>[];
+	attrTable: Readonly<AttributeItem>[] | undefined;
 	isEditing: boolean;
 	pendingChanges: any;
 }

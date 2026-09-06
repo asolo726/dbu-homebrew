@@ -12,7 +12,7 @@ export interface Aspect {
 	link?: { name: string; url: string };
 }
 interface AspectsProps {
-	aspects: Aspect[];
+	aspects: Aspect[] | undefined;
 	customAspectNames: string[];
 	spanStyle: string;
 	aspectsReady: boolean;

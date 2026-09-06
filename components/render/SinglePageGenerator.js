@@ -5,6 +5,7 @@ import { getIsAdmin } from "../../lib/getIsAdmin";
 import { normalizePageContent } from "../../lib/normalizePageContent";
 import Head from "../dbu/General/Head";
 import Section from "../dbu/General/Section";
+import Credits from "../dbu/General/Credits";
 
 export default async function SinglePageGenerator({ content }) {
 	const session = await auth();
@@ -19,19 +20,20 @@ export default async function SinglePageGenerator({ content }) {
 			{normalizedContent ? (
 				<>
 					<div className="px-4 pb-4">
-						<div className="flex flex-col flex-col-1 w-full max-w-5xl mx-auto px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
-							<Head Form={normalizedContent} />
-							<Section
-								body={normalizedContent.body}
-								basePath="body"
-							/>
-						</div>
 						<CommunitySettings
 							keyName={normalizedContent.data.keyName}
 							isCommunity={
 								normalizedContent.head.isCommunity ?? false
 							}
 						/>
+						<div className="flex flex-col flex-col-1 w-full max-w-5xl mx-auto px-10 py-10 md:px-25 sm:m-10 justify-center content-center text-wrap bg-dbu-bg3 sm:rounded-[4em]">
+							<Head Form={normalizedContent} />
+							<Section
+								body={normalizedContent.body}
+								basePath="body"
+							/>
+							<Credits Data={normalizedContent.data} />
+						</div>
 					</div>
 					<div className="px-4 pb-16">
 						<CommentSection

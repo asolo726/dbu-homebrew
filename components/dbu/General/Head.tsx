@@ -17,8 +17,59 @@ import AttributeModsTable from "./headHelpers/AttributeTable";
 import Aspects, { type Aspect } from "./headHelpers/Aspects";
 import { useEditingState } from "@/components/edit/useEditingState";
 
+export interface Data {
+	identity: string; // Shows what collection this page is associated with. Can be used to determine the Form/Enhancement type as well.
+	keyName: string; // Search key for a page.
+	author: string; // Author of the page.
+	tag: string; // Tags a page with category of content, such as "Pocket Monsters" for the Pocket Monster expansion.
+	credits: {
+		bannerAuthor: string; // Author of the banner image.
+		collabs: string; // If the Author collaborated with other authors, this is where they can be credited.
+	};
+	management: {
+		status: string; // TODO: This is currently unused, but could be used to indicate the status of a page, such as "Draft", "Published", or "Archived".
+		approved: boolean; // TODO: This is currently unused, but could be used to indicate whether a page has been approved by an admin or moderator.
+		isCommunity: boolean; // Indicates whether the page is a community page. Community pages are usually created by multiple authors and may have different rules for editing and publishing.
+		toggle: string; // The name of the toggle that controls whether the page is public or hidden. This is used to determine whether the page should be visible to the public or only to the author and admins.
+	};
+}
+
+interface Head {
+	title: string;
+	banner: string;
+	desc: string;
+	details: {
+		raceReq?: string;
+		preReq?: string;
+		stressTest?: string;
+		tier?: string;
+		transStage?: number;
+		transLine?: string;
+		attributeModifiers?: any[];
+		aspects?: Aspect[];
+		maxFactor?: number; // Only used by Factors
+		maxStacks?: number; // Only used by Awakenings
+		enhancementType?: string; // Standard or Special
+		initialEnhancement?: string; // Only for Special Enhancements. Specials usually have a hyperlink to the form they apply to. The user can add this manually.
+		awakeningType?: string; // Lesser, Greater, Super
+		awakeningOrigin?: string; // Body or Mind
+		evolvedStageType?: string; // Generic or Unique. Uniques usually have a hyperlink to the form they apply to. The user can add this manually.
+		raceInfo?: {
+			RLM: number; // Racial Life Modifier
+			saves: string[]; // Racial Saving Throws
+			skillRanks: number;
+			attributeScores: string;
+		};
+	};
+}
+
+interface Form {
+	data: Data;
+	head: Head;
+}
+
 interface HeadProps {
-	Form: any;
+	Form: Form;
 }
 
 export default function Head({ Form }: Readonly<HeadProps>) {
@@ -120,7 +171,9 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 		pendingChanges?.["head.details.tier"] ?? Form.head.details.tier;
 
 	const currentIsCommunity =
-		pendingChanges?.["head.isCommunity"] ?? Form.head.isCommunity ?? false;
+		pendingChanges?.["data.management.isCommunity"] ??
+		Form.data.management.isCommunity ??
+		false;
 
 	// Community pages always hide the author credit
 	const currentDontShowAuthor =
@@ -271,7 +324,11 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 				</p>
 			)}
 
-			<div className="flex flex-col items-center justify-center mr-5 mb-3">
+			<div
+				className="flex flex-col items-center justify-center mr-5 mb-3"
+				data-tooltip-id="art-credit-tooltip"
+				data-tooltip-content={"Like this homebrew? Give it an upvote!"}
+			>
 				<PageVoteButtons
 					keyName={Form.data.keyName}
 					initialUpvotes={Form.head.upvotes ?? 0}
