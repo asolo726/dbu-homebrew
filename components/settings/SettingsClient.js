@@ -154,6 +154,7 @@ export default function SettingsClient({ user, pageData }) {
 	// ── Authored pages helpers ─────────────────────────────────────────────────
 	const allEntries = Object.values(pageData.Response).flat();
 	const normalize = (s) => s.toLowerCase().replace(/\s+/g, "");
+	console.log(allEntries);
 	const authoredEntries = allEntries.filter(
 		(e) => e.data.author === username,
 	);
@@ -384,7 +385,7 @@ export default function SettingsClient({ user, pageData }) {
 										awakeningOrigin={
 											entry.head.awakeningOrigin
 										}
-										tag={entry.data.management.tag}
+										tag={entry.data.tag}
 										keyName={entry.data.keyName}
 										upvotes={entry.head.upvotes ?? 0}
 										views={entry.head.views ?? 0}
