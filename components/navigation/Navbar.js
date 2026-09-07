@@ -121,7 +121,7 @@ export default function Navbar({ session }) {
 			>
 				<div
 					id="title"
-					className="col-span-3 lg:col-span-2 lg:grow-2 text-dbu-header place-content-center"
+					className="col-span-3 xl:col-span-2 xl:grow-2 text-dbu-header place-content-center"
 				>
 					<a
 						className="navOption text-left text-xl hover:text-dbu-link"
@@ -131,7 +131,7 @@ export default function Navbar({ session }) {
 					</a>
 				</div>
 
-				<div className="flex flex-row self-center col-span-1 justify-self-end place-content-center lg:hidden">
+				<div className="flex flex-row self-center col-span-1 justify-self-end place-content-center xl:hidden">
 					<button
 						id="navButton"
 						className="flex align-middle justify-center p-3 "
@@ -148,27 +148,27 @@ export default function Navbar({ session }) {
 
 				<nav
 					id="desktopNavMenu"
-					className="hidden lg:justify-self-end lg:place-self-center lg:col-span-2 lg:block w-full"
+					className="hidden xl:justify-self-end xl:place-self-center xl:col-span-2 xl:block w-full"
 				>
 					{desktopNavMenu()}
 				</nav>
 			</header>
 
 			{/* Mobile Search Bar */}
-			<div className="lg:hidden px-6 py-3 border-b border-dbu-line">
+			<div className="xl:hidden px-6 py-3 border-b border-dbu-line">
 				<NavbarSearch fullWidth />
 			</div>
 
 			{/* Mobile Nav Menu */}
 			<nav
 				id="mobileNavMenu"
-				className={"bg-dbu-bg2 flex justify-center align-middle lg:hidden".concat(
+				className={"bg-dbu-bg2 flex justify-center align-middle xl:hidden".concat(
 					dropdownCss,
 				)}
 			>
 				<div
 					id="innerNavMenu"
-					className="self-center flex flex-col m-10 lg:flex-row lg:self-end w-full"
+					className="self-center flex flex-col m-10 xl:flex-row xl:self-end w-full"
 				>
 					<div className="flex flex-row border-b-1 pb-5 border-dbu-line py-3">
 						<p className="text-sm self-center">MENU</p>

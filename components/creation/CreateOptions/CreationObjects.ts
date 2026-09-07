@@ -1,15 +1,71 @@
-export interface BasicHead {
-	title: string;
-	author: string;
-	authorID: number;
-	banner?: string;
-	bannerAuthor?: string;
-	keyName: string;
-	identity: string;
-	dontShowAuthor: boolean;
-	tag: string;
-	// This is what allows us to add more keys to the Object
-	[key: string]: string | number | boolean | undefined | {} | [];
+export interface BodySection {
+	header: string;
+	headerSize?: "h2" | "h3" | "h4";
+	traits: unknown[];
+}
+
+export interface CreationForm {
+	data: {
+		identity: string;
+		keyName: string;
+		author: string;
+		authorID: number;
+		tag: string;
+		credits: {
+			bannerAuthor: string;
+			collabs: string;
+		};
+		management: {
+			status: string;
+			approved: boolean;
+			isCommunity: boolean;
+			toggle: string;
+		};
+	};
+	head: {
+		title: string;
+		banner: string;
+		desc: string;
+		details: Record<string, unknown>;
+	};
+	body: BodySection[];
+}
+
+const DEFAULT_BANNER =
+	"https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp";
+
+export function createData(
+	name: string,
+	identity: string,
+	author: string,
+	authorID: number,
+) {
+	return {
+		identity,
+		keyName: name.replaceAll(" ", "-").toLowerCase(),
+		author,
+		authorID,
+		tag: "",
+		credits: {
+			bannerAuthor: "",
+			collabs: "",
+		},
+		management: {
+			status: "",
+			approved: false,
+			isCommunity: false,
+			toggle: "",
+		},
+	};
+}
+
+export function createHead(title: string, details: Record<string, unknown>) {
+	return {
+		title,
+		banner: DEFAULT_BANNER,
+		desc: "",
+		details,
+	};
 }
 
 export const ATTR_MOD_DEFAULT = [

@@ -9,13 +9,11 @@ export default function RaceFeatures({
 	const savingThrowsDisplay =
 		savingThrows.length === 1
 			? savingThrows[0]
-			: savingThrows.forEach(savingThrows, (key) => {
-					savingThrow + !(key === savingThrows.length - 1) // Check if not last saving throw
-						? key === savingThrows.length - 2 // Check if second to last saving throw
-							? " and "
-							: ", "
-						: "";
-				});
+			: savingThrows.length === 0
+				? ""
+				: savingThrows.slice(0, -1).join(", ") +
+					(savingThrows.length > 1 ? " and " : "") +
+					savingThrows.at(-1);
 	const hasMinionSize =
 		minionSize != null && minionSize != undefined && minionSize != "";
 	const hasAvailableFactors =

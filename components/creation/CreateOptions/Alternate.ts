@@ -1,36 +1,30 @@
-import { ATTR_MOD_DEFAULT, BasicHead } from "./CreationObjects";
+import {
+	ATTR_MOD_DEFAULT,
+	CreationForm,
+	createData,
+	createHead,
+} from "./CreationObjects";
 
 export default function createAlternate(
 	name: string,
 	author: string,
 	authorID: number,
 ) {
-	let head: BasicHead = {
-		title: name,
-		author: author,
-		authorID: authorID,
-		keyName: name.replaceAll(" ", "-").toLowerCase(),
-		identity: "Alternate",
-		banner: "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp",
-		tag: "",
-		dontShowAuthor: false,
-		bannerAuthor: "",
-	};
-
-	head.desc = "";
-	head.raceReq = "Any Race";
-	head.preReq = "N/A";
-	head.tier = "1";
-	head.aspects = [];
-	head.attributeModifiers = ATTR_MOD_DEFAULT;
-	head.stress = "1";
-	head.transLine = "";
-	head.transStage = "";
-	head.transformationType = "Form";
-	head.formType = "Alternate";
-
-	let alternate = {
-		head: head,
+	const alternate: CreationForm = {
+		data: createData(name, "Alternate", author, authorID),
+		head: createHead(name, {
+			raceReq: "Any Race",
+			preReq: "N/A",
+			tier: "1",
+			aspects: [],
+			attributeModifiers: ATTR_MOD_DEFAULT,
+			stressTest: "1",
+			transLine: "",
+			transStage: "",
+			transformationType: "Form",
+			formType: "Alternate",
+		}),
+		body: [],
 	};
 
 	return alternate;

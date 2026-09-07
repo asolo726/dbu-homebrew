@@ -6,15 +6,12 @@ import { Tooltip } from "../../../lib/reactTooltip";
 import PageVoteButtons from "../../pages/PageVoteButtons";
 import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
-import {
-	loadAspects,
-	getCustomAspectNames,
-	formatTransformationType,
-} from "./util/headUtil";
+import { loadAspects, getCustomAspectNames } from "./util/headUtil";
 import { ScrollToTop } from "../../navigation/ScrollBackToTopButton";
 import BasicStat from "./headHelpers/BasicStats";
 import AttributeModsTable from "./headHelpers/AttributeTable";
 import Aspects, { type Aspect } from "./headHelpers/Aspects";
+import RaceFeatures from "../Race/RaceFeatures";
 import { useEditingState } from "@/components/edit/useEditingState";
 
 export interface Data {
@@ -44,17 +41,19 @@ interface Head {
 		preReq?: string;
 		stressTest?: string;
 		tier?: string;
-		transStage?: number;
+		transStage?: string | number;
 		transLine?: string;
 		attributeModifiers?: any[];
 		aspects?: Aspect[];
 		maxFactor?: string; // Only used by Factors
 		maxStacks?: string; // Only used by Awakenings
 		enhancementType?: string; // Standard or Special
-		initialEnhancement?: string; // Only for Special Enhancements. Specials usually have a hyperlink to the form they apply to. The user can add this manually.
+		initialEnhancement?: string | { name: string; url: string }; // Only for Special Enhancements.
 		awakeningType?: string; // Lesser, Greater, Super
 		awakeningOrigin?: string; // Body or Mind
 		evolvedStageType?: string; // Generic or Unique. Uniques usually have a hyperlink to the form they apply to. The user can add this manually.
+		formType?: string;
+		transformationType?: string;
 		raceInfo?: {
 			RLM: number; // Racial Life Modifier
 			saves: string[]; // Racial Saving Throws
@@ -175,6 +174,24 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 		pendingChanges?.["data.management.isCommunity"] ??
 		Form.data.management.isCommunity ??
 		false;
+	const initialEnhancement = Form.head.details.initialEnhancement;
+	const initialEnhancementText =
+		initialEnhancement && typeof initialEnhancement === "object"
+			? initialEnhancement.name
+			: (initialEnhancement ?? "");
+	const supportsAspects = [
+		"Awakening",
+		"Alternate",
+		"Enhancement",
+		"Evolved Stage",
+		"Legendary",
+	].includes(Form.data.identity);
+	const supportsStressTest = [
+		"Alternate",
+		"Enhancement",
+		"Evolved Stage",
+		"Legendary",
+	].includes(Form.data.identity);
 
 	return (
 		<div className="grow">
@@ -305,13 +322,17 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 				</p>
 			)}
 			<ul className="list-disc ml-10 mt-3 text-md md:text-lg">
-				<BasicStat
-					statName={"raceReq"}
-					statValue={Form.head.details.raceReq}
-					isEditing={isEditing}
-					spanStyle={requirementNameStyle}
-					spanText="Racial Requirement: "
-				/>
+				{["Alternate", "Enhancement", "Legendary", "Factor"].includes(
+					Form.data.identity,
+				) && (
+					<BasicStat
+						statName={"raceReq"}
+						statValue={Form.head.details.raceReq}
+						isEditing={isEditing}
+						spanStyle={requirementNameStyle}
+						spanText="Racial Requirement: "
+					/>
+				)}
 				<BasicStat
 					statName={"evolvedStageType"}
 					statValue={Form.head.details.evolvedStageType}
@@ -319,20 +340,29 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 					spanStyle={requirementNameStyle}
 					spanText="Evolved Stage Type: "
 				/>
-				<BasicStat
-					statName={"identity"}
-					statValue={formatTransformationType(Form.data.identity)}
-					isEditing={isEditing}
-					spanStyle={requirementNameStyle}
-					spanText="Transformation Type: "
-				/>
-				<BasicStat
-					statName={"identity"}
-					statValue={Form.data.identity}
-					isEditing={isEditing}
-					spanStyle={requirementNameStyle}
-					spanText="Form Type: "
-				/>
+				{[
+					"Alternate",
+					"Enhancement",
+					"Evolved Stage",
+					"Legendary",
+				].includes(Form.data.identity) && (
+					<>
+						<BasicStat
+							statName={"transformationType"}
+							statValue={Form.head.details.transformationType}
+							isEditing={isEditing}
+							spanStyle={requirementNameStyle}
+							spanText="Transformation Type: "
+						/>
+						<BasicStat
+							statName={"formType"}
+							statValue={Form.head.details.formType}
+							isEditing={isEditing}
+							spanStyle={requirementNameStyle}
+							spanText="Form Type: "
+						/>
+					</>
+				)}
 				<BasicStat
 					statName={"enhancementType"}
 					statValue={Form.head.details.enhancementType}
@@ -340,24 +370,20 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 					spanStyle={requirementNameStyle}
 					spanText="Enhancement Type: "
 				/>
-				{Form.head.details.initialEnhancement ? (
-					<li>
-						<p>
-							<span className={requirementNameStyle}>
-								Initial Enhancement:
-							</span>{" "}
-							<a
-								href={Form.head.details.initialEnhancement.url}
-								target="_blank"
-								className="text-dbu-link hover:underline"
-							>
-								{Form.head.details.initialEnhancement.name}
-							</a>
-						</p>
-					</li>
-				) : (
-					<></>
-				)}
+				{Form.data.identity === "Enhancement" &&
+					(isEditing || initialEnhancementText !== "") && (
+						<li>
+							<p>
+								<span className={requirementNameStyle}>
+									Initial Enhancement:
+								</span>{" "}
+								<EditableText
+									path="head.details.initialEnhancement"
+									value={initialEnhancementText}
+								/>
+							</p>
+						</li>
+					)}
 				<BasicStat
 					statName="awakeningType"
 					statValue={Form.head.details.awakeningType}
@@ -395,24 +421,30 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 				/>
 				<BasicStat
 					statName="transStage"
-					statValue={Form.head.details.transStage}
+					statValue={
+						Form.head.details.transStage === undefined
+							? undefined
+							: String(Form.head.details.transStage)
+					}
 					isEditing={isEditing}
 					spanStyle={requirementNameStyle}
 					spanText="Transformation Stage: "
 				/>
-				<BasicStat
-					statName="stressTest"
-					statValue={Form.head.details.stressTest}
-					isEditing={isEditing}
-					spanStyle={requirementNameStyle}
-					spanText="Stress Test Requirement: "
-				/>
+				{supportsStressTest && (
+					<BasicStat
+						statName="stressTest"
+						statValue={Form.head.details.stressTest}
+						isEditing={isEditing}
+						spanStyle={requirementNameStyle}
+						spanText="Stress Test Requirement: "
+					/>
+				)}
 				<BasicStat
 					statName="maxStacks"
 					statValue={
-						(Object.hasOwn(Form.head.details, "maxStacks") &&
-							Form.head.details.maxStacks.toString()) ||
-						undefined
+						Form.head.details.maxStacks !== undefined
+							? String(Form.head.details.maxStacks)
+							: undefined
 					}
 					isEditing={isEditing}
 					spanStyle={requirementNameStyle}
@@ -420,7 +452,8 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 				/>
 
 				{Object.hasOwn(Form.head.details, "tier") ? (
-					(Form.head.details.tier.length > 0 || isEditing) && (
+					(String(Form.head.details.tier ?? "").length > 0 ||
+						isEditing) && (
 						<li>
 							<p>
 								<span className={requirementNameStyle}>
@@ -443,16 +476,26 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 				) : (
 					<></>
 				)}
-				<Aspects
-					aspects={Form.head.details.aspects}
-					customAspectNames={customAspectNames}
-					isEditing={isEditing}
-					spanStyle={requirementNameStyle}
-					aspectsReady={aspectsReady}
-					pendingChanges={pendingChanges}
-					handleAspectChange={handleAspectChange}
-				/>
+				{supportsAspects && (
+					<Aspects
+						aspects={Form.head.details.aspects}
+						customAspectNames={customAspectNames}
+						isEditing={isEditing}
+						spanStyle={requirementNameStyle}
+						aspectsReady={aspectsReady}
+						pendingChanges={pendingChanges}
+						handleAspectChange={handleAspectChange}
+					/>
+				)}
 			</ul>
+			{Form.data.identity === "Race" && Form.head.details.raceInfo && (
+				<RaceFeatures
+					racialLifeModifier={Form.head.details.raceInfo.RLM}
+					savingThrows={Form.head.details.raceInfo.saves}
+					skillRanks={Form.head.details.raceInfo.skillRanks}
+					attributeScores={Form.head.details.raceInfo.attributeScores}
+				/>
+			)}
 			<AttributeModsTable
 				attrTable={Form.head.details.attributeModifiers}
 				isEditing={isEditing}

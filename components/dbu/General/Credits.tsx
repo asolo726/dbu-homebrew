@@ -56,15 +56,17 @@ export default function Credits({ Data }: Readonly<{ Data: Data }>) {
 					<span className="font-bold text-dbu-header">Author: </span>
 					<EditableText path={`data.author`} value={Data.author} />
 				</p>
-				<p className="m-1">
-					<span className="font-bold text-dbu-header">
-						Art Credit:{" "}
-					</span>
-					<EditableText
-						path={`data.credits.bannerAuthor`}
-						value={Data.credits.bannerAuthor}
-					/>
-				</p>
+				{(isEditing || Data.credits.bannerAuthor !== "") && (
+					<p className="m-1">
+						<span className="font-bold text-dbu-header">
+							Art Credit:{" "}
+						</span>
+						<EditableText
+							path={`data.credits.bannerAuthor`}
+							value={Data.credits.bannerAuthor}
+						/>
+					</p>
+				)}
 				{/** We want this visible if the user is editing or if there are collaborators */}
 				{(isEditing || Data.credits.collabs !== "") && (
 					<p className="m-1">

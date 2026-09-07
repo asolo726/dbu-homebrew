@@ -50,7 +50,7 @@ export default function Aspects({
 		}
 	}, [aspects]);
 
-	if (sortedAspects) {
+	if (sortedAspects.length > 0 || isEditing) {
 		// Normal Render
 		if (!isEditing) {
 			return (

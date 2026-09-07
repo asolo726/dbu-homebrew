@@ -1,38 +1,31 @@
-import { ATTR_MOD_DEFAULT, BasicHead } from "./CreationObjects";
+import {
+	ATTR_MOD_DEFAULT,
+	CreationForm,
+	createData,
+	createHead,
+} from "./CreationObjects";
 
 export default function createLegendary(
-  name: string,
-  author: string,
-  authorID: number,
+	name: string,
+	author: string,
+	authorID: number,
 ) {
-  let head: BasicHead = {
-    title: name,
-    author: author,
-    authorID: authorID,
-    keyName: name.replaceAll(" ", "-").toLowerCase(),
-    identity: "Legendary",
-    banner:
-      "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp",
-    tag: "",
-    dontShowAuthor: false,
-    bannerAuthor: "",
-  };
+	const legendary: CreationForm = {
+		data: createData(name, "Legendary", author, authorID),
+		head: createHead(name, {
+			raceReq: "Any Race",
+			preReq: "N/A",
+			tier: "1",
+			aspects: [],
+			attributeModifiers: ATTR_MOD_DEFAULT,
+			stressTest: "1",
+			transformationType: "Form",
+			formType: "Legendary",
+			transLine: "...",
+			transStage: "...",
+		}),
+		body: [],
+	};
 
-  head.desc = "";
-  head.raceReq = "Any Race";
-  head.preReq = "N/A";
-  head.tier = "1";
-  head.aspects = [];
-  head.attributeModifiers = ATTR_MOD_DEFAULT;
-  head.stress = "1";
-  head.transformationType = "Form";
-  head.formType = "Legendary";
-  head.transLine = "...";
-  head.transStage = "...";
-
-  let legendary = {
-    head: head,
-  };
-
-  return legendary;
+	return legendary;
 }
