@@ -21,6 +21,7 @@ export interface Data {
 	identity: string; // Shows what collection this page is associated with. Can be used to determine the Form/Enhancement type as well.
 	keyName: string; // Search key for a page.
 	author: string; // Author of the page.
+	authorID: number; // Author number
 	tag: string; // Tags a page with category of content, such as "Pocket Monsters" for the Pocket Monster expansion.
 	credits: {
 		bannerAuthor: string; // Author of the banner image.
@@ -326,8 +327,8 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 					spanText="Transformation Type: "
 				/>
 				<BasicStat
-					statName={"formType"}
-					statValue={Form.head.details.formType}
+					statName={"identity"}
+					statValue={Form.data.identity}
 					isEditing={isEditing}
 					spanStyle={requirementNameStyle}
 					spanText="Form Type: "

@@ -154,7 +154,6 @@ export default function SettingsClient({ user, pageData }) {
 	// ── Authored pages helpers ─────────────────────────────────────────────────
 	const allEntries = Object.values(pageData.Response).flat();
 	const normalize = (s) => s.toLowerCase().replace(/\s+/g, "");
-	console.log(allEntries);
 	const authoredEntries = allEntries.filter(
 		(e) => e.data.author === username,
 	);
