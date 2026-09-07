@@ -59,6 +59,8 @@ interface Head {
 			saves: string[]; // Racial Saving Throws
 			skillRanks: number;
 			attributeScores: string;
+			minionSize?: string;
+			availableFactors?: string;
 		};
 	};
 }
@@ -494,6 +496,11 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 					savingThrows={Form.head.details.raceInfo.saves}
 					skillRanks={Form.head.details.raceInfo.skillRanks}
 					attributeScores={Form.head.details.raceInfo.attributeScores}
+					minionSize={Form.head.details.raceInfo.minionSize}
+					availableFactors={
+						Form.head.details.raceInfo.availableFactors
+					}
+					isEditing={isEditing}
 				/>
 			)}
 			<AttributeModsTable

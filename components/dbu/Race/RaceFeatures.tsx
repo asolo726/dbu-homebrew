@@ -1,3 +1,8 @@
+import EditableText from "../../edit/EditableText";
+import { useEditingState } from "../../edit/useEditingState";
+
+const SAVING_THROW_OPTIONS = ["Impulsive", "Corporeal", "Cognitive", "Morale"];
+
 export default function RaceFeatures({
 	racialLifeModifier = 0,
 	savingThrows = [""],
@@ -5,15 +10,32 @@ export default function RaceFeatures({
 	attributeScores = "",
 	minionSize = "",
 	availableFactors = "",
+	isEditing = false,
 }) {
+	const { pendingChanges, setChange } = useEditingState();
+	const savingThrowsPath = "head.details.raceInfo.saves";
+	const currentSavingThrows: string[] = Array.isArray(
+		pendingChanges?.[savingThrowsPath],
+	)
+		? pendingChanges[savingThrowsPath]
+		: savingThrows;
+
+	function toggleSavingThrow(name: string) {
+		if (!setChange) return;
+		const nextSavingThrows = currentSavingThrows.includes(name)
+			? currentSavingThrows.filter((savingThrow) => savingThrow !== name)
+			: [...currentSavingThrows.filter(Boolean), name];
+		setChange(savingThrowsPath, nextSavingThrows);
+	}
+
 	const savingThrowsDisplay =
-		savingThrows.length === 1
-			? savingThrows[0]
-			: savingThrows.length === 0
+		currentSavingThrows.length === 1
+			? currentSavingThrows[0]
+			: currentSavingThrows.length === 0
 				? ""
-				: savingThrows.slice(0, -1).join(", ") +
-					(savingThrows.length > 1 ? " and " : "") +
-					savingThrows.at(-1);
+				: currentSavingThrows.slice(0, -1).join(", ") +
+					(currentSavingThrows.length > 1 ? " and " : "") +
+					currentSavingThrows.at(-1);
 	const hasMinionSize =
 		minionSize != null && minionSize != undefined && minionSize != "";
 	const hasAvailableFactors =
@@ -27,36 +49,75 @@ export default function RaceFeatures({
 				<span className={requirementNameStyle}>
 					Attribute Score Increase:
 				</span>{" "}
-				{attributeScores}
+				<EditableText
+					path="head.details.raceInfo.attributeScores"
+					value={String(attributeScores)}
+				/>
 			</p>
 			<p>
 				<span className={requirementNameStyle}>
 					Racial Life Modifier:
 				</span>{" "}
-				+{racialLifeModifier}
+				+
+				<EditableText
+					path="head.details.raceInfo.RLM"
+					value={String(racialLifeModifier)}
+				/>
 			</p>
 			<p>
 				<span className={requirementNameStyle}>Saving Throws:</span>{" "}
-				<span className="italic">{savingThrowsDisplay}</span>
+				{isEditing ? (
+					<span className="flex flex-col gap-1 mt-2 not-italic">
+						{SAVING_THROW_OPTIONS.map((savingThrow) => (
+							<label
+								key={savingThrow}
+								className="flex items-center justify-between gap-4 font-normal"
+							>
+								<span>{savingThrow}</span>
+								<input
+									type="checkbox"
+									checked={currentSavingThrows.includes(
+										savingThrow,
+									)}
+									onChange={() =>
+										toggleSavingThrow(savingThrow)
+									}
+									className="h-4 w-4 cursor-pointer"
+								/>
+							</label>
+						))}
+					</span>
+				) : (
+					<span className="italic">{savingThrowsDisplay}</span>
+				)}
 			</p>
 			<p>
 				<span className={requirementNameStyle}>Skill Ranks:</span>{" "}
-				{skillRanks}
+				<EditableText
+					path="head.details.raceInfo.skillRanks"
+					value={String(skillRanks)}
+				/>
 			</p>
-			{hasMinionSize ? (
+			{hasMinionSize || isEditing ? (
 				<p>
 					<span className={requirementNameStyle}>Minion Size:</span>{" "}
-					{minionSize}
+					<EditableText
+						path="head.details.raceInfo.minionSize"
+						value={String(minionSize)}
+					/>
 				</p>
 			) : (
 				<></>
 			)}
-			{hasAvailableFactors ? (
+			{hasAvailableFactors || isEditing ? (
 				<p>
 					<span className={requirementNameStyle}>
 						Available Factors:
 					</span>{" "}
-					{availableFactors}
+					<EditableText
+						path="head.details.raceInfo.availableFactors"
+						value={String(availableFactors)}
+					/>
 				</p>
 			) : (
 				<></>
