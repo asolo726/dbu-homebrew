@@ -38,60 +38,83 @@ export default function SearchClient({ pageData }) {
 		router.replace(`?${params.toString()}`, { scroll: false });
 	}, [query, sortOrder, filters]);
 
-	const entries = Object.values(pageData.Response).flat();
-	const normalize = (s) => s.toLowerCase().replace(/\s+/g, "");
-	const normalizeForMatch = (s) =>
+	const entries = Object.values(pageData?.Response ?? {}).flat();
+	const normalize = (s = "") => s.toLowerCase().replace(/\s+/g, "");
+	const normalizeForMatch = (s = "") =>
 		s.trim().toLowerCase().replace(/\s+/g, "-");
 
+	const getEntryMeta = (entry) => {
+		const data = entry?.data ?? {};
+		const head = entry?.head ?? {};
+		const details = data?.details ?? head?.details ?? {};
+		return {
+			data,
+			head,
+			details,
+			title: head?.title ?? data?.title ?? "",
+			author: data?.author ?? head?.author ?? "",
+			identity: data?.identity ?? head?.identity ?? "",
+			keyName: data?.keyName ?? head?.keyName ?? "",
+			tag: data?.tag ?? head?.tag ?? "",
+		};
+	};
+
 	const handleSearchEnter = () => {
-		const matches = entries.filter(
-			(e) => normalizeForMatch(e.head.title) === normalizeForMatch(query),
-		);
-		if (matches.length === 1) router.push(`/${matches[0].data.keyName}`);
+		const matches = entries.filter((e) => {
+			const meta = getEntryMeta(e);
+			return normalizeForMatch(meta.title) === normalizeForMatch(query);
+		});
+		if (matches.length === 1)
+			router.push(`/${getEntryMeta(matches[0]).keyName}`);
 	};
 
 	const filtered = entries.filter((entry) => {
+		if (!entry) return false;
+		const meta = getEntryMeta(entry);
+		const { data, head, details } = meta;
+
 		const nameMatch =
-			!query.trim() ||
-			normalize(entry.head.title).includes(normalize(query));
+			!query.trim() || normalize(meta.title).includes(normalize(query));
 
 		const authorMatch =
 			filters.authors.length === 0 ||
-			filters.authors.includes(entry.data.author);
+			filters.authors.includes(data.author ?? head.author ?? "");
 
 		const pageTypeMatch =
 			filters.pageTypes.length === 0 ||
-			filters.pageTypes.includes(entry.data.identity);
+			filters.pageTypes.includes(data.identity ?? head.identity ?? "");
 
-		const entryAspects = entry.data.details.aspects
-			? entry.data.details.aspects.map((a) =>
-					a.name.replace(/\s*\(.*?\)$/, ""),
-				)
-			: [];
+		const rawAspects = Array.isArray(details.aspects)
+			? details.aspects
+			: Array.isArray(head.aspects)
+				? head.aspects
+				: [];
+		const entryAspects = rawAspects
+			.map((a) =>
+				typeof a === "string" ? a : (a?.name ?? a?.title ?? ""),
+			)
+			.map((value) => value.replace(/\s*\(.*?\)$/, ""));
 		const aspectMatch =
 			filters.aspects.length === 0 ||
 			filters.aspects.some((a) => entryAspects.includes(a));
 
 		const normalizeRace = (r) => r?.toLowerCase().replace(/s$/, "") ?? "";
+		const raceReq = details.raceReq ?? head.raceReq ?? data.raceReq ?? "";
 		const raceMatch =
 			filters.races.length === 0 ||
 			filters.races.some((r) => {
-				const req = entry.head.details.raceReq;
 				if (r === "Any Race") {
-					// Match null, "Any", "Any Race", or any "Any Race (except X)" variant
 					return (
-						!req ||
-						req === "Any" ||
-						/any race/i.test(req) ||
-						entry.data.identity === "Race"
+						!raceReq ||
+						raceReq === "Any" ||
+						/any race/i.test(raceReq) ||
+						(data.identity ?? head.identity ?? "") === "Race"
 					);
 				}
-				// Match Race-type entries by their title
-				if (entry.data.identity === "Race") {
-					return normalizeRace(entry.head.title) === normalizeRace(r);
+				if ((data.identity ?? head.identity ?? "") === "Race") {
+					return normalizeRace(meta.title) === normalizeRace(r);
 				}
-				// Split comma-separated raceReq and check each part
-				return (req || "")
+				return (raceReq || "")
 					.split(",")
 					.map((p) => p.trim())
 					.some((p) => normalizeRace(p) === normalizeRace(r));
@@ -99,7 +122,9 @@ export default function SearchClient({ pageData }) {
 
 		const tagMatch =
 			filters.tags.length === 0 ||
-			filters.tags.some((t) => entry.data.tag?.includes(t));
+			filters.tags.some((t) =>
+				String(data.tag ?? head.tag ?? "").includes(t),
+			);
 
 		return (
 			nameMatch &&

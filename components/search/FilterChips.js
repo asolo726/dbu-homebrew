@@ -30,30 +30,54 @@ function FilterGroup({
 }
 
 export default function FilterChips({ filters, setFilters, entries }) {
+	const safeEntry = (entry) => {
+		const data = entry?.data ?? {};
+		const head = entry?.head ?? {};
+		const details = data?.details ?? head?.details ?? {};
+
+		return {
+			data,
+			head,
+			details,
+			author: data?.author ?? head?.author ?? "",
+			identity: data?.identity ?? head?.identity ?? "",
+			title: head?.title ?? data?.title ?? "",
+			tag: data?.tag ?? head?.tag ?? "",
+			raceReq: details?.raceReq ?? head?.raceReq ?? data?.raceReq ?? "",
+			aspects: Array.isArray(details?.aspects)
+				? details.aspects
+				: Array.isArray(head?.aspects)
+					? head.aspects
+					: [],
+		};
+	};
+
 	const authors = [
-		...new Set(entries.map((e) => e.data.author).filter(Boolean)),
+		...new Set(entries.map((e) => safeEntry(e).author).filter(Boolean)),
 	].sort();
 
 	const aspectSet = new Set();
-	entries.forEach((e) => {
-		e.head.details.aspects?.forEach((a) =>
-			aspectSet.add(a.name.replace(/\s*\(.*?\)$/, "")),
-		);
+	entries.forEach((entry) => {
+		const { aspects } = safeEntry(entry);
+		aspects.forEach((a) => {
+			const name =
+				typeof a === "string" ? a : (a?.name ?? a?.title ?? "");
+			if (name) aspectSet.add(name.replace(/\s*\(.*?\)$/, ""));
+		});
 	});
 	const aspects = [...aspectSet].sort();
 
 	const dynamicRaces = [];
-	entries.forEach((e) => {
-		// Add Race-type entries by title (e.g. Basakejin, Namekian)
-		if (e.data.identity === "Race") {
-			dynamicRaces.push(e.head.title);
+	entries.forEach((entry) => {
+		const { identity, title, raceReq } = safeEntry(entry);
+		if (identity === "Race") {
+			dynamicRaces.push(title);
 			return;
 		}
-		const req = e.head.details.raceReq;
-		if (!req || req === "Any" || req === "Any Race") return;
-		if (/any race/i.test(req)) return; // skip "Any Race (except X)" variants
-		// Split comma-separated values and check each part
-		req.split(",")
+		if (!raceReq || raceReq === "Any" || raceReq === "Any Race") return;
+		if (/any race/i.test(raceReq)) return;
+		raceReq
+			.split(",")
 			.map((r) => r.trim())
 			.forEach((part) => {
 				if (
@@ -70,7 +94,17 @@ export default function FilterChips({ filters, setFilters, entries }) {
 		...[...new Set([...BASE_RACES, ...dynamicRaces])].sort(),
 	];
 
-	const tags = [...new Set(entries.flatMap((e) => e.data.tag ?? []))].sort();
+	const tags = [
+		...new Set(
+			entries
+				.flatMap((entry) => {
+					const tag = safeEntry(entry).tag;
+					if (!tag) return [];
+					return Array.isArray(tag) ? tag : [String(tag)];
+				})
+				.filter(Boolean),
+		),
+	].sort();
 
 	const toggle = (category, value) => {
 		setFilters((prev) => {
