@@ -169,7 +169,7 @@ export default function Trait({
 						...item,
 						miniTraitList: [
 							...(item.miniTraitList ?? []),
-							{ title: "", desc: "" },
+							{ condition: "", desc: "" },
 						],
 					};
 				}

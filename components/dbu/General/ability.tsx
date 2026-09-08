@@ -22,6 +22,7 @@ export interface Ability {
 	desc?: string;
 	list?: string[];
 	listIndent?: number; // This is used to determine the level of indentation for a list. Supports up to three levels (with 0 (default), 1, and 2)
+	sublist?: number; // Legacy list depth retained for backward compatibility.
 	miniTraitList?: MiniTraitList[];
 	addendumBox?: DBUBox;
 	table?: TableData;
@@ -117,7 +118,7 @@ export default function Ability({
 						);
 					}
 				} else if (Array.isArray(item.list)) {
-					const depth = item.listIndent ?? 0;
+					const depth = item.listIndent ?? item.sublist ?? 0;
 					const marginLeft = `${(depth + 1) * 2.5}rem`;
 					const listStyleType =
 						depth >= 2 ? "square" : depth >= 1 ? "circle" : "disc";
@@ -170,7 +171,7 @@ export default function Ability({
 						</div>
 					);
 				} else if (Array.isArray(item.miniTraitList)) {
-					const depth = item.listIndent ?? 0;
+					const depth = item.listIndent ?? item.sublist ?? 0;
 					const marginLeft = `${(depth + 1) * 2.5}rem`;
 					const listStyleType =
 						depth >= 2 ? "square" : depth >= 1 ? "circle" : "disc";
@@ -186,7 +187,7 @@ export default function Ability({
 											<EditableText
 												path={
 													path
-														? `${path}.abilities.${itemIndex}.miniTraitList.${i}.title`
+														? `${path}.abilities.${itemIndex}.miniTraitList.${i}.condition`
 														: undefined
 												}
 												value={listItem.condition}

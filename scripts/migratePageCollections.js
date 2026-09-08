@@ -36,6 +36,103 @@ function arrayify(value) {
 	return Array.isArray(value) ? value : [];
 }
 
+function normalizeMiniTraitList(items) {
+	return arrayify(items).map((item) => ({
+		condition: item?.condition ?? item?.title ?? "",
+		desc: item?.desc ?? "",
+	}));
+}
+
+function normalizeAbility(ability) {
+	if (!ability || typeof ability !== "object") return ability;
+	const normalized = { ...ability };
+	const legacyDepth = ability.sublist;
+	if (normalized.listIndent === undefined && Number.isInteger(legacyDepth)) {
+		normalized.listIndent = Math.max(0, Math.min(2, legacyDepth));
+	}
+	delete normalized.sublist;
+
+	if (Array.isArray(ability.miniTraitList)) {
+		normalized.miniTraitList = normalizeMiniTraitList(
+			ability.miniTraitList,
+		);
+	}
+	if (ability.addendumBox) {
+		normalized.addendumBox = normalizeAddendumBox(ability.addendumBox);
+	}
+	return normalized;
+}
+
+function hasLegacyListDepth(value) {
+	if (Array.isArray(value)) return value.some(hasLegacyListDepth);
+	if (!value || typeof value !== "object") return false;
+	if (Object.hasOwn(value, "sublist")) return true;
+	return Object.values(value).some(hasLegacyListDepth);
+}
+
+function normalizeTrait(trait) {
+	if (!trait || typeof trait !== "object") return trait;
+	if (trait.sectional) {
+		return { sectional: { title: trait.sectional.title ?? "" } };
+	}
+	return {
+		...trait,
+		title: trait.title ?? "",
+		desc: trait.desc ?? "",
+		abilities: arrayify(trait.abilities).map(normalizeAbility),
+	};
+}
+
+function hasInitialBoxTrait(box) {
+	return !!(
+		box &&
+		(box.title || box.desc || arrayify(box.abilities).length > 0)
+	);
+}
+
+function makeSections(items, { splitSectionals = true } = {}) {
+	const sections = [];
+	let pendingHeader = "";
+	let pendingTraits = [];
+
+	function flush() {
+		if (pendingTraits.length > 0) {
+			sections.push({ header: pendingHeader, traits: pendingTraits });
+		}
+		pendingHeader = "";
+		pendingTraits = [];
+	}
+
+	for (const rawItem of arrayify(items)) {
+		const item = normalizeTrait(rawItem);
+		if (splitSectionals && item?.sectional) {
+			flush();
+			pendingHeader = item.sectional.title ?? "";
+			continue;
+		}
+		if (item != null) pendingTraits.push(item);
+	}
+	flush();
+	return sections;
+}
+
+function normalizeAddendumBox(box) {
+	if (!box || typeof box !== "object") return box;
+	const items = [];
+	if (hasInitialBoxTrait(box)) {
+		items.push({
+			title: box.title ?? "",
+			desc: box.desc ?? "",
+			abilities: arrayify(box.abilities).map(normalizeAbility),
+		});
+	}
+	items.push(...arrayify(box.traits));
+	return {
+		boxTitle: box.boxTitle ?? "",
+		body: makeSections(items),
+	};
+}
+
 function makeDetails(doc, collectionName) {
 	const oldHead = doc.head ?? {};
 	const details = { ...(oldHead.details ?? {}) };
@@ -44,6 +141,7 @@ function makeDetails(doc, collectionName) {
 		"raceReq",
 		"preReq",
 		"stressTest",
+		"stress",
 		"tier",
 		"aspects",
 		"attributes",
@@ -72,68 +170,52 @@ function makeDetails(doc, collectionName) {
 
 	if (!details.aspects && Array.isArray(doc.aspects))
 		details.aspects = doc.aspects;
-	if (!details.attributeModifiers && Array.isArray(doc.attributeModifiers))
+	if (!details.attributeModifiers && Array.isArray(doc.attributeModifiers)) {
 		details.attributeModifiers = doc.attributeModifiers;
+	}
+
+	const raceFeatures = doc.raceFeatures ?? oldHead.raceFeatures;
+	if (!details.raceInfo && raceFeatures) {
+		details.raceInfo = {
+			RLM: Number(
+				raceFeatures.racialLifeModifier ?? raceFeatures.RLM ?? 0,
+			),
+			saves: arrayify(raceFeatures.savingThrows),
+			skillRanks: Number(raceFeatures.skillRanks ?? 0),
+			attributeScores: raceFeatures.attributeScores ?? "",
+			minionSize: raceFeatures.minionSize ?? "",
+			availableFactors: raceFeatures.availableFactors ?? "",
+		};
+	}
+
 	if (
-		!details.attributeModifiers &&
-		Array.isArray(oldHead.attributeModifiers)
-	)
-		details.attributeModifiers = oldHead.attributeModifiers;
-
-	if (!details.raceInfo && doc.raceFeatures) {
-		const raceFeatures = doc.raceFeatures ?? {};
-		const saves = Array.isArray(raceFeatures.savingThrows)
-			? raceFeatures.savingThrows
-			: [];
-		details.raceInfo = {
-			RLM: Number(
-				raceFeatures.racialLifeModifier ?? raceFeatures.RLM ?? 0,
-			),
-			saves,
-			skillRanks: Number(raceFeatures.skillRanks ?? 0),
-			attributeScores: raceFeatures.attributeScores ?? "",
-			minionSize: raceFeatures.minionSize ?? "",
-			availableFactors: raceFeatures.availableFactors ?? "",
-		};
-	}
-
-	if (!details.raceInfo && oldHead.raceFeatures) {
-		const raceFeatures = oldHead.raceFeatures ?? {};
-		const saves = Array.isArray(raceFeatures.savingThrows)
-			? raceFeatures.savingThrows
-			: [];
-		details.raceInfo = {
-			RLM: Number(
-				raceFeatures.racialLifeModifier ?? raceFeatures.RLM ?? 0,
-			),
-			saves,
-			skillRanks: Number(raceFeatures.skillRanks ?? 0),
-			attributeScores: raceFeatures.attributeScores ?? "",
-			minionSize: raceFeatures.minionSize ?? "",
-			availableFactors: raceFeatures.availableFactors ?? "",
-		};
-	}
-
-	if (oldHead.identity && !details.identity)
-		details.identity = oldHead.identity;
-	if (collectionName && !details.collectionName)
+		collectionName &&
+		Object.keys(details).length === 0 &&
+		collectionName !== "Other"
+	) {
 		details.collectionName = collectionName;
-
+	}
 	return details;
 }
 
 function makeBody(doc) {
-	if (Array.isArray(doc.body) && doc.body.length > 0) {
-		return doc.body;
+	if (Array.isArray(doc.body)) {
+		return doc.body.map((section) => ({
+			...section,
+			traits: arrayify(section?.traits).map(normalizeTrait),
+		}));
 	}
-
 	const body = [];
-
 	const addSection = (header, value) => {
-		const items = arrayify(value).filter(
-			(entry) => entry !== null && entry !== undefined,
-		);
-		if (items.length > 0) body.push({ header, traits: items });
+		const sections = makeSections(value);
+		if (sections.length > 0) {
+			body.push(
+				...sections.map((section) => ({
+					...section,
+					header: header || section.header,
+				})),
+			);
+		}
 	};
 
 	addSection("Primary Traits", doc.primaryTraits);
@@ -141,21 +223,13 @@ function makeBody(doc) {
 	addSection("Subraces", doc.subraces);
 	addSection("Burst Limit", doc.burstLimit);
 	addSection("Mastery Trait", doc.masteryTrait);
+	addSection("Transcendent Trait", doc.transcendentTrait);
 	addSection("Legendary Trait", doc.legendaryTrait);
-	addSection("Traits", doc.traits);
-
-	if (Array.isArray(doc.head?.body)) {
-		return doc.head.body;
-	}
-
-	if (body.length === 0 && Array.isArray(doc.traits)) {
-		body.push({ header: "Traits", traits: doc.traits });
-	}
-
+	addSection("", doc.traits);
 	return body;
 }
 
-function normalizeDocument(doc, collectionName) {
+function normalizeDocument(doc, collectionName, authorIds, toggleMap) {
 	if (!doc || typeof doc !== "object") return null;
 
 	const isAlreadyNormalized = !!(
@@ -166,12 +240,28 @@ function normalizeDocument(doc, collectionName) {
 	if (
 		isAlreadyNormalized &&
 		doc.head.details &&
-		typeof doc.head.details === "object"
+		typeof doc.head.details === "object" &&
+		Object.keys(doc.head.details).length > 0 &&
+		!hasLegacyListDepth(doc.body)
 	) {
 		return null;
 	}
 
 	const oldHead = doc.head ?? {};
+	const author = doc.data?.author ?? oldHead.author ?? doc.author ?? "";
+	const authorID =
+		doc.data?.authorID ??
+		oldHead.authorID ??
+		doc.authorID ??
+		(author ? authorIds.get(author) : undefined) ??
+		"";
+	const toggle =
+		doc.data?.management?.toggle ?? oldHead.toggle ?? doc.toggle ?? "";
+	const toggleOwner = author || oldHead.author || "";
+	const toggleValue =
+		toggleOwner && toggle
+			? toggleMap.get(`${toggleOwner}:${toggle}`)
+			: undefined;
 	const data = {
 		identity:
 			doc.data?.identity ??
@@ -180,10 +270,8 @@ function normalizeDocument(doc, collectionName) {
 			collectionName ??
 			"",
 		keyName: doc.data?.keyName ?? oldHead.keyName ?? doc.keyName ?? "",
-		author: doc.data?.author ?? oldHead.author ?? doc.author ?? "",
-		authorID: Number(
-			doc.data?.authorID ?? oldHead.authorID ?? doc.authorID ?? 0,
-		),
+		author,
+		authorID: authorID,
 		tag: doc.data?.tag ?? doc.tag ?? "",
 		credits: {
 			bannerAuthor:
@@ -198,33 +286,19 @@ function normalizeDocument(doc, collectionName) {
 				"",
 		},
 		management: {
-			status:
-				doc.data?.management?.status ??
-				oldHead.management?.status ??
-				doc.management?.status ??
-				"",
-			approved: !!(
-				doc.data?.management?.approved ??
-				oldHead.management?.approved ??
-				doc.management?.approved ??
-				false
-			),
+			status: toggleValue === false ? "Hidden" : "public",
+			approved: true,
 			isCommunity: !!(
 				doc.data?.management?.isCommunity ??
 				oldHead.isCommunity ??
 				doc.isCommunity ??
 				false
 			),
-			toggle:
-				doc.data?.management?.toggle ??
-				oldHead.management?.toggle ??
-				doc.management?.toggle ??
-				"",
+			toggle,
 		},
 	};
 
-	const baseHead =
-		doc.head && typeof doc.head === "object" ? { ...doc.head } : {};
+	const details = makeDetails(doc, collectionName);
 	const normalized = {
 		_id: doc._id,
 		data:
@@ -232,7 +306,6 @@ function normalizeDocument(doc, collectionName) {
 				? { ...doc.data, ...data }
 				: data,
 		head: {
-			...baseHead,
 			title: doc.data?.head?.title ?? oldHead.title ?? doc.title ?? "",
 			banner:
 				doc.data?.head?.banner ??
@@ -240,10 +313,16 @@ function normalizeDocument(doc, collectionName) {
 				doc.banner ??
 				DEFAULT_BANNER,
 			desc: doc.data?.head?.desc ?? oldHead.desc ?? doc.desc ?? "",
-			details: makeDetails(doc, collectionName),
 		},
-		body: Array.isArray(doc.body) ? doc.body : makeBody(doc),
+		body: makeBody(doc),
 	};
+	if (Object.keys(details).length > 0) normalized.head.details = details;
+	if (Array.isArray(oldHead.communityAllowlist)) {
+		normalized.head.communityAllowlist = oldHead.communityAllowlist;
+	}
+	if (oldHead.dontShowAuthor !== undefined) {
+		normalized.head.dontShowAuthor = oldHead.dontShowAuthor;
+	}
 
 	if (oldHead.bannerAuthor && !normalized.data.credits.bannerAuthor) {
 		normalized.data.credits.bannerAuthor = oldHead.bannerAuthor;
@@ -252,14 +331,19 @@ function normalizeDocument(doc, collectionName) {
 	return normalized;
 }
 
-async function migrateCollection(client, collectionName) {
+async function migrateCollection(client, collectionName, authorIds, toggleMap) {
 	const coll = client.db(DB_NAME).collection(collectionName);
 	const docs = await coll.find({}).toArray();
 	let migrated = 0;
 	let skipped = 0;
 
 	for (const doc of docs) {
-		const normalized = normalizeDocument(doc, collectionName);
+		const normalized = normalizeDocument(
+			doc,
+			collectionName,
+			authorIds,
+			toggleMap,
+		);
 		if (!normalized) {
 			skipped += 1;
 			continue;
@@ -301,6 +385,12 @@ async function migrateCollection(client, collectionName) {
 				},
 			},
 		);
+		if (!normalized.head.details) {
+			await coll.updateOne(
+				{ _id: doc._id },
+				{ $unset: { "head.details": "" } },
+			);
+		}
 
 		if (result.modifiedCount > 0 || result.matchedCount > 0) {
 			migrated += 1;
@@ -315,11 +405,40 @@ async function main() {
 	await client.connect();
 
 	console.log("Starting page migration for database:", DB_NAME);
+	const db = client.db(DB_NAME);
+	const authorIds = new Map();
+	for (const collectionName of COLLECTIONS) {
+		const docs = await db.collection(collectionName).find({}).toArray();
+		for (const doc of docs) {
+			const author = doc.head?.author ?? doc.data?.author ?? doc.author;
+			const authorID =
+				doc.head?.authorID ?? doc.data?.authorID ?? doc.authorID;
+			if (author && authorID !== undefined && authorID !== null) {
+				authorIds.set(author, authorID);
+			}
+		}
+	}
+
+	const toggleMap = new Map();
+	const toggleDoc = await client.db("Main").collection("toggles").findOne({});
+	for (const [author, toggles] of Object.entries(toggleDoc?.toggles ?? {})) {
+		for (const [toggle, value] of Object.entries(toggles ?? {})) {
+			toggleMap.set(`${author}:${toggle}`, value);
+		}
+	}
+	console.log(
+		`Resolved ${authorIds.size} author IDs and ${toggleMap.size} toggle values`,
+	);
 	const results = [];
 
 	for (const collectionName of COLLECTIONS) {
 		try {
-			const result = await migrateCollection(client, collectionName);
+			const result = await migrateCollection(
+				client,
+				collectionName,
+				authorIds,
+				toggleMap,
+			);
 			results.push(result);
 			console.log(JSON.stringify(result));
 		} catch (error) {

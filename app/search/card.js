@@ -29,9 +29,12 @@ export default function Card({
 		Other: "Other",
 	};
 	const ToPIsString = typeof tierOfPower === "string";
+	const tierMatches = ToPIsString
+		? (tierOfPower.match(/\d+\.?\d*/g) ?? [])
+		: [];
 	const ToP = ToPIsString
-		? tierOfPower.match(/\d+\.?\d*/g).map(Number)
-		: tierOfPower;
+		? Number(tierMatches[0]) || 0
+		: Number(tierOfPower) || 0;
 	const cardAttributes = [
 		raceRestriction,
 		pageTypeDisplay[pageType],
