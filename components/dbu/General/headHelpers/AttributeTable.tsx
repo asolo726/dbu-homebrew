@@ -27,6 +27,9 @@ export default function AttributeModsTable({
 			if (Number(currentBonus) === 0) {
 				return "-";
 			}
+			if (currentBonus === "*") {
+				return currentBonus;
+			}
 			if (currentMultiplier === "\n" || currentMultiplier === "") {
 				return `+${currentBonus}`;
 			} else {
