@@ -70,19 +70,17 @@ export async function POST(request) {
 			{
 				projection: {
 					"data.author": 1,
-					"head.isCommunity": 1,
-					"head.communityAllowlist": 1,
+					"data.management.isCommunity": 1,
 				},
 			},
 		);
 		if (!doc) continue;
 
 		const isAuthor = doc.data.author === userName;
-		const inAllowlist =
-			doc.head.isCommunity &&
-			(doc.head.communityAllowlist ?? []).includes(session.user.email);
+		const canContribute =
+			!!doc.data?.management?.isCommunity && !!session.user.email;
 
-		if (!isAdmin && !isAuthor && !inAllowlist) {
+		if (!isAdmin && !isAuthor && !canContribute) {
 			return Response.json({ error: "Forbidden" }, { status: 403 });
 		}
 

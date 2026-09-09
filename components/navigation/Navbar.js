@@ -33,6 +33,7 @@ export default function Navbar({ session }) {
 	];
 	const techniqueOptions = [
 		{ text: "Unique Abilities", link: "/unique-abilities" },
+		{ text: "Signature Techniques", link: "/signature" },
 	];
 	const communityOptions = [
 		{ text: "Aspects", link: "/aspects" },

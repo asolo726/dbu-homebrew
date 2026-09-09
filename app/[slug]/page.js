@@ -194,12 +194,14 @@ export default async function Page({ params }) {
 				/>
 				{(() => {
 					const canEdit = viewerName === pageAuthor || isAdmin;
-					const allowlist = content.head.communityAllowlist ?? [];
+					const isCommunity = !!content.data.management.isCommunity;
+					const canDelete =
+						!!isAdmin ||
+						(!isCommunity && viewerName === pageAuthor);
 					const canContribute =
 						!canEdit &&
 						!!content.data.management.isCommunity &&
-						!!viewerEmail &&
-						allowlist.includes(viewerEmail);
+						!!viewerEmail;
 					return (
 						<EditModeWrapper
 							canEdit={canEdit}
@@ -209,7 +211,8 @@ export default async function Page({ params }) {
 							contributorEmail={viewerEmail}
 							contributorName={viewerName}
 							isAdmin={isAdmin}
-							isCommunity={!!content.head.isCommunity}
+							isCommunity={isCommunity}
+							canDelete={canDelete}
 						>
 							<SinglePageGenerator content={content} />
 						</EditModeWrapper>

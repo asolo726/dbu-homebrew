@@ -13,6 +13,7 @@ import AttributeModsTable from "./headHelpers/AttributeTable";
 import Aspects, { type Aspect } from "./headHelpers/Aspects";
 import RaceFeatures from "../Race/RaceFeatures";
 import { useEditingState } from "@/components/edit/useEditingState";
+import DeletePageButton from "../../pages/DeletePageButton";
 
 export interface Data {
 	identity: string; // Shows what collection this page is associated with. Can be used to determine the Form/Enhancement type as well.
@@ -198,6 +199,7 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 	return (
 		<div className="grow">
 			<div className="flex items-center justify-center gap-2 mb-4">
+				<DeletePageButton title={Form.head.title} />
 				<h1 className="text-dbu-header text-[2em] sm:text-[3em] font-bold text-center tracking-wide">
 					{isEditing ? (
 						<EditableText
@@ -324,9 +326,13 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 				</p>
 			)}
 			<ul className="list-disc ml-10 mt-3 text-md md:text-lg">
-				{["Alternate", "Enhancement", "Legendary", "Factor"].includes(
-					Form.data.identity,
-				) && (
+				{[
+					"Awakening",
+					"Alternate",
+					"Enhancement",
+					"Legendary",
+					"Factor",
+				].includes(Form.data.identity) && (
 					<BasicStat
 						statName={"raceReq"}
 						statValue={Form.head.details.raceReq}

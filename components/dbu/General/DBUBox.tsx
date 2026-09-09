@@ -98,13 +98,10 @@ export default function AddendumBox({
 			)}
 
 			<div className={menuState ? "block px-3 pb-3" : "hidden"}>
-				{body &&
-				Array.isArray(currentBody) &&
-				currentBody.length > 0 ? (
-					<Section body={currentBody} basePath={`${traitsKey}`} />
-				) : (
-					<></>
-				)}
+				<Section
+					body={Array.isArray(currentBody) ? currentBody : []}
+					basePath={`${traitsKey}`}
+				/>
 			</div>
 		</div>
 	);

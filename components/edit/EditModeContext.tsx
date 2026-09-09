@@ -10,6 +10,7 @@ export interface EditModeContextType {
 	contributorName: string | null;
 	isAdmin: boolean;
 	isCommunity: boolean;
+	canDelete: boolean;
 	pendingChanges: Record<string, any>;
 	setChange: (path: string, value: any) => void;
 	setArrayChange: (arrayPath: string, value: any[]) => void;
@@ -37,6 +38,7 @@ interface EditModeProviderProps {
 	contributorName?: string | null;
 	isAdmin?: boolean;
 	isCommunity?: boolean;
+	canDelete?: boolean;
 }
 
 export function EditModeProvider({
@@ -47,6 +49,7 @@ export function EditModeProvider({
 	contributorName = null,
 	isAdmin = false,
 	isCommunity = false,
+	canDelete = false,
 }: EditModeProviderProps) {
 	const [isEditing, setIsEditing] = useState(false);
 	const [isContributing, setIsContributing] = useState(false);
@@ -144,6 +147,7 @@ export function EditModeProvider({
 		contributorName,
 		isAdmin,
 		isCommunity,
+		canDelete,
 		pendingChanges,
 		setChange,
 		setArrayChange,

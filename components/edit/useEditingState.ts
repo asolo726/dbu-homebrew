@@ -11,6 +11,8 @@ export function useEditingState(): Partial<EditModeContextType> {
 		contributorEmail: ctx?.contributorEmail ?? null,
 		contributorName: ctx?.contributorName ?? null,
 		isCommunity: ctx?.isCommunity ?? false,
+		canDelete: ctx?.canDelete ?? false,
+		keyName: ctx?.keyName ?? "",
 		pendingChanges: ctx?.pendingChanges ?? {},
 		setChange: ctx?.setChange,
 		setArrayChange: ctx?.setArrayChange,

@@ -35,6 +35,7 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
 		body,
 		pendingChanges ?? {},
 	);
+	const sections = Array.isArray(currentBody) ? currentBody : [];
 	const isActive = isEditing || isContributing;
 	const currentlyEditing = isActive && basePath;
 
@@ -60,14 +61,18 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
 	}
 
 	function newSection() {
-		return { header: "New Header", headerSize: "h2", traits: [] };
+		return withContributor({
+			header: "New Header",
+			headerSize: "h2",
+			traits: [],
+		});
 	}
 
 	function addAt(index: number, item: any) {
 		if (!basePath || !setArrayChange) return;
 		// If adding a new trait, add a new trait within the same section.
 		// If adding a new section, add a new section (with header) below where the button is used.
-		const arr = [...currentBody];
+		const arr = [...sections];
 
 		if (item === "trait") {
 			const traitsArr = [...(arr[index].traits || [])];
@@ -79,6 +84,15 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
 			setArrayChange(basePath, arr);
 			console.log(arr);
 		}
+	}
+
+	function addFirst(item: "trait" | "section") {
+		if (!basePath || !setArrayChange) return;
+		if (item === "trait") {
+			setArrayChange(basePath, [{ header: "", traits: [newTrait()] }]);
+			return;
+		}
+		setArrayChange(basePath, [newSection()]);
 	}
 
 	function withContributor(base: any) {
@@ -105,7 +119,7 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
 		if (!basePath || !setArrayChange) return;
 		setArrayChange(
 			basePath,
-			currentBody.filter((_: any, i: number) => i !== index),
+			sections.filter((_: any, i: number) => i !== index),
 		);
 	}
 
@@ -125,7 +139,27 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
 
 	return (
 		<>
-			{currentBody.map((section: Section, index: number) => {
+			{sections.length === 0 && currentlyEditing ? (
+				<div className="flex gap-2 mt-4">
+					<EditingButton
+						variant="add"
+						icon={RiAddFill}
+						title="Add trait"
+						onClick={() => addFirst("trait")}
+					>
+						Add Trait
+					</EditingButton>
+					<EditingButton
+						variant="section"
+						icon={RiAddFill}
+						title="Add section header"
+						onClick={() => addFirst("section")}
+					>
+						Add Section
+					</EditingButton>
+				</div>
+			) : null}
+			{sections.map((section: Section, index: number) => {
 				const hasValidHeader = section.header && section.header !== "";
 				const shouldShowHeader = hasValidHeader || currentlyEditing;
 				const headerPath = shouldShowHeader
