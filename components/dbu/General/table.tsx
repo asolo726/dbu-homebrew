@@ -27,16 +27,18 @@ export default function Table({ tableData }: Readonly<TableProps>) {
 				<tbody>
 					{rows.map((row, key) => (
 						<tr key={key}>
-							<td
-								key={key}
-								className={
-									key === row.length - 1
-										? "border border-dbu-header py-2 w-auto px-3"
-										: "border border-dbu-header min-w-[7em] max-w-[25em] py-2"
-								}
-							>
-								row
-							</td>
+							{row.map((val, key) => (
+								<td
+									key={key}
+									className={
+										key === row.length - 1
+											? "border border-dbu-header py-2 w-auto px-3"
+											: "border border-dbu-header min-w-[7em] max-w-[25em] py-2"
+									}
+								>
+									{val}
+								</td>
+							))}
 						</tr>
 					))}
 				</tbody>
