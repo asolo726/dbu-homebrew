@@ -1,37 +1,29 @@
+"use client";
 import Image from "next/image";
-import { aspectData } from "../../Aspects/aspectData";
+import { useEffect, useState } from "react";
 import { Tooltip } from "../../../lib/reactTooltip";
-
-/**
- * Generates formatted HTML tooltip for an aspect
- */
-const getAspectTooltip = (aspectName) => {
-	const cleanName = aspectName.replace(/\s*\(.*?\)$/, "");
-	const aspectInfo = aspectData[cleanName];
-	const isPositive = aspectInfo.type === "Positive";
-	const textColorClass = isPositive
-		? "text-dbu-pos-aspect"
-		: "text-dbu-neg-aspect";
-
-	return `<div class="p-3">
-    <div class="text-lg font-bold ${textColorClass} mb-1">
-      ${cleanName}
-    </div>
-    <div class="italic text-sm mb-2 text-gray-300">
-      ${aspectInfo.type} Aspect
-    </div>
-    <div class="text-sm leading-relaxed text-gray-100">
-      ${aspectInfo.effects}
-    </div>
-  </div>`;
-};
+import { getAspectTooltip, loadAspects } from "../util/headUtil";
 
 /**
  *
  * @returns Editable Head of the page. Including Title, Banner, Requirements, and Stat Buff Table
  */
 export default function HeadEdit({ Form }) {
+	const [aspectsReady, setAspectsReady] = useState(false);
 	const requirementNameStyle = "font-bold text-dbu-header";
+
+	useEffect(() => {
+		let cancelled = false;
+
+		loadAspects().then(() => {
+			if (!cancelled) setAspectsReady(true);
+		});
+
+		return () => {
+			cancelled = true;
+		};
+	}, []);
+
 	const areAuthorAndBannerAuthorDifferent = () => {
 		try {
 			return !(
@@ -288,9 +280,13 @@ export default function HeadEdit({ Form }) {
 									<span key={id}>
 										<a
 											data-tooltip-id="my-tooltip"
-											data-tooltip-html={getAspectTooltip(
-												aspect.name,
-											)}
+											data-tooltip-html={
+												aspectsReady
+													? getAspectTooltip(
+															aspect.name,
+														)
+													: ""
+											}
 											className="cursor-help"
 										>
 											{aspect.name}

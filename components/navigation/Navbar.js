@@ -32,8 +32,8 @@ export default function Navbar({ session }) {
 		{ text: "Gear", link: "/items-accessories" },
 	];
 	const techniqueOptions = [
-		{ text: "Unique Abilities", link: "/unique-abilities" },
 		{ text: "Signature Techniques", link: "/signature" },
+		{ text: "Unique Abilities", link: "/unique-abilities" },
 	];
 	const communityOptions = [
 		{ text: "Aspects", link: "/aspects" },

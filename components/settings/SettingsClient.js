@@ -59,7 +59,13 @@ export default function SettingsClient({ user, pageData }) {
 		fetch(`/api/settings/toggles?page=${togglePage}`)
 			.then((r) => r.json())
 			.then((data) => {
-				setToggleList(data.toggles ?? []);
+				setToggleList(
+					(data.toggles ?? []).sort((a, b) =>
+						a.name.localeCompare(b.name, undefined, {
+							sensitivity: "base",
+						}),
+					),
+				);
 				setToggleTotal(data.total ?? 0);
 				setToggleTotalPages(data.totalPages ?? 1);
 			})
@@ -68,14 +74,20 @@ export default function SettingsClient({ user, pageData }) {
 	}, [activeTab, togglePage]);
 
 	const handleToggleSwitch = async (name, enabled) => {
+		const previous = toggleList;
 		setToggleList((prev) =>
 			prev.map((t) => (t.name === name ? { ...t, enabled } : t)),
 		);
-		await fetch("/api/settings/toggles", {
-			method: "PATCH",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ toggleName: name, enabled }),
-		});
+		try {
+			const response = await fetch("/api/settings/toggles", {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ toggleName: name, enabled }),
+			});
+			if (!response.ok) throw new Error("Toggle update failed");
+		} catch {
+			setToggleList(previous);
+		}
 	};
 
 	const openTogglePopup = async (name) => {
@@ -90,9 +102,17 @@ export default function SettingsClient({ user, pageData }) {
 				`/api/settings/toggles/pages?toggle=${encodeURIComponent(name)}`,
 			);
 			const data = await r.json();
-			setPopupLeft(data.withToggle ?? []);
-			setPopupRight(data.withoutToggle ?? []);
-			setOrigLeft(data.withToggle ?? []);
+			const sortPages = (pages) =>
+				(pages ?? []).sort((a, b) =>
+					a.title.localeCompare(b.title, undefined, {
+						sensitivity: "base",
+					}),
+				);
+			const withToggle = sortPages(data.withToggle);
+			const withoutToggle = sortPages(data.withoutToggle);
+			setPopupLeft(withToggle);
+			setPopupRight(withoutToggle);
+			setOrigLeft(withToggle);
 		} catch {
 			setPopupError("Failed to load pages.");
 		}
@@ -152,16 +172,32 @@ export default function SettingsClient({ user, pageData }) {
 	};
 
 	// ── Authored pages helpers ─────────────────────────────────────────────────
-	const allEntries = Object.values(pageData.Response).flat();
-	const normalize = (s) => s.toLowerCase().replace(/\s+/g, "");
-	const authoredEntries = allEntries.filter(
-		(e) => e.data.author === username,
-	);
-	const filteredEntries = authoredEntries.filter(
-		(e) =>
+	const allEntries = Object.values(pageData?.Response ?? {})
+		.flat()
+		.filter(Boolean);
+	const normalize = (s = "") => s.toLowerCase().replace(/\s+/g, "");
+	const getEntryMeta = (entry) => {
+		const data = entry?.data ?? {};
+		const head = entry?.head ?? {};
+		const details = head?.details ?? {};
+		return { data, head, details };
+	};
+	const authoredEntries = allEntries
+		.filter((e) => getEntryMeta(e).data.author === username)
+		.sort((a, b) =>
+			getEntryMeta(a).head.title.localeCompare(
+				getEntryMeta(b).head.title,
+				undefined,
+				{ sensitivity: "base" },
+			),
+		);
+	const filteredEntries = authoredEntries.filter((e) => {
+		const { head } = getEntryMeta(e);
+		return (
 			!authoredQuery.trim() ||
-			normalize(e.head.title).includes(normalize(authoredQuery)),
-	);
+			normalize(head.title).includes(normalize(authoredQuery))
+		);
+	});
 
 	// ── Account save helpers ───────────────────────────────────────────────────
 	const handleSaveClick = async () => {
@@ -172,7 +208,9 @@ export default function SettingsClient({ user, pageData }) {
 			setEditValue(username);
 			return;
 		}
-		const hasPages = allEntries.some((e) => e.data.author === username);
+		const hasPages = allEntries.some(
+			(e) => getEntryMeta(e).data.author === username,
+		);
 		if (hasPages) {
 			setPendingNewName(trimmed);
 			setShowModal(true);
@@ -365,31 +403,35 @@ export default function SettingsClient({ user, pageData }) {
 										"repeat(auto-fill, minmax(220px, 1fr))",
 								}}
 							>
-								{filteredEntries.map((entry) => (
-									<Card
-										key={entry.data.keyName}
-										link={`/${entry.data.keyName}`}
-										imageUrl={entry.head.banner}
-										pageName={entry.head.title}
-										pageType={entry.data.identity}
-										raceRestriction={
-											entry.head.details.raceReq
-										}
-										tierOfPower={entry.head.details.tier}
-										author={entry.data.author}
-										enhancementType={
-											entry.head.enhancementType
-										}
-										awakeningType={entry.head.awakeningType}
-										awakeningOrigin={
-											entry.head.awakeningOrigin
-										}
-										tag={entry.data.tag}
-										keyName={entry.data.keyName}
-										upvotes={entry.head.upvotes ?? 0}
-										views={entry.head.views ?? 0}
-									/>
-								))}
+								{filteredEntries.map((entry, index) => {
+									const { data, head, details } =
+										getEntryMeta(entry);
+									return (
+										<Card
+											key={data.keyName ?? index}
+											link={`/${data.keyName ?? ""}`}
+											imageUrl={head.banner}
+											pageName={head.title}
+											pageType={data.identity}
+											raceRestriction={details.raceReq}
+											tierOfPower={details.tier}
+											author={data.author}
+											enhancementType={
+												details.enhancementType
+											}
+											awakeningType={
+												details.awakeningType
+											}
+											awakeningOrigin={
+												details.awakeningOrigin
+											}
+											tag={data.tag}
+											keyName={data.keyName}
+											upvotes={head.upvotes ?? 0}
+											views={head.views ?? 0}
+										/>
+									);
+								})}
 							</div>
 						)}
 					</div>

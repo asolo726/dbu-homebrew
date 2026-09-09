@@ -8,10 +8,10 @@ import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
 import { loadAspects, getCustomAspectNames } from "./util/headUtil";
 import { ScrollToTop } from "../../navigation/ScrollBackToTopButton";
-import BasicStat from "./headHelpers/BasicStats";
-import AttributeModsTable from "./headHelpers/AttributeTable";
-import Aspects, { type Aspect } from "./headHelpers/Aspects";
-import RaceFeatures from "../Race/RaceFeatures";
+import BasicStat from "./headExtras/BasicStats";
+import AttributeModsTable from "./headExtras/AttributeTable";
+import Aspects, { type Aspect } from "./headExtras/Aspects";
+import RaceFeatures from "./headExtras/RaceFeatures";
 import { useEditingState } from "@/components/edit/useEditingState";
 import DeletePageButton from "../../pages/DeletePageButton";
 

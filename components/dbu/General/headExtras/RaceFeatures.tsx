@@ -1,5 +1,5 @@
-import EditableText from "../../edit/EditableText";
-import { useEditingState } from "../../edit/useEditingState";
+import EditableText from "../../../edit/EditableText";
+import { useEditingState } from "../../../edit/useEditingState";
 
 const SAVING_THROW_OPTIONS = ["Impulsive", "Corporeal", "Cognitive", "Morale"];
 
