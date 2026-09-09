@@ -199,7 +199,7 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 	return (
 		<div className="grow">
 			<div className="flex items-center justify-center gap-2 mb-4">
-				<DeletePageButton title={Form.head.title} />
+				{isEditing && <DeletePageButton title={Form.head.title} />}
 				<h1 className="text-dbu-header text-[2em] sm:text-[3em] font-bold text-center tracking-wide">
 					{isEditing ? (
 						<EditableText
@@ -349,6 +349,7 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 					spanText="Evolved Stage Type: "
 				/>
 				{[
+					"Awakening",
 					"Alternate",
 					"Enhancement",
 					"Evolved Stage",

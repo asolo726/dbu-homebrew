@@ -1,6 +1,11 @@
 "use client";
 import TraitsSection from "./SectionTraits";
-import { RiAddFill, RiDeleteBinLine } from "react-icons/ri";
+import {
+	RiAddFill,
+	RiArrowDownLine,
+	RiArrowUpLine,
+	RiDeleteBinLine,
+} from "react-icons/ri";
 import { useEditingState } from "@/components/edit/useEditingState";
 import EditableText from "@/components/edit/EditableText";
 import { EditingButton } from "./util/EditingButton";
@@ -123,6 +128,19 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
 		);
 	}
 
+	function moveSection(index: number, direction: -1 | 1) {
+		if (!basePath || !setArrayChange) return;
+		const targetIndex = index + direction;
+		if (targetIndex < 0 || targetIndex >= sections.length) return;
+
+		const reordered = [...sections];
+		[reordered[index], reordered[targetIndex]] = [
+			reordered[targetIndex],
+			reordered[index],
+		];
+		setArrayChange(basePath, reordered);
+	}
+
 	/**
 	 * Sorts all traits below a specific sectional in alphabetical order.
 	 * NO AI USED
@@ -172,7 +190,20 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
 				return (
 					<div key={index}>
 						{shouldShowHeader && (
-							<div className="mt-10">
+							<div className="mt-10 flex items-center justify-center gap-2">
+								{currentlyEditing && (
+									<div className="flex items-center gap-1">
+										<EditingButton
+											icon={RiArrowUpLine}
+											title="Move section up"
+											variant="sort"
+											disabled={index === 0}
+											onClick={() =>
+												moveSection(index, -1)
+											}
+										/>
+									</div>
+								)}
 								<p
 									className={
 										headerStyle[
@@ -191,6 +222,15 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
 										section.header
 									)}
 								</p>
+								{currentlyEditing && (
+									<EditingButton
+										icon={RiArrowDownLine}
+										title="Move section down"
+										variant="sort"
+										disabled={index === sections.length - 1}
+										onClick={() => moveSection(index, 1)}
+									/>
+								)}
 							</div>
 						)}
 						{currentlyEditing && (
