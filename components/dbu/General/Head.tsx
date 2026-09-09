@@ -87,7 +87,7 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 	const requirementNameStyle = "font-bold text-dbu-header";
 	const [uploading, setUploading] = useState(false);
 	const [toggling, setToggling] = useState(false);
-	const [localPublic, setLocalPublic] = useState(true);
+	const [localPublic, setLocalPublic] = useState<boolean | null>(null);
 	const router = useRouter();
 	const toggle = Form.data.management.toggle;
 	const author = Form.data.author;

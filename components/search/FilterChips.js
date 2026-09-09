@@ -42,7 +42,7 @@ export default function FilterChips({ filters, setFilters, entries }) {
 			author: data?.author ?? head?.author ?? "",
 			identity: data?.identity ?? head?.identity ?? "",
 			title: head?.title ?? data?.title ?? "",
-			tag: data?.tag ?? head?.tag ?? "",
+			tag: data?.tag || head?.tag || "",
 			raceReq: details?.raceReq ?? head?.raceReq ?? data?.raceReq ?? "",
 			aspects: Array.isArray(details?.aspects)
 				? details.aspects

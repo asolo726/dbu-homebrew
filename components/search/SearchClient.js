@@ -55,7 +55,7 @@ export default function SearchClient({ pageData }) {
 			author: data?.author ?? head?.author ?? "",
 			identity: data?.identity ?? head?.identity ?? "",
 			keyName: data?.keyName ?? head?.keyName ?? "",
-			tag: data?.tag ?? head?.tag ?? "",
+			tag: data?.tag || head?.tag || "",
 		};
 	};
 
@@ -120,11 +120,10 @@ export default function SearchClient({ pageData }) {
 					.some((p) => normalizeRace(p) === normalizeRace(r));
 			});
 
+		const tag = data.tag || head.tag || "";
 		const tagMatch =
 			filters.tags.length === 0 ||
-			filters.tags.some((t) =>
-				String(data.tag ?? head.tag ?? "").includes(t),
-			);
+			filters.tags.some((t) => String(tag).includes(t));
 
 		return (
 			nameMatch &&

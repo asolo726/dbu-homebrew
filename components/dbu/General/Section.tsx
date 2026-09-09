@@ -185,7 +185,7 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
 										<EditableText
 											path={headerPath}
 											value={section.header}
-											className="text-center"
+											className="text-center inline-block min-w-4 min-h-6 align-middle"
 										/>
 									) : (
 										section.header
