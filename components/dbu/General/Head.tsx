@@ -8,22 +8,89 @@ import EditableText from "../../edit/EditableText";
 import { useEditMode } from "../../edit/EditModeContext";
 import { loadAspects, getCustomAspectNames } from "./util/headUtil";
 import { ScrollToTop } from "../../navigation/ScrollBackToTopButton";
-import BasicStat from "./headHelpers/BasicStats";
-import AttributeModsTable from "./headHelpers/AttributeTable";
-import Aspects from "./headHelpers/Aspects";
+import BasicStat from "./headExtras/BasicStats";
+import AttributeModsTable from "./headExtras/AttributeTable";
+import Aspects, { type Aspect } from "./headExtras/Aspects";
+import RaceFeatures from "./headExtras/RaceFeatures";
+import { useEditingState } from "@/components/edit/useEditingState";
+import DeletePageButton from "../../pages/DeletePageButton";
 
-export default function Head({ Form }) {
+export interface Data {
+	identity: string; // Shows what collection this page is associated with. Can be used to determine the Form/Enhancement type as well.
+	keyName: string; // Search key for a page.
+	author: string; // Author of the page.
+	authorID: number; // Author number
+	tag: string; // Tags a page with category of content, such as "Pocket Monsters" for the Pocket Monster expansion.
+	credits: {
+		bannerAuthor: string; // Author of the banner image.
+		collabs: string; // If the Author collaborated with other authors, this is where they can be credited.
+	};
+	management: {
+		status: string; // TODO: This is currently unused, but could be used to indicate the status of a page, such as "Draft", "Published", or "Archived".
+		approved: boolean; // TODO: This is currently unused, but could be used to indicate whether a page has been approved by an admin or moderator.
+		isCommunity: boolean; // Indicates whether the page is a community page. Community pages are usually created by multiple authors and may have different rules for editing and publishing.
+		toggle: string; // The name of the toggle that controls whether the page is public or hidden. This is used to determine whether the page should be visible to the public or only to the author and admins.
+	};
+}
+
+interface Head {
+	title: string;
+	banner: string;
+	desc: string;
+	details: {
+		raceReq?: string;
+		preReq?: string;
+		stressTest?: string;
+		tier?: string;
+		transStage?: string | number;
+		transLine?: string;
+		attributeModifiers?: any[];
+		aspects?: Aspect[];
+		maxFactor?: string; // Only used by Factors
+		maxStacks?: string; // Only used by Awakenings
+		enhancementType?: string; // Standard or Special
+		initialEnhancement?: string | { name: string; url: string }; // Only for Special Enhancements.
+		awakeningType?: string; // Lesser, Greater, Super
+		awakeningOrigin?: string; // Body or Mind
+		evolvedStageType?: string; // Generic or Unique. Uniques usually have a hyperlink to the form they apply to. The user can add this manually.
+		formType?: string;
+		transformationType?: string;
+		raceInfo?: {
+			RLM: number; // Racial Life Modifier
+			saves: string[]; // Racial Saving Throws
+			skillRanks: number;
+			attributeScores: string;
+			minionSize?: string;
+			availableFactors?: string;
+		};
+	};
+}
+
+interface Form {
+	data: Data;
+	head: Head;
+}
+
+interface HeadProps {
+	Form: Form;
+}
+
+export default function Head({ Form }: Readonly<HeadProps>) {
 	const editMode = useEditMode();
-	const { isEditing, pendingChanges, setChange, toggleStatus, isAdmin } =
-		editMode || {};
+	const {
+		isEditing = false,
+		pendingChanges = {},
+		setChange,
+		toggleStatus,
+	} = useEditingState();
 	const isAuthor = editMode !== null;
 	const requirementNameStyle = "font-bold text-dbu-header";
 	const [uploading, setUploading] = useState(false);
 	const [toggling, setToggling] = useState(false);
-	const [localPublic, setLocalPublic] = useState(null);
+	const [localPublic, setLocalPublic] = useState<boolean | null>(null);
 	const router = useRouter();
-	const toggle = Form.head.toggle;
-	const author = Form.head.author;
+	const toggle = Form.data.management.toggle;
+	const author = Form.data.author;
 	const [aspectsReady, setAspectsReady] = useState(false);
 
 	const isPublic =
@@ -52,12 +119,12 @@ export default function Head({ Form }) {
 	}
 
 	// Saves Aspects when user changes them with modal
-	function handleAspectChange(newAspects) {
-		setChange?.("head.aspects", newAspects);
+	function handleAspectChange(newAspects: Aspect[]) {
+		setChange?.("head.details.aspects", newAspects);
 	}
 
 	// Allows users to upload an image and set the banner URL in the head object.
-	async function handleImageUpload(file) {
+	async function handleImageUpload(file: File) {
 		if (!file || !setChange) return;
 		setUploading(true);
 		try {
@@ -77,9 +144,9 @@ export default function Head({ Form }) {
 	// It uses sessionStorage to track whether the user has visited the page, and if not, it scrolls to the top instantly and sets a flag in sessionStorage to prevent future automatic scrolling during the same session.
 	useEffect(() => {
 		const hasVisited = sessionStorage.getItem("hasVisitedPage");
-		if (hasVisited !== Form.head.keyName) {
+		if (hasVisited !== Form.data.keyName) {
 			ScrollToTop("instant");
-			sessionStorage.setItem("hasVisitedPage", Form.head.keyName);
+			sessionStorage.setItem("hasVisitedPage", Form.data.keyName);
 		}
 	}, []);
 
@@ -103,23 +170,45 @@ export default function Head({ Form }) {
 		"https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp";
 
 	// Get current (possibly pending) value of tier for formatting
-	const currentTier = pendingChanges?.["head.tier"] ?? Form.head.tier;
+	const currentTier =
+		pendingChanges?.["head.details.tier"] ?? Form.head.details.tier;
 
 	const currentIsCommunity =
-		pendingChanges?.["head.isCommunity"] ?? Form.head.isCommunity ?? false;
-
-	// Community pages always hide the author credit
-	const currentDontShowAuthor =
-		currentIsCommunity ||
-		(pendingChanges?.["head.dontShowAuthor"] ??
-			Form.head.dontShowAuthor ??
-			false);
+		pendingChanges?.["data.management.isCommunity"] ??
+		Form.data.management.isCommunity ??
+		false;
+	const initialEnhancement = Form.head.details.initialEnhancement;
+	const initialEnhancementText =
+		initialEnhancement && typeof initialEnhancement === "object"
+			? initialEnhancement.name
+			: (initialEnhancement ?? "");
+	const supportsAspects = [
+		"Awakening",
+		"Alternate",
+		"Enhancement",
+		"Evolved Stage",
+		"Legendary",
+	].includes(Form.data.identity);
+	const supportsStressTest = [
+		"Alternate",
+		"Enhancement",
+		"Evolved Stage",
+		"Legendary",
+	].includes(Form.data.identity);
 
 	return (
 		<div className="grow">
 			<div className="flex items-center justify-center gap-2 mb-4">
+				{isEditing && <DeletePageButton title={Form.head.title} />}
 				<h1 className="text-dbu-header text-[2em] sm:text-[3em] font-bold text-center tracking-wide">
-					{Form.head.title}
+					{isEditing ? (
+						<EditableText
+							path="head.title"
+							value={Form.head.title}
+						/>
+					) : (
+						Form.head.title
+					)}
 				</h1>
 				{currentIsCommunity && (
 					<span className="self-center text-[0.55rem] font-semibold tracking-wide uppercase border rounded px-1.5 py-0.5 text-blue-300 border-blue-400">
@@ -158,40 +247,6 @@ export default function Head({ Form }) {
 					))}
 			</div>
 
-			{/* Author line — always visible in edit mode so the toggle is accessible */}
-			{(isEditing || !currentDontShowAuthor) && (
-				<div className="flex items-center justify-center gap-2 mb-10">
-					<h3
-						className={`text-dbu-header text-[1.5em] sm:text-[1.8em] italic text-center transition-opacity ${
-							isEditing && currentDontShowAuthor
-								? "line-through opacity-40"
-								: ""
-						}`}
-					>
-						by {Form.head.author}
-					</h3>
-					{isEditing && !currentIsCommunity && (
-						<button
-							type="button"
-							onClick={() =>
-								setChange?.(
-									"head.dontShowAuthor",
-									!currentDontShowAuthor,
-								)
-							}
-							title={
-								currentDontShowAuthor
-									? "Show author credit"
-									: "Hide author credit"
-							}
-							className="text-xs px-2 py-1 rounded border border-dbu-line text-dbu-text/60 hover:text-dbu-header hover:border-dbu-header transition-colors shrink-0"
-						>
-							{currentDontShowAuthor ? "Show" : "Hide"}
-						</button>
-					)}
-				</div>
-			)}
-
 			{/* Image with upload overlay in edit mode */}
 			<a
 				className="justify-self-center max-w-full mb-3 block"
@@ -204,9 +259,9 @@ export default function Head({ Form }) {
 					data-tooltip-id="art-credit-tooltip"
 					data-tooltip-content={
 						!isEditing &&
-						Form.head.bannerAuthor &&
-						Form.head.bannerAuthor !== ""
-							? `Art Credit: ${Form.head.bannerAuthor}`
+						Form.data.credits.bannerAuthor &&
+						Form.data.credits.bannerAuthor !== ""
+							? `Art Credit: ${Form.data.credits.bannerAuthor}`
 							: undefined
 					}
 				>
@@ -243,21 +298,22 @@ export default function Head({ Form }) {
 				<p className="text-xs text-center text-dbu-text/50 mb-2">
 					Art Credit:{" "}
 					<EditableText
-						path="head.bannerAuthor"
-						value={Form.head.bannerAuthor || ""}
+						path="data.credits.bannerAuthor"
+						value={Form.data.credits.bannerAuthor || ""}
 						className="text-xs"
 					/>
 				</p>
 			)}
 
-			<div className="flex flex-col items-center justify-center mr-5 mb-3">
+			<div
+				className="flex flex-col items-center justify-center mr-5 mb-3"
+				data-tooltip-id="art-credit-tooltip"
+				data-tooltip-content={"Like this homebrew? Give it an upvote!"}
+			>
 				<PageVoteButtons
-					keyName={Form.head.keyName}
-					initialUpvotes={Form.head.upvotes ?? 0}
+					keyName={Form.data.keyName}
+					initialUpvotes={0}
 				/>
-				<p className="italic text-sm text-gray-500">
-					Like this homebrew? Give it an upvote!
-				</p>
 			</div>
 			<Tooltip id="art-credit-tooltip" />
 			{(isEditing || Form.head.desc) && (
@@ -270,122 +326,143 @@ export default function Head({ Form }) {
 				</p>
 			)}
 			<ul className="list-disc ml-10 mt-3 text-md md:text-lg">
-				<BasicStat
-					statName={"raceReq"}
-					statValue={Form.head.raceReq}
-					isEditing={isEditing}
-					spanStyle={requirementNameStyle}
-					spanText="Racial Requirement: "
-				/>
+				{[
+					"Awakening",
+					"Alternate",
+					"Enhancement",
+					"Legendary",
+					"Factor",
+				].includes(Form.data.identity) && (
+					<BasicStat
+						statName={"raceReq"}
+						statValue={Form.head.details.raceReq}
+						isEditing={isEditing}
+						spanStyle={requirementNameStyle}
+						spanText="Racial Requirement: "
+					/>
+				)}
 				<BasicStat
 					statName={"evolvedStageType"}
-					statValue={Form.head.evolvedStageType}
+					statValue={Form.head.details.evolvedStageType}
 					isEditing={isEditing}
 					spanStyle={requirementNameStyle}
 					spanText="Evolved Stage Type: "
 				/>
-				<BasicStat
-					statName={"transformationType"}
-					statValue={Form.head.transformationType}
-					isEditing={isEditing}
-					spanStyle={requirementNameStyle}
-					spanText="Transformation Type: "
-				/>
-				<BasicStat
-					statName={"formType"}
-					statValue={Form.head.formType}
-					isEditing={isEditing}
-					spanStyle={requirementNameStyle}
-					spanText="Form Type: "
-				/>
+				{[
+					"Awakening",
+					"Alternate",
+					"Enhancement",
+					"Evolved Stage",
+					"Legendary",
+				].includes(Form.data.identity) && (
+					<>
+						<BasicStat
+							statName={"transformationType"}
+							statValue={Form.head.details.transformationType}
+							isEditing={isEditing}
+							spanStyle={requirementNameStyle}
+							spanText="Transformation Type: "
+						/>
+						<BasicStat
+							statName={"formType"}
+							statValue={Form.head.details.formType}
+							isEditing={isEditing}
+							spanStyle={requirementNameStyle}
+							spanText="Form Type: "
+						/>
+					</>
+				)}
 				<BasicStat
 					statName={"enhancementType"}
-					statValue={Form.head.enhancementType}
+					statValue={Form.head.details.enhancementType}
 					isEditing={isEditing}
 					spanStyle={requirementNameStyle}
 					spanText="Enhancement Type: "
 				/>
-				{Form.head.initialEnhancement ? (
-					<li>
-						<p>
-							<span className={requirementNameStyle}>
-								Initial Enhancement:
-							</span>{" "}
-							<a
-								href={Form.head.initialEnhancement[1]}
-								target="_blank"
-								className="text-dbu-link hover:underline"
-							>
-								{Form.head.initialEnhancement[0]}
-							</a>
-						</p>
-					</li>
-				) : (
-					<></>
-				)}
+				{Form.data.identity === "Enhancement" &&
+					(isEditing || initialEnhancementText !== "") && (
+						<li>
+							<p>
+								<span className={requirementNameStyle}>
+									Initial Enhancement:
+								</span>{" "}
+								<EditableText
+									path="head.details.initialEnhancement"
+									value={initialEnhancementText}
+								/>
+							</p>
+						</li>
+					)}
 				<BasicStat
 					statName="awakeningType"
-					statValue={Form.head.awakeningType}
+					statValue={Form.head.details.awakeningType}
 					isEditing={isEditing}
 					spanStyle={requirementNameStyle}
 					spanText="Awakening Type: "
 				/>
 				<BasicStat
 					statName="awakeningOrigin"
-					statValue={Form.head.awakeningOrigin}
+					statValue={Form.head.details.awakeningOrigin}
 					isEditing={isEditing}
 					spanStyle={requirementNameStyle}
 					spanText="Awakening Origin: "
 				/>
 				<BasicStat
 					statName="maxFactor"
-					statValue={Form.head.maxFactor}
+					statValue={Form.head.details.maxFactor}
 					isEditing={isEditing}
 					spanStyle={requirementNameStyle}
 					spanText="Maximum Factor: "
 				/>
 				<BasicStat
 					statName="preReq"
-					statValue={Form.head.preReq}
+					statValue={Form.head.details.preReq}
 					isEditing={isEditing}
 					spanStyle={requirementNameStyle}
 					spanText="Prerequisite(s): "
 				/>
 				<BasicStat
 					statName="transLine"
-					statValue={Form.head.transLine}
+					statValue={Form.head.details.transLine}
 					isEditing={isEditing}
 					spanStyle={requirementNameStyle}
 					spanText="Transformation Line: "
 				/>
 				<BasicStat
 					statName="transStage"
-					statValue={Form.head.transStage}
+					statValue={
+						Form.head.details.transStage === undefined
+							? undefined
+							: String(Form.head.details.transStage)
+					}
 					isEditing={isEditing}
 					spanStyle={requirementNameStyle}
 					spanText="Transformation Stage: "
 				/>
-				<BasicStat
-					statName="stress"
-					statValue={Form.head.stress}
-					isEditing={isEditing}
-					spanStyle={requirementNameStyle}
-					spanText="Stress Test Requirement: "
-				/>
+				{supportsStressTest && (
+					<BasicStat
+						statName="stressTest"
+						statValue={Form.head.details.stressTest}
+						isEditing={isEditing}
+						spanStyle={requirementNameStyle}
+						spanText="Stress Test Requirement: "
+					/>
+				)}
 				<BasicStat
 					statName="maxStacks"
 					statValue={
-						(Object.hasOwn(Form.head, "maxStacks") &&
-							Form.head.maxStacks.toString()) ||
-						undefined
+						Form.head.details.maxStacks !== undefined
+							? String(Form.head.details.maxStacks)
+							: undefined
 					}
 					isEditing={isEditing}
 					spanStyle={requirementNameStyle}
 					spanText="Maximum No of Stacks: "
 				/>
 
-				{Object.hasOwn(Form.head, "tier") ? (
-					(Form.head.tier.length > 0 || isEditing) && (
+				{Object.hasOwn(Form.head.details, "tier") ? (
+					(String(Form.head.details.tier ?? "").length > 0 ||
+						isEditing) && (
 						<li>
 							<p>
 								<span className={requirementNameStyle}>
@@ -393,8 +470,8 @@ export default function Head({ Form }) {
 								</span>{" "}
 								{isEditing ? (
 									<EditableText
-										path="head.tier"
-										value={String(Form.head.tier)}
+										path="head.details.tier"
+										value={String(Form.head.details.tier)}
 									/>
 								) : (
 									currentTier +
@@ -408,9 +485,9 @@ export default function Head({ Form }) {
 				) : (
 					<></>
 				)}
-				{Form.head.aspects && (
+				{supportsAspects && (
 					<Aspects
-						aspects={Form.head.aspects}
+						aspects={Form.head.details.aspects}
 						customAspectNames={customAspectNames}
 						isEditing={isEditing}
 						spanStyle={requirementNameStyle}
@@ -420,8 +497,21 @@ export default function Head({ Form }) {
 					/>
 				)}
 			</ul>
+			{Form.data.identity === "Race" && Form.head.details.raceInfo && (
+				<RaceFeatures
+					racialLifeModifier={Form.head.details.raceInfo.RLM}
+					savingThrows={Form.head.details.raceInfo.saves}
+					skillRanks={Form.head.details.raceInfo.skillRanks}
+					attributeScores={Form.head.details.raceInfo.attributeScores}
+					minionSize={Form.head.details.raceInfo.minionSize}
+					availableFactors={
+						Form.head.details.raceInfo.availableFactors
+					}
+					isEditing={isEditing}
+				/>
+			)}
 			<AttributeModsTable
-				attrTable={Form.head.attributeModifiers}
+				attrTable={Form.head.details.attributeModifiers}
 				isEditing={isEditing}
 				pendingChanges={pendingChanges}
 			/>

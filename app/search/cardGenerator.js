@@ -1,31 +1,38 @@
 import Card from "./card";
 
 export default function CardGenerator({ entries }) {
-  
-  return (
-    <div
-      className="grid gap-6 mt-6 mb-4 ml-2 p-6"
-      style={{ gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))" }}
-    >
-      {entries.map((entry, i) => (
-        <Card
-          key={entry.head.keyName}
-          link={`/${entry.head.keyName}`}
-          imageUrl={entry.head.banner}
-          pageName={entry.head.title}
-          pageType={entry.head.identity}
-          raceRestriction={entry.head.raceReq}
-          tierOfPower={entry.head.tier}
-          author={entry.head.author}
-          enhancementType={entry.head.enhancementType}
-          awakeningType={entry.head.awakeningType}
-          awakeningOrigin={entry.head.awakeningOrigin}
-          tag={entry.head.tag}
-          keyName={entry.head.keyName}
-          upvotes={entry.head.upvotes ?? 0}
-          views={entry.head.views ?? 0}
-        />
-      ))}
-    </div>
-  );
+	return (
+		<div
+			className="grid gap-6 mt-6 mb-4 ml-2 p-6"
+			style={{
+				gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+			}}
+		>
+			{entries.map((entry, i) => {
+				const data = entry?.data ?? {};
+				const head = entry?.head ?? {};
+				const details = head.details ?? {};
+
+				return (
+					<Card
+						key={data.keyName ?? i}
+						link={`/${data.keyName ?? ""}`}
+						imageUrl={head.banner}
+						pageName={head.title}
+						pageType={data.identity}
+						raceRestriction={details.raceReq}
+						tierOfPower={details.tier}
+						author={data.author}
+						enhancementType={details.enhancementType}
+						awakeningType={details.awakeningType}
+						awakeningOrigin={details.awakeningOrigin}
+						tag={data.tag}
+						keyName={data.keyName}
+						upvotes={head.upvotes ?? 0}
+						views={head.views ?? 0}
+					/>
+				);
+			})}
+		</div>
+	);
 }

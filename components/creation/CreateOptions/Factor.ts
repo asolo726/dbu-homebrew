@@ -1,33 +1,19 @@
-import { BasicHead } from "./CreationObjects";
+import { CreationForm, createData, createHead } from "./CreationObjects";
 
 export default function createFactor(
-  name: string,
-  author: string,
-  authorID: number,
+	name: string,
+	author: string,
+	authorID: number,
 ) {
-  let head: BasicHead = {
-    title: name,
-    author: author,
-    authorID: authorID,
-    keyName: name.replaceAll(" ", "-").toLowerCase(),
-    identity: "Factor",
-    banner:
-      "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp",
-    tag: "",
-    dontShowAuthor: false,
-    bannerAuthor: "",
-  };
+	const factor: CreationForm = {
+		data: createData(name, "Factor", author, authorID),
+		head: createHead(name, {
+			raceReq: "",
+			maxFactor: "1",
+			preReq: "",
+		}),
+		body: [{ header: "Traits", traits: [] }],
+	};
 
-  head.raceReq = "";
-  head.maxFactor = "1";
-  head.preReq = "";
-  head.tag = "";
-  head.toggle = "";
-
-  let factor = {
-    head: head,
-    traits: [],
-  };
-
-  return factor;
+	return factor;
 }
