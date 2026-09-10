@@ -45,7 +45,7 @@ function AbilityPreview({
 		const ml = `${(listDepth + 1) * 2.5}rem`;
 		if (listSubtype === "bold") {
 			const filled = miniItems.filter(
-				(it) => it.title.trim() || it.desc.trim(),
+				(it) => it.condition.trim() || it.desc.trim(),
 			);
 			return (
 				<ul style={{ marginLeft: ml }}>
@@ -63,9 +63,9 @@ function AbilityPreview({
 								className="my-2 text-dbu-text text-md text-left"
 								style={{ listStyleType: styleType }}
 							>
-								{item.title.trim() && (
+								{item.condition.trim() && (
 									<span className="font-bold text-dbu-header">
-										{item.title.trim()}:{" "}
+										{item.condition.trim()}:{" "}
 									</span>
 								)}
 								{item.desc}
@@ -125,7 +125,7 @@ export default function AddAbilityModal({ onSave, onClose }) {
 	const [boxTraitDesc, setBoxTraitDesc] = useState("");
 	const [listSubtype, setListSubtype] = useState("plain");
 	const [listItems, setListItems] = useState([""]);
-	const [miniItems, setMiniItems] = useState([{ title: "", desc: "" }]);
+	const [miniItems, setMiniItems] = useState([{ condition: "", desc: "" }]);
 	const [listDepth, setListDepth] = useState(0);
 
 	/**
@@ -150,7 +150,7 @@ export default function AddAbilityModal({ onSave, onClose }) {
 					? listSubtype === "bold"
 						? miniItems.some(
 								(it) =>
-									it.title.trim() !== "" ||
+									it.condition.trim() !== "" ||
 									it.desc.trim() !== "",
 							)
 						: listItems.some((s) => s.trim() !== "")
@@ -164,16 +164,14 @@ export default function AddAbilityModal({ onSave, onClose }) {
 			onSave({
 				addendumBox: {
 					boxTitle: boxTitle.trim(),
-					title: boxTraitTitle.trim(),
-					desc: boxTraitDesc.trim(),
-					abilities: [],
+					body: [],
 				},
 			});
 		} else if (type === "list") {
 			const depth = listDepth > 0 ? { sublist: listDepth } : {};
 			if (listSubtype === "bold") {
 				const filtered = miniItems.filter(
-					(it) => it.title.trim() || it.desc.trim(),
+					(it) => it.condition.trim() || it.desc.trim(),
 				);
 				onSave({ miniTraitList: filtered, ...depth });
 			} else {
@@ -401,11 +399,11 @@ export default function AddAbilityModal({ onSave, onClose }) {
 													</button>
 												)}
 												<input
-													value={item.title}
+													value={item.condition}
 													onChange={(e) =>
 														updateMiniItem(
 															i,
-															"title",
+															"condition",
 															e.target.value,
 														)
 													}
@@ -430,7 +428,7 @@ export default function AddAbilityModal({ onSave, onClose }) {
 											onClick={() =>
 												setMiniItems([
 													...miniItems,
-													{ title: "", desc: "" },
+													{ condition: "", desc: "" },
 												])
 											}
 											className="text-xs text-dbu-text/50 hover:text-dbu-header text-left"
@@ -456,33 +454,6 @@ export default function AddAbilityModal({ onSave, onClose }) {
 										}
 										placeholder="e.g. Evolved Enhancement"
 										className={inputClass}
-									/>
-								</div>
-								<div className="flex flex-col gap-1">
-									<label className="text-xs text-dbu-text/50">
-										Trait Title (optional)
-									</label>
-									<input
-										value={boxTraitTitle}
-										onChange={(e) =>
-											setBoxTraitTitle(e.target.value)
-										}
-										placeholder="e.g. Evolved Enhancement"
-										className={inputClass}
-									/>
-								</div>
-								<div className="flex flex-col gap-1">
-									<label className="text-xs text-dbu-text/50">
-										Trait Description (optional)
-									</label>
-									<textarea
-										value={boxTraitDesc}
-										onChange={(e) =>
-											setBoxTraitDesc(e.target.value)
-										}
-										placeholder="Description…"
-										rows={3}
-										className={`${inputClass} resize-none`}
 									/>
 								</div>
 							</>
