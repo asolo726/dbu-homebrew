@@ -7,177 +7,206 @@ import FilterChips from "./FilterChips";
 import { Tooltip } from "react-tooltip";
 
 export default function SearchClient({ pageData }) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+	const router = useRouter();
+	const searchParams = useSearchParams();
 
-  const [query, setQuery] = useState(searchParams.get("q") ?? "");
-  const [sortOrder, setSortOrder] = useState(searchParams.get("sort") ?? "asc");
-  const [filters, setFilters] = useState({
-    authors: searchParams.get("authors")?.split(",").filter(Boolean) ?? [],
-    aspects: searchParams.get("aspects")?.split(",").filter(Boolean) ?? [],
-    pageTypes: searchParams.get("pageTypes")?.split(",").filter(Boolean) ?? [],
-    races: searchParams.get("races")?.split(",").filter(Boolean) ?? [],
-    tags: searchParams.get("tags")?.split(",").filter(Boolean) ?? [],
-  });
+	const [query, setQuery] = useState(searchParams.get("q") ?? "");
+	const [sortOrder, setSortOrder] = useState(
+		searchParams.get("sort") ?? "asc",
+	);
+	const [filters, setFilters] = useState({
+		authors: searchParams.get("authors")?.split(",").filter(Boolean) ?? [],
+		aspects: searchParams.get("aspects")?.split(",").filter(Boolean) ?? [],
+		pageTypes:
+			searchParams.get("pageTypes")?.split(",").filter(Boolean) ?? [],
+		races: searchParams.get("races")?.split(",").filter(Boolean) ?? [],
+		tags: searchParams.get("tags")?.split(",").filter(Boolean) ?? [],
+	});
 
-  useEffect(() => {
-    const params = new URLSearchParams();
-    if (query) params.set("q", query);
-    if (sortOrder) params.set("sort", sortOrder);
-    if (filters.authors.length)
-      params.set("authors", filters.authors.join(","));
-    if (filters.aspects.length)
-      params.set("aspects", filters.aspects.join(","));
-    if (filters.pageTypes.length)
-      params.set("pageTypes", filters.pageTypes.join(","));
-    if (filters.races.length) params.set("races", filters.races.join(","));
-    if (filters.tags.length) params.set("tags", filters.tags.join(","));
-    router.replace(`?${params.toString()}`, { scroll: false });
-  }, [query, sortOrder, filters]);
+	useEffect(() => {
+		const params = new URLSearchParams();
+		if (query) params.set("q", query);
+		if (sortOrder) params.set("sort", sortOrder);
+		if (filters.authors.length)
+			params.set("authors", filters.authors.join(","));
+		if (filters.aspects.length)
+			params.set("aspects", filters.aspects.join(","));
+		if (filters.pageTypes.length)
+			params.set("pageTypes", filters.pageTypes.join(","));
+		if (filters.races.length) params.set("races", filters.races.join(","));
+		if (filters.tags.length) params.set("tags", filters.tags.join(","));
+		router.replace(`?${params.toString()}`, { scroll: false });
+	}, [query, sortOrder, filters]);
 
-  const entries = Object.values(pageData.Response).flat();
-  const normalize = (s) => s.toLowerCase().replace(/\s+/g, "");
-  const normalizeForMatch = (s) => s.trim().toLowerCase().replace(/\s+/g, "-");
+	const entries = Object.values(pageData?.Response ?? {}).flat();
+	const normalize = (s = "") => s.toLowerCase().replace(/\s+/g, "");
+	const normalizeForMatch = (s = "") =>
+		s.trim().toLowerCase().replace(/\s+/g, "-");
 
-  const handleSearchEnter = () => {
-    const matches = entries.filter(
-      (e) => normalizeForMatch(e.head.title) === normalizeForMatch(query),
-    );
-    if (matches.length === 1) router.push(`/${matches[0].head.keyName}`);
-  };
+	const getEntryMeta = (entry) => {
+		const data = entry?.data ?? {};
+		const head = entry?.head ?? {};
+		const details = data?.details ?? head?.details ?? {};
+		return {
+			data,
+			head,
+			details,
+			title: head?.title ?? data?.title ?? "",
+			author: data?.author ?? head?.author ?? "",
+			identity: data?.identity ?? head?.identity ?? "",
+			keyName: data?.keyName ?? head?.keyName ?? "",
+			tag: data?.tag || head?.tag || "",
+		};
+	};
 
-  const filtered = entries.filter((entry) => {
-    const nameMatch =
-      !query.trim() || normalize(entry.head.title).includes(normalize(query));
+	const handleSearchEnter = () => {
+		const matches = entries.filter((e) => {
+			const meta = getEntryMeta(e);
+			return normalizeForMatch(meta.title) === normalizeForMatch(query);
+		});
+		if (matches.length === 1)
+			router.push(`/${getEntryMeta(matches[0]).keyName}`);
+	};
 
-    const authorMatch =
-      filters.authors.length === 0 ||
-      filters.authors.includes(entry.head.author);
+	const filtered = entries.filter((entry) => {
+		if (!entry) return false;
+		const meta = getEntryMeta(entry);
+		const { data, head, details } = meta;
 
-    const pageTypeMatch =
-      filters.pageTypes.length === 0 ||
-      filters.pageTypes.includes(entry.head.identity);
+		const nameMatch =
+			!query.trim() || normalize(meta.title).includes(normalize(query));
 
-    const entryAspects = entry.head.aspects
-      ? entry.head.aspects.map((a) => a.name.replace(/\s*\(.*?\)$/, ""))
-      : [];
-    const aspectMatch =
-      filters.aspects.length === 0 ||
-      filters.aspects.some((a) => entryAspects.includes(a));
+		const authorMatch =
+			filters.authors.length === 0 ||
+			filters.authors.includes(data.author ?? head.author ?? "");
 
-    const normalizeRace = (r) => r?.toLowerCase().replace(/s$/, "") ?? "";
-    const raceMatch =
-      filters.races.length === 0 ||
-      filters.races.some((r) => {
-        const req = entry.head.raceReq;
-        if (r === "Any Race") {
-          // Match null, "Any", "Any Race", or any "Any Race (except X)" variant
-          return (
-            !req ||
-            req === "Any" ||
-            /any race/i.test(req) ||
-            entry.head.identity === "Race"
-          );
-        }
-        // Match Race-type entries by their title
-        if (entry.head.identity === "Race") {
-          return normalizeRace(entry.head.title) === normalizeRace(r);
-        }
-        // Split comma-separated raceReq and check each part
-        return (req || "")
-          .split(",")
-          .map((p) => p.trim())
-          .some((p) => normalizeRace(p) === normalizeRace(r));
-      });
+		const pageTypeMatch =
+			filters.pageTypes.length === 0 ||
+			filters.pageTypes.includes(data.identity ?? head.identity ?? "");
 
-    const tagMatch =
-      filters.tags.length === 0 ||
-      filters.tags.some((t) => entry.head.tag?.includes(t));
+		const rawAspects = Array.isArray(details.aspects)
+			? details.aspects
+			: Array.isArray(head.aspects)
+				? head.aspects
+				: [];
+		const entryAspects = rawAspects
+			.map((a) =>
+				typeof a === "string" ? a : (a?.name ?? a?.title ?? ""),
+			)
+			.map((value) => value.replace(/\s*\(.*?\)$/, ""));
+		const aspectMatch =
+			filters.aspects.length === 0 ||
+			filters.aspects.some((a) => entryAspects.includes(a));
 
-    return (
-      nameMatch &&
-      authorMatch &&
-      pageTypeMatch &&
-      aspectMatch &&
-      raceMatch &&
-      tagMatch
-    );
-  });
+		const normalizeRace = (r) => r?.toLowerCase().replace(/s$/, "") ?? "";
+		const raceReq = details.raceReq ?? head.raceReq ?? data.raceReq ?? "";
+		const raceMatch =
+			filters.races.length === 0 ||
+			filters.races.some((r) => {
+				if (r === "Any Race") {
+					return (
+						!raceReq ||
+						raceReq === "Any" ||
+						/any race/i.test(raceReq) ||
+						(data.identity ?? head.identity ?? "") === "Race"
+					);
+				}
+				if ((data.identity ?? head.identity ?? "") === "Race") {
+					return normalizeRace(meta.title) === normalizeRace(r);
+				}
+				return (raceReq || "")
+					.split(",")
+					.map((p) => p.trim())
+					.some((p) => normalizeRace(p) === normalizeRace(r));
+			});
 
-  const sorted = sortOrder
-    ? [...filtered].sort((a, b) => {
-        const cmp = a.head.title.localeCompare(b.head.title);
-        return sortOrder === "asc" ? cmp : -cmp;
-      })
-    : filtered;
+		const tag = data.tag || head.tag || "";
+		const tagMatch =
+			filters.tags.length === 0 ||
+			filters.tags.some((t) => String(tag).includes(t));
 
-  const clearAll = () => {
-    setQuery("");
-    setSortOrder("null");
-    setFilters({
-      authors: [],
-      aspects: [],
-      pageTypes: [],
-      races: [],
-      tags: [],
-    });
-  };
+		return (
+			nameMatch &&
+			authorMatch &&
+			pageTypeMatch &&
+			aspectMatch &&
+			raceMatch &&
+			tagMatch
+		);
+	});
 
-  const [openFiltersDrawer, setOpenFiltersDrawer] = useState(false);
+	const sorted = sortOrder
+		? [...filtered].sort((a, b) => {
+				const cmp = a.head.title.localeCompare(b.head.title);
+				return sortOrder === "asc" ? cmp : -cmp;
+			})
+		: filtered;
 
-  return (
-    <>
-      <div className="flex gap-2">
-        <SearchBar
-          query={query}
-          onSearch={setQuery}
-          onEnter={handleSearchEnter}
-          suggestions={entries.map((e) => e.head.title)}
-        />
-        <button
-          type="button"
-          onClick={clearAll}
-          data-tooltip-id="clear-tooltip"
-          data-tooltip-content="Clear all filters and search"
-          className="shrink-0 px-3 py-1 rounded-md text-xs border border-dbu-line bg-dbu-bg2 text-dbu-text hover:border-dbu-header transition-all active:scale-90 active:bg-dbu-bg3 cursor-pointer"
-        >
-          Clear
-        </button>
-        <button
-          type="button"
-          onClick={() => setOpenFiltersDrawer(!openFiltersDrawer)}
-          data-tooltip-id="filter-tooltip"
-          data-tooltip-content="Open the Filters Drawer"
-          className="shrink-0 px-3 py-1 rounded-md text-xs border border-dbu-line bg-dbu-bg2 text-dbu-text hover:border-dbu-header transition-all active:scale-90 active:bg-dbu-bg3 cursor-pointer"
-        >
-          Filters
-        </button>
-        <select
-          value={sortOrder ?? "null"}
-          onChange={(e) =>
-            setSortOrder(e.target.value === "null" ? null : e.target.value)
-          }
-          className="shrink-0 w-auto px-2 py-1 mr-6 rounded-md text-xs border border-dbu-line bg-dbu-bg2 text-dbu-text focus:outline-none focus:border-dbu-header cursor-pointer"
-        >
-          <option value="asc">A→Z</option>
-          <option value="desc">Z→A</option>
-        </select>
-      </div>
-      <div
-        className={`w-full p-2 bg-dbu-bg2 border border-dbu-line text-dbu-text ${openFiltersDrawer ? "block px-3 pb-3" : "hidden"}`}
-      >
-        {
-          <FilterChips
-            filters={filters}
-            setFilters={setFilters}
-            entries={entries}
-          />
-        }
-      </div>
-      {sorted.length > 0 && (
-        <CardGenerator entries={sorted} />
-      )}
-      <Tooltip id="clear-tooltip" className="tooltip" />
-    </>
-  );
+	const clearAll = () => {
+		setQuery("");
+		setSortOrder("null");
+		setFilters({
+			authors: [],
+			aspects: [],
+			pageTypes: [],
+			races: [],
+			tags: [],
+		});
+	};
+
+	const [openFiltersDrawer, setOpenFiltersDrawer] = useState(false);
+
+	return (
+		<>
+			<div className="flex gap-2">
+				<SearchBar
+					query={query}
+					onSearch={setQuery}
+					onEnter={handleSearchEnter}
+					suggestions={entries.map((e) => e.head.title)}
+				/>
+				<button
+					onClick={clearAll}
+					data-tooltip-id="clear-tooltip"
+					data-tooltip-content="Clear all filters and search"
+					className="shrink-0 px-3 py-1 rounded-md text-xs border border-dbu-line bg-dbu-bg2 text-dbu-text hover:border-dbu-header transition-all active:scale-90 active:bg-dbu-bg3 cursor-pointer"
+				>
+					Clear
+				</button>
+				<button
+					onClick={() => setOpenFiltersDrawer(!openFiltersDrawer)}
+					data-tooltip-id="filter-tooltip"
+					data-tooltip-content="Open the Filters Drawer"
+					className="shrink-0 px-3 py-1 rounded-md text-xs border border-dbu-line bg-dbu-bg2 text-dbu-text hover:border-dbu-header transition-all active:scale-90 active:bg-dbu-bg3 cursor-pointer"
+				>
+					Filters
+				</button>
+				<select
+					value={sortOrder ?? "null"}
+					onChange={(e) =>
+						setSortOrder(
+							e.target.value === "null" ? null : e.target.value,
+						)
+					}
+					className="shrink-0 w-auto px-2 py-1 mr-6 rounded-md text-xs border border-dbu-line bg-dbu-bg2 text-dbu-text focus:outline-none focus:border-dbu-header cursor-pointer"
+				>
+					<option value="asc">A→Z</option>
+					<option value="desc">Z→A</option>
+				</select>
+			</div>
+			<div
+				className={`w-full p-2 bg-dbu-bg2 border border-dbu-line text-dbu-text ${openFiltersDrawer ? "block px-3 pb-3" : "hidden"}`}
+			>
+				{
+					<FilterChips
+						filters={filters}
+						setFilters={setFilters}
+						entries={entries}
+					/>
+				}
+			</div>
+			<CardGenerator entries={sorted} />
+			<Tooltip id="clear-tooltip" className="tooltip" />
+		</>
+	);
 }

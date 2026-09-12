@@ -1,35 +1,27 @@
-import { BasicHead, ATTR_MOD_DEFAULT } from "./CreationObjects";
+import {
+	ATTR_MOD_DEFAULT_AWAKENING,
+	CreationForm,
+	createData,
+	createHead,
+} from "./CreationObjects";
 function createAwakening(name: string, author: string, authorID: number) {
-  let head: BasicHead = {
-    title: name,
-    author: author,
-    authorID: authorID,
-    keyName: name.replaceAll(" ", "-").toLowerCase(),
-    identity: "Awakening",
-    banner:
-      "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp",
-    tag: "",
-    dontShowAuthor: false,
-    bannerAuthor: "",
-  };
+	const awakening: CreationForm = {
+		data: createData(name, "Awakening", author, authorID),
+		head: createHead(name, {
+			raceReq: "",
+			preReq: "",
+			tier: "",
+			aspects: [],
+			attributeModifiers: ATTR_MOD_DEFAULT_AWAKENING,
+			maxStacks: 1,
+			transformationType: "Awakening",
+			awakeningType: "",
+			awakeningOrigin: "",
+		}),
+		body: [],
+	};
 
-  head.desc = "";
-  head.raceReq = "";
-  head.preReq = "";
-  head.tier = "";
-  head.aspects = [];
-  head.attributeModifiers = ATTR_MOD_DEFAULT;
-  head.tier = 0;
-  head.maxStacks = 1;
-  head.transformationType = "Awakening";
-  head.awakeningType = "";
-  head.awakeningOrigin = "";
-
-  let awakening = {
-    head: head,
-  };
-
-  return awakening;
+	return awakening;
 }
 
 export default createAwakening;

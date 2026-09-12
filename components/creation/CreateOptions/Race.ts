@@ -1,35 +1,24 @@
-import { BasicHead } from "./CreationObjects";
+import { CreationForm, createData, createHead } from "./CreationObjects";
 
 function createRace(name: string, author: string, authorID: number) {
-  let head: BasicHead = {
-    title: name,
-    author: author,
-    authorID: authorID,
-    keyName: name.replaceAll(" ", "-").toLowerCase(),
-    identity: "Race",
-    banner:
-      "https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp",
-    tag: "",
-    dontShowAuthor: false,
-    bannerAuthor: "",
-  };
+	const race: CreationForm = {
+		data: createData(name, "Race", author, authorID),
+		head: createHead(name, {
+			raceInfo: {
+				RLM: 0,
+				saves: [""],
+				skillRanks: 0,
+				attributeScores: "",
+			},
+		}),
+		body: [
+			{ header: "Primary Traits", traits: [] },
+			{ header: "Secondary Traits", traits: [] },
+			{ header: "Subraces", traits: [] },
+		],
+	};
 
-  head.tag = "";
-
-  let Race = {
-    head: head,
-    raceFeatures: {
-      racialLifeModifier: 0,
-      savingThrows: [""],
-      skillRanks: 0,
-      attributeScores: "",
-    },
-    primaryTraits: [],
-    secondaryTraits: [],
-    subraces: [],
-  };
-
-  return Race;
+	return race;
 }
 
 export default createRace;

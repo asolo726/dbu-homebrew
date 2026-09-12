@@ -15,42 +15,42 @@ import searchContent from "../searchContent/route.js";
  */
 
 async function getCustomAspects() {
-  const aspectsPage = await searchContent("aspects");
-  const content = aspectsPage.content[0];
-  let customAspects = [];
-  try {
-    let aspectType = true; // True for positive aspects, false for negative aspects
-    const traits = content.traits || [];
+	const aspectsPage = await searchContent("aspects");
+	try {
+		const body = aspectsPage.content?.[0]?.body;
+		if (!Array.isArray(body)) return [];
 
-    traits.forEach((trait) => {
-      // 1. Check if this item is a section header (like Positive or Negative Aspects)
-      const sectionTitle = trait.sectional?.title || trait.title;
+		return body.flatMap((section) => {
+			const header = section.header?.trim().toLowerCase();
+			const isPositive = header === "positive aspects";
+			const isNegative = header === "negative aspects";
 
-      if (sectionTitle === "Negative Aspects") {
-        aspectType = false;
-        return; // Move to the next item
-      }
+			if (
+				(!isPositive && !isNegative) ||
+				!Array.isArray(section.traits)
+			) {
+				return [];
+			}
 
-      // 2. Get first ability
-      const firstAbility = trait.abilities?.[0];
-      const desc = firstAbility?.desc;
+			return section.traits.flatMap((trait) => {
+				const effects = trait.abilities?.[0]?.desc || trait.desc;
+				if (!trait.title || !effects) return [];
 
-      // 3. Only push if both title and desc exist
-      if (trait.title && desc) {
-        customAspects.push({
-          name: trait.title,
-          isPositive: aspectType,
-          effects: desc,
-          maxLevel: 0,
-          isCustom: true,
-        });
-      }
-    });
-
-    return customAspects;
-  } catch (error) {
-    console.error("Error parsing custom aspects:", error);
-  }
+				return [
+					{
+						name: trait.title,
+						isPositive,
+						effects,
+						maxLevel: 0,
+						isCustom: true,
+					},
+				];
+			});
+		});
+	} catch (error) {
+		console.error("Error parsing custom aspects:", error);
+		return [];
+	}
 }
 
 /**
@@ -60,39 +60,39 @@ async function getCustomAspects() {
  * @returns On a Failed search, returns a No Data Response
  */
 export async function GET() {
-  const client = await clientPromise;
-  try {
-    const db = client.db("Main");
+	const client = await clientPromise;
+	try {
+		const db = client.db("Main");
 
-    const data = await db
-      .collection("aspects")
-      .findOne({}, { projection: { _id: 0 } });
-    const positiveAspects = data.positiveAspects.map((aspect) => {
-      return {
-        name: aspect.name,
-        isPositive: true,
-        effects: aspect.effects,
-        maxLevel: aspect.maxLevel ? aspect.maxLevel : 0,
-        isCustom: false,
-      };
-    });
-    const negativeAspects = data.negativeAspects.map((aspect) => {
-      return {
-        name: aspect.name,
-        isPositive: false,
-        effects: aspect.effects,
-        maxLevel: aspect.maxLevel ? aspect.maxLevel : 0,
-        isCustom: false,
-      };
-    });
+		const data = await db
+			.collection("aspects")
+			.findOne({}, { projection: { _id: 0 } });
+		const positiveAspects = data.positiveAspects.map((aspect) => {
+			return {
+				name: aspect.name,
+				isPositive: true,
+				effects: aspect.effects,
+				maxLevel: aspect.maxLevel ? aspect.maxLevel : 0,
+				isCustom: false,
+			};
+		});
+		const negativeAspects = data.negativeAspects.map((aspect) => {
+			return {
+				name: aspect.name,
+				isPositive: false,
+				effects: aspect.effects,
+				maxLevel: aspect.maxLevel ? aspect.maxLevel : 0,
+				isCustom: false,
+			};
+		});
 
-    const customAspects = await getCustomAspects();
-    return Response.json({
-      positiveAspects: positiveAspects,
-      negativeAspects: negativeAspects,
-      customAspects: customAspects,
-    });
-  } catch (e) {
-    return { Response: "No Data Found" };
-  }
+		const customAspects = await getCustomAspects();
+		return Response.json({
+			positiveAspects: positiveAspects,
+			negativeAspects: negativeAspects,
+			customAspects: customAspects,
+		});
+	} catch (e) {
+		return { Response: "No Data Found" };
+	}
 }
