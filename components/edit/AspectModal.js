@@ -2,7 +2,7 @@
 import {
 	aspects,
 	getAspectTooltip,
-	prettifyAspects,
+	sortEditableAspects,
 } from "../dbu/General/util/headUtil";
 import { Tooltip } from "../../lib/reactTooltip.js";
 import { useState, useEffect } from "react";
@@ -10,15 +10,18 @@ import { RxArrowUp, RxInfoCircled } from "react-icons/rx";
 
 export default function AspectsModal({ currentAspects, onSave, onClose }) {
 	const [editedAspects, setEditedAspects] = useState(currentAspects); // A copy of the current aspects, to be edited by the user.
-
 	const [positiveAspectOptions, setPositiveAspectOptions] = useState([]);
 	const [negativeAspectOptions, setNegativeAspectOptions] = useState([]);
+	const [updatingAspect, setUpdatingAspect] = useState(false);
 
+	const loadedPositiveAspects = aspects.filter((a) => a.isPositive);
+	const loadedNegativeAspects = aspects.filter((a) => !a.isPositive);
 	// Make an Aspect List for the select boxes, filtering out aspects that are already in currentAspects
-	// Can reuse the code for the Toggle Select in SettingsClient, but this is simpler since we don't need to worry about the "selected" state of the aspects, just the options available to select from
+	// Can reuse the code for the Toggle Select in SettingsClient, but this is simpler since we don't need
+	// to worry about the "selected" state of the aspects, just the options available to select from
 
 	useEffect(() => {
-		const currentNames = new Set(editedAspects.map((a) => a.name));
+		let currentNames = new Set(editedAspects.map((a) => a.name));
 		setPositiveAspectOptions(
 			aspects.filter((a) => a.isPositive && !currentNames.has(a.name)),
 		);
@@ -27,20 +30,30 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
 		);
 	}, [editedAspects]);
 
+	useEffect(() => {
+		const sortAspects = async () => {
+			const sortedAspects = await sortEditableAspects(editedAspects);
+			setEditedAspects(sortedAspects);
+		};
+		sortAspects();
+	}, [updatingAspect]);
+
 	const removeAspect = (aspectName) => {
 		const newEditedAspects = editedAspects.filter(
 			(aspect) => aspect.name !== aspectName,
 		);
-		setEditedAspects(prettifyAspects(newEditedAspects));
+		setUpdatingAspect(!updatingAspect);
+		setEditedAspects(newEditedAspects);
 	};
 
 	const addAspect = (aspect) => {
 		const aspectToAdd = {
 			name: aspect.name,
-			level: 0, // Placeholder
+			level: 1, // Placeholder
 		};
 		const newEditedAspects = [...editedAspects, aspectToAdd];
-		setEditedAspects(prettifyAspects(newEditedAspects));
+		setUpdatingAspect(!updatingAspect);
+		setEditedAspects(newEditedAspects);
 	};
 
 	return (
@@ -67,13 +80,13 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
 								key={id}
 								className="inline-flex justify-between rounded-full border border-dbu-line bg-dbu-bg3 px-3 py-1 text-dbu-text text-sm text-center min-w-[10rem] max-w-[16rem] break-words"
 							>
-								<a
+								<span
 									data-tooltip-id="my-tooltip-2"
 									data-tooltip-html={getAspectTooltip(a.name)}
 									className="flex w-full cursor-help justify-center"
 								>
 									{a.name}
-								</a>
+								</span>
 								<button
 									onClick={() => removeAspect(a.name)}
 									className="ml-2 text-red-400/40 hover:text-red-400 text-sm leading-none cursor-pointer"
