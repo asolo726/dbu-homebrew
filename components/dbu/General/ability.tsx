@@ -259,6 +259,11 @@ export default function Ability({
 									columns: item.table.columns,
 									rows: item.table.rows,
 								}}
+								path={
+									path
+										? `${path}.abilities.${itemIndex}.table`
+										: undefined
+								}
 							/>
 						</ul>
 					);

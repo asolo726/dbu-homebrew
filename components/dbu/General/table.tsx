@@ -1,3 +1,4 @@
+import EditableText from "../../edit/EditableText";
 export interface TableData {
 	columns: string[];
 	rows: string[][];
@@ -5,9 +6,10 @@ export interface TableData {
 
 interface TableProps {
 	tableData: TableData;
+	path: string | undefined;
 }
 
-export default function Table({ tableData }: Readonly<TableProps>) {
+export default function Table({ tableData, path }: Readonly<TableProps>) {
 	const { columns, rows } = tableData;
 	return (
 		<div className="overflow-x-auto">
@@ -19,14 +21,17 @@ export default function Table({ tableData }: Readonly<TableProps>) {
 								className="border border-dbu-header min-w-[7em] max-w-[15em] py-2 text-sm"
 								key={key}
 							>
-								{item}
+								<EditableText
+									path={`${path}.columns.${key}`}
+									value={item}
+								/>
 							</th>
 						))}
 					</tr>
 				</thead>
 				<tbody>
-					{rows.map((row, key) => (
-						<tr key={key}>
+					{rows.map((row, rowKey) => (
+						<tr key={rowKey}>
 							{row.map((val, key) => (
 								<td
 									key={key}
@@ -36,7 +41,10 @@ export default function Table({ tableData }: Readonly<TableProps>) {
 											: "border border-dbu-header min-w-[7em] max-w-[25em] py-2"
 									}
 								>
-									{val}
+									<EditableText
+										path={`${path}.rows.${rowKey}.${key}`}
+										value={val}
+									/>
 								</td>
 							))}
 						</tr>
