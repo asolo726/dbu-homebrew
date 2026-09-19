@@ -61,16 +61,12 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
 		setEditedAspects(newEditedAspects);
 	};
 
-	const updateLevel = (aspect) => {
-		let newLevel = aspect.level+1;
-		if (newLevel > aspect.maxLevel) {
-			newLevel = 1;
-		}
+	const updateLevel = (aspect, level) => {
 		const aspectToUpdate = {
 			name: aspect.name,
-			level: newLevel,
+			level: level,
 			maxLevel: aspect.maxLevel,
-		}
+		};
 		const newEditedAspects = editedAspects.map((a) => {
 			if (a.name === aspect.name) {
 				return aspectToUpdate;
@@ -80,7 +76,7 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
 
 		setUpdatingAspect(!updatingAspect);
 		setEditedAspects(newEditedAspects);
-	}
+	};
 
 	return (
 		<div
@@ -104,7 +100,7 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
 						{editedAspects.map((a, id) => (
 							<div
 								key={id}
-								className="inline-flex grow justify-between rounded-full border border-dbu-line bg-dbu-bg3 px-3 py-1 text-dbu-text text-sm text-center min-w-[10rem] max-w-[16rem] wrap-break-word"
+								className="inline-flex items-center justify-between rounded-full border border-dbu-line bg-dbu-bg3 px-3 py-1 text-dbu-text text-sm text-center min-w-[10rem] max-w-[16rem] wrap-break-word"
 							>
 								<span
 									data-tooltip-id="my-tooltip-2"
@@ -113,19 +109,23 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
 								>
 									{a.name}
 								</span>
-								{
-									(Object.hasOwn(a, "maxLevel") && a.maxLevel !== 0) && (
+								{Object.hasOwn(a, "maxLevel") &&
+									a.maxLevel !== 0 && (
 										<>
 											<input
-												onSubmit={() => updateLevel(a)}
-												className="w-5 ml-2 text-dbu-header/40 hover:text-dbu-header text-sm leading-none cursor-pointer"
-											/> 
-											<span className="pl-2 text-dbu-header/40 hover:text-dbu-header text-sm leading-none cursor-pointer">
+												onSubmit={(e) =>
+													updateLevel(
+														a,
+														e.target.value,
+													)
+												}
+												className="text-center w-5 text-dbu-header/40 hover:text-dbu-header text-sm leading-none cursor-pointer border-text-dbu-header border-b-1"
+											/>
+											<span className="w-20 text-dbu-header text-sm leading-none">
 												/ {a.maxLevel}
-											</span>	
+											</span>
 										</>
-									)
-								}
+									)}
 								<button
 									onClick={() => removeAspect(a.name)}
 									className="ml-2 text-red-400/40 hover:text-red-400 text-sm leading-none cursor-pointer"
