@@ -13,13 +13,17 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
 	const [positiveAspectOptions, setPositiveAspectOptions] = useState([]);
 	const [negativeAspectOptions, setNegativeAspectOptions] = useState([]);
 	const [updatingAspect, setUpdatingAspect] = useState(false);
+	const [aspectLevel, setAspectLevel] = useState(1);
 
-	const loadedPositiveAspects = aspects.filter((a) => a.isPositive);
-	const loadedNegativeAspects = aspects.filter((a) => !a.isPositive);
-	// Make an Aspect List for the select boxes, filtering out aspects that are already in currentAspects
+	const SLUG_PATTERN = /^([1-9]\d{0,2})?$/;
+
+	// const loadedPositiveAspects = aspects.filter((a) => a.isPositive);
+	// const loadedNegativeAspects = aspects.filter((a) => !a.isPositive);
+	// // Make an Aspect List for the select boxes, filtering out aspects that are already in currentAspects
 	// Can reuse the code for the Toggle Select in SettingsClient, but this is simpler since we don't need
 	// to worry about the "selected" state of the aspects, just the options available to select from
 
+	// Filter the aspects to remove the ones that are already in editedAspects
 	useEffect(() => {
 		let currentNames = new Set(editedAspects.map((a) => a.name));
 		setPositiveAspectOptions(
@@ -30,6 +34,7 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
 		);
 	}, [editedAspects]);
 
+	// Sort the aspects alphabetically and by positive/negative
 	useEffect(() => {
 		const sortAspects = async () => {
 			const sortedAspects = await sortEditableAspects(editedAspects);
@@ -61,16 +66,12 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
 		setEditedAspects(newEditedAspects);
 	};
 
-	const updateLevel = (aspect) => {
-		let newLevel = aspect.level+1;
-		if (newLevel > aspect.maxLevel) {
-			newLevel = 1;
-		}
+	const updateLevel = (aspect, level) => {
 		const aspectToUpdate = {
 			name: aspect.name,
-			level: newLevel,
+			level: level,
 			maxLevel: aspect.maxLevel,
-		}
+		};
 		const newEditedAspects = editedAspects.map((a) => {
 			if (a.name === aspect.name) {
 				return aspectToUpdate;
@@ -80,7 +81,7 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
 
 		setUpdatingAspect(!updatingAspect);
 		setEditedAspects(newEditedAspects);
-	}
+	};
 
 	return (
 		<div
@@ -104,7 +105,7 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
 						{editedAspects.map((a, id) => (
 							<div
 								key={id}
-								className="inline-flex grow justify-between rounded-full border border-dbu-line bg-dbu-bg3 px-3 py-1 text-dbu-text text-sm text-center min-w-[10rem] max-w-[16rem] wrap-break-word"
+								className="inline-flex items-center justify-between rounded-full border border-dbu-line bg-dbu-bg3 px-3 py-1 text-dbu-text text-sm text-center min-w-[10rem] max-w-[16rem] wrap-break-word"
 							>
 								<span
 									data-tooltip-id="my-tooltip-2"
@@ -113,19 +114,38 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
 								>
 									{a.name}
 								</span>
-								{
-									(Object.hasOwn(a, "maxLevel") && a.maxLevel !== 0) && (
+								{Object.hasOwn(a, "maxLevel") &&
+									a.maxLevel !== 0 && (
 										<>
 											<input
-												onSubmit={() => updateLevel(a)}
-												className="w-5 ml-2 text-dbu-header/40 hover:text-dbu-header text-sm leading-none cursor-pointer"
-											/> 
-											<span className="pl-2 text-dbu-header/40 hover:text-dbu-header text-sm leading-none cursor-pointer">
+												onChange={(e) => {
+													if (
+														SLUG_PATTERN.test(
+															e.target.value,
+														)
+													) {
+														if (
+															e.target.value <=
+															a.maxLevel
+														) {
+															setAspectLevel(
+																e.target.value,
+															);
+															updateLevel(
+																a,
+																e.target.value,
+															);
+														}
+													}
+												}}
+												value={aspectLevel}
+												className="text-center w-5 text-dbu-header text-sm leading-none cursor-pointer border-text-dbu-header border-b"
+											/>
+											<span className="w-20 text-dbu-header text-sm leading-none">
 												/ {a.maxLevel}
-											</span>	
+											</span>
 										</>
-									)
-								}
+									)}
 								<button
 									onClick={() => removeAspect(a.name)}
 									className="ml-2 text-red-400/40 hover:text-red-400 text-sm leading-none cursor-pointer"
