@@ -122,6 +122,7 @@ export default function Aspects({
 							currentAspects={sortedAspects}
 							onSave={onSave}
 							onClose={() => setAspectWindowOpen(false)}
+							pendingChanges={pendingChanges}
 						/>
 					</div>
 				)}

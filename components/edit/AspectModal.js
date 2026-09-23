@@ -8,12 +8,11 @@ import { Tooltip } from "../../lib/reactTooltip.js";
 import { useState, useEffect } from "react";
 import { RxArrowUp, RxInfoCircled } from "react-icons/rx";
 
-export default function AspectsModal({ currentAspects, onSave, onClose }) {
-	const [editedAspects, setEditedAspects] = useState(currentAspects); // A copy of the current aspects, to be edited by the user.
+export default function AspectsModal({ currentAspects, onSave, onClose, pendingChanges }) {
+	const [editedAspects, setEditedAspects] = useState(pendingChanges?.["head.details.aspects"] ?? currentAspects); // A copy of the current aspects, to be edited by the user.
 	const [positiveAspectOptions, setPositiveAspectOptions] = useState([]);
 	const [negativeAspectOptions, setNegativeAspectOptions] = useState([]);
 	const [updatingAspect, setUpdatingAspect] = useState(false);
-	const [aspectLevel, setAspectLevel] = useState(1);
 
 	const SLUG_PATTERN = /^([1-9]\d{0,2})?$/;
 
@@ -102,7 +101,7 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
 				{/* Body [Aspects display] */}
 				<div className="px-6 py-4 max-h-[70vh] overflow-y-auto bg-white/5">
 					<div className="flex flex-wrap justify-center gap-3 max-w-full">
-						{editedAspects.map((a, id) => (
+						{(editedAspects).map((a, id) => (
 							<div
 								key={id}
 								className="inline-flex items-center justify-between rounded-full border border-dbu-line bg-dbu-bg3 px-3 py-1 text-dbu-text text-sm text-center min-w-[10rem] max-w-[16rem] wrap-break-word"
@@ -125,12 +124,9 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
 														)
 													) {
 														if (
-															e.target.value <=
-															a.maxLevel
-														) {
-															setAspectLevel(
-																e.target.value,
-															);
+															e.target.value <= a.maxLevel
+														) 
+														{
 															updateLevel(
 																a,
 																e.target.value,
@@ -138,8 +134,8 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
 														}
 													}
 												}}
-												value={aspectLevel}
-												className="text-center w-5 text-dbu-header text-sm leading-none cursor-pointer border-text-dbu-header border-b"
+												value={a.level}
+												className="text-center w-7 text-dbu-header text-sm leading-none cursor-pointer border-text-dbu-header border-b"
 											/>
 											<span className="w-20 text-dbu-header text-sm leading-none">
 												/ {a.maxLevel}
@@ -210,7 +206,10 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
 					</button>
 					<button
 						className="px-4 py-2 rounded bg-dbu-link  text-white hover:bg-dbu-link/90 cursor-pointer"
-						onClick={() => onSave(editedAspects)}
+						onClick={() => {
+							onSave(editedAspects)
+							setEditedAspects(pendingChanges?.["head.details.aspects"])
+						}}
 					>
 						Save
 					</button>
