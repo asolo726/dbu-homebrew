@@ -8,8 +8,15 @@ import { Tooltip } from "../../lib/reactTooltip.js";
 import { useState, useEffect } from "react";
 import { RxArrowUp, RxInfoCircled } from "react-icons/rx";
 
-export default function AspectsModal({ currentAspects, onSave, onClose, pendingChanges }) {
-	const [editedAspects, setEditedAspects] = useState(pendingChanges?.["head.details.aspects"] ?? currentAspects); // A copy of the current aspects, to be edited by the user.
+export default function AspectsModal({
+	currentAspects,
+	onSave,
+	onClose,
+	pendingChanges,
+}) {
+	const [editedAspects, setEditedAspects] = useState(
+		pendingChanges?.["head.details.aspects"] ?? currentAspects,
+	); // A copy of the current aspects, to be edited by the user.
 	const [positiveAspectOptions, setPositiveAspectOptions] = useState([]);
 	const [negativeAspectOptions, setNegativeAspectOptions] = useState([]);
 	const [updatingAspect, setUpdatingAspect] = useState(false);
@@ -82,6 +89,57 @@ export default function AspectsModal({ currentAspects, onSave, onClose, pendingC
 		setEditedAspects(newEditedAspects);
 	};
 
+	const normalAspectItemRender = (a, id) => {
+		return (
+			<div
+				key={id}
+				className="inline-flex items-center justify-between rounded-full border border-dbu-line bg-dbu-bg3 px-3 py-1 text-dbu-text text-sm text-center min-w-[10rem] max-w-[16rem] wrap-break-word"
+			>
+				<span
+					data-tooltip-id="my-tooltip-2"
+					data-tooltip-html={getAspectTooltip(a.name)}
+					className="flex w-full cursor-help justify-center"
+				>
+					{a.name}
+				</span>
+				{Object.hasOwn(a, "maxLevel") && a.maxLevel !== 0 && (
+					<>
+						<input
+							onChange={(e) => {
+								if (SLUG_PATTERN.test(e.target.value)) {
+									if (e.target.value <= a.maxLevel) {
+										updateLevel(a, e.target.value);
+									}
+								}
+							}}
+							value={a.level}
+							className="text-center w-7 text-dbu-header text-sm leading-none cursor-pointer border-text-dbu-header border-b"
+						/>
+						<span className="w-20 text-dbu-header text-sm leading-none">
+							/ {a.maxLevel}
+						</span>
+					</>
+				)}
+				<button
+					onClick={() => removeAspect(a.name)}
+					className="ml-2 text-red-400/40 hover:text-red-400 text-sm leading-none cursor-pointer"
+					title="Remove Aspect"
+				>
+					×
+				</button>
+			</div>
+		);
+	};
+
+	const variantAspectRender = (a, id) => {};
+
+	const enhancedSave = (a, id) => {
+		// Make a drop down list to select from these options, perhaps a 4 dot structure?
+		// Impulsive, Corporeal, Cognitive, Morale
+	};
+
+	const innateStateRender = (a, id) => {};
+
 	return (
 		<div
 			className="fixed inset-0 bg-black/60 flex items-center justify-center z-60"
@@ -101,56 +159,17 @@ export default function AspectsModal({ currentAspects, onSave, onClose, pendingC
 				{/* Body [Aspects display] */}
 				<div className="px-6 py-4 max-h-[70vh] overflow-y-auto bg-white/5">
 					<div className="flex flex-wrap justify-center gap-3 max-w-full">
-						{(editedAspects).map((a, id) => (
-							<div
-								key={id}
-								className="inline-flex items-center justify-between rounded-full border border-dbu-line bg-dbu-bg3 px-3 py-1 text-dbu-text text-sm text-center min-w-[10rem] max-w-[16rem] wrap-break-word"
-							>
-								<span
-									data-tooltip-id="my-tooltip-2"
-									data-tooltip-html={getAspectTooltip(a.name)}
-									className="flex w-full cursor-help justify-center"
-								>
-									{a.name}
-								</span>
-								{Object.hasOwn(a, "maxLevel") &&
-									a.maxLevel !== 0 && (
-										<>
-											<input
-												onChange={(e) => {
-													if (
-														SLUG_PATTERN.test(
-															e.target.value,
-														)
-													) {
-														if (
-															e.target.value <= a.maxLevel
-														) 
-														{
-															updateLevel(
-																a,
-																e.target.value,
-															);
-														}
-													}
-												}}
-												value={a.level}
-												className="text-center w-7 text-dbu-header text-sm leading-none cursor-pointer border-text-dbu-header border-b"
-											/>
-											<span className="w-20 text-dbu-header text-sm leading-none">
-												/ {a.maxLevel}
-											</span>
-										</>
-									)}
-								<button
-									onClick={() => removeAspect(a.name)}
-									className="ml-2 text-red-400/40 hover:text-red-400 text-sm leading-none cursor-pointer"
-									title="Remove Aspect"
-								>
-									×
-								</button>
-							</div>
-						))}
+						{editedAspects.map((a, id) => {
+							if (a.name === "Enhanced Save") {
+								return enhancedSave(a, id);
+							} else if (a.name === "Innate State") {
+								return innateStateRender(a, id);
+							} else if (a.name === "Variant") {
+								return variantAspectRender(a, id);
+							} else {
+								return normalAspectItemRender(a, id);
+							}
+						})}
 					</div>
 				</div>
 
@@ -207,8 +226,10 @@ export default function AspectsModal({ currentAspects, onSave, onClose, pendingC
 					<button
 						className="px-4 py-2 rounded bg-dbu-link  text-white hover:bg-dbu-link/90 cursor-pointer"
 						onClick={() => {
-							onSave(editedAspects)
-							setEditedAspects(pendingChanges?.["head.details.aspects"])
+							onSave(editedAspects);
+							setEditedAspects(
+								pendingChanges?.["head.details.aspects"],
+							);
 						}}
 					>
 						Save
