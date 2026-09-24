@@ -53,6 +53,7 @@ export const getAspectTooltip = (aspectName) => {
  * This only works with the loaded Aspects array, NOT aspects the user can edit
  * Returns a sorted array of aspects.
  * Positive Aspects are returned first, in alphabetical order, followed by negative aspects, also in alphabetical order.
+ * Finally, if there's a Variant aspect, that is placed first in the array.
  * @param {*} aspects
  * @returns []
  */
@@ -65,7 +66,14 @@ export const prettifyAspects = (aspects) => {
 	const sortedNegativeAspects = negativeAspects.sort((a, b) =>
 		a.name.localeCompare(b.name, undefined, { sensitivity: "base" }),
 	);
-	return [...sortedPositiveAspects, ...sortedNegativeAspects];
+	let sortedAspects = [...sortedPositiveAspects, ...sortedNegativeAspects];
+	const variantAspect = sortedAspects.find((a) => a.name === "Variant");
+	if (variantAspect !== undefined) {
+		sortedAspects.splice(sortedAspects.indexOf(variantAspect), 1);
+		const variantFirstSortedAspects = [variantAspect, ...sortedAspects];
+		sortedAspects = variantFirstSortedAspects;
+	}
+	return sortedAspects;
 };
 
 /**
