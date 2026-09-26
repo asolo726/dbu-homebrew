@@ -20,7 +20,21 @@ export default function AspectsModal({
 	const [positiveAspectOptions, setPositiveAspectOptions] = useState([]);
 	const [negativeAspectOptions, setNegativeAspectOptions] = useState([]);
 	const [updatingAspect, setUpdatingAspect] = useState(false);
-
+	const [enhancedSaveOptions, setEnhancedSaveOptions] = useState(
+		{ Impulsive: false },
+		{ Corporeal: false },
+		{ Cognitive: false },
+		{ Morale: false },
+	);
+	const [buttonStateStyles, setButtonStateStyles] = useState({
+		Impulsive:
+			"text-dbu-header text-sm leading-none w-3 h-3 border border-text-dbu-header rounded-full cursor-pointer",
+		Corporeal:
+			"text-dbu-header text-sm leading-none w-3 h-3 border border-text-dbu-header rounded-full cursor-pointer",
+		Cognitive:
+			"text-dbu-header text-sm leading-none w-3 h-3 border border-text-dbu-header rounded-full cursor-pointer",
+		Morale: "text-dbu-header text-sm leading-none w-3 h-3 border border-text-dbu-header rounded-full cursor-pointer",
+	});
 	const SLUG_PATTERN = /^([1-9]\d{0,2})?$/;
 
 	// const loadedPositiveAspects = aspects.filter((a) => a.isPositive);
@@ -133,9 +147,76 @@ export default function AspectsModal({
 
 	const variantAspectRender = (a, id) => {};
 
-	const enhancedSave = (a, id) => {
-		// Make a drop down list to select from these options, perhaps a 4 dot structure?
+	const enhancedSaveRender = (a, id) => {
+		// Perhaps a 4 dot structure?
 		// Impulsive, Corporeal, Cognitive, Morale
+		return (
+			<div
+				key={id}
+				className="flex-col inline-flex items-center justify-between rounded-full border border-dbu-line bg-dbu-bg3 px-3 py-1 text-dbu-text text-sm text-center min-w-[10rem] max-w-[16rem] wrap-break-word"
+			>
+				<div className="flex items-center">
+					<span
+						data-tooltip-id="my-tooltip-2"
+						data-tooltip-html={getAspectTooltip(a.name)}
+						className="flex w-full cursor-help justify-center"
+					>
+						Enhanced Save
+					</span>
+					<button
+						onClick={() => removeAspect(a.name)}
+						className="ml-3 text-red-400/40 hover:text-red-400 text-sm leading-none cursor-pointer"
+						title="Remove Aspect"
+					>
+						×
+					</button>
+				</div>
+				<div className="flex items-center gap-4">
+					<button
+						className={buttonStateStyles.Impulsive}
+						onClick={() => updateEnhancedSave(a, "Impulsive")}
+					></button>
+					<button className={buttonStateStyles.Corporeal}></button>
+					<button className={buttonStateStyles.Cognitive}></button>
+					<button className={buttonStateStyles.Morale}></button>
+				</div>
+			</div>
+		);
+	};
+
+	const updateEnhancedSave = (aspect, SaveType) => {
+		const newEnhancedSaveOptions = enhancedSaveOptions;
+		enhancedSaveOptions[SaveType] = !enhancedSaveOptions[SaveType];
+		// Updates Button Styles
+		if (newEnhancedSaveOptions[SaveType]) {
+			setButtonStateStyles((prevState) => ({
+				...prevState,
+				[SaveType]: prevState[SaveType] + " bg-dbu-header",
+			}));
+		} else {
+			setButtonStateStyles((prevState) => ({
+				...prevState,
+				[SaveType]: prevState[SaveType].replace(" bg-dbu-header", ""),
+			}));
+		}
+		// Updates Aspect Array
+		const newEditedAspects = editedAspects.map((a) => {
+			if (a.name.includes("Enhanced Save")) {
+				const newAspectName = enhancedSaveNameBuilder(enhancedSaveOptions, SaveType, a.name);
+				a.name = newAspectName;
+				return a;
+			}
+		});
+		setUpdatingAspect(!updatingAspect);
+		setEditedAspects(newEditedAspects);
+		setEnhancedSaveOptions(newEnhancedSaveOptions);
+	};
+
+	const enhancedSaveNameBuilder = (enhancedSaveOptions, SaveType, startingName) => {
+		let newAspectName = "Enhanced Save [";
+		// First check if there's only 1 option set to true, if so, return that option
+
+		return newAspectName;
 	};
 
 	const innateStateRender = (a, id) => {};
@@ -160,8 +241,8 @@ export default function AspectsModal({
 				<div className="px-6 py-4 max-h-[70vh] overflow-y-auto bg-white/5">
 					<div className="flex flex-wrap justify-center gap-3 max-w-full">
 						{editedAspects.map((a, id) => {
-							if (a.name === "Enhanced Save") {
-								return enhancedSave(a, id);
+							if (a.name.includes("Enhanced Save")) {
+								return enhancedSaveRender(a, id);
 							} else if (a.name === "Innate State") {
 								return innateStateRender(a, id);
 							} else if (a.name === "Variant") {
