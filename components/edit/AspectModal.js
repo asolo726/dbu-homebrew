@@ -78,7 +78,7 @@ export default function AspectsModal({
 		}
 		const aspectToAdd = {
 			name: aspect.name,
-			level: 1, // Placeholder
+			level: 0, // Placeholder
 			maxLevel: maxLevel,
 		};
 		const newEditedAspects = [...editedAspects, aspectToAdd];
@@ -202,20 +202,42 @@ export default function AspectsModal({
 		// Updates Aspect Array
 		const newEditedAspects = editedAspects.map((a) => {
 			if (a.name.includes("Enhanced Save")) {
-				const newAspectName = enhancedSaveNameBuilder(enhancedSaveOptions, SaveType, a.name);
+				const newAspectName = enhancedSaveNameBuilder(
+					enhancedSaveOptions,
+					SaveType,
+					a.name,
+				);
 				a.name = newAspectName;
+				return a;
+			} else {
 				return a;
 			}
 		});
-		setUpdatingAspect(!updatingAspect);
 		setEditedAspects(newEditedAspects);
+		setUpdatingAspect(!updatingAspect);
 		setEnhancedSaveOptions(newEnhancedSaveOptions);
 	};
 
-	const enhancedSaveNameBuilder = (enhancedSaveOptions, SaveType, startingName) => {
-		let newAspectName = "Enhanced Save [";
+	const enhancedSaveNameBuilder = (
+		enhancedSaveOptions,
+		SaveType,
+		startingName,
+	) => {
+		let newAspectName = "Enhanced Save (";
+		let saveTypes = "";
+		let loopCount = 0;
 		// First check if there's only 1 option set to true, if so, return that option
-
+		for (const [key, value] of Object.entries(enhancedSaveOptions)) {
+			if (value) {
+				if (loopCount === 0) {
+					saveTypes += key;
+				}
+				if (loopCount > 0) {
+					saveTypes += "/" + key;
+				}
+			}
+		}
+		newAspectName += saveTypes + ")";
 		return newAspectName;
 	};
 
