@@ -4,6 +4,7 @@ import {
 	getAspectTooltip,
 	sortEditableAspects,
 } from "../dbu/General/util/headUtil";
+import EnhancedSaveModal from "./AspectSpecialModals/EnhancedSaveModal";
 import { Tooltip } from "../../lib/reactTooltip.js";
 import { useState, useEffect } from "react";
 import { RxArrowUp, RxInfoCircled } from "react-icons/rx";
@@ -20,21 +21,8 @@ export default function AspectsModal({
 	const [positiveAspectOptions, setPositiveAspectOptions] = useState([]);
 	const [negativeAspectOptions, setNegativeAspectOptions] = useState([]);
 	const [updatingAspect, setUpdatingAspect] = useState(false);
-	const [enhancedSaveOptions, setEnhancedSaveOptions] = useState(
-		{ Impulsive: false },
-		{ Corporeal: false },
-		{ Cognitive: false },
-		{ Morale: false },
-	);
-	const [buttonStateStyles, setButtonStateStyles] = useState({
-		Impulsive:
-			"text-dbu-header text-sm leading-none w-3 h-3 border border-text-dbu-header rounded-full cursor-pointer",
-		Corporeal:
-			"text-dbu-header text-sm leading-none w-3 h-3 border border-text-dbu-header rounded-full cursor-pointer",
-		Cognitive:
-			"text-dbu-header text-sm leading-none w-3 h-3 border border-text-dbu-header rounded-full cursor-pointer",
-		Morale: "text-dbu-header text-sm leading-none w-3 h-3 border border-text-dbu-header rounded-full cursor-pointer",
-	});
+	const [EnhancedSaveName, setEnhancedSaveName] = useState();
+	const [enhancedSaveModalOpen, setEnhancedSaveModalOpen] = useState(false);
 	const SLUG_PATTERN = /^([1-9]\d{0,2})?$/;
 
 	// const loadedPositiveAspects = aspects.filter((a) => a.isPositive);
@@ -72,18 +60,26 @@ export default function AspectsModal({
 	};
 
 	const addAspect = (aspect) => {
-		let maxLevel = 0;
-		if (Object.hasOwn(aspect, "maxLevel")) {
-			maxLevel = aspect.maxLevel;
-		}
-		const aspectToAdd = {
-			name: aspect.name,
-			level: 0, // Placeholder
-			maxLevel: maxLevel,
-		};
-		const newEditedAspects = [...editedAspects, aspectToAdd];
-		setUpdatingAspect(!updatingAspect);
-		setEditedAspects(newEditedAspects);
+		if (aspect.name === "Enhanced Save") {
+			setEnhancedSaveModalOpen(true);
+			// const aspectToAdd = {
+			// }
+			return;
+		} 
+		
+			let maxLevel = 0;
+			if (Object.hasOwn(aspect, "maxLevel")) {
+				maxLevel = aspect.maxLevel;
+			}
+			const aspectToAdd = {
+				name: aspect.name,
+				level: 0, // Placeholder
+				maxLevel: maxLevel,
+			};
+			const newEditedAspects = [...editedAspects, aspectToAdd];
+			setUpdatingAspect(!updatingAspect);
+			setEditedAspects(newEditedAspects);
+		
 	};
 
 	const updateLevel = (aspect, level) => {
@@ -148,8 +144,6 @@ export default function AspectsModal({
 	const variantAspectRender = (a, id) => {};
 
 	const enhancedSaveRender = (a, id) => {
-		// Perhaps a 4 dot structure?
-		// Impulsive, Corporeal, Cognitive, Morale
 		return (
 			<div
 				key={id}
@@ -161,7 +155,7 @@ export default function AspectsModal({
 						data-tooltip-html={getAspectTooltip(a.name)}
 						className="flex w-full cursor-help justify-center"
 					>
-						Enhanced Save
+						{a.name}
 					</span>
 					<button
 						onClick={() => removeAspect(a.name)}
@@ -171,23 +165,10 @@ export default function AspectsModal({
 						×
 					</button>
 				</div>
-				<div className="flex items-center gap-4">
-					<button
-						className={buttonStateStyles.Impulsive}
-						onClick={() => updateEnhancedSave(a, "Impulsive")}
-					></button>
-					<button className={buttonStateStyles.Corporeal}></button>
-					<button className={buttonStateStyles.Cognitive}></button>
-					<button className={buttonStateStyles.Morale}></button>
-				</div>
 			</div>
 		);
 	};
-
-	const updateEnhancedSave = (aspect, SaveType) => {
-		const newEnhancedSaveOptions = enhancedSaveOptions;
-		enhancedSaveOptions[SaveType] = !enhancedSaveOptions[SaveType];
-		// Updates Button Styles
+	const updateEnhancedButtonStyles = (newEnhancedSaveOptions, SaveType) => {
 		if (newEnhancedSaveOptions[SaveType]) {
 			setButtonStateStyles((prevState) => ({
 				...prevState,
@@ -199,6 +180,12 @@ export default function AspectsModal({
 				[SaveType]: prevState[SaveType].replace(" bg-dbu-header", ""),
 			}));
 		}
+	};
+	const updateEnhancedSave = (aspect, SaveType) => {
+		const newEnhancedSaveOptions = enhancedSaveOptions;
+		enhancedSaveOptions[SaveType] = !enhancedSaveOptions[SaveType];
+		// Updates Button Styles
+		updateEnhancedButtonStyles(newEnhancedSaveOptions, SaveType);
 		// Updates Aspect Array
 		const newEditedAspects = editedAspects.map((a) => {
 			if (a.name.includes("Enhanced Save")) {
@@ -344,6 +331,7 @@ export default function AspectsModal({
 				className="tooltip z-30"
 				style={{ maxWidth: "400px" }}
 			/>
+			{ enhancedSaveModalOpen && <EnhancedSaveModal EnhancedSaveName={EnhancedSaveName} setEnhancedSaveName={setEnhancedSaveName} /> }
 		</div>
 	);
 }
