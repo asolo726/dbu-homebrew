@@ -12,8 +12,10 @@ import { RxArrowUp, RxInfoCircled } from "react-icons/rx";
 export default function AspectsModal({
 	currentAspects,
 	onSave,
-	onClose,
+	closeAspectModal,
 	pendingChanges,
+	enhancedWindowOpen,
+	setEnhancedWindowOpen,
 }) {
 	const [editedAspects, setEditedAspects] = useState(
 		pendingChanges?.["head.details.aspects"] ?? currentAspects,
@@ -21,8 +23,7 @@ export default function AspectsModal({
 	const [positiveAspectOptions, setPositiveAspectOptions] = useState([]);
 	const [negativeAspectOptions, setNegativeAspectOptions] = useState([]);
 	const [updatingAspect, setUpdatingAspect] = useState(false);
-	const [EnhancedSaveName, setEnhancedSaveName] = useState();
-	const [enhancedSaveModalOpen, setEnhancedSaveModalOpen] = useState(false);
+	const [EnhancedSaveName, setEnhancedSaveName] = useState("Enhanced Save");
 	const SLUG_PATTERN = /^([1-9]\d{0,2})?$/;
 
 	// const loadedPositiveAspects = aspects.filter((a) => a.isPositive);
@@ -61,12 +62,10 @@ export default function AspectsModal({
 
 	const addAspect = (aspect) => {
 		if (aspect.name === "Enhanced Save") {
-			setEnhancedSaveModalOpen(true);
-			// const aspectToAdd = {
-			// }
-			return;
-		} 
-		
+			setEnhancedWindowOpen(true);
+		} else if (aspect.name === "Variant") {
+		} else if (aspect.name === "Innate State") {
+		} else {
 			let maxLevel = 0;
 			if (Object.hasOwn(aspect, "maxLevel")) {
 				maxLevel = aspect.maxLevel;
@@ -79,7 +78,7 @@ export default function AspectsModal({
 			const newEditedAspects = [...editedAspects, aspectToAdd];
 			setUpdatingAspect(!updatingAspect);
 			setEditedAspects(newEditedAspects);
-		
+		}
 	};
 
 	const updateLevel = (aspect, level) => {
@@ -168,72 +167,13 @@ export default function AspectsModal({
 			</div>
 		);
 	};
-	const updateEnhancedButtonStyles = (newEnhancedSaveOptions, SaveType) => {
-		if (newEnhancedSaveOptions[SaveType]) {
-			setButtonStateStyles((prevState) => ({
-				...prevState,
-				[SaveType]: prevState[SaveType] + " bg-dbu-header",
-			}));
-		} else {
-			setButtonStateStyles((prevState) => ({
-				...prevState,
-				[SaveType]: prevState[SaveType].replace(" bg-dbu-header", ""),
-			}));
-		}
-	};
-	const updateEnhancedSave = (aspect, SaveType) => {
-		const newEnhancedSaveOptions = enhancedSaveOptions;
-		enhancedSaveOptions[SaveType] = !enhancedSaveOptions[SaveType];
-		// Updates Button Styles
-		updateEnhancedButtonStyles(newEnhancedSaveOptions, SaveType);
-		// Updates Aspect Array
-		const newEditedAspects = editedAspects.map((a) => {
-			if (a.name.includes("Enhanced Save")) {
-				const newAspectName = enhancedSaveNameBuilder(
-					enhancedSaveOptions,
-					SaveType,
-					a.name,
-				);
-				a.name = newAspectName;
-				return a;
-			} else {
-				return a;
-			}
-		});
-		setEditedAspects(newEditedAspects);
-		setUpdatingAspect(!updatingAspect);
-		setEnhancedSaveOptions(newEnhancedSaveOptions);
-	};
-
-	const enhancedSaveNameBuilder = (
-		enhancedSaveOptions,
-		SaveType,
-		startingName,
-	) => {
-		let newAspectName = "Enhanced Save (";
-		let saveTypes = "";
-		let loopCount = 0;
-		// First check if there's only 1 option set to true, if so, return that option
-		for (const [key, value] of Object.entries(enhancedSaveOptions)) {
-			if (value) {
-				if (loopCount === 0) {
-					saveTypes += key;
-				}
-				if (loopCount > 0) {
-					saveTypes += "/" + key;
-				}
-			}
-		}
-		newAspectName += saveTypes + ")";
-		return newAspectName;
-	};
 
 	const innateStateRender = (a, id) => {};
 
 	return (
 		<div
 			className="fixed inset-0 bg-black/60 flex items-center justify-center z-60"
-			onClick={onClose}
+			// onClick={closeAspectModal}
 		>
 			<div
 				className="bg-dbu-bg2 border border-dbu-line rounded-lg w-full max-w-3xl mx-4 shadow-2xl overflow-hidden"
@@ -309,7 +249,7 @@ export default function AspectsModal({
 				<div className="px-6 py-4 border-t border-dbu-line flex justify-end gap-2">
 					<button
 						className="px-4 py-2 rounded border border-dbu-line text-dbu-text hover:border-dbu-header transition-colors"
-						onClick={onClose}
+						onClick={closeAspectModal}
 					>
 						Cancel
 					</button>
@@ -331,7 +271,27 @@ export default function AspectsModal({
 				className="tooltip z-30"
 				style={{ maxWidth: "400px" }}
 			/>
-			{ enhancedSaveModalOpen && <EnhancedSaveModal EnhancedSaveName={EnhancedSaveName} setEnhancedSaveName={setEnhancedSaveName} /> }
+			{enhancedWindowOpen && (
+				<EnhancedSaveModal
+					EnhancedSaveName={EnhancedSaveName}
+					setEnhancedSaveName={setEnhancedSaveName}
+					setEnhancedWindowOpen={setEnhancedWindowOpen}
+					editedAspects={editedAspects}
+					setEditedAspects={setEditedAspects}
+					setUpdatingAspect={setUpdatingAspect}
+					updatingAspect={updatingAspect}
+				/>
+			)}
 		</div>
 	);
 }
+/**
+ * const aspectToAdd = {
+			name: EnhancedSaveName,
+			level: 0,
+			maxLevel: 0,
+		};
+		const newEditedAspects = [...editedAspects, aspectToAdd];
+		setUpdatingAspect(!updatingAspect);
+		setEditedAspects(newEditedAspects);
+ */

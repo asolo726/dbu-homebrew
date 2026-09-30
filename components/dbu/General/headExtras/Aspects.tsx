@@ -33,15 +33,26 @@ export default function Aspects({
 	const btnStyle =
 		"ml-2 gap-1.5 px-3 py-1.5 rounded-md text-sm border border-white/30 text-white bg-white/10 hover:bg-white/20 transition-colors";
 	const [aspectWindowOpen, setAspectWindowOpen] = useState(false);
-
+	const [enhancedWindowOpen, setEnhancedWindowOpen] = useState(false);
+	const [variantWindowOpen, setVariantWindowOpen] = useState(false);
+	const [innateStateWindowOpen, setInnateStateWindowOpen] = useState(false);
 	const onSave = (newAspects: any) => {
 		handleAspectChange(newAspects);
+		setEnhancedWindowOpen(false);
 		setAspectWindowOpen(false);
+		setVariantWindowOpen(false);
+		setInnateStateWindowOpen(false);
 	};
 
 	const toggleAspectWindowState = () => {
 		setAspectWindowOpen(!aspectWindowOpen);
 	};
+
+	const handleClosingModals = () => {
+		if (!enhancedWindowOpen || !variantWindowOpen || !innateStateWindowOpen)
+			setAspectWindowOpen(false);
+	};
+
 	const [sortedAspects, setSortedAspects] = useState<Aspect[]>([]);
 
 	useEffect(() => {
@@ -121,7 +132,9 @@ export default function Aspects({
 						<AspectsModal
 							currentAspects={sortedAspects}
 							onSave={onSave}
-							onClose={() => setAspectWindowOpen(false)}
+							closeAspectModal={() => handleClosingModals()}
+							enhancedWindowOpen={enhancedWindowOpen}
+							setEnhancedWindowOpen={setEnhancedWindowOpen}
 							pendingChanges={pendingChanges}
 						/>
 					</div>
