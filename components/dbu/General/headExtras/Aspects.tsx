@@ -10,6 +10,7 @@ export interface Aspect {
 	level: number;
 	maxLevel?: number;
 	link?: { name: string; url: string };
+	EnhancedSaves? : string;
 }
 interface AspectsProps {
 	aspects: Aspect[] | undefined;
@@ -36,7 +37,8 @@ export default function Aspects({
 	const [enhancedWindowOpen, setEnhancedWindowOpen] = useState(false);
 	const [variantWindowOpen, setVariantWindowOpen] = useState(false);
 	const [innateStateWindowOpen, setInnateStateWindowOpen] = useState(false);
-	const onSave = (newAspects: any) => {
+	const [EnhancedSaveName, setEnhancedSaveName] = useState("");
+	const onSave = (newAspects: Aspect[]) => {
 		handleAspectChange(newAspects);
 		setEnhancedWindowOpen(false);
 		setAspectWindowOpen(false);
@@ -83,7 +85,7 @@ export default function Aspects({
 										<span
 											className={`${customAspectNames.includes(aspect.name) ? "underline" : ""}`}
 										>
-											{aspect.name}
+											{aspect.EnhancedSaves ? aspect.EnhancedSaves : aspect.name}
 										</span>
 									</span>
 									{aspect.link && (
@@ -136,6 +138,8 @@ export default function Aspects({
 							enhancedWindowOpen={enhancedWindowOpen}
 							setEnhancedWindowOpen={setEnhancedWindowOpen}
 							pendingChanges={pendingChanges}
+							EnhancedSaveName={EnhancedSaveName}
+							setEnhancedSaveName={setEnhancedSaveName}
 						/>
 					</div>
 				)}

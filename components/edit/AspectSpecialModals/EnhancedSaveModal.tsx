@@ -43,20 +43,19 @@ export default function EnhancedSaveModal({
 			Cognitive: false,
 			Morale: false,
 		});
-	const [previewName, setPreviewName] = useState("Enhanced Save");
+	const [previewName, setPreviewName] = useState(EnhancedSaveName);
 	const [buttonStateStyles, setButtonStateStyles] =
 		useState<EnhancedSaveButtonStyles>({
 			Impulsive:
 				"text-dbu-header leading-none border border-text-dbu-header rounded-full cursor-pointer",
 			Corporeal:
-				" text-dbu-header leading-none border border-text-dbu-header rounded-full cursor-pointer",
+				"text-dbu-header leading-none border border-text-dbu-header rounded-full cursor-pointer",
 			Cognitive:
-				" text-dbu-header leading-none border border-text-dbu-header rounded-full cursor-pointer",
-			Morale: " text-dbu-header leading-none border border-text-dbu-header rounded-full cursor-pointer",
+				"text-dbu-header leading-none border border-text-dbu-header rounded-full cursor-pointer",
+			Morale: "text-dbu-header leading-none border border-text-dbu-header rounded-full cursor-pointer",
 		});
 
 	const onClose = () => {
-		console.log("Closing Enhanced Modal");
 		setEnhancedWindowOpen(false);
 	};
 
@@ -67,19 +66,27 @@ export default function EnhancedSaveModal({
 			Cognitive: false,
 			Morale: false,
 		};
+		let newButtonStyles = buttonStateStyles;
+
 		if (EnhancedSaveName.includes("Impulsive")) {
 			options.Impulsive = true;
+			newButtonStyles.Impulsive = "text-dbu-bg1 leading-none border border-text-dbu-header rounded-full cursor-pointer bg-dbu-header";
 		}
 		if (EnhancedSaveName.includes("Corporeal")) {
 			options.Corporeal = true;
+			newButtonStyles.Corporeal = "text-dbu-bg1 leading-none border border-text-dbu-header rounded-full cursor-pointer bg-dbu-header";
 		}
 		if (EnhancedSaveName.includes("Cognitive")) {
 			options.Cognitive = true;
+			newButtonStyles.Cognitive = "text-dbu-bg1 leading-none border border-text-dbu-header rounded-full cursor-pointer bg-dbu-header";
 		}
 		if (EnhancedSaveName.includes("Morale")) {
 			options.Morale = true;
+			newButtonStyles.Morale = "text-dbu-bg1 leading-none border border-text-dbu-header rounded-full cursor-pointer bg-dbu-header";
 		}
+
 		setEnhancedSaveOptions(options);
+		setButtonStateStyles(newButtonStyles);
 	};
 
 	const updateEnhancedSave = (SaveType: string) => {
@@ -87,15 +94,14 @@ export default function EnhancedSaveModal({
 		enhancedSaveOptions[SaveType] = !enhancedSaveOptions[SaveType];
 		// Updates Button Styles
 		if (newEnhancedSaveOptions[SaveType]) {
-			setButtonStateStyles((prevState) => ({
-				...prevState,
-				[SaveType]: prevState[SaveType] + " bg-dbu-header",
-			}));
+			let newButtonStyles = buttonStateStyles;
+			newButtonStyles[SaveType] = newButtonStyles[SaveType].concat(" bg-dbu-header").replace("text-dbu-header", "text-dbu-bg1");
+			setButtonStateStyles(newButtonStyles);
 		} else {
-			setButtonStateStyles((prevState) => ({
-				...prevState,
-				[SaveType]: prevState[SaveType].replace(" bg-dbu-header", ""),
-			}));
+			let newButtonStyles = buttonStateStyles;
+			newButtonStyles[SaveType] = newButtonStyles[SaveType].replace("text-dbu-bg1", "text-dbu-header").replace("bg-dbu-header", "");
+			setButtonStateStyles(newButtonStyles);
+
 		}
 		enhancedSaveNameBuilder();
 	};
@@ -105,7 +111,6 @@ export default function EnhancedSaveModal({
 		let saveTypes = "";
 		let loopCount = 0;
 		let numOfOptionsTrue = 0;
-		// First check if there's only 1 option set to true, if so, return that option
 		for (const [key, value] of Object.entries(enhancedSaveOptions)) {
 			if (value) {
 				numOfOptionsTrue++;
@@ -139,9 +144,9 @@ export default function EnhancedSaveModal({
 
 	const updateEnhancedSaveNameFinal = () => {
 		const aspectToAdd = {
-			name: previewName,
+			name: "Enhanced Save",
 			level: 0,
-			maxLevel: 0,
+			EnhancedSaves: EnhancedSaveName,
 		};
 		const newEditedAspects = [...editedAspects, aspectToAdd];
 		setUpdatingAspect(!updatingAspect);
@@ -151,6 +156,11 @@ export default function EnhancedSaveModal({
 	useEffect(() => {
 		readEnhancedSaveOptions();
 	}, []);
+
+	useEffect(() => {
+		setEnhancedSaveName(previewName);
+	},[previewName]);
+
 	return (
 		<div
 			className="fixed inset-0 bg-black/80 flex items-center justify-center z-70"
@@ -162,17 +172,17 @@ export default function EnhancedSaveModal({
 			>
 				{/* Header */}
 				<div className="px-6 py-4 border-b border-dbu-line">
-					<h1 className="text-dbu-header font-semibold flex flex-wrap justify-center">
+					<h1 className="text-2xl text-dbu-header font-semibold flex flex-wrap justify-center">
 						Enhanced Save Aspect Editor
 					</h1>
 				</div>
 				<div className="flex justify-center">
-					<h3 className="italic">Enhanced Save Name Preview</h3>
+					<h2 className="text-lg italic">Enhanced Save Name Preview</h2>
 				</div>
 				<div className="flex justify-center">
-					<h3>{previewName}</h3>
+					<h3 className="text-xl font-semibold">{previewName}</h3>
 				</div>
-				<div className="flex justify-center">
+				<div className="flex flex-col md:justify-around mx-20 text-center md:flex-row md:flex-4 justify-center mb-4 mt-2">
 					<div className={buttonStateStyles.Impulsive}>
 						<button
 							className="p-5 text-md"

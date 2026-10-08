@@ -16,6 +16,8 @@ export default function AspectsModal({
 	pendingChanges,
 	enhancedWindowOpen,
 	setEnhancedWindowOpen,
+	EnhancedSaveName,
+	setEnhancedSaveName,
 }) {
 	const [editedAspects, setEditedAspects] = useState(
 		pendingChanges?.["head.details.aspects"] ?? currentAspects,
@@ -23,7 +25,6 @@ export default function AspectsModal({
 	const [positiveAspectOptions, setPositiveAspectOptions] = useState([]);
 	const [negativeAspectOptions, setNegativeAspectOptions] = useState([]);
 	const [updatingAspect, setUpdatingAspect] = useState(false);
-	const [EnhancedSaveName, setEnhancedSaveName] = useState("Enhanced Save");
 	const SLUG_PATTERN = /^([1-9]\d{0,2})?$/;
 
 	// const loadedPositiveAspects = aspects.filter((a) => a.isPositive);
@@ -51,6 +52,15 @@ export default function AspectsModal({
 		};
 		sortAspects();
 	}, [updatingAspect]);
+	
+	//Pre-Load the Enhanced Save Name if it is already in the Aspects list
+	useEffect(()=>{
+		for (const aspect of editedAspects) {
+			if (aspect.name === "Enhanced Save") {
+				setEnhancedSaveName(aspect.EnhancedSaves);
+			}
+		}
+	},[])
 
 	const removeAspect = (aspectName) => {
 		const newEditedAspects = editedAspects.filter(
@@ -63,16 +73,19 @@ export default function AspectsModal({
 	const addAspect = (aspect) => {
 		if (aspect.name === "Enhanced Save") {
 			setEnhancedWindowOpen(true);
-		} else if (aspect.name === "Variant") {
-		} else if (aspect.name === "Innate State") {
-		} else {
+		} 
+		else if (aspect.name === "Variant") {
+		} 
+		else if (aspect.name === "Innate State") {
+		} 
+		else {
 			let maxLevel = 0;
 			if (Object.hasOwn(aspect, "maxLevel")) {
 				maxLevel = aspect.maxLevel;
 			}
 			const aspectToAdd = {
 				name: aspect.name,
-				level: 0, // Placeholder
+				level: 0,
 				maxLevel: maxLevel,
 			};
 			const newEditedAspects = [...editedAspects, aspectToAdd];
@@ -151,10 +164,10 @@ export default function AspectsModal({
 				<div className="flex items-center">
 					<span
 						data-tooltip-id="my-tooltip-2"
-						data-tooltip-html={getAspectTooltip(a.name)}
+						data-tooltip-html={getAspectTooltip("Enhanced Save")}
 						className="flex w-full cursor-help justify-center"
 					>
-						{a.name}
+						{a.EnhancedSaves}
 					</span>
 					<button
 						onClick={() => removeAspect(a.name)}
@@ -273,25 +286,15 @@ export default function AspectsModal({
 			/>
 			{enhancedWindowOpen && (
 				<EnhancedSaveModal
-					EnhancedSaveName={EnhancedSaveName}
-					setEnhancedSaveName={setEnhancedSaveName}
 					setEnhancedWindowOpen={setEnhancedWindowOpen}
 					editedAspects={editedAspects}
 					setEditedAspects={setEditedAspects}
 					setUpdatingAspect={setUpdatingAspect}
 					updatingAspect={updatingAspect}
+					EnhancedSaveName={EnhancedSaveName}
+					setEnhancedSaveName={setEnhancedSaveName}
 				/>
 			)}
 		</div>
 	);
 }
-/**
- * const aspectToAdd = {
-			name: EnhancedSaveName,
-			level: 0,
-			maxLevel: 0,
-		};
-		const newEditedAspects = [...editedAspects, aspectToAdd];
-		setUpdatingAspect(!updatingAspect);
-		setEditedAspects(newEditedAspects);
- */
