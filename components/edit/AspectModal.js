@@ -5,6 +5,7 @@ import {
 	sortEditableAspects,
 } from "../dbu/General/util/headUtil";
 import EnhancedSaveModal from "./AspectSpecialModals/EnhancedSaveModal";
+import InnateStateModal from "./AspectSpecialModals/InnateStateModal";
 import { Tooltip } from "../../lib/reactTooltip.js";
 import { useState, useEffect } from "react";
 import { RxArrowUp, RxInfoCircled } from "react-icons/rx";
@@ -16,6 +17,8 @@ export default function AspectsModal({
 	pendingChanges,
 	enhancedWindowOpen,
 	setEnhancedWindowOpen,
+	innateStateWindowOpen,
+	setInnateStateWindowOpen,
 	EnhancedSaveName,
 	setEnhancedSaveName,
 }) {
@@ -52,15 +55,15 @@ export default function AspectsModal({
 		};
 		sortAspects();
 	}, [updatingAspect]);
-	
+
 	//Pre-Load the Enhanced Save Name if it is already in the Aspects list
-	useEffect(()=>{
+	useEffect(() => {
 		for (const aspect of editedAspects) {
 			if (aspect.name === "Enhanced Save") {
 				setEnhancedSaveName(aspect.EnhancedSaves);
 			}
 		}
-	},[])
+	}, []);
 
 	const removeAspect = (aspectName) => {
 		const newEditedAspects = editedAspects.filter(
@@ -73,12 +76,10 @@ export default function AspectsModal({
 	const addAspect = (aspect) => {
 		if (aspect.name === "Enhanced Save") {
 			setEnhancedWindowOpen(true);
-		} 
-		else if (aspect.name === "Variant") {
-		} 
-		else if (aspect.name === "Innate State") {
-		} 
-		else {
+		} else if (aspect.name === "Variant") {
+		} else if (aspect.name === "Innate State") {
+			setInnateStateWindowOpen(true);
+		} else {
 			let maxLevel = 0;
 			if (Object.hasOwn(aspect, "maxLevel")) {
 				maxLevel = aspect.maxLevel;
@@ -181,7 +182,31 @@ export default function AspectsModal({
 		);
 	};
 
-	const innateStateRender = (a, id) => {};
+	const innateStateRender = (a, id) => {
+		return (
+			<div
+				key={id}
+				className="flex-col inline-flex items-center justify-between rounded-full border border-dbu-line bg-dbu-bg3 px-3 py-1 text-dbu-text text-sm text-center min-w-[10rem] max-w-[16rem] wrap-break-word"
+			>
+				<div className="flex items-center">
+					<span
+						data-tooltip-id="my-tooltip-2"
+						data-tooltip-html={getAspectTooltip("Innate State")}
+						className="flex w-full cursor-help justify-center"
+					>
+						{a.name} {a.innateState}
+					</span>
+					<button
+						onClick={() => removeAspect(a.name)}
+						className="ml-3 text-red-400/40 hover:text-red-400 text-sm leading-none cursor-pointer"
+						title="Remove Aspect"
+					>
+						×
+					</button>
+				</div>
+			</div>
+		);
+	};
 
 	return (
 		<div
@@ -293,6 +318,15 @@ export default function AspectsModal({
 					updatingAspect={updatingAspect}
 					EnhancedSaveName={EnhancedSaveName}
 					setEnhancedSaveName={setEnhancedSaveName}
+				/>
+			)}
+			{innateStateWindowOpen && (
+				<InnateStateModal
+					setInnateStateWindowOpen={setInnateStateWindowOpen}
+					editedAspects={editedAspects}
+					setEditedAspects={setEditedAspects}
+					setUpdatingAspect={setUpdatingAspect}
+					updatingAspect={updatingAspect}
 				/>
 			)}
 		</div>

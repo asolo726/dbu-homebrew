@@ -47,12 +47,12 @@ export default function EnhancedSaveModal({
 	const [buttonStateStyles, setButtonStateStyles] =
 		useState<EnhancedSaveButtonStyles>({
 			Impulsive:
-				"text-dbu-header leading-none border border-text-dbu-header rounded-full cursor-pointer",
+				"text-dbu-header leading-none border border-text-dbu-header rounded-full",
 			Corporeal:
-				"text-dbu-header leading-none border border-text-dbu-header rounded-full cursor-pointer",
+				"text-dbu-header leading-none border border-text-dbu-header rounded-full",
 			Cognitive:
-				"text-dbu-header leading-none border border-text-dbu-header rounded-full cursor-pointer",
-			Morale: "text-dbu-header leading-none border border-text-dbu-header rounded-full cursor-pointer",
+				"text-dbu-header leading-none border border-text-dbu-header rounded-full",
+			Morale: "text-dbu-header leading-none border border-text-dbu-header rounded-full",
 		});
 
 	const onClose = () => {
@@ -70,19 +70,23 @@ export default function EnhancedSaveModal({
 
 		if (EnhancedSaveName.includes("Impulsive")) {
 			options.Impulsive = true;
-			newButtonStyles.Impulsive = "text-dbu-bg1 leading-none border border-text-dbu-header rounded-full cursor-pointer bg-dbu-header";
+			newButtonStyles.Impulsive =
+				"text-dbu-bg1 leading-none border border-text-dbu-header rounded-full cursor-pointer bg-dbu-header";
 		}
 		if (EnhancedSaveName.includes("Corporeal")) {
 			options.Corporeal = true;
-			newButtonStyles.Corporeal = "text-dbu-bg1 leading-none border border-text-dbu-header rounded-full cursor-pointer bg-dbu-header";
+			newButtonStyles.Corporeal =
+				"text-dbu-bg1 leading-none border border-text-dbu-header rounded-full cursor-pointer bg-dbu-header";
 		}
 		if (EnhancedSaveName.includes("Cognitive")) {
 			options.Cognitive = true;
-			newButtonStyles.Cognitive = "text-dbu-bg1 leading-none border border-text-dbu-header rounded-full cursor-pointer bg-dbu-header";
+			newButtonStyles.Cognitive =
+				"text-dbu-bg1 leading-none border border-text-dbu-header rounded-full cursor-pointer bg-dbu-header";
 		}
 		if (EnhancedSaveName.includes("Morale")) {
 			options.Morale = true;
-			newButtonStyles.Morale = "text-dbu-bg1 leading-none border border-text-dbu-header rounded-full cursor-pointer bg-dbu-header";
+			newButtonStyles.Morale =
+				"text-dbu-bg1 leading-none border border-text-dbu-header rounded-full cursor-pointer bg-dbu-header";
 		}
 
 		setEnhancedSaveOptions(options);
@@ -95,13 +99,17 @@ export default function EnhancedSaveModal({
 		// Updates Button Styles
 		if (newEnhancedSaveOptions[SaveType]) {
 			let newButtonStyles = buttonStateStyles;
-			newButtonStyles[SaveType] = newButtonStyles[SaveType].concat(" bg-dbu-header").replace("text-dbu-header", "text-dbu-bg1");
+			newButtonStyles[SaveType] = newButtonStyles[SaveType].concat(
+				" bg-dbu-header",
+			).replace("text-dbu-header", "text-dbu-bg1");
 			setButtonStateStyles(newButtonStyles);
 		} else {
 			let newButtonStyles = buttonStateStyles;
-			newButtonStyles[SaveType] = newButtonStyles[SaveType].replace("text-dbu-bg1", "text-dbu-header").replace("bg-dbu-header", "");
+			newButtonStyles[SaveType] = newButtonStyles[SaveType].replace(
+				"text-dbu-bg1",
+				"text-dbu-header",
+			).replace("bg-dbu-header", "");
 			setButtonStateStyles(newButtonStyles);
-
 		}
 		enhancedSaveNameBuilder();
 	};
@@ -159,7 +167,7 @@ export default function EnhancedSaveModal({
 
 	useEffect(() => {
 		setEnhancedSaveName(previewName);
-	},[previewName]);
+	}, [previewName]);
 
 	return (
 		<div
@@ -177,7 +185,9 @@ export default function EnhancedSaveModal({
 					</h1>
 				</div>
 				<div className="flex justify-center">
-					<h2 className="text-lg italic">Enhanced Save Name Preview</h2>
+					<h2 className="text-lg italic">
+						Enhanced Save Name Preview
+					</h2>
 				</div>
 				<div className="flex justify-center">
 					<h3 className="text-xl font-semibold">{previewName}</h3>
@@ -185,7 +195,7 @@ export default function EnhancedSaveModal({
 				<div className="flex flex-col md:justify-around mx-20 text-center md:flex-row md:flex-4 justify-center mb-4 mt-2">
 					<div className={buttonStateStyles.Impulsive}>
 						<button
-							className="p-5 text-md"
+							className="p-5 text-md cursor-pointer"
 							onClick={() => updateEnhancedSave("Impulsive")}
 						>
 							Impulsive
@@ -193,7 +203,7 @@ export default function EnhancedSaveModal({
 					</div>
 					<div className={buttonStateStyles.Corporeal}>
 						<button
-							className="p-5 text-md"
+							className="p-5 text-md cursor-pointer"
 							onClick={() => updateEnhancedSave("Corporeal")}
 						>
 							Corporeal
@@ -201,7 +211,7 @@ export default function EnhancedSaveModal({
 					</div>
 					<div className={buttonStateStyles.Cognitive}>
 						<button
-							className="p-5 text-md"
+							className="p-5 text-md cursor-pointer"
 							onClick={() => updateEnhancedSave("Cognitive")}
 						>
 							Cognitive
@@ -209,7 +219,7 @@ export default function EnhancedSaveModal({
 					</div>
 					<div className={buttonStateStyles.Morale}>
 						<button
-							className="p-5 text-md"
+							className="p-5 text-md cursor-pointer"
 							onClick={() => updateEnhancedSave("Morale")}
 						>
 							Morale
