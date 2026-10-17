@@ -1,5 +1,4 @@
 "use client";
-import { link } from "fs";
 import { useState, useEffect } from "react";
 
 interface InnateStateModalProps {
@@ -26,16 +25,22 @@ export default function InnateStateModal({
 		innateStateURL?: string,
 		innateStateLevel?: number,
 	) => {
-		const aspectToAdd = {
+		let aspectToAdd: any = {
 			name: "Innate State",
-			level: innateStateLevel || 0,
+			level: 0,
 			innateState: `Innate State (${innateState})`,
-			link: {
-				name: innateState,
-				url: innateStateURL || "",
-			},
 		};
+		if (innateStateLevel) {
+			aspectToAdd.level = innateStateLevel;
+		}
+		if (innateStateURL) {
+			aspectToAdd.link = { name: innateState, url: innateStateURL };
+		}
+		const newEditedAspects = [...editedAspects, aspectToAdd];
+		setUpdatingAspect(!updatingAspect);
+		setEditedAspects(newEditedAspects);
 	};
+
 	return (
 		<div
 			className="fixed inset-0 bg-black/80 flex items-center justify-center z-70"
