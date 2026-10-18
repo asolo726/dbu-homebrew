@@ -41,6 +41,8 @@ export default function InnateStateModal({
 	const addSelectedInnateState = (innateStateName: string) => {
 		if (innateState[0] === "") {
 			setInnateState([innateStateName]);
+		} else if (innateState.includes(innateStateName)) {
+			removeSelectedInnateState(innateStateName);
 		} else {
 			setInnateState([...innateState, innateStateName]);
 		}
@@ -48,7 +50,9 @@ export default function InnateStateModal({
 
 	const removeSelectedInnateState = (innateStateName: string) => {
 		setInnateState(
-			innateState.splice(innateState.indexOf(innateStateName), 1),
+			innateState.filter(
+				(innateState) => innateState !== innateStateName,
+			),
 		);
 	};
 
@@ -85,11 +89,9 @@ export default function InnateStateModal({
 					<h2 className="text-sm italic">Selected Innate States</h2>
 				</div>
 				<div className="flex justify-center">
-					{innateState.map((innateState: string, index) => (
-						<h3 key={index} className="text-xl font-semibold">
-							{innateState}
-						</h3>
-					))}
+					<span className="text-xl font-semibold">
+						{innateState.join("/")}
+					</span>
 				</div>
 				<div className="px-6 py-4">
 					<div className="flex flex-wrap justify-center gap-2">
