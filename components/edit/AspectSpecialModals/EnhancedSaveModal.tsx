@@ -115,7 +115,7 @@ export default function EnhancedSaveModal({
 	};
 
 	const enhancedSaveNameBuilder = () => {
-		let newAspectName = "Enhanced Save [";
+		let newAspectName = "Enhanced Save (";
 		let saveTypes = "";
 		let loopCount = 0;
 		let numOfOptionsTrue = 0;
@@ -142,11 +142,11 @@ export default function EnhancedSaveModal({
 			setPreviewName(newAspectName);
 			return;
 		} else if (numOfOptionsTrue === 4) {
-			newAspectName = "Enhanced Save [All]";
+			newAspectName = "Enhanced Save (All)";
 			setPreviewName(newAspectName);
 			return;
 		}
-		newAspectName += saveTypes + "]";
+		newAspectName += saveTypes + ")";
 		setPreviewName(newAspectName);
 	};
 
