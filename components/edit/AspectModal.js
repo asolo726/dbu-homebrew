@@ -2,23 +2,43 @@
 import {
 	aspects,
 	getAspectTooltip,
-	prettifyAspects,
+	sortEditableAspects,
 } from "../dbu/General/util/headUtil";
+import EnhancedSaveModal from "./AspectSpecialModals/EnhancedSaveModal";
+import InnateStateModal from "./AspectSpecialModals/InnateStateModal";
 import { Tooltip } from "../../lib/reactTooltip.js";
 import { useState, useEffect } from "react";
 import { RxArrowUp, RxInfoCircled } from "react-icons/rx";
 
-export default function AspectsModal({ currentAspects, onSave, onClose }) {
-	const [editedAspects, setEditedAspects] = useState(currentAspects); // A copy of the current aspects, to be edited by the user.
-
+export default function AspectsModal({
+	currentAspects,
+	onSave,
+	closeAspectModal,
+	pendingChanges,
+	enhancedWindowOpen,
+	setEnhancedWindowOpen,
+	innateStateWindowOpen,
+	setInnateStateWindowOpen,
+	EnhancedSaveName,
+	setEnhancedSaveName,
+}) {
+	const [editedAspects, setEditedAspects] = useState(
+		pendingChanges?.["head.details.aspects"] ?? currentAspects,
+	); // A copy of the current aspects, to be edited by the user.
 	const [positiveAspectOptions, setPositiveAspectOptions] = useState([]);
 	const [negativeAspectOptions, setNegativeAspectOptions] = useState([]);
+	const [updatingAspect, setUpdatingAspect] = useState(false);
+	const SLUG_PATTERN = /^([1-9]\d{0,2})?$/;
 
-	// Make an Aspect List for the select boxes, filtering out aspects that are already in currentAspects
-	// Can reuse the code for the Toggle Select in SettingsClient, but this is simpler since we don't need to worry about the "selected" state of the aspects, just the options available to select from
+	// const loadedPositiveAspects = aspects.filter((a) => a.isPositive);
+	// const loadedNegativeAspects = aspects.filter((a) => !a.isPositive);
+	// // Make an Aspect List for the select boxes, filtering out aspects that are already in currentAspects
+	// Can reuse the code for the Toggle Select in SettingsClient, but this is simpler since we don't need
+	// to worry about the "selected" state of the aspects, just the options available to select from
 
+	// Filter the aspects to remove the ones that are already in editedAspects
 	useEffect(() => {
-		const currentNames = new Set(editedAspects.map((a) => a.name));
+		let currentNames = new Set(editedAspects.map((a) => a.name));
 		setPositiveAspectOptions(
 			aspects.filter((a) => a.isPositive && !currentNames.has(a.name)),
 		);
@@ -27,26 +47,171 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
 		);
 	}, [editedAspects]);
 
+	// Sort the aspects alphabetically and by positive/negative
+	useEffect(() => {
+		const sortAspects = async () => {
+			const sortedAspects = await sortEditableAspects(editedAspects);
+			setEditedAspects(sortedAspects);
+		};
+		sortAspects();
+	}, [updatingAspect]);
+
+	//Pre-Load the Enhanced Save Name if it is already in the Aspects list
+	useEffect(() => {
+		for (const aspect of editedAspects) {
+			if (aspect.name === "Enhanced Save") {
+				setEnhancedSaveName(aspect.EnhancedSaves);
+			}
+		}
+	}, []);
+
 	const removeAspect = (aspectName) => {
 		const newEditedAspects = editedAspects.filter(
 			(aspect) => aspect.name !== aspectName,
 		);
-		setEditedAspects(prettifyAspects(newEditedAspects));
+		setUpdatingAspect(!updatingAspect);
+		setEditedAspects(newEditedAspects);
 	};
 
 	const addAspect = (aspect) => {
-		const aspectToAdd = {
+		if (aspect.name === "Enhanced Save") {
+			setEnhancedWindowOpen(true);
+		} else if (aspect.name === "Variant") {
+		} else if (aspect.name === "Innate State") {
+			setInnateStateWindowOpen(true);
+		} else {
+			let maxLevel = 0;
+			if (Object.hasOwn(aspect, "maxLevel")) {
+				maxLevel = aspect.maxLevel;
+			}
+			const aspectToAdd = {
+				name: aspect.name,
+				level: 0,
+				maxLevel: maxLevel,
+			};
+			const newEditedAspects = [...editedAspects, aspectToAdd];
+			setUpdatingAspect(!updatingAspect);
+			setEditedAspects(newEditedAspects);
+		}
+	};
+
+	const updateLevel = (aspect, level) => {
+		const aspectToUpdate = {
 			name: aspect.name,
-			level: 0, // Placeholder
+			level: level,
+			maxLevel: aspect.maxLevel,
 		};
-		const newEditedAspects = [...editedAspects, aspectToAdd];
-		setEditedAspects(prettifyAspects(newEditedAspects));
+		const newEditedAspects = editedAspects.map((a) => {
+			if (a.name === aspect.name) {
+				return aspectToUpdate;
+			}
+			return a;
+		});
+
+		setUpdatingAspect(!updatingAspect);
+		setEditedAspects(newEditedAspects);
+	};
+
+	const normalAspectItemRender = (a, id) => {
+		return (
+			<div
+				key={id}
+				className="inline-flex items-center justify-between rounded-full border border-dbu-line bg-dbu-bg3 px-3 py-1 text-dbu-text text-sm text-center min-w-[10rem] max-w-[16rem] wrap-break-word"
+			>
+				<span
+					data-tooltip-id="my-tooltip-2"
+					data-tooltip-html={getAspectTooltip(a.name)}
+					className="flex w-full cursor-help justify-center"
+				>
+					{a.name}
+				</span>
+				{Object.hasOwn(a, "maxLevel") && a.maxLevel !== 0 && (
+					<>
+						<input
+							onChange={(e) => {
+								if (SLUG_PATTERN.test(e.target.value)) {
+									if (e.target.value <= a.maxLevel) {
+										updateLevel(a, e.target.value);
+									}
+								}
+							}}
+							value={a.level}
+							className="text-center w-7 text-dbu-header text-sm leading-none cursor-pointer border-text-dbu-header border-b"
+						/>
+						<span className="w-20 text-dbu-header text-sm leading-none">
+							/ {a.maxLevel}
+						</span>
+					</>
+				)}
+				<button
+					onClick={() => removeAspect(a.name)}
+					className="ml-2 text-red-400/40 hover:text-red-400 text-sm leading-none cursor-pointer"
+					title="Remove Aspect"
+				>
+					×
+				</button>
+			</div>
+		);
+	};
+
+	const variantAspectRender = (a, id) => {};
+
+	const enhancedSaveRender = (a, id) => {
+		return (
+			<div
+				key={id}
+				className="flex-col inline-flex items-center justify-between rounded-full border border-dbu-line bg-dbu-bg3 px-3 py-1 text-dbu-text text-sm text-center min-w-[10rem] max-w-[16rem] wrap-break-word"
+			>
+				<div className="flex items-center">
+					<span
+						data-tooltip-id="my-tooltip-2"
+						data-tooltip-html={getAspectTooltip("Enhanced Save")}
+						className="flex w-full cursor-help justify-center"
+					>
+						{a.EnhancedSaves}
+					</span>
+					<button
+						onClick={() => removeAspect(a.name)}
+						className="ml-3 text-red-400/40 hover:text-red-400 text-sm leading-none cursor-pointer"
+						title="Remove Aspect"
+					>
+						×
+					</button>
+				</div>
+			</div>
+		);
+	};
+
+	const innateStateRender = (a, id) => {
+		return (
+			<div
+				key={id}
+				className="flex-col inline-flex items-center justify-between rounded-full border border-dbu-line bg-dbu-bg3 px-3 py-1 text-dbu-text text-sm text-center min-w-[10rem] max-w-[16rem] wrap-break-word"
+			>
+				<div className="flex items-center">
+					<span
+						data-tooltip-id="my-tooltip-2"
+						data-tooltip-html={getAspectTooltip("Innate State")}
+						className="flex w-full cursor-help justify-center"
+					>
+						{a.name} {a.innateState}
+					</span>
+					<button
+						onClick={() => removeAspect(a.name)}
+						className="ml-3 text-red-400/40 hover:text-red-400 text-sm leading-none cursor-pointer"
+						title="Remove Aspect"
+					>
+						×
+					</button>
+				</div>
+			</div>
+		);
 	};
 
 	return (
 		<div
 			className="fixed inset-0 bg-black/60 flex items-center justify-center z-60"
-			onClick={onClose}
+			// onClick={closeAspectModal}
 		>
 			<div
 				className="bg-dbu-bg2 border border-dbu-line rounded-lg w-full max-w-3xl mx-4 shadow-2xl overflow-hidden"
@@ -62,27 +227,17 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
 				{/* Body [Aspects display] */}
 				<div className="px-6 py-4 max-h-[70vh] overflow-y-auto bg-white/5">
 					<div className="flex flex-wrap justify-center gap-3 max-w-full">
-						{editedAspects.map((a, id) => (
-							<div
-								key={id}
-								className="inline-flex justify-between rounded-full border border-dbu-line bg-dbu-bg3 px-3 py-1 text-dbu-text text-sm text-center min-w-[10rem] max-w-[16rem] break-words"
-							>
-								<a
-									data-tooltip-id="my-tooltip-2"
-									data-tooltip-html={getAspectTooltip(a.name)}
-									className="flex w-full cursor-help justify-center"
-								>
-									{a.name}
-								</a>
-								<button
-									onClick={() => removeAspect(a.name)}
-									className="ml-2 text-red-400/40 hover:text-red-400 text-sm leading-none cursor-pointer"
-									title="Remove Aspect"
-								>
-									×
-								</button>
-							</div>
-						))}
+						{editedAspects.map((a, id) => {
+							if (a.name.includes("Enhanced Save")) {
+								return enhancedSaveRender(a, id);
+							} else if (a.name === "Innate State") {
+								return innateStateRender(a, id);
+							} else if (a.name === "Variant") {
+								return variantAspectRender(a, id);
+							} else {
+								return normalAspectItemRender(a, id);
+							}
+						})}
 					</div>
 				</div>
 
@@ -132,13 +287,18 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
 				<div className="px-6 py-4 border-t border-dbu-line flex justify-end gap-2">
 					<button
 						className="px-4 py-2 rounded border border-dbu-line text-dbu-text hover:border-dbu-header transition-colors"
-						onClick={onClose}
+						onClick={closeAspectModal}
 					>
 						Cancel
 					</button>
 					<button
 						className="px-4 py-2 rounded bg-dbu-link  text-white hover:bg-dbu-link/90 cursor-pointer"
-						onClick={() => onSave(editedAspects)}
+						onClick={() => {
+							onSave(editedAspects);
+							setEditedAspects(
+								pendingChanges?.["head.details.aspects"],
+							);
+						}}
 					>
 						Save
 					</button>
@@ -149,6 +309,26 @@ export default function AspectsModal({ currentAspects, onSave, onClose }) {
 				className="tooltip z-30"
 				style={{ maxWidth: "400px" }}
 			/>
+			{enhancedWindowOpen && (
+				<EnhancedSaveModal
+					setEnhancedWindowOpen={setEnhancedWindowOpen}
+					editedAspects={editedAspects}
+					setEditedAspects={setEditedAspects}
+					setUpdatingAspect={setUpdatingAspect}
+					updatingAspect={updatingAspect}
+					EnhancedSaveName={EnhancedSaveName}
+					setEnhancedSaveName={setEnhancedSaveName}
+				/>
+			)}
+			{innateStateWindowOpen && (
+				<InnateStateModal
+					setInnateStateWindowOpen={setInnateStateWindowOpen}
+					editedAspects={editedAspects}
+					setEditedAspects={setEditedAspects}
+					setUpdatingAspect={setUpdatingAspect}
+					updatingAspect={updatingAspect}
+				/>
+			)}
 		</div>
 	);
 }

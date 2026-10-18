@@ -10,6 +10,8 @@ export interface Aspect {
 	level: number;
 	maxLevel?: number;
 	link?: { name: string; url: string };
+	EnhancedSaves?: string;
+	innateState?: string;
 }
 interface AspectsProps {
 	aspects: Aspect[] | undefined;
@@ -33,15 +35,27 @@ export default function Aspects({
 	const btnStyle =
 		"ml-2 gap-1.5 px-3 py-1.5 rounded-md text-sm border border-white/30 text-white bg-white/10 hover:bg-white/20 transition-colors";
 	const [aspectWindowOpen, setAspectWindowOpen] = useState(false);
-
-	const onSave = (newAspects: any) => {
+	const [enhancedWindowOpen, setEnhancedWindowOpen] = useState(false);
+	const [variantWindowOpen, setVariantWindowOpen] = useState(false);
+	const [innateStateWindowOpen, setInnateStateWindowOpen] = useState(false);
+	const [EnhancedSaveName, setEnhancedSaveName] = useState("");
+	const onSave = (newAspects: Aspect[]) => {
 		handleAspectChange(newAspects);
+		setEnhancedWindowOpen(false);
 		setAspectWindowOpen(false);
+		setVariantWindowOpen(false);
+		setInnateStateWindowOpen(false);
 	};
 
 	const toggleAspectWindowState = () => {
 		setAspectWindowOpen(!aspectWindowOpen);
 	};
+
+	const handleClosingModals = () => {
+		if (!enhancedWindowOpen || !variantWindowOpen || !innateStateWindowOpen)
+			setAspectWindowOpen(false);
+	};
+
 	const [sortedAspects, setSortedAspects] = useState<Aspect[]>([]);
 
 	useEffect(() => {
@@ -72,23 +86,31 @@ export default function Aspects({
 										<span
 											className={`${customAspectNames.includes(aspect.name) ? "underline" : ""}`}
 										>
-											{aspect.name}
+											{aspect.EnhancedSaves
+												? aspect.EnhancedSaves
+												: aspect.innateState
+													? aspect.name +
+														" " +
+														aspect.innateState
+													: aspect.name}
 										</span>
 									</span>
-									{aspect.link && (
-										<>
-											{" "}
-											(
-											<a
-												href={aspect.link.url}
-												target="_blank"
-												className="text-dbu-link hover:underline"
-											>
-												{aspect.link.name}
-											</a>
-											)
-										</>
-									)}
+									{/* Variant link render */}
+									{aspect.link &&
+										aspect.name === "Variant" && (
+											<>
+												{" "}
+												(
+												<a
+													href={aspect.link.url}
+													target="_blank"
+													className="text-dbu-link hover:underline"
+												>
+													{aspect.link.name}
+												</a>
+												)
+											</>
+										)}
 									{aspect.level !== 0 && (
 										<> (LV{aspect.level})</>
 									)}
@@ -121,7 +143,14 @@ export default function Aspects({
 						<AspectsModal
 							currentAspects={sortedAspects}
 							onSave={onSave}
-							onClose={() => setAspectWindowOpen(false)}
+							closeAspectModal={() => handleClosingModals()}
+							enhancedWindowOpen={enhancedWindowOpen}
+							setEnhancedWindowOpen={setEnhancedWindowOpen}
+							innateStateWindowOpen={innateStateWindowOpen}
+							setInnateStateWindowOpen={setInnateStateWindowOpen}
+							pendingChanges={pendingChanges}
+							EnhancedSaveName={EnhancedSaveName}
+							setEnhancedSaveName={setEnhancedSaveName}
 						/>
 					</div>
 				)}
