@@ -1,5 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
+import { Tooltip } from "../../../lib/reactTooltip.js";
+import {
+	getInnateStateTooltip,
+	InnateState,
+	loadInnateStateOptions,
+} from "../util/innateStateTooltips";
 
 interface InnateStateModalProps {
 	setInnateStateWindowOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,22 +26,40 @@ export default function InnateStateModal({
 		setInnateStateWindowOpen(false);
 	};
 
-	const addInnateStateFinal = (
-		innateState: string,
-		innateStateURL?: string,
-		innateStateLevel?: number,
-	) => {
+	const [innateStateOptions, setInnateStateOptions] = useState([]);
+	const [innateState, setInnateState] = useState([""]);
+	const [selectedInnateStates, setSelectedInnateStates] = useState([]);
+
+	useEffect(() => {
+		const fetchInnateStates = async () => {
+			const data = await loadInnateStateOptions();
+			setInnateStateOptions(data);
+		};
+		fetchInnateStates();
+	}, []);
+
+	const addSelectedInnateState = (innateStateName: string) => {
+		if (innateState[0] === "") {
+			setInnateState([innateStateName]);
+		} else {
+			setInnateState([...innateState, innateStateName]);
+		}
+	};
+
+	const removeSelectedInnateState = (innateStateName: string) => {
+		setInnateState(
+			innateState.splice(innateState.indexOf(innateStateName), 1),
+		);
+	};
+
+	const addInnateStateFinal = () => {
+		const innateStateFinal = innateState.join("/");
 		let aspectToAdd: any = {
 			name: "Innate State",
 			level: 0,
-			innateState: `Innate State (${innateState})`,
+			innateState: `(${innateStateFinal})`,
 		};
-		if (innateStateLevel) {
-			aspectToAdd.level = innateStateLevel;
-		}
-		if (innateStateURL) {
-			aspectToAdd.link = { name: innateState, url: innateStateURL };
-		}
+
 		const newEditedAspects = [...editedAspects, aspectToAdd];
 		setUpdatingAspect(!updatingAspect);
 		setEditedAspects(newEditedAspects);
@@ -56,6 +80,39 @@ export default function InnateStateModal({
 						Innate State Aspect Editor
 					</h1>
 				</div>
+				{/* Body */}
+				<div className="flex justify-center">
+					<h2 className="text-sm italic">Selected Innate States</h2>
+				</div>
+				<div className="flex justify-center">
+					{innateState.map((innateState: string, index) => (
+						<h3 key={index} className="text-xl font-semibold">
+							{innateState}
+						</h3>
+					))}
+				</div>
+				<div className="px-6 py-4">
+					<div className="flex flex-wrap justify-center gap-2">
+						{innateStateOptions.map((innateState: InnateState) => (
+							<span
+								key={innateState.name}
+								className="px-4 py-2 rounded border border-dbu-line text-dbu-text hover:border-dbu-header transition-colors"
+								data-tooltip-id="my-tooltip-3"
+								data-tooltip-html={getInnateStateTooltip(
+									innateState.name,
+								)}
+							>
+								<button
+									onClick={() =>
+										addSelectedInnateState(innateState.name)
+									}
+								>
+									{innateState.name}
+								</button>
+							</span>
+						))}
+					</div>
+				</div>
 				<div className="px-6 py-4 border-t border-dbu-line flex justify-end gap-2">
 					<button
 						className="px-4 py-2 rounded border border-dbu-line text-dbu-text hover:border-dbu-header transition-colors"
@@ -66,7 +123,7 @@ export default function InnateStateModal({
 					<button
 						className="px-4 py-2 rounded bg-dbu-link  text-white hover:bg-dbu-link/90 cursor-pointer"
 						onClick={() => {
-							// Add the add aspect function here...
+							addInnateStateFinal();
 							onClose();
 						}}
 					>
@@ -74,6 +131,11 @@ export default function InnateStateModal({
 					</button>
 				</div>
 			</div>
+			<Tooltip
+				id="my-tooltip-3"
+				className="tooltip z-30"
+				style={{ maxWidth: "500px" }}
+			/>
 		</div>
 	);
 }

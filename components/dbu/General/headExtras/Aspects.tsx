@@ -88,23 +88,29 @@ export default function Aspects({
 										>
 											{aspect.EnhancedSaves
 												? aspect.EnhancedSaves
-												: aspect.name}
+												: aspect.innateState
+													? aspect.name +
+														" " +
+														aspect.innateState
+													: aspect.name}
 										</span>
 									</span>
-									{aspect.link && (
-										<>
-											{" "}
-											(
-											<a
-												href={aspect.link.url}
-												target="_blank"
-												className="text-dbu-link hover:underline"
-											>
-												{aspect.link.name}
-											</a>
-											)
-										</>
-									)}
+									{/* Variant link render */}
+									{aspect.link &&
+										aspect.name === "Variant" && (
+											<>
+												{" "}
+												(
+												<a
+													href={aspect.link.url}
+													target="_blank"
+													className="text-dbu-link hover:underline"
+												>
+													{aspect.link.name}
+												</a>
+												)
+											</>
+										)}
 									{aspect.level !== 0 && (
 										<> (LV{aspect.level})</>
 									)}

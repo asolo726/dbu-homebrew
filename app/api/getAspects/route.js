@@ -66,7 +66,7 @@ export async function GET() {
 
 		const data = await db
 			.collection("aspects")
-			.findOne({}, { projection: { _id: 0 } });
+			.findOne({ title: { $eq: "Aspects" } }, { projection: { _id: 0 } });
 		const positiveAspects = data.positiveAspects.map((aspect) => {
 			return {
 				name: aspect.name,
