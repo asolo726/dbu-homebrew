@@ -1,19 +1,19 @@
-import { Interface } from "readline";
-
 export let innateStateOptions: InnateState[] = [];
 let innateStateOptionsLoaded = false;
 let innateStateOptionsPromise: any = null;
 
-interface Level {
+export interface Level {
 	levelName: string;
 	abilities: Ability[];
 }
-interface Ability {
+export interface Ability {
 	condition: string;
 	desc: string;
 }
 export interface InnateState {
 	name: string;
+	author?: string;
+	authorID?: number;
 	narrativeReq?: string;
 	hasLevels: boolean;
 	levels?: Level[];

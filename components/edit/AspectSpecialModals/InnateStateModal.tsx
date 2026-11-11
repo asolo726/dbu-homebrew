@@ -6,6 +6,7 @@ import {
 	InnateState,
 	loadInnateStateOptions,
 } from "../util/innateStateTooltips";
+import CustomStateModal from "./customStateModal";
 
 interface InnateStateModalProps {
 	setInnateStateWindowOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,7 +29,8 @@ export default function InnateStateModal({
 
 	const [innateStateOptions, setInnateStateOptions] = useState([]);
 	const [innateState, setInnateState] = useState([""]);
-	const [selectedInnateStates, setSelectedInnateStates] = useState([]);
+	const [customStateWindowToggle, setCustomStateWindowToggle] =
+		useState(false);
 
 	useEffect(() => {
 		const fetchInnateStates = async () => {
@@ -69,10 +71,14 @@ export default function InnateStateModal({
 		setEditedAspects(newEditedAspects);
 	};
 
+	const openCustomStateWindow = () => {
+		setCustomStateWindowToggle(true);
+	};
+
 	return (
 		<div
 			className="fixed inset-0 bg-black/80 flex items-center justify-center z-70"
-			onClick={onClose}
+			// onClick={onClose}
 		>
 			<div
 				className="bg-dbu-bg2 border border-dbu-line rounded-lg w-full max-w-3xl mx-4 shadow-2xl overflow-hidden"
@@ -118,6 +124,13 @@ export default function InnateStateModal({
 				<div className="px-6 py-4 border-t border-dbu-line flex justify-end gap-2">
 					<button
 						className="px-4 py-2 rounded border border-dbu-line text-dbu-text hover:border-dbu-header transition-colors"
+						onClick={openCustomStateWindow}
+					>
+						Add State
+					</button>
+
+					<button
+						className="px-4 py-2 rounded border border-dbu-line text-dbu-text hover:border-dbu-header transition-colors"
 						onClick={onClose}
 					>
 						Cancel
@@ -138,6 +151,12 @@ export default function InnateStateModal({
 				className="tooltip z-30"
 				style={{ maxWidth: "500px" }}
 			/>
+			{customStateWindowToggle && (
+				<CustomStateModal
+					setCustomStateWindowToggle={setCustomStateWindowToggle}
+					editedAspects={editedAspects}
+				/>
+			)}
 		</div>
 	);
 }
