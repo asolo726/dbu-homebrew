@@ -6,6 +6,7 @@ import { useEditMode } from "../../edit/EditModeContext";
 import { RiArrowUpLine, RiArrowDownLine } from "react-icons/ri";
 import type { TableData } from "./table";
 import type { Section } from "./Section";
+import type { Contributor } from "./Trait";
 
 export interface DBUBox {
 	boxTitle?: string;
@@ -31,6 +32,7 @@ export interface Ability {
 interface AbilityProps {
 	abilityList: Ability[];
 	path: string | undefined;
+	inheritedContributor?: Contributor;
 	selectedIndices?: Set<number> | undefined;
 	onToggleSelect?: (index: number) => void;
 	onMove?: (index: number, direction: number) => void;
@@ -40,6 +42,7 @@ interface AbilityProps {
 export default function Ability({
 	abilityList = [{}],
 	path,
+	inheritedContributor,
 	selectedIndices,
 	onToggleSelect,
 	onMove,
@@ -243,6 +246,7 @@ export default function Ability({
 							<AddendumBox
 								boxTitle={item.addendumBox.boxTitle}
 								body={item.addendumBox.body}
+								inheritedContributor={inheritedContributor}
 								path={
 									path
 										? `${path}.abilities.${itemIndex}.addendumBox`

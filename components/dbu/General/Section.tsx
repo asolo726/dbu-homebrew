@@ -23,9 +23,14 @@ export interface Section {
 interface SectionProps {
 	body: Section[];
 	basePath: string;
+	inheritedContributor?: TraitType["contributor"];
 }
 
-export default function Section({ body, basePath }: Readonly<SectionProps>) {
+export default function Section({
+	body,
+	basePath,
+	inheritedContributor,
+}: Readonly<SectionProps>) {
 	const {
 		isEditing,
 		isContributing,
@@ -260,6 +265,7 @@ export default function Section({ body, basePath }: Readonly<SectionProps>) {
 										? `${basePath}.${index}.traits`
 										: "traits"
 								}
+								inheritedContributor={inheritedContributor}
 							/>
 						)}
 						{currentlyEditing && (

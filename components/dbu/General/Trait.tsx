@@ -13,16 +13,19 @@ type AbilityOperation =
 	| { type: "miniTraitList:add" }
 	| { type: "miniTraitList:remove"; index: number };
 
+export interface Contributor {
+	email?: string;
+	name?: string;
+}
+
 export interface Trait {
 	title: string;
 	desc: string;
 	abilities: AbilityType[];
 	path: string | undefined;
 	disableEditActions?: boolean;
-	contributor?: {
-		email?: string;
-		name?: string;
-	};
+	inheritedContributor?: Contributor;
+	contributor?: Contributor;
 }
 
 export default function Trait({
@@ -32,6 +35,7 @@ export default function Trait({
 	path,
 	disableEditActions = false,
 	contributor,
+	inheritedContributor,
 }: Readonly<Trait>) {
 	const {
 		isEditing,
@@ -215,6 +219,7 @@ export default function Trait({
 			<Ability
 				abilityList={currentAbilities}
 				path={path}
+				inheritedContributor={contributor ?? inheritedContributor}
 				selectedIndices={
 					disableEditActions ? undefined : selectedIndices
 				}

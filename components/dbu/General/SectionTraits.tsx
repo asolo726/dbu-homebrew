@@ -9,11 +9,13 @@ import { resolvePendingValue } from "@/components/edit/resolvePendingValue";
 interface TraitsSectionProps {
 	traits?: TraitType[];
 	basePath?: string;
+	inheritedContributor?: TraitType["contributor"];
 }
 
 export default function TraitsSection({
 	traits = [],
 	basePath,
+	inheritedContributor,
 }: Readonly<TraitsSectionProps>) {
 	const {
 		isEditing,
@@ -34,7 +36,11 @@ export default function TraitsSection({
 	// In contribute mode, users can only edit items they contributed themselves
 	function canEditItem(item: any) {
 		if (isEditing) return true;
-		if (isContributing) return item.contributor?.email === contributorEmail;
+		if (isContributing)
+			return (
+				(item.contributor ?? inheritedContributor)?.email ===
+				contributorEmail
+			);
 		return false;
 	}
 
@@ -60,6 +66,7 @@ export default function TraitsSection({
 								desc={item.desc}
 								abilities={item.abilities}
 								contributor={(item.contributor as any) ?? null}
+								inheritedContributor={inheritedContributor}
 								disableEditActions={!editable}
 								path={
 									basePath

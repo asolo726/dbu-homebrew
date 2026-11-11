@@ -1,12 +1,9 @@
 "use client";
-import Trait from "./Trait";
 import EditableText from "../../edit/EditableText";
-import { useEditMode } from "../../edit/EditModeContext";
 import { useState, useEffect } from "react";
 import { RxChevronRight } from "react-icons/rx";
-import { RiAddFill, RiSubtractFill, RiDeleteBinLine } from "react-icons/ri";
-import { EditingButton } from "./util/EditingButton";
 import type { Section as SectionType } from "./Section";
+import type { Contributor } from "./Trait";
 import Section from "./Section";
 import { useEditingState } from "@/components/edit/useEditingState";
 
@@ -14,12 +11,14 @@ export interface DBUBoxProps {
 	boxTitle?: string;
 	body?: SectionType[];
 	path?: string;
+	inheritedContributor?: Contributor;
 }
 
 export default function AddendumBox({
 	boxTitle,
 	body,
 	path,
+	inheritedContributor,
 }: Readonly<DBUBoxProps>) {
 	const {
 		isEditing,
@@ -101,6 +100,7 @@ export default function AddendumBox({
 				<Section
 					body={Array.isArray(currentBody) ? currentBody : []}
 					basePath={`${traitsKey}`}
+					inheritedContributor={inheritedContributor}
 				/>
 			</div>
 		</div>
