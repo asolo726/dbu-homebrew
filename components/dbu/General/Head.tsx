@@ -387,6 +387,22 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 					)}
 				</div>
 			</a>
+			{isEditing && (
+				<span className="flex flex items-center justify-center py-2">
+					<button
+						type="button"
+						className="flex items-center justify-center px-2 py-1 bg-dbu-bg1 hover:bg-dbu-line border border-dbu-text rounded-lg text-dbu-text text-sm font-medium cursor-pointer"
+						onClick={() =>
+							setChange?.(
+								"head.banner",
+								"https://9pensrt47gzxrsro.public.blob.vercel-storage.com/whosthatzfighter.webp",
+							)
+						}
+					>
+						Reset Image
+					</button>
+				</span>
+			)}
 			{uploadError && (
 				<p
 					role="alert"
