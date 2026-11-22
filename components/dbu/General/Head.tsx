@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Tooltip } from "../../../lib/reactTooltip";
 import PageVoteButtons from "../../pages/PageVoteButtons";
@@ -14,6 +14,7 @@ import Aspects, { type Aspect } from "./headExtras/Aspects";
 import RaceFeatures from "./headExtras/RaceFeatures";
 import { useEditingState } from "@/components/edit/useEditingState";
 import DeletePageButton from "../../pages/DeletePageButton";
+import { HeadJoke, playAudio } from "./util/headJoke";
 
 export interface Data {
 	identity: string; // Shows what collection this page is associated with. Can be used to determine the Form/Enhancement type as well.
@@ -86,15 +87,74 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 	const isAuthor = editMode !== null;
 	const requirementNameStyle = "font-bold text-dbu-header";
 	const [uploading, setUploading] = useState(false);
+	const [uploadError, setUploadError] = useState("");
+	const [headJoke] = useState(() => new HeadJoke(Form.data.author));
+	const [closingAfterTooBigUploads, setClosingAfterTooBigUploads] =
+		useState(false);
+	const closeTimeoutRef = useRef<number | null>(null);
 	const [toggling, setToggling] = useState(false);
 	const [localPublic, setLocalPublic] = useState<boolean | null>(null);
 	const router = useRouter();
 	const toggle = Form.data.management.toggle;
 	const author = Form.data.author;
 	const [aspectsReady, setAspectsReady] = useState(false);
+	const pendingChangesRef = useRef(pendingChanges);
+	pendingChangesRef.current = pendingChanges;
 
 	const isPublic =
 		localPublic !== null ? localPublic : !toggle || !!toggleStatus;
+
+	function finishAfterRepeatedOversizedUploads() {
+		if (closeTimeoutRef.current !== null) return;
+		closeTimeoutRef.current = window.setTimeout(() => {
+			closeTimeoutRef.current = null;
+			setClosingAfterTooBigUploads(true);
+			const changes = pendingChangesRef.current;
+			const savePromise = Object.keys(changes).length
+				? fetch("/api/updateContent", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({
+							keyName: editMode?.keyName,
+							changes,
+						}),
+					}).then(async (res) => {
+						const data = await res.json().catch(() => null);
+						if (!res.ok) {
+							throw new Error(
+								data?.error || "Unable to save your changes.",
+							);
+						}
+					})
+				: Promise.resolve();
+
+			void savePromise
+				.then(async () => {
+					await new Promise<void>((resolve) =>
+						window.setTimeout(resolve, 700),
+					);
+					editMode?.clearChanges();
+					window.close();
+					if (!window.closed) window.location.assign("/");
+				})
+				.catch((error) => {
+					setUploadError(
+						`Your changes could not be saved, so the page was not closed. ${
+							error instanceof Error
+								? error.message
+								: "Please save your changes and try again."
+						}`,
+					);
+					setClosingAfterTooBigUploads(false);
+				});
+		}, 2000);
+	}
+
+	function handleTooBigUpload() {
+		const { message, shouldClose } = headJoke.nextMessage();
+		setUploadError(message);
+		if (shouldClose) finishAfterRepeatedOversizedUploads();
+	}
 
 	async function handleTogglePublish() {
 		if (!toggle || toggling) return;
@@ -126,7 +186,12 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 	// Allows users to upload an image and set the banner URL in the head object.
 	async function handleImageUpload(file: File) {
 		if (!file || !setChange) return;
+		if (headJoke.isTooBig(file.size)) {
+			handleTooBigUpload();
+			return;
+		}
 		setUploading(true);
+		setUploadError("");
 		try {
 			const fd = new FormData();
 			fd.append("file", file);
@@ -134,12 +199,40 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 				method: "POST",
 				body: fd,
 			});
-			const data = await res.json();
-			if (data.url) setChange("head.banner", data.url);
+			if (res.status === 413) {
+				handleTooBigUpload();
+				return;
+			}
+
+			const data = await res.json().catch(() => null);
+			if (!res.ok) {
+				throw new Error(data?.error || "Unable to upload image.");
+			}
+			if (!data?.url) {
+				throw new Error("The image upload did not return a URL.");
+			}
+			setChange("head.banner", data.url);
+		} catch (error) {
+			setUploadError(
+				error instanceof Error
+					? error.message
+					: "Unable to upload image. Please try again.",
+			);
 		} finally {
 			setUploading(false);
 		}
 	}
+	useEffect(
+		() => () => {
+			if (closeTimeoutRef.current !== null) {
+				window.clearTimeout(closeTimeoutRef.current);
+			}
+		},
+		[],
+	);
+	useEffect(() => {
+		if (closingAfterTooBigUploads) playAudio("/audio/fun.mp3");
+	}, [closingAfterTooBigUploads]);
 	// This useEffect scrolls the user to the top of a page, but only if they haven't visited the page before in this session.
 	// It uses sessionStorage to track whether the user has visited the page, and if not, it scrolls to the top instantly and sets a flag in sessionStorage to prevent future automatic scrolling during the same session.
 	useEffect(() => {
@@ -285,13 +378,43 @@ export default function Head({ Form }: Readonly<HeadProps>) {
 								disabled={uploading}
 								onChange={(e) => {
 									const f = e.target.files?.[0];
+									setUploadError("");
 									if (f) handleImageUpload(f);
+									e.target.value = "";
 								}}
 							/>
 						</label>
 					)}
 				</div>
 			</a>
+			{uploadError && (
+				<p
+					role="alert"
+					className="mb-3 text-center text-sm text-red-300"
+				>
+					{uploadError}
+				</p>
+			)}
+			{closingAfterTooBigUploads && (
+				<div
+					className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4"
+					role="alertdialog"
+					aria-modal="true"
+					aria-live="assertive"
+					tabIndex={-1}
+					autoFocus
+				>
+					<Image
+						src="/memes/foxy.gif"
+						alt="you cant"
+						width={0}
+						height={0}
+						sizes="100vw"
+						className="w-screen h-auto"
+						unoptimized
+					/>
+				</div>
+			)}
 
 			{/* Art credit editable in edit mode */}
 			{isEditing && (
