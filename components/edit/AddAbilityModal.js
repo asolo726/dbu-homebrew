@@ -124,7 +124,7 @@ function AbilityPreview({
 
 	return (
 		<p className="text-dbu-text text-md text-left my-1">
-			{"(1)-["}
+			{"(X)-["}
 			<span className="font-bold text-dbu-header">
 				{conditionText.trim() || empty}
 			</span>
@@ -182,30 +182,31 @@ export default function AddAbilityModal({ onSave, onClose }) {
 						? numColumns > 0 && numRows > 0
 						: conditionText.trim() !== "";
 
-	function handleSave() {
+	function handleSave(closeAfterSave = true) {
 		if (!isValid) return;
+		let ability;
 		if (type === "label") {
-			onSave({ condition: `–${labelText.trim()}`, desc: desc.trim() });
+			ability = { condition: `–${labelText.trim()}`, desc: desc.trim() };
 		} else if (type === "addendumbox") {
-			onSave({
+			ability = {
 				addendumBox: {
 					boxTitle: boxTitle.trim(),
 					body: [],
 				},
-			});
+			};
 		} else if (type === "list") {
 			const depth = listDepth > 0 ? { sublist: listDepth } : {};
 			if (listSubtype === "bold") {
 				const filtered = miniItems.filter(
 					(it) => it.condition.trim() || it.desc.trim(),
 				);
-				onSave({ miniTraitList: filtered, ...depth });
+				ability = { miniTraitList: filtered, ...depth };
 			} else {
 				const filtered = listItems.filter((s) => s.trim());
-				onSave({ list: filtered, ...depth });
+				ability = { list: filtered, ...depth };
 			}
 		} else if (type === "table") {
-			onSave({
+			ability = {
 				table: {
 					columns: Array.from(
 						{ length: numColumns },
@@ -215,10 +216,25 @@ export default function AddAbilityModal({ onSave, onClose }) {
 						Array(numColumns).fill("placeholder"),
 					),
 				},
-			});
+			};
 		} else {
-			onSave({ condition: conditionText.trim(), desc: desc.trim() });
+			ability = { condition: conditionText.trim(), desc: desc.trim() };
 		}
+		onSave(ability, closeAfterSave);
+		if (!closeAfterSave) resetTextFields();
+	}
+
+	function resetTextFields() {
+		setConditionText("");
+		setLabelText("");
+		setDesc("");
+		setBoxTitle("");
+		setBoxTraitTitle("");
+		setBoxTraitDesc("");
+		setListItems([""]);
+		setMiniItems([{ condition: "", desc: "" }]);
+		setNumColumns();
+		setNumRows();
 	}
 
 	function updateListItem(i, val) {
@@ -304,7 +320,7 @@ export default function AddAbilityModal({ onSave, onClose }) {
 									onChange={(e) =>
 										setConditionText(e.target.value)
 									}
-									placeholder="e.g. When attacking…"
+									placeholder="e.g. Passive, Triggered, 1/Encounter..."
 									className={inputClass}
 								/>
 							</div>
@@ -584,13 +600,22 @@ export default function AddAbilityModal({ onSave, onClose }) {
 					>
 						Cancel
 					</button>
-					<button
-						onClick={handleSave}
-						disabled={!isValid}
-						className="px-4 py-2 rounded-md text-sm bg-dbu-link text-white hover:bg-dbu-link/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-					>
-						Add
-					</button>
+					<div class="flex gap-0">
+						<button
+							onClick={() => handleSave()}
+							disabled={!isValid}
+							className="px-4 py-2 rounded-l-md text-sm bg-dbu-link text-white hover:bg-dbu-link/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+						>
+							Add
+						</button>
+						<button
+							onClick={() => handleSave(false)}
+							disabled={!isValid}
+							className="px-2 py-2 rounded-r-md text-sm bg-dbu-link text-white hover:bg-dbu-link/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+						>
+							+
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>

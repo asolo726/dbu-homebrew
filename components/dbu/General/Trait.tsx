@@ -112,14 +112,14 @@ export default function Trait({
 		});
 	}
 
-	function handleAdd(newAbility: AbilityType) {
+	function handleAdd(newAbility: AbilityType, closeAfterSave = true) {
 		if (!path || !setArrayChange) return;
 
 		setArrayChange(abilitiesKey, [
 			...resolveCurrentAbilities(),
 			newAbility,
 		]);
-		setShowAddModal(false);
+		if (closeAfterSave) setShowAddModal(false);
 	}
 
 	function handleRemove() {
