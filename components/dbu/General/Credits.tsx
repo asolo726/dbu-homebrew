@@ -82,7 +82,13 @@ export default function Credits({ Data }: Readonly<{ Data: Data }>) {
 				{(isEditing || Data.tag !== "") && (
 					<p className="m-1">
 						<span className="font-bold text-dbu-header">Tag: </span>
-						<EditableText path={`data.tag`} value={Data.tag} />
+						<a
+							href={`/search?tags=${encodeURIComponent(Data.tag)}`}
+							target="_blank"
+							className="text-dbu-link hover:underline"
+						>
+							<EditableText path={`data.tag`} value={Data.tag} />
+						</a>
 					</p>
 				)}
 			</div>

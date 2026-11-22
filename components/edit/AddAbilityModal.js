@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { RxChevronRight } from "react-icons/rx";
 import Table from "./../dbu/General/table";
+import { boxTemplates, createBoxTemplate } from "./util/boxTemplates";
 
 function AbilityPreview({
 	type,
@@ -151,6 +152,7 @@ export default function AddAbilityModal({ onSave, onClose }) {
 	const [numRows, setNumRows] = useState();
 	const [miniItems, setMiniItems] = useState([{ condition: "", desc: "" }]);
 	const [listDepth, setListDepth] = useState(0);
+	const [selBoxTemplate, setSelBoxTemplate] = useState(null);
 
 	/**
 	 * Depending on type of content the user is adding, the code prevent them from adding it if
@@ -191,7 +193,9 @@ export default function AddAbilityModal({ onSave, onClose }) {
 			ability = {
 				addendumBox: {
 					boxTitle: boxTitle.trim(),
-					body: [],
+					body: selBoxTemplate
+						? boxTemplates[selBoxTemplate].body
+						: [],
 				},
 			};
 		} else if (type === "list") {
@@ -510,6 +514,30 @@ export default function AddAbilityModal({ onSave, onClose }) {
 										placeholder="e.g. Evolved Enhancement"
 										className={inputClass}
 									/>
+									<label className="text-xs text-dbu-text/50">
+										Box Template?
+									</label>
+									<select
+										value={selBoxTemplate ?? ""}
+										onChange={(e) =>
+											setSelBoxTemplate(
+												e.target.value || null,
+											)
+										}
+										className={inputClass}
+									>
+										<option value="">None</option>
+										{Object.keys(boxTemplates)
+											.sort()
+											.map((template) => (
+												<option
+													key={template}
+													value={template}
+												>
+													{template}
+												</option>
+											))}
+									</select>
 								</div>
 							</>
 						)}
