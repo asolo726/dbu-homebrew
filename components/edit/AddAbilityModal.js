@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { RxChevronRight } from "react-icons/rx";
+import Table from "./../dbu/General/table";
 
 function AbilityPreview({
 	type,
@@ -12,6 +13,8 @@ function AbilityPreview({
 	listItems,
 	miniItems,
 	listDepth,
+	numColumns,
+	numRows,
 }) {
 	const empty = <span className="italic text-dbu-text/30">…</span>;
 
@@ -100,6 +103,25 @@ function AbilityPreview({
 		);
 	}
 
+	if (type === "table") {
+		const columns = Array.from(
+			{ length: numColumns },
+			(_, i) => `Column ${i + 1}`,
+		);
+		const rows = Array.from({ length: numRows }, () =>
+			Array(numColumns).fill("placeholder"),
+		);
+		const tableData = {
+			columns: columns,
+			rows: rows,
+		};
+		return (
+			<div className="overflow-x-auto">
+				<Table tableData={tableData} />
+			</div>
+		);
+	}
+
 	return (
 		<p className="text-dbu-text text-md text-left my-1">
 			{"(1)-["}
@@ -125,6 +147,8 @@ export default function AddAbilityModal({ onSave, onClose }) {
 	const [boxTraitDesc, setBoxTraitDesc] = useState("");
 	const [listSubtype, setListSubtype] = useState("plain");
 	const [listItems, setListItems] = useState([""]);
+	const [numColumns, setNumColumns] = useState();
+	const [numRows, setNumRows] = useState();
 	const [miniItems, setMiniItems] = useState([{ condition: "", desc: "" }]);
 	const [listDepth, setListDepth] = useState(0);
 
@@ -154,7 +178,9 @@ export default function AddAbilityModal({ onSave, onClose }) {
 									it.desc.trim() !== "",
 							)
 						: listItems.some((s) => s.trim() !== "")
-					: conditionText.trim() !== "";
+					: type === "table"
+						? numColumns > 0 && numRows > 0
+						: conditionText.trim() !== "";
 
 	function handleSave() {
 		if (!isValid) return;
@@ -178,6 +204,18 @@ export default function AddAbilityModal({ onSave, onClose }) {
 				const filtered = listItems.filter((s) => s.trim());
 				onSave({ list: filtered, ...depth });
 			}
+		} else if (type === "table") {
+			onSave({
+				table: {
+					columns: Array.from(
+						{ length: numColumns },
+						(_, i) => `Column ${i + 1}`,
+					),
+					rows: Array.from({ length: numRows }, () =>
+						Array(numColumns).fill("placeholder"),
+					),
+				},
+			});
 		} else {
 			onSave({ condition: conditionText.trim(), desc: desc.trim() });
 		}
@@ -253,6 +291,7 @@ export default function AddAbilityModal({ onSave, onClose }) {
 							{typeBtn("label", "Label")}
 							{typeBtn("list", "List")}
 							{typeBtn("addendumbox", "Box")}
+							{typeBtn("table", "Table")}
 						</div>
 
 						{type === "condition" && (
@@ -459,20 +498,61 @@ export default function AddAbilityModal({ onSave, onClose }) {
 							</>
 						)}
 
-						{type !== "addendumbox" && type !== "list" && (
-							<div className="flex flex-col gap-1">
-								<label className="text-xs text-dbu-text/50">
-									Description
-								</label>
-								<textarea
-									value={desc}
-									onChange={(e) => setDesc(e.target.value)}
-									placeholder="Ability description…"
-									rows={4}
-									className={`${inputClass} resize-none`}
-								/>
-							</div>
+						{type === "table" && (
+							<>
+								<div className="flex flex-col gap-1">
+									<label className="text-xs text-dbu-text/50">
+										Number of Columns{" "}
+										<span className="text-red-400">*</span>
+									</label>
+									<input
+										value={numColumns}
+										onChange={(e) =>
+											setNumColumns(
+												parseInt(e.target.value) || 0,
+											)
+										}
+										className={inputClass}
+										placeholder="e.g. 3"
+									/>
+								</div>
+								<div className="flex flex-col gap-1">
+									<label className="text-xs text-dbu-text/50">
+										Number of Rows{" "}
+										<span className="text-red-400">*</span>
+									</label>
+									<input
+										value={numRows}
+										onChange={(e) =>
+											setNumRows(
+												parseInt(e.target.value) || 0,
+											)
+										}
+										className={inputClass}
+										placeholder="e.g. 3"
+									/>
+								</div>
+							</>
 						)}
+
+						{type !== "addendumbox" &&
+							type !== "list" &&
+							type !== "table" && (
+								<div className="flex flex-col gap-1">
+									<label className="text-xs text-dbu-text/50">
+										Description
+									</label>
+									<textarea
+										value={desc}
+										onChange={(e) =>
+											setDesc(e.target.value)
+										}
+										placeholder="Ability description…"
+										rows={4}
+										className={`${inputClass} resize-none`}
+									/>
+								</div>
+							)}
 					</div>
 
 					{/* Preview */}
@@ -489,6 +569,8 @@ export default function AddAbilityModal({ onSave, onClose }) {
 								listItems={listItems}
 								miniItems={miniItems}
 								listDepth={listDepth}
+								numColumns={numColumns}
+								numRows={numRows}
 							/>
 						</div>
 					</div>
