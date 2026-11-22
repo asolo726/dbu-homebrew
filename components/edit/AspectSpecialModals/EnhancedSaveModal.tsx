@@ -42,6 +42,7 @@ export default function EnhancedSaveModal({
 			Corporeal: false,
 			Cognitive: false,
 			Morale: false,
+			All: false,
 		});
 	const [previewName, setPreviewName] = useState(EnhancedSaveName);
 	const [buttonStateStyles, setButtonStateStyles] =
@@ -53,6 +54,7 @@ export default function EnhancedSaveModal({
 			Cognitive:
 				"text-dbu-header leading-none border border-text-dbu-header rounded-full",
 			Morale: "text-dbu-header leading-none border border-text-dbu-header rounded-full",
+			All: "text-dbu-header leading-none border border-text-dbu-header rounded-full",
 		});
 
 	const onClose = () => {
@@ -65,6 +67,7 @@ export default function EnhancedSaveModal({
 			Corporeal: false,
 			Cognitive: false,
 			Morale: false,
+			All: false,
 		};
 		let newButtonStyles = buttonStateStyles;
 
@@ -88,7 +91,22 @@ export default function EnhancedSaveModal({
 			newButtonStyles.Morale =
 				"text-dbu-bg1 leading-none border border-text-dbu-header rounded-full cursor-pointer bg-dbu-header";
 		}
-
+		if (EnhancedSaveName.includes("All")) {
+			options.Impulsive = true;
+			options.Corporeal = true;
+			options.Cognitive = true;
+			options.Morale = true;
+			newButtonStyles.Impulsive =
+				"text-dbu-bg1 leading-none border border-text-dbu-header rounded-full cursor-pointer bg-dbu-header";
+			newButtonStyles.Corporeal =
+				"text-dbu-bg1 leading-none border border-text-dbu-header rounded-full cursor-pointer bg-dbu-header";
+			newButtonStyles.Cognitive =
+				"text-dbu-bg1 leading-none border border-text-dbu-header rounded-full cursor-pointer bg-dbu-header";
+			newButtonStyles.Morale =
+				"text-dbu-bg1 leading-none border border-text-dbu-header rounded-full cursor-pointer bg-dbu-header";
+			newButtonStyles.All =
+				"text-dbu-bg1 leading-none border border-text-dbu-header rounded-full cursor-pointer bg-dbu-header";
+		}
 		setEnhancedSaveOptions(options);
 		setButtonStateStyles(newButtonStyles);
 	};
@@ -223,6 +241,14 @@ export default function EnhancedSaveModal({
 							onClick={() => updateEnhancedSave("Morale")}
 						>
 							Morale
+						</button>
+					</div>
+					<div className={buttonStateStyles.All}>
+						<button
+							className="p-5 text-md cursor-pointer"
+							onClick={() => updateEnhancedSave("All")}
+						>
+							All
 						</button>
 					</div>
 				</div>
