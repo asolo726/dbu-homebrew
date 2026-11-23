@@ -20,7 +20,7 @@ const variantStyles: Record<ButtonVariant, string> = {
 	section:
 		"px-3 py-1.5 border border-dbu-header/50 text-dbu-header bg-dbu-header/10 hover:bg-dbu-header/20",
 	remove: "px-3 py-1.5 border border-red-500/50 text-red-400 bg-red-900/20 hover:bg-red-900/40",
-	add: "px-3 py-1.5 border border-white/30 text-white bg-white/10 hover:bg-white/20",
+	add: "px-3 py-1.5 border border-dbu-text/30 text-dbu-text bg-dbu-bg3/30 hover:border-dbu-header hover:bg-dbu-bg3 hover:text-dbu-header",
 	delete: "px-3 py-1.5 rounded-md text-sm border border-red-500/50 text-red-400 bg-red-900/20 hover:bg-red-900/40",
 	// sort is a wider button
 	sort: "px-6 py-1.5 border border-dbu-header/50 text-dbu-header bg-dbu-header/10 hover:bg-dbu-header/20",

@@ -46,7 +46,7 @@ export default function Card({
 
 	return (
 		<div
-			className="card-glow flex flex-col w-full border border-[var(--card-color)] bg-[#282828] rounded-lg overflow-hidden transition-transform duration-200 hover:-translate-y-2"
+			className="card-glow flex flex-col w-full border border-[var(--card-color)] bg-dbu-bg3 rounded-lg overflow-hidden transition-transform duration-200 hover:-translate-y-2"
 			data-page-type={pageType.toLowerCase().trim()}
 		>
 			<div className="relative w-full h-[160px] shrink-0">

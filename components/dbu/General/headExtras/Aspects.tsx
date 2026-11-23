@@ -33,7 +33,7 @@ export default function Aspects({
 	handleAspectChange,
 }: Readonly<AspectsProps>) {
 	const btnStyle =
-		"ml-2 gap-1.5 px-3 py-1.5 rounded-md text-sm border border-white/30 text-white bg-white/10 hover:bg-white/20 transition-colors";
+		"ml-2 gap-1.5 px-3 py-1.5 rounded-md text-sm border border-dbu-text/30 text-dbu-text bg-dbu-bg3/30 hover:border-dbu-header hover:bg-dbu-bg3 hover:text-dbu-header transition-colors";
 	const [aspectWindowOpen, setAspectWindowOpen] = useState(false);
 	const [enhancedWindowOpen, setEnhancedWindowOpen] = useState(false);
 	const [variantWindowOpen, setVariantWindowOpen] = useState(false);

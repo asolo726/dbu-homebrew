@@ -266,7 +266,7 @@ export default function Trait({
 			)}
 
 			{contributor && (
-				<p className="text-xs text-white italic mt-2 opacity-60">
+				<p className="text-xs text-dbu-text italic mt-2 opacity-60">
 					(Added by {contributor.name})
 				</p>
 			)}

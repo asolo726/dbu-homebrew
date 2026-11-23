@@ -34,6 +34,24 @@ export default function SettingsClient({ user, pageData }) {
 	const [authoredQuery, setAuthoredQuery] = useState("");
 	const [saving, setSaving] = useState(false);
 	const [saveError, setSaveError] = useState("");
+	const [currentTheme, setCurrentTheme] = useState("default");
+	const [currentThemeDisplayName, setCurrentThemeDisplayName] =
+		useState("N/A");
+	const themeNames = {
+		default: "N/A",
+		midnight: "Midnight",
+		"midnight-red": "Midnight Red",
+		"midnight-blue": "Midnight Blue",
+		"midnight-green": "Midnight Green",
+		kaioken: "Kaioken",
+		ssj: "Super Saiyan",
+		ssjb: "Super Saiyan Blue",
+		lssj: "Legendary Super Saiyan",
+		orange: "Orange",
+		beerus: "Beerus",
+		"ui-sign": "Ultra Instinct -Omen-",
+		mui: "Ultra Instinct",
+	};
 
 	// ── Toggle tab ─────────────────────────────────────────────────────────────
 	const [toggleList, setToggleList] = useState([]);
@@ -54,23 +72,24 @@ export default function SettingsClient({ user, pageData }) {
 
 	// ── Load toggles when tab opens or page changes ────────────────────────────
 	useEffect(() => {
-		if (activeTab !== "toggles") return;
-		setTogglesLoading(true);
-		fetch(`/api/settings/toggles?page=${togglePage}`)
-			.then((r) => r.json())
-			.then((data) => {
-				setToggleList(
-					(data.toggles ?? []).sort((a, b) =>
-						a.name.localeCompare(b.name, undefined, {
-							sensitivity: "base",
-						}),
-					),
-				);
-				setToggleTotal(data.total ?? 0);
-				setToggleTotalPages(data.totalPages ?? 1);
-			})
-			.catch(() => {})
-			.finally(() => setTogglesLoading(false));
+		if (activeTab === "toggles") {
+			setTogglesLoading(true);
+			fetch(`/api/settings/toggles?page=${togglePage}`)
+				.then((r) => r.json())
+				.then((data) => {
+					setToggleList(
+						(data.toggles ?? []).sort((a, b) =>
+							a.name.localeCompare(b.name, undefined, {
+								sensitivity: "base",
+							}),
+						),
+					);
+					setToggleTotal(data.total ?? 0);
+					setToggleTotalPages(data.totalPages ?? 1);
+				})
+				.catch(() => {})
+				.finally(() => setTogglesLoading(false));
+		}
 	}, [activeTab, togglePage]);
 
 	const handleToggleSwitch = async (name, enabled) => {
@@ -269,6 +288,78 @@ export default function SettingsClient({ user, pageData }) {
 			? "bg-[#2e2e2e] text-dbu-header"
 			: "text-dbu-text hover:bg-[#292929] hover:text-dbu-header");
 
+	// This shows the border-header color, background color, bg3 color, and hyperlink color
+	const themePalettes = {
+		default: ["#dfe288", "#232323", "#1f1f1f", "#ff6900"],
+		midnight: ["#dfe288", "#232323", "#0d0d0d", "#ff6900"],
+		"midnight-red": ["#e32f1b", "#121212", "#0d0d0d", "#ffb000"],
+		"midnight-blue": ["#2ef9fb", "#121212", "#0d0d0d", "#ffb000"],
+		"midnight-green": ["#33ff00", "#121212", "#0d0d0d", "#ffb000"],
+		kaioken: ["#ffe550", "#660000", "#4d0000", "#ff0000"],
+		ssj: ["#fde96a", "#7b560e", "#725112", "#1ce5a7"],
+		ssjb: ["#ffe099", "#102a3a", "#0b1c27", "#56c8d8"],
+		lssj: ["#b8ffd2", "#1d5001", "#186f3f", "#e9fd39"],
+		orange: ["#ff2a25", "#9c5000", "#542008", "#f14fb4"],
+		beerus: ["#ded240", "#6400aa", "#561385", "#fe920e"],
+		"ui-sign": ["#95fff8", "#131524", "#2a2c45", "#dc6fe3"],
+		mui: ["#4a2f7f", "#e4e5e5", "#e8edef", "#147d92"],
+	};
+
+	useEffect(() => {
+		fetch("/api/settings/updateTheme")
+			.then((response) => (response.ok ? response.json() : null))
+			.then((data) => {
+				if (!data?.theme) return;
+				const theme = themePalettes[data.theme]
+					? data.theme
+					: "default";
+				setCurrentTheme(theme);
+				setCurrentThemeDisplayName(themeNames[theme]);
+				document.documentElement.dataset.theme =
+					theme === "default" ? "" : theme;
+			})
+			.catch(() => {});
+	}, []);
+
+	const selectTheme = async (t, label) => {
+		setCurrentTheme(t);
+		setCurrentThemeDisplayName(label);
+		document.documentElement.dataset.theme = t === "default" ? "" : t;
+
+		try {
+			const response = await fetch("/api/settings/updateTheme", {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ theme: t }),
+			});
+			if (!response.ok) throw new Error("Theme update failed");
+		} catch {
+			// Keep the preview applied locally if saving fails.
+		}
+	};
+
+	const themeSelector = (t, label) => {
+		const [header, background, bg3, link] = themePalettes[t];
+
+		return (
+			<button
+				type="button"
+				title={label}
+				aria-label={label}
+				className={`cursor-pointer shrink-0 p-1 rounded-xl border hover:border-dbu-header transition-colors ${t === currentTheme ? "border-dbu-header" : "border-dbu-line"}`}
+				onClick={() => selectTheme(t, label)}
+			>
+				<span
+					className="block size-14 rounded-lg"
+					style={{
+						border: `2px solid ${header}`,
+						background: `linear-gradient(135deg, ${header} 0 25%, ${background} 25% 50%, ${bg3} 50% 75%, ${link} 75% 100%)`,
+					}}
+				/>
+			</button>
+		);
+	};
+
 	return (
 		<div className="flex flex-col md:flex-row w-full">
 			{/* Sidebar — horizontal tabs on mobile, vertical on desktop */}
@@ -374,6 +465,42 @@ export default function SettingsClient({ user, pageData }) {
 							</label>
 							<div className="px-4 py-3 rounded-md bg-dbu-bg2 border border-dbu-line text-dbu-text/60 text-base select-all">
 								{user.email}
+							</div>
+						</div>
+
+						<div className="w-full">
+							<span className="flex justify-between block text-sm text-dbu-text/50 mb-2">
+								<label className=" ml-1">Themes</label>
+								<label className="mr-1">
+									{`Current: ${currentThemeDisplayName}`}
+								</label>
+							</span>
+							<div className="flex flex-wrap items-center justify-center gap-2 px-4 py-3 rounded-md bg-dbu-bg2 border border-dbu-line">
+								{themeSelector("default", "N/A")}
+								{themeSelector("midnight", "Midnight")}
+								{themeSelector("midnight-red", "Midnight Red")}
+								{themeSelector(
+									"midnight-blue",
+									"Midnight Blue",
+								)}
+								{themeSelector(
+									"midnight-green",
+									"Midnight Green",
+								)}
+								{themeSelector("kaioken", "Kaioken")}
+								{themeSelector("ssj", "Super Saiyan")}
+								{themeSelector("ssjb", "Super Saiyan Blue")}
+								{themeSelector(
+									"lssj",
+									"Legendary Super Saiyan",
+								)}
+								{themeSelector("orange", "Orange")}
+								{themeSelector("beerus", "Beerus")}
+								{themeSelector(
+									"ui-sign",
+									"Ultra Instinct -Omen-",
+								)}
+								{themeSelector("mui", "Ultra Instinct")}
 							</div>
 						</div>
 					</div>
