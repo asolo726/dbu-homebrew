@@ -42,6 +42,7 @@ export default function Navbar({ session }) {
 		{ text: "Bestial Traits", link: "/bestial-traits" },
 		{ text: "Custom Species", link: "/custom-species-expansion" },
 		{ text: "Genetic Splicing/Bio-Focus", link: "/genetic-focus" },
+		{ text: "Items and Accessories", link: "/items-accessories" },
 		{ text: "Monstrous Traits", link: "/monstrous-traits" },
 		{ text: "Monster", link: "/monster" },
 		{ text: "Mutation", link: "/mutation" },
